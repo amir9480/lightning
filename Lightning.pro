@@ -12,10 +12,12 @@ SOURCES += main.cpp \
     lplane.cpp \
     lquaternion.cpp \
     ltriangle.cpp \
-    lvector4.cpp
+    lvector4.cpp \
+    lboundingbox.cpp
 
 
 HEADERS += \
+    .gitignore\
     Lightning\
     lmatrix.h \
     ldefines.h \
@@ -27,5 +29,6 @@ HEADERS += \
     lcore.h \
     lquaternion.h \
     ltriangle.h \
-    lvector4.h
+    lvector4.h \
+    lboundingbox.h
 

@@ -8,7 +8,7 @@
 
 LNAMESPACE_BEGIN
 
-class LVector4
+class LAPI LVector4
 {
 public:
     //! Constructor

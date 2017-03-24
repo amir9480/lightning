@@ -9,5 +9,6 @@
 #include "lplane.h"
 #include "lquaternion.h"
 #include "ltriangle.h"
+#include "lboundingbox.h"
 
 #endif // LMATH_H

@@ -2,6 +2,7 @@
 #define LTRIANGLE_H
 #include "ldefines.h"
 #include "lvector3.h"
+#include "lmatrix.h"
 
 LNAMESPACE_BEGIN
 /*!
@@ -24,13 +25,34 @@ public:
     linline f32             getArea()const;
 
     //! Get Barycentric Coordinates
-    linline bool getBarycentricCoordinates(const LVector3& v,f32 out[3]);
+    linline bool            getBarycentricCoordinates(const LVector3& v,f32 out[3]);
+
+    //! Get Circumcenter Circle
+    linline LVector3        getCircumcenter()const;
+
+    //! Get Radiu of  Circumcenter
+    linline f32             getCircumcenterRadiu()const;
+
+    //! Get Center of Gravity
+    linline LVector3        getGravityCenter()const;
+
+    //! Get Incenter
+    linline LVector3        getIncenter()const;
+
+    //! Get Radiu of Incenter Circle
+    linline f32             getIncenterRadiu()const;
 
     //! Get Triangle Perimeter
     linline f32             getPerimeter()const;
 
+    //! Get Transformed Copy of this
+    linline LTriangle       getTransformed(const LMatrix& _m)const;
+
     //! Set Triangle Parameters
     linline void            set(const LVector3& _v1,const LVector3& _v2,const LVector3& _v3);
+
+    //! Transform this Triangle using Transformatrion Matrix
+    linline void            transform(const LMatrix& _m);
 
     //! Update Triangle Values Based On Only Vertices
     linline void            update();
@@ -116,9 +138,61 @@ bool LTriangle::getBarycentricCoordinates(const LVector3 &v, f32 out[3])
     return true;
 }
 
+LVector3 LTriangle::getCircumcenter() const
+{
+    //Adapted from '3D Math Primer for Graphics and Game Development' book by Fletcher Dunn and lan Parberry
+    f32 d1=-e2.getDotProduct(e3);
+    f32 d2=-e3.getDotProduct(e1);
+    f32 d3=-e1.getDotProduct(e2);
+    f32 c1=d2*d3;
+    f32 c2=d3*d1;
+    f32 c3=d1*d2;
+    f32 c=c1+c2+c3;
+    LVector3 o=((c2+c3)*v1+(c3+c1)*v2+(c1+c2)*v3)/2.0f*c;
+    return o;
+}
+
+f32 LTriangle::getCircumcenterRadiu() const
+{
+    //Adapted from '3D Math Primer for Graphics and Game Development' book by Fletcher Dunn and lan Parberry
+    f32 d1=-e2.getDotProduct(e3);
+    f32 d2=-e3.getDotProduct(e1);
+    f32 d3=-e1.getDotProduct(e2);
+    f32 c1=d2*d3;
+    f32 c2=d3*d1;
+    f32 c3=d1*d2;
+    f32 c=c1+c2+c3;
+    return lSqrt((d1+d2)*(d2+d3)*(d3+d1)/c)/2.0f;
+}
+
+LVector3 LTriangle::getGravityCenter() const
+{
+    //Adapted from '3D Math Primer for Graphics and Game Development' book by Fletcher Dunn and lan Parberry
+    return (v1+v2+v3)/3.0f;
+}
+
+LVector3 LTriangle::getIncenter() const
+{
+    //Adapted from '3D Math Primer for Graphics and Game Development' book by Fletcher Dunn and lan Parberry
+    return (l1*v1+l2*v2+l3*v3)/getPerimeter();
+}
+
+f32 LTriangle::getIncenterRadiu() const
+{
+    //Adapted from '3D Math Primer for Graphics and Game Development' book by Fletcher Dunn and lan Parberry
+    return getArea()/getPerimeter();
+}
+
 f32 LTriangle::getPerimeter() const
 {
     return l1+l2+l3;
+}
+
+LTriangle LTriangle::getTransformed(const LMatrix &_m) const
+{
+    LTriangle o=*this;
+    o.transform(_m);
+    return o;
 }
 
 void LTriangle::set(const LVector3 &_v1, const LVector3 &_v2, const LVector3 &_v3)
@@ -126,6 +200,14 @@ void LTriangle::set(const LVector3 &_v1, const LVector3 &_v2, const LVector3 &_v
     v1=_v1;
     v2=_v2;
     v3=_v3;
+    update();
+}
+
+void LTriangle::transform(const LMatrix &_m)
+{
+    v1*=_m;
+    v2*=_m;
+    v3*=_m;
     update();
 }
 
