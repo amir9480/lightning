@@ -276,7 +276,7 @@ f32 lRound(const f32& _in, const u32& _precision)
         return (lFloor((_in*lPower(10,_precision))+0.5f)/lPower(10,_precision));
     f32 o=-(lFloor((-_in*lPower(10,_precision))+0.5f)/lPower(10,_precision));
     // Prevent from -0.0f
-    if(lCompareFloat(lAbs(o),0.0f))
+    if(lCompareFloat(lAbs(o),0.0f,_precision))
         o=0.0f;
     return o;
 }
@@ -287,7 +287,7 @@ f64 lRoundD(const f64& _in, const u32& _precision)
         return (lFloorD((_in*lPower(10,_precision))+0.5)/lPower(10,_precision));
     f64 o= -(lFloorD((-_in*lPower(10,_precision))+0.5)/lPower(10,_precision));
     // Prevent from -0.0f
-    if(lCompareFloat(lAbs(o),0.0f))
+    if(lCompareDouble(lAbs(o),0.0f,_precision))
         o=0.0;
     return o;
 }

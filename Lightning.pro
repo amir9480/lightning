@@ -11,7 +11,8 @@ SOURCES += main.cpp \
     lvector3.cpp \
     lplane.cpp \
     lquaternion.cpp \
-    ltriangle.cpp
+    ltriangle.cpp \
+    lvector4.cpp
 
 
 HEADERS += \
@@ -25,5 +26,6 @@ HEADERS += \
     lplane.h \
     lcore.h \
     lquaternion.h \
-    ltriangle.h
+    ltriangle.h \
+    lvector4.h
 

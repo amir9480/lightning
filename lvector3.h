@@ -5,6 +5,9 @@
 #include "lmatrix.h"
 LNAMESPACE_BEGIN
 
+// forward declartion
+class LVector4;
+
 class LAPI LVector3
 {
 public:
@@ -70,7 +73,7 @@ public:
     linline f32             getSqauredDistanceFrom(const LVector3& _other)const;
 
     //! Checkout this vector is able to normalize
-    linline bool                isNormalizable()const;
+    linline bool            isNormalizable()const;
 
     //! Checkout is this a unit vector
     linline bool            isNormalized()const;
@@ -126,7 +129,7 @@ public:
     linline LVector3        operator*(const f32& _scaler)const;
     linline LVector3&       operator*=(const f32& _scaler);
     friend linline LVector3 operator*(const f32 &_a, const LVector3 &_b);
-    linline LVector3        operator* (const LMatrix& _other)const;
+    linline LVector3        operator*(const LMatrix& _other)const;
     linline LVector3&       operator*=(const LMatrix& _other);
 
     //! Division
@@ -153,6 +156,9 @@ public:
     //! Compare
     linline bool            operator==(const LVector3& _other)const;
     linline bool            operator!=(const LVector3& _other)const;
+
+    //! Casting operator
+    operator                LVector4()const;
 
     const static LVector3 up;
     const static LVector3 down;
@@ -347,7 +353,7 @@ void LVector3::reflect(const LVector3 &_n)
     (*this)=(*this)-(2.0f*dotProduct(*this,_n)*_n);
 }
 
-LVector3 LVector3::rotateAround(const LVector3 &a, const LVector3 &b, const f32 &yaw,const f32& pitch,const f32& roll)
+LVector3 LVector3::rotateAround(const LVector3 &a, const LVector3 &b, const f32 &yaw, const f32 &pitch, const f32 &roll)
 {
     //! ToDo : Get Better algorithm
     LVector3 out=a-b;
@@ -426,15 +432,15 @@ LVector3 &LVector3::operator*=(const LVector3 &_other)
     return (*this);
 }
 
-LVector3 &LVector3::operator*=(const f32 &_scaler)
+LVector3 &LVector3::operator*=(const LMatrix &_other)
 {
-    (*this)= (*this)*_scaler;
+    (*this)= (*this)*_other;
     return (*this);
 }
 
-LVector3 &LVector3::operator*=(const LMatrix &_other)
+LVector3 &LVector3::operator*=(const f32 &_scaler)
 {
-    (*this)=(*this)*_other;
+    (*this)= (*this)*_scaler;
     return (*this);
 }
 

@@ -65,7 +65,7 @@
     #error Lightning compile time error:Undefined Compiler
 #endif
 
-#if COMPILE_TYPE == COMPILE_DYNAMIC && LOS == LOS_WINDOWS
+#if COMPILE_TYPE == COMPILE_DYNAMIC && LOS == LOS_WINDOWS && LHEADER_USAGE_TYPE == LHEADER_USAGE_EXPORT
     #define LAPI __declspec(dllexport)
 #else
     #define LAPI

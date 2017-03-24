@@ -5,6 +5,7 @@
 #include "lmathutility.h"
 #include "lmatrix.h"
 #include "lvector3.h"
+#include "lvector4.h"
 #include "lplane.h"
 #include "lquaternion.h"
 #include "ltriangle.h"

@@ -4,6 +4,7 @@
 #include "lmathutility.h"
 #include "lmatrix.h"
 #include "lvector3.h"
+#include "lvector4.h"
 LNAMESPACE_BEGIN
 
 class LAPI LPlane
@@ -225,10 +226,10 @@ void LPlane::set(const LVector3 &_normal, const f32 &_d)
 
 void LPlane::set(const LVector3 &_point1, const LVector3 &_point2, const LVector3 &_point3)
 {
-    LVector3 m=_point2-_point1;
-    LVector3 n=_point3-_point1;
-    mNormal=m.getCrossProduct(n).normalize();
-    calcD(_point1);
+    LVector3 m=_point1-_point2;
+    LVector3 n=_point3-_point2;
+    mNormal=(m.getCrossProduct(n)).getNormalized();
+    calcD(_point2);
 }
 
 void LPlane::set(const f32 &_a, const f32 &_b, const f32 &_c, const f32 &_d)
