@@ -10,5 +10,6 @@
 #include "lquaternion.h"
 #include "ltriangle.h"
 #include "lboundingbox.h"
+#include "lboundingsphere.h"
 
 #endif // LMATH_H

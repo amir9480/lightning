@@ -160,14 +160,14 @@ public:
     //! Casting operator
     operator                LVector4()const;
 
-    const static LVector3 up;
-    const static LVector3 down;
-    const static LVector3 left;
-    const static LVector3 right;
-    const static LVector3 forward;
-    const static LVector3 back;
-    const static LVector3 zero;
-    const static LVector3 one;
+    const static LVector3   up;
+    const static LVector3   down;
+    const static LVector3   left;
+    const static LVector3   right;
+    const static LVector3   forward;
+    const static LVector3   back;
+    const static LVector3   zero;
+    const static LVector3   one;
 
 public:
     union

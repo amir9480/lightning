@@ -17,9 +17,9 @@ LNAMESPACE_BEGIN
 class LAPI LTriangle
 {
 public:
-    linline LTriangle();
+    linline                 LTriangle();
 
-    linline LTriangle(const LVector3& _v1,const LVector3& _v2,const LVector3& _v3);
+    linline                 LTriangle(const LVector3& _v1,const LVector3& _v2,const LVector3& _v3);
 
     //! Get Triangle Area
     linline f32             getArea()const;
@@ -30,8 +30,8 @@ public:
     //! Get Circumcenter Circle
     linline LVector3        getCircumcenter()const;
 
-    //! Get Radiu of  Circumcenter
-    linline f32             getCircumcenterRadiu()const;
+    //! Get Radius of  Circumcenter
+    linline f32             getCircumcenterRadius()const;
 
     //! Get Center of Gravity
     linline LVector3        getGravityCenter()const;
@@ -39,8 +39,8 @@ public:
     //! Get Incenter
     linline LVector3        getIncenter()const;
 
-    //! Get Radiu of Incenter Circle
-    linline f32             getIncenterRadiu()const;
+    //! Get Radius of Incenter Circle
+    linline f32             getIncenterRadius()const;
 
     //! Get Triangle Perimeter
     linline f32             getPerimeter()const;
@@ -56,6 +56,13 @@ public:
 
     //! Update Triangle Values Based On Only Vertices
     linline void            update();
+
+    //! Copy Operator
+    linline LTriangle&      operator=(const LTriangle& _other);
+
+    //! Compare
+    linline bool            operator==(const LTriangle& _other)const;
+    linline bool            operator!=(const LTriangle& _other)const;
 
 public:
     LVector3 v1,v2,v3;  // Vertices
@@ -152,7 +159,7 @@ LVector3 LTriangle::getCircumcenter() const
     return o;
 }
 
-f32 LTriangle::getCircumcenterRadiu() const
+f32 LTriangle::getCircumcenterRadius() const
 {
     //Adapted from '3D Math Primer for Graphics and Game Development' book by Fletcher Dunn and lan Parberry
     f32 d1=-e2.getDotProduct(e3);
@@ -177,7 +184,7 @@ LVector3 LTriangle::getIncenter() const
     return (l1*v1+l2*v2+l3*v3)/getPerimeter();
 }
 
-f32 LTriangle::getIncenterRadiu() const
+f32 LTriangle::getIncenterRadius() const
 {
     //Adapted from '3D Math Primer for Graphics and Game Development' book by Fletcher Dunn and lan Parberry
     return getArea()/getPerimeter();
@@ -223,6 +230,47 @@ void LTriangle::update()
     a1=e2.getAngelFrom(-e3);
     a2=e3.getAngelFrom(-e1);
     a3=e1.getAngelFrom(-e2);
+}
+
+LTriangle &LTriangle::operator=(const LTriangle &_other)
+{
+    v1=_other.v1;
+    v2=_other.v2;
+    v3=_other.v3;
+
+    a1=_other.a1;
+    a2=_other.a2;
+    a3=_other.a3;
+
+    e1=_other.e1;
+    e2=_other.e2;
+    e3=_other.e3;
+
+    l1=_other.l1;
+    l2=_other.l2;
+    l3=_other.l3;
+
+    mNormal=_other.mNormal;
+
+    return *this;
+}
+
+bool LTriangle::operator==(const LTriangle &_other) const
+{
+    return(
+               (
+                    ((v1==_other.v1)&&(v2==_other.v2)&&(v3==_other.v3))||
+                    ((v1==_other.v2)&&(v2==_other.v3)&&(v3==_other.v1))||
+                    ((v1==_other.v3)&&(v2==_other.v1)&&(v3==_other.v2))
+                )
+                &&
+                mNormal==_other.mNormal
+          );
+}
+
+bool LTriangle::operator!=(const LTriangle &_other) const
+{
+    return !(*this==_other);
 }
 
 LNAMESPACE_END

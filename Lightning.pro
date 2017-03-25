@@ -13,11 +13,11 @@ SOURCES += main.cpp \
     lquaternion.cpp \
     ltriangle.cpp \
     lvector4.cpp \
-    lboundingbox.cpp
+    lboundingbox.cpp \
+    lboundingsphere.cpp
 
 
 HEADERS += \
-    .gitignore\
     Lightning\
     lmatrix.h \
     ldefines.h \
@@ -30,5 +30,6 @@ HEADERS += \
     lquaternion.h \
     ltriangle.h \
     lvector4.h \
-    lboundingbox.h
+    lboundingbox.h \
+    lboundingsphere.h
 

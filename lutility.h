@@ -4,16 +4,16 @@
 
 #if LTARGET==LTARGET_DEBUG
 //! Disable Unused parameter warning
-#define L_UNUSED(IN) (void)IN
+#define         L_UNUSED(IN) (void)IN
 #else
-#define L_UNUSED(IN)
+#define         L_UNUSED(IN)
 #endif
 
 LNAMESPACE_BEGIN
 
 //! Swap two value
 template<typename T>
-linline void lSwap(T& _a,T& b);
+linline void    lSwap(T& _a,T& b);
 
 
 
