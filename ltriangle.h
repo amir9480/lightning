@@ -155,7 +155,7 @@ LVector3 LTriangle::getCircumcenter() const
     f32 c2=d3*d1;
     f32 c3=d1*d2;
     f32 c=c1+c2+c3;
-    LVector3 o=((c2+c3)*v1+(c3+c1)*v2+(c1+c2)*v3)/2.0f*c;
+    LVector3 o=((c2+c3)*v1+(c3+c1)*v2+(c1+c2)*v3)/(2.0f*c);
     return o;
 }
 
@@ -169,13 +169,13 @@ f32 LTriangle::getCircumcenterRadius() const
     f32 c2=d3*d1;
     f32 c3=d1*d2;
     f32 c=c1+c2+c3;
-    return lSqrt((d1+d2)*(d2+d3)*(d3+d1)/c)/2.0f;
+    return lSqrt((d1+d2)*(d2+d3)*(d3+d1)/c)*0.5f;
 }
 
 LVector3 LTriangle::getGravityCenter() const
 {
     //Adapted from '3D Math Primer for Graphics and Game Development' book by Fletcher Dunn and lan Parberry
-    return (v1+v2+v3)/3.0f;
+    return (v1+v2+v3)*0.3333333333333333f;
 }
 
 LVector3 LTriangle::getIncenter() const

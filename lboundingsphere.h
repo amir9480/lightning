@@ -6,7 +6,11 @@
 
 LNAMESPACE_BEGIN
 
-class LBoundingSphere
+// forward declartion
+class LBoundingBox;
+class LPlane;
+
+class LAPI LBoundingSphere
 {
 public:
     linline                     LBoundingSphere();
@@ -38,6 +42,12 @@ public:
 
     //! Check is all part of another sphere is inside or not. if was returns true otherwise returns false;
     linline bool                isContain(const LBoundingSphere& _b)const;
+
+    //! if Sphere intersects other plane will returns true . other wise returns false
+    bool                        isIntersect(const LPlane& _other)const;
+
+    //! if Sphere intersects other Box will returns true . other wise returns false
+    bool                        isIntersect(const LBoundingBox& _other)const;
 
     //! Merge this with another Sphere
     linline void                merge(const LBoundingSphere& _other);
@@ -80,7 +90,7 @@ LBoundingSphere LBoundingSphere::getTransformed(const LMatrix &_m) const
 
 f32 LBoundingSphere::getVolume() const
 {
-    return mRadius*mRadius*mRadius*lPi*4.0f/3.0f;
+    return mRadius*mRadius*mRadius*lPi*(1.333333333333333f/* 4/3 */);
 }
 
 bool LBoundingSphere::isContain(const LVector3 &_p) const
@@ -96,8 +106,8 @@ bool LBoundingSphere::isContain(const LBoundingSphere &_b) const
 void LBoundingSphere::merge(const LBoundingSphere &_other)
 {
     //TODO: Get Better Algorithm
-    f32 dis=mPos.getDistanceFrom(_other.mPos)/2.0f;
-    mPos=(mPos+_other.mPos)/2.0f;
+    f32 dis=mPos.getDistanceFrom(_other.mPos)*0.5f;
+    mPos=(mPos+_other.mPos)*0.5f;
     mRadius=dis+lMax(mRadius,_other.mRadius);
 }
 

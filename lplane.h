@@ -7,6 +7,10 @@
 #include "lvector4.h"
 LNAMESPACE_BEGIN
 
+//forward declartion
+class LBoundingBox;
+class LBoundingSphere;
+
 class LAPI LPlane
 {
 public:
@@ -58,6 +62,12 @@ public:
 
     //! returns true when point is in the front of plane . otherwise returns false
     linline bool        isFrontSide(const LVector3& _point)const;
+
+    //! if plane intersects other AABB will returns true . other wise returns false
+    bool                isIntersect(const LBoundingBox& _other)const;
+
+    //! if plane intersects other Sphere will returns true . other wise returns false
+    bool                isIntersect(const LBoundingSphere& _other)const;
 
     //! returns true when two point is in the same side of plane
     linline bool        isSameSide(const LVector3& _a,const LVector3& _b)const;
@@ -195,6 +205,8 @@ bool LPlane::isFrontSide(const LVector3 &_point) const
 {
     return (getDistanceFrom(_point)>=0.0f);
 }
+
+
 
 bool LPlane::isSameSide(const LVector3 &_a, const LVector3 &_b) const
 {

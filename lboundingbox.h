@@ -7,6 +7,10 @@
 
 LNAMESPACE_BEGIN
 
+// forward declartion
+class LPlane;
+class LBoundingSphere;
+
 //! This class is for Axisally Aligned Bounding Box
 class LAPI LBoundingBox
 {
@@ -74,6 +78,12 @@ public:
 
     //! Check is all corner of another box is inside or not. if was returns true otherwise returns false;
     linline bool            isContain(const LBoundingBox& _bb)const;
+
+    //! if AABB intersects other plane will returns true . other wise returns false
+    bool                    isIntersect(const LPlane& _other)const;
+
+    //! if AABB intersects other sphare will returns true. otherwise returns false
+    bool                    isIntersect(const LBoundingSphere& _other)const;
 
     //! Merge Another box with this
     linline void            merge(const LBoundingBox& _other);
@@ -205,7 +215,7 @@ void LBoundingBox::fix()
 
 LVector3 LBoundingBox::getCenter() const
 {
-    return (mMin+mMax)/2.0f;
+    return (mMin+mMax)*0.5f;
 }
 
 const LVector3 &LBoundingBox::getCorner(LBoundingBox::LCorner _t) const

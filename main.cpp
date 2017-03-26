@@ -8,13 +8,22 @@ int main(int argc, char *argv[])
 {
     L_UNUSED(argc);
     L_UNUSED(argv);
-    LBoundingSphere a(LVector3::left,2.0f);
-    LBoundingSphere b(LVector3::right,2.0f);
-    a.merge(b);
-    for(int i=0;i<3;i++)
-        cout<<a.getPos().at(i)<<"\t";
-    cout<<"\n"<<a.getRadius()<<endl;
 
+    LRay r(LVector3(-2.0f,3.0f,2.0f),LVector3::down);
+
+    LTriangle t(LVector3::left*3.0f,LVector3::zero,LVector3::forward*3.0f);
+
+    cout<<r.isIntersect(t)<<endl;
+
+    for(int i=0;i<3;i++)
+        cout<<r.getPoint(r.isIntersect(t)).at(i)<<"\t";
+
+    cout<<"\n\n";
+
+    for(int i=0;i<3;i++)
+        cout<<t.mNormal.at(i)<<"\t";
+
+    cout<<"\n\n";
     return 0;
 }
 
