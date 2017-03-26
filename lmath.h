@@ -11,5 +11,6 @@
 #include "ltriangle.h"
 #include "lboundingbox.h"
 #include "lboundingsphere.h"
+#include "lray.h"
 
 #endif // LMATH_H

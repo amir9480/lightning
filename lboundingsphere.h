@@ -27,6 +27,9 @@ public:
     //! get Radius
     linline f32                 getRadius() const;
 
+    //! Get Transformed Copy of this
+    linline LBoundingSphere     getTransformed(const LMatrix& _m)const;
+
     //! Get Volume of this Sphere
     linline f32                 getVolume()const;
 
@@ -48,6 +51,10 @@ public:
     //! Set Radius
     linline void                setRadius(const f32 &radius);
 
+    //! Transform this sphere using Transformatrion Matrix
+    linline void                transform(const LMatrix& _m);
+
+
     //! Copy Assign
     linline LBoundingSphere&    operator =(const LBoundingSphere& _other);
 
@@ -62,6 +69,13 @@ protected:
 f32 LBoundingSphere::getRadius() const
 {
     return mRadius;
+}
+
+LBoundingSphere LBoundingSphere::getTransformed(const LMatrix &_m) const
+{
+    LBoundingSphere o=*this;
+    o.transform(_m);
+    return o;
 }
 
 f32 LBoundingSphere::getVolume() const
@@ -96,6 +110,11 @@ void LBoundingSphere::set(const LVector3 &_pos, const f32 &_radius)
 void LBoundingSphere::setRadius(const f32 &radius)
 {
     mRadius = radius;
+}
+
+void LBoundingSphere::transform(const LMatrix &_m)
+{
+    mPos*=_m;
 }
 
 LBoundingSphere &LBoundingSphere::operator =(const LBoundingSphere &_other)

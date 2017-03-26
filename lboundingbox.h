@@ -210,6 +210,7 @@ LVector3 LBoundingBox::getCenter() const
 
 const LVector3 &LBoundingBox::getCorner(LBoundingBox::LCorner _t) const
 {
+    // TODO : add index excption to _t
     return mCorners[_t];
 }
 
@@ -274,9 +275,6 @@ void LBoundingBox::setMax(const LVector3 &_p)
 
 void LBoundingBox::transform(const LMatrix& _m)
 {
-    LVector3 currentPos=getCenter();
-    mMin-=currentPos;
-    mMax-=currentPos;
     LVector3 vm=mMin;
     LVector3 vM=mMax;
     LVector3 t;
@@ -293,8 +291,6 @@ void LBoundingBox::transform(const LMatrix& _m)
 
     fix();
     update();
-    mMin+=currentPos;
-    mMax+=currentPos;
 }
 
 void LBoundingBox::update()
