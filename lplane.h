@@ -1,6 +1,6 @@
 #ifndef LPLANE_H
 #define LPLANE_H
-#include "ldefines.h"
+#include "lcore.h"
 #include "lmathutility.h"
 #include "lmatrix.h"
 #include "lvector3.h"

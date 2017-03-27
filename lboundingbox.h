@@ -1,6 +1,6 @@
 #ifndef LBOUNDINGBOX_H
 #define LBOUNDINGBOX_H
-#include "ldefines.h"
+#include "lcore.h"
 #include "lmathutility.h"
 #include "lvector3.h"
 #include "lmatrix.h"
@@ -85,6 +85,9 @@ public:
     //! if AABB intersects other sphare will returns true. otherwise returns false
     bool                    isIntersect(const LBoundingSphere& _other)const;
 
+    //! if AABB intersects other AABB will returns true. otherwise returns false
+    linline bool            isIntersect(const LBoundingBox& _other)const;
+
     //! Merge Another box with this
     linline void            merge(const LBoundingBox& _other);
 
@@ -163,6 +166,24 @@ bool LBoundingBox::isContain(const LBoundingBox &_bb) const
                 isContain(_bb.mCorners[6])&&
                 isContain(_bb.mCorners[7])
             );
+}
+
+bool LBoundingBox::isIntersect(const LBoundingBox &_other) const
+{
+    // Adapted from http://gamemath.com/2011/09/detecting-whether-two-boxes-overlap/
+    if(mMax.x<_other.mMin.x)
+        return false;
+    if(mMin.x>_other.mMax.x)
+        return false;
+    if(mMax.y<_other.mMin.y)
+        return false;
+    if(mMin.y>_other.mMax.y)
+        return false;
+    if(mMax.z<_other.mMin.z)
+        return false;
+    if(mMin.z>_other.mMax.z)
+        return false;
+    return true;
 }
 
 void LBoundingBox::merge(const LBoundingBox &_other)

@@ -1,6 +1,6 @@
 #ifndef LVECTOR3_H
 #define LVECTOR3_H
-#include "ldefines.h"
+#include "lcore.h"
 #include "lmathutility.h"
 #include "lmatrix.h"
 LNAMESPACE_BEGIN

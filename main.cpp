@@ -9,19 +9,9 @@ int main(int argc, char *argv[])
     L_UNUSED(argc);
     L_UNUSED(argv);
 
-    LRay r(LVector3(-2.0f,3.0f,2.0f),LVector3::down);
-
-    LTriangle t(LVector3::left*3.0f,LVector3::zero,LVector3::forward*3.0f);
-
-    cout<<r.isIntersect(t)<<endl;
-
-    for(int i=0;i<3;i++)
-        cout<<r.getPoint(r.isIntersect(t)).at(i)<<"\t";
-
-    cout<<"\n\n";
-
-    for(int i=0;i<3;i++)
-        cout<<t.mNormal.at(i)<<"\t";
+    LBoundingBox a(LVector3(-1.0f,-1.0f,-1.0f),LVector3(1.0f,1.0f,1.0f));
+    LBoundingBox b(LVector3(2.0f,2.0f,2.0f),LVector3(3.0f,3.0f,3.0f));
+    cout<<a.isIntersect(b)<<endl;
 
     cout<<"\n\n";
     return 0;

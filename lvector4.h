@@ -1,7 +1,7 @@
 #ifndef LVECTOR4_H
 #define LVECTOR4_H
 
-#include "ldefines.h"
+#include "lcore.h"
 #include "lmathutility.h"
 #include "lvector3.h"
 #include "lmatrix.h"

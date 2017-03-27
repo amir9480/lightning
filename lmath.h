@@ -1,6 +1,5 @@
 #ifndef LMATH_H
 #define LMATH_H
-#include "ldefines.h"
 
 #include "lmathutility.h"
 #include "lmatrix.h"

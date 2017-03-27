@@ -1,6 +1,6 @@
 #ifndef LMATRIX_H
 #define LMATRIX_H
-#include "ldefines.h"
+#include "lcore.h"
 #include "lmathutility.h"
 #include "lutility.h"
 

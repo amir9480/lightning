@@ -1,6 +1,6 @@
 #ifndef LBOUNDINGSPHERE_H
 #define LBOUNDINGSPHERE_H
-#include "ldefines.h"
+#include "lcore.h"
 #include "lmatrix.h"
 #include "lvector3.h"
 
@@ -48,6 +48,9 @@ public:
 
     //! if Sphere intersects other Box will returns true . other wise returns false
     bool                        isIntersect(const LBoundingBox& _other)const;
+
+    //! if Sphere intersects other Box will returns true . other wise returns false
+    linline bool                isIntersect(const LBoundingSphere& _other)const;
 
     //! Merge this with another Sphere
     linline void                merge(const LBoundingSphere& _other);
@@ -101,6 +104,11 @@ bool LBoundingSphere::isContain(const LVector3 &_p) const
 bool LBoundingSphere::isContain(const LBoundingSphere &_b) const
 {
     return (mPos.getDistanceFrom(_b.mPos)+_b.mRadius<=mRadius);
+}
+
+bool LBoundingSphere::isIntersect(const LBoundingSphere &_other) const
+{
+    return (mPos.getDistanceFrom(_other.mPos)<=mRadius+_other.mRadius);
 }
 
 void LBoundingSphere::merge(const LBoundingSphere &_other)

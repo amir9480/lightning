@@ -1,6 +1,6 @@
 #ifndef LTRIANGLE_H
 #define LTRIANGLE_H
-#include "ldefines.h"
+#include "lcore.h"
 #include "lvector3.h"
 #include "lmatrix.h"
 

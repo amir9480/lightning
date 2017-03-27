@@ -1,6 +1,6 @@
 #ifndef LMATHUTILITY_H
 #define LMATHUTILITY_H
-#include "ldefines.h"
+#include "lcore.h"
 LNAMESPACE_BEGIN
 //! Value of PI ~= 3.14
 extern const f32 lPi;
@@ -83,6 +83,10 @@ linline f64     lFloorD(const f64& _in);
 f32             lFMod(const f32& _a,const f32& _b);
 f64             lFModD(const f64& _a,const f64& _b);
 
+//! CheckOut FloatPoint is NaN
+linline bool    lIsNaN(const f32& _in);
+linline bool    lIsNaND(const f64& _in);
+
 //! Get Lerp betweem two float point number .
 linline f32     lLerp(const f32& _a,const f32& _b,const f64& _p);
 linline f32     lLerpD(const f64& _a,const f64& _b,const f64& _p);
@@ -108,10 +112,6 @@ linline T       lMin(const T& _a,const T& _b);
 //! Get Maximum one
 template<typename T>
 linline T       lMax(const T& _a,const T& _b);
-
-//! CheckOut FloatPoint is NaN
-linline bool    lIsNaN(const f32& _in);
-linline bool    lIsNaND(const f64& _in);
 
 //! Get Interger Power
 linline i32     lPower(const i32& _a,const u32& _b);

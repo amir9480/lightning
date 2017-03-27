@@ -1,6 +1,6 @@
 #ifndef LRAY_H
 #define LRAY_H
-#include "ldefines.h"
+#include "lcore.h"
 #include "lmathutility.h"
 #include "lvector3.h"
 
@@ -33,15 +33,21 @@ public:
     linline LVector3    getPoint(const f32& _dis)const;
 
     //! is Intersect with another plane. if there is no intersection returns NaN . other wise returns d
-    //! that is distance between start point and intersection point. to check you can use \fn isnan
+    //! that is distance between start point and intersection point. to check you can use \fn lIsNaN
     linline f32         isIntersect(const LPlane& _other)const;
 
     //! is Intersect with another Sphere. if there is no intersection returns NaN . other wise returns d
-    //! that is distance between start point and intersection point. to check you can use \fn isnan
+    //! that is distance between start point and intersection point. to check you can use \fn lIsNaN
     linline f32         isIntersect(const LBoundingSphere& _other)const;
 
+    //! is Intersect with another Box. if there is no intersection returns NaN . other wise returns d
+    //! that is distance between start point and intersection point. to check you can use \fn lIsNaN
+    //! \param _farDistance if was not NULL will be far intersection point
+    //! \note if (near was NaN and far was not NaN) that mean ray start point is inside box
+    linline f32         isIntersect(const LBoundingBox& _other,f32* _farDistance=nullptr)const;
+
     //! is Intersect with another Triangle. if there is no intersection returns NaN . other wise returns d
-    //! that is distance between start point and intersection point. to check you can use \fn isnan
+    //! that is distance between start point and intersection point. to check you can use \fn lIsNaN
     linline f32         isIntersect(const LTriangle& _other)const;
 
     //! Normalize Ray Direction
@@ -149,6 +155,71 @@ f32 LRay::isIntersect(const LBoundingSphere &_other) const
     if(f<0.0f)
         return lNaN;
     return a-lSqrt(f);
+}
+
+f32 LRay::isIntersect(const LBoundingBox &_other,f32* _farDistance) const
+{
+    //Adated from http://www.cs.utah.edu/~awilliam/box/box.pdf
+    f32 tmin,tmax,tymin,tymax,tzmin,tzmax;
+    if(_farDistance!=nullptr)
+        *_farDistance=lNaN;
+    if(mDir.x>=0.0f)
+    {
+        tmin=(_other.getMin().x-mPos.x)/mDir.x;
+        tmax=(_other.getMax().x-mPos.x)/mDir.x;
+    }
+    else
+    {
+        tmax=(_other.getMin().x-mPos.x)/mDir.x;
+        tmin=(_other.getMax().x-mPos.x)/mDir.x;
+    }
+
+    if(mDir.y>=0.0f)
+    {
+        tymin=(_other.getMin().y-mPos.y)/mDir.y;
+        tymax=(_other.getMax().y-mPos.y)/mDir.y;
+    }
+    else
+    {
+        tymax=(_other.getMin().y-mPos.y)/mDir.y;
+        tymin=(_other.getMax().y-mPos.y)/mDir.y;
+    }
+    if((tmin>tymax)||(tymin>tmax))
+        return lNaN;
+    if(tymin>tmin)
+        tmin=tymin;
+    if(tymax<tmax)
+        tmax=tymax;
+
+    if(mDir.z>=0.0f)
+    {
+        tzmin=(_other.getMin().z-mPos.z)/mDir.z;
+        tzmax=(_other.getMax().z-mPos.z)/mDir.z;
+    }
+    else
+    {
+        tzmax=(_other.getMin().y-mPos.z)/mDir.z;
+        tzmin=(_other.getMax().y-mPos.z)/mDir.z;
+    }
+    if((tmin>tzmax)||(tzmin>tmax))
+        return lNaN;
+    if(tzmin>tmin)
+        tmin=tzmin;
+    if(tzmax<tmax)
+        tmax=tzmax;
+
+    if(_farDistance!=nullptr)
+    {
+        if((mPos-getPoint(tmax)).getLength()!=tmax)
+            *_farDistance=lNaN;
+        else
+            *_farDistance=tmax;
+    }
+
+    if((mPos-getPoint(tmin)).getLength()!=tmin)
+        return lNaN;
+    return tmin;
+
 }
 
 f32 LRay::isIntersect(const LTriangle &_other) const
