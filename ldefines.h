@@ -1,31 +1,16 @@
-#ifndef LDEFINES_H
+﻿#ifndef LDEFINES_H
 #define LDEFINES_H
 
-//! if Namespace is requied set this to 1
-#define LIGHTING_USING_NAMESPACE 0
+#include "lconfig.h"
 
-//! set Lightning namespace Dynamically
+// set Lightning namespace Dynamically
 #if LIGHTING_USING_NAMESPACE
-#define LNAMESPACE_BEGIN namespace Lightning{
+#define LNAMESPACE_BEGIN namespace Lightning {
 #define LNAMESPACE_END   }
 #else
 #define LNAMESPACE_BEGIN
 #define LNAMESPACE_END
 #endif
-
-//! Lightning compile type
-#define LTARGET_DEBUG 1
-#define LTARGET_RELEASE 2
-
-//! Lightning compile type
-#define LTARGET LTARGET_DEBUG
-
-//! How to make Lightning Library static or dynamic
-#define LCOMPILE_STATIC 1
-#define LCOMPILE_DYNAMIC 2
-//! How to make Lightning Library static or dynamic
-#define LCOMPILE_TYPE LCOMPILE_DYNAMIC
-
 
 #define LHEADER_USAGE_IMPORT 1
 #define LHEADER_USAGE_EXPORT 2
@@ -85,16 +70,17 @@ LNAMESPACE_BEGIN
 typedef char                     i8  ;
 typedef short int                i16 ;
 typedef int                      i32 ;
-typedef long long int            i64 ,slong;
+typedef long long int            i64 , slong;
 
-typedef unsigned char            u8  ;
+typedef unsigned char            u8  , uchar;
 typedef unsigned short int       u16 ;
 typedef unsigned int             u32 ;
-typedef unsigned long long int   u64 ,ulong;
+typedef unsigned long long int   u64 , ulong;
 
 typedef float                    f32 ;
 typedef double                   f64 ;
 typedef long double              f96 ;
+
 
 LNAMESPACE_END
 #endif // LDEFINES_H

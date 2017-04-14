@@ -1,13 +1,24 @@
-#include "lmatrix.h"
+﻿#include "lmatrix.h"
 #include "lvector3.h"
 LNAMESPACE_BEGIN
 
+/*!
+ * \en
+ * \brief LMatrix::identity is matrix that : everymatrix*identity=same everymatrix
+ * \enden
+ */
 const LMatrix LMatrix::identity(
         1.0f,0.0f,0.0f,0.0f,
         0.0f,1.0f,0.0f,0.0f,
         0.0f,0.0f,1.0f,0.0f,
         0.0f,0.0f,0.0f,1.0f
         );
+
+/*!
+ * \en
+ * \brief All Matrix parameters is zero
+ * \enden
+ */
 const LMatrix LMatrix::zero(
         0.0f,0.0f,0.0f,0.0f,
         0.0f,0.0f,0.0f,0.0f,
@@ -15,7 +26,13 @@ const LMatrix LMatrix::zero(
         0.0f,0.0f,0.0f,0.0f
         );
 
-
+/*!
+ * \en
+ * \brief create a rotation matrix based on an Axis and rotation
+ * \param _axis axis to rotate around
+ * \param _angle rotation angle by degree
+ * \enden
+ */
 LMatrix LMatrix::createRotationMatrixAxis(LVector3 _axis,const f32& _angle)
 {
     // Adapted from : https://en.wikipedia.org/wiki/Rotation_matrix#Rotation_matrix_from_axis_and_angle
@@ -40,6 +57,12 @@ LMatrix LMatrix::createRotationMatrixAxis(LVector3 _axis,const f32& _angle)
     return out;
 }
 
+/*!
+ * \en
+ * \brief  create a scale matrix
+ * \param _scale scale values
+ * \enden
+ */
 LMatrix LMatrix::createScaleMatrix(const LVector3 &_scale)
 {
     LMatrix out;
@@ -49,6 +72,12 @@ LMatrix LMatrix::createScaleMatrix(const LVector3 &_scale)
     return out;
 }
 
+/*!
+ * \en
+ * \brief  create a Translation matrix to translate a vector
+ * \param _position translation values
+ * \enden
+ */
 LMatrix LMatrix::createTranslationMatrix(const LVector3 &_position)
 {
     LMatrix out;
@@ -58,6 +87,15 @@ LMatrix LMatrix::createTranslationMatrix(const LVector3 &_position)
     return out;
 }
 
+/*!
+ * \en
+ * \brief  Create a View Matrix based on view axes and position
+ * \param _camerapos position of camera
+ * \param axis_x right axis of camera
+ * \param axis_y up axis of camera
+ * \param axis_z forward axis of camera
+ * \enden
+ */
 LMatrix LMatrix::createViewMatrix(const LVector3 &_camerapos,const LVector3 &axis_x, const LVector3 &axis_y, const LVector3 &axis_z)
 {
     // Adapted from DirectX documents
@@ -80,6 +118,14 @@ LMatrix LMatrix::createViewMatrix(const LVector3 &_camerapos,const LVector3 &axi
     return out;
 }
 
+/*!
+ * \en
+ * \brief   Create a View Matrix Left Handed
+ * \param _camerapos position of camera
+ * \param _lookat look target position
+ * \param _up up axis of camera
+ * \enden
+ */
 LMatrix LMatrix::createViewMatrixLH(const LVector3 &_camerapos, const LVector3 &_lookat, const LVector3 &_up)
 {
     // Adapted from DirectX documents
@@ -89,6 +135,14 @@ LMatrix LMatrix::createViewMatrixLH(const LVector3 &_camerapos, const LVector3 &
     return createViewMatrix(_camerapos,axis_x,axis_y,axis_z);
 }
 
+/*!
+ * \en
+ * \brief   Create a View Matrix Right Handed
+ * \param _camerapos position of camera
+ * \param _lookat look target position
+ * \param _up up axis of camera
+ * \enden
+ */
 LMatrix LMatrix::createViewMatrixRH(const LVector3 &_camerapos, const LVector3 &_lookat, const LVector3 &_up)
 {
     // Adapted from DirectX documents
@@ -98,6 +152,11 @@ LMatrix LMatrix::createViewMatrixRH(const LVector3 &_camerapos, const LVector3 &
     return createViewMatrix(_camerapos,axis_x,axis_y,axis_z);
 }
 
+/*!
+ * \en
+ * \brief  extract rotation parameters to euler angles from rotation matrix
+ * \enden
+ */
 LVector3 LMatrix::getRotationParameter() const
 {
     LVector3 out;
@@ -157,11 +216,21 @@ LVector3 LMatrix::getRotationParameter() const
     return out;
 }
 
+/*!
+ * \en
+ * \brief  extract scale parameters to euler angles from rotation matrix
+ * \enden
+ */
 LVector3 LMatrix::getScaleParameter() const
 {
     return LVector3(m11,m22,m33);
 }
 
+/*!
+ * \en
+ * \brief  extract translation parameters to euler angles from rotation matrix
+ * \enden
+ */
 LVector3 LMatrix::getTranslationParameter() const
 {
     return LVector3(m41,m42,m43);

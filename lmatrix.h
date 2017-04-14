@@ -1,4 +1,4 @@
-#ifndef LMATRIX_H
+﻿#ifndef LMATRIX_H
 #define LMATRIX_H
 #include "lcore.h"
 #include "lmathutility.h"
@@ -9,7 +9,19 @@ LNAMESPACE_BEGIN
 // forward declartion
 class LVector3;
 
-//! This class using to create matrix
+/*!
+ * \ingroup Math
+ *
+ * \en
+ * \brief Matrix
+ * This class using for creating 4 x 4 matrix <br>
+ * Matrix 4x4 = <br>
+ *              m11 m12 m13 m14 <br>
+ *              m21 m22 m23 m24 <br>
+ *              m31 m32 m33 m34 <br>
+ *              m41 m42 m43 m44 <br>
+ * \enden
+ */
 class LAPI LMatrix
 {
 public:
@@ -23,20 +35,25 @@ public:
                                     f32 _41,f32 _42,f32 _43,f32 _44
                                    );
 
-    //! Matrix from pou32er or array
+    //! Matrix from pointer or array
     linline                 LMatrix(f32* _in);
 
     //! Matrix from 2D array
     linline                 LMatrix(f32 _in[4][4]);
 
-    //! Copy Constructor
+    // Copy Constructor
     linline                 LMatrix(const LMatrix& _other);
 
     //! Access to Matrix element
     linline f32&            at(u32 i);
+    //! \copydoc at(u32 i)
     linline f32&            at(u32 i,u32 j);
+    //! \copydoc at(u32 i)
+    linline f32             at(u32 i)const;
+    //! \copydoc at(u32 i)
+    linline f32             at(u32 i,u32 j)const;
 
-    //! Creates an orthgraphic Projection Left Handed by screen values
+    //! Creates an orthgraphic projection Left Handed by screen values
     linline static LMatrix  createOrthgraphicProjectionLH(const f32& _left=0.0f,const f32& _right=800.0f,const f32& _top=0.0f,const f32& _bottom=600.0f,const f32& _znear=0.1f,const f32& _zfar=1000.0f);
 
     //! Creates an orthgraphic Projection Right Handed by screen values
@@ -57,17 +74,17 @@ public:
     //! Creates a Rotation Matrix from Axis
     static LMatrix          createRotationMatrixAxis(LVector3 _axis, const f32& _angle);
 
-    //! Creates a RotationX Matrix
-    linline static LMatrix  createRotationMatrixX(const f32& _angle);
-
-    //! Creates a RotationY Matrix
-    linline static LMatrix  createRotationMatrixY(const f32& _angle);
-
     //! Creates a Rotation Matrix from Yaw Pitch Roll
     //! roll  = z
     //! pitch = x
     //! yaw   = y
     linline static LMatrix  createRotationMatrix(const f32& _pitch,const f32& _yaw,const f32& _roll);
+
+    //! Creates a RotationX Matrix
+    linline static LMatrix  createRotationMatrixX(const f32& _angle);
+
+    //! Creates a RotationY Matrix
+    linline static LMatrix  createRotationMatrixY(const f32& _angle);
 
     //! Creates a RotationZ Matrix
     linline static LMatrix  createRotationMatrixZ(const f32& _angle);
@@ -90,7 +107,7 @@ public:
     //! Get determinant of matrix
     linline f32             getDeterminant()const;
 
-    //! Get copy of Inversed of this matrix
+    //! Get Inversed copy of this matrix
     linline LMatrix         getInversed()const;
 
     //! Get inverse transposed of this . useful for compute normal vectors transform matrix
@@ -105,7 +122,7 @@ public:
     //! Get Translation (where the matrix is a translation matrix)
     LVector3                getTranslationParameter()const;
 
-    //! Get copy of transposed of this matrix
+    //! Get transposed copy of transposed this matrix
     linline LMatrix         getTransposed()const;
 
     //! Inverse the Matrix
@@ -120,15 +137,15 @@ public:
     //! remove translation part of matrix to convert to rotation and scale only
     linline void            removeTranslation();
 
-    //! set Matrix
+    // set Matrix
     linline void            set(f32 _11,f32 _12,f32 _13,f32 _14,
                                 f32 _21,f32 _22,f32 _23,f32 _24,
                                 f32 _31,f32 _32,f32 _33,f32 _34,
                                 f32 _41,f32 _42,f32 _43,f32 _44
                                 );
-
+    // set Matrix
     linline void            set(f32* _in);
-
+    // set Matrix
     linline void            set(f32 _in[4][4]);
 
     //! Transpose the Matrix
@@ -137,14 +154,18 @@ public:
     //! Copy Assign Operator
     linline LMatrix& operator = (const LMatrix& _other);
 
-    //! Access to Matrix elements
+    //! \copydoc at(u32 i)
     linline f32&            operator() (u32 i);
+    //! \copydoc at(u32 i)
     linline f32&            operator() (u32 i,u32 j);
+    //! \copydoc at(u32 i)
     linline f32             operator() (u32 i)const;
+    //! \copydoc at(u32 i)
     linline f32             operator() (u32 i,u32 j)const;
 
-    //! Access to Matrix elements
+    //! Access to Matrix row
     linline f32*            operator[] (u32 i);
+    //! Access to Matrix row
     linline const f32*      operator[] (u32 i)const;
 
     //! Compare two matrix
@@ -189,7 +210,11 @@ public:
     };
 };
 
-
+/*!
+ * \brief Default Matrix Constructor will Create Identity matrix
+ *
+ * \sa LMatrix::identity
+ */
 LMatrix::LMatrix():
     m{  {1.0f,0.0f,0.0f,0.0f},
         {0.0f,1.0f,0.0f,0.0f},
@@ -199,6 +224,14 @@ LMatrix::LMatrix():
 
 }
 
+/*!
+ * \en
+ * \fn LMatrix::LMatrix(f32 _11, f32 _12, f32 _13, f32 _14,f32 _21, f32 _22, f32 _23, f32 _24,f32 _31, f32 _32, f32 _33, f32 _34,f32 _41, f32 _42, f32 _43, f32 _44):
+ * \brief Matrix with first values
+ * \enden
+ *
+ * \sa LMatrix::set(f32 _11,f32 _12,f32 _13,f32 _14,f32 _21,f32 _22,f32 _23,f32 _24,f32 _31,f32 _32,f32 _33,f32 _34,f32 _41,f32 _42,f32 _43,f32 _44)
+ */
 LMatrix::LMatrix(f32 _11, f32 _12, f32 _13, f32 _14,
                  f32 _21, f32 _22, f32 _23, f32 _24,
                  f32 _31, f32 _32, f32 _33, f32 _34,
@@ -226,6 +259,13 @@ LMatrix::LMatrix(f32 _11, f32 _12, f32 _13, f32 _14,
 
 }
 
+/*!
+ * \en
+ * \brief Create matrix from pointer or array
+ * \enden
+ *
+ * \sa LMatrix::set(f32* _in)
+ */
 LMatrix::LMatrix(f32 *_in):
     m11(_in[0]),
     m12(_in[1]),
@@ -250,6 +290,13 @@ LMatrix::LMatrix(f32 *_in):
 
 }
 
+/*!
+ * \en
+ * \brief Matrix from 2D 4x4 array
+ * \enden
+ *
+ * \sa LMatrix::set(f32 _in[4][4])
+ */
 LMatrix::LMatrix(f32 _in[4][4]):
     m11(_in[0][0]),
     m12(_in[0][1]),
@@ -291,6 +338,29 @@ f32& LMatrix::at(u32 i, u32 j)
     return m[i][j];
 }
 
+f32 LMatrix::at(u32 i)const
+{
+    //! To Do: Add i error exception log
+    return m[i/4][i%4];
+}
+
+f32 LMatrix::at(u32 i, u32 j)const
+{
+    //! To Do: Add i,j error exception log
+    return m[i][j];
+}
+
+/*!
+ * \en
+ * \brief Creates an orthgraphic projection Left Handed by screen values
+ * \param _left left screen position
+ * \param _right right screen position
+ * \param _top  top screen position
+ * \param _bottom botton screen position
+ * \param _znear near clip value
+ * \param _zfar far clip value
+ * \enden
+ */
 LMatrix LMatrix::createOrthgraphicProjectionLH(const f32 &_left, const f32 &_right, const f32 &_top, const f32 &_bottom, const f32 &_znear, const f32 &_zfar)
 {
     // Adapted from DirectX documents
@@ -304,6 +374,17 @@ LMatrix LMatrix::createOrthgraphicProjectionLH(const f32 &_left, const f32 &_rig
     return out;
 }
 
+/*!
+ * \en
+ * \brief Creates an orthgraphic projection Right Handed by screen values
+ * \param _left left screen position
+ * \param _right right screen position
+ * \param _top  top screen position
+ * \param _bottom botton screen position
+ * \param _znear near clip value
+ * \param _zfar far clip value
+ * \enden
+ */
 LMatrix LMatrix::createOrthgraphicProjectionRH(const f32 &_left, const f32 &_right, const f32 &_top, const f32 &_bottom, const f32 &_znear, const f32 &_zfar)
 {
     // Adapted from DirectX documents
@@ -317,6 +398,15 @@ LMatrix LMatrix::createOrthgraphicProjectionRH(const f32 &_left, const f32 &_rig
     return out;
 }
 
+/*!
+ * \en
+ * \brief Creates an orthgraphic Projection Left Handed
+ * \param _width screen width value
+ * \param _height screen height value
+ * \param _znear near clip value
+ * \param _zfar far clip value
+ * \enden
+ */
 LMatrix LMatrix::createOrthgraphicProjectionLH(const f32 &_width, const f32 &_height, const f32 &_znear, const f32 &_zfar)
 {
     // Adapted from DirectX documents
@@ -328,6 +418,15 @@ LMatrix LMatrix::createOrthgraphicProjectionLH(const f32 &_width, const f32 &_he
     return out;
 }
 
+/*!
+ * \en
+ * \brief Creates an orthgraphic Projection Right Handed
+ * \param _width screen width value
+ * \param _height screen height value
+ * \param _znear near clip value
+ * \param _zfar far clip value
+ * \enden
+ */
 LMatrix LMatrix::createOrthgraphicProjectionRH(const f32 &_width, const f32 &_height, const f32 &_znear, const f32 &_zfar)
 {
     // Adapted from DirectX documents
@@ -339,6 +438,15 @@ LMatrix LMatrix::createOrthgraphicProjectionRH(const f32 &_width, const f32 &_he
     return out;
 }
 
+/*!
+ * \en
+ * \brief Creates a Perspective Projection Left Handed
+ * \param _fov field of view by degree (not radian)
+ * \param _aspectratio aspect ratio
+ * \param _znear near clip value
+ * \param _zfar far clip value
+ * \enden
+ */
 LMatrix LMatrix::createPerspectiveProjectionLH(const f32 &_fov, const f32 &_aspectratio, const f32 &_znear, const f32 &_zfar)
 {
     // Adapted from DirectX documents
@@ -352,6 +460,15 @@ LMatrix LMatrix::createPerspectiveProjectionLH(const f32 &_fov, const f32 &_aspe
     return out;
 }
 
+/*!
+ * \en
+ * \brief Creates a Perspective Projection Right Handed
+ * \param _fov field of view by degree (not radian)
+ * \param _aspectratio aspect ratio
+ * \param _znear near clip value
+ * \param _zfar far clip value
+ * \enden
+ */
 LMatrix LMatrix::createPerspectiveProjectionRH(const f32 &_fov, const f32 &_aspectratio, const f32 &_znear, const f32 &_zfar)
 {
     // Adapted from DirectX documents
@@ -365,6 +482,12 @@ LMatrix LMatrix::createPerspectiveProjectionRH(const f32 &_fov, const f32 &_aspe
     return out;
 }
 
+/*!
+ * \en
+ * \brief Create a rotation matrix around X axis
+ * \param _angle by degree
+ * \enden
+ */
 LMatrix LMatrix::createRotationMatrixX(const f32 &_angle)
 {
     LMatrix out;
@@ -374,6 +497,12 @@ LMatrix LMatrix::createRotationMatrixX(const f32 &_angle)
     return out;
 }
 
+/*!
+ * \en
+ * \brief Create a rotation matrix around Y axis
+ * \param _angle by degree
+ * \enden
+ */
 LMatrix LMatrix::createRotationMatrixY(const f32 &_angle)
 {
     LMatrix out;
@@ -383,18 +512,29 @@ LMatrix LMatrix::createRotationMatrixY(const f32 &_angle)
     return out;
 }
 
+/*!
+ * \en
+ * \brief Create a combined rotation matrix by pitch(X) , yaw(Y) and roll(Z). Product order is roll*pitch*yaw
+ * \param _pitch rotation angle around X
+ * \param _yaw rotation angle around Y
+ * \param _roll rotation angle around Z
+ * \enden
+ */
 LMatrix LMatrix::createRotationMatrix(const f32& _pitch,const f32& _yaw,const f32& _roll)
 {
     LMatrix out;
-    f32 _p=lLimitedAngle180(_pitch);
-    f32 _y=lLimitedAngle180(_yaw);
-    f32 _r=lLimitedAngle180(_roll);
-    out*=LMatrix::createRotationMatrixZ(_r);
-    out*=LMatrix::createRotationMatrixX(_p);
-    out*=LMatrix::createRotationMatrixY(_y);
+    out*=LMatrix::createRotationMatrixZ(_roll);
+    out*=LMatrix::createRotationMatrixX(_pitch);
+    out*=LMatrix::createRotationMatrixY(_yaw);
     return out;
 }
 
+/*!
+ * \en
+ * \brief Create a rotation matrix around Z axis
+ * \param _angle by degree
+ * \enden
+ */
 LMatrix LMatrix::createRotationMatrixZ(const f32 &_angle)
 {
     LMatrix out;
@@ -404,6 +544,11 @@ LMatrix LMatrix::createRotationMatrixZ(const f32 &_angle)
     return out;
 }
 
+/*!
+ * \en
+ * \brief returns determinant of this matrix
+ * \enden
+ */
 f32 LMatrix::getDeterminant() const
 {
     /*
@@ -459,6 +604,13 @@ f32 LMatrix::getDeterminant() const
             m14 * (m21*(m32*m43-m33*m42) -m22*(m31*m43-m33*m41) +m23*(m31*m42-m32*m41));
 }
 
+/*!
+ * \en
+ * \brief  Get Inversed copy of this matrix
+ * \enden
+ *
+ * \sa inverse()
+ */
 LMatrix LMatrix::getInversed() const
 {
     LMatrix temp=(*this);
@@ -466,6 +618,14 @@ LMatrix LMatrix::getInversed() const
     return temp;
 }
 
+/*!
+ * \en
+ * \brief  Get Inversed - Transposed of this matrix. using to transform normal vectors
+ * \enden
+ *
+ * \sa inverse()
+ * \sa transpose()
+ */
 LMatrix LMatrix::getInverseTransposed() const
 {
     LMatrix out=(*this);
@@ -474,6 +634,13 @@ LMatrix LMatrix::getInverseTransposed() const
     return out;
 }
 
+/*!
+ * \en
+ * \brief  Get Transposed of this matrix.
+ * \enden
+ *
+ * \sa transpose()
+ */
 LMatrix LMatrix::getTransposed() const
 {
     LMatrix temp=(*this);
@@ -481,6 +648,16 @@ LMatrix LMatrix::getTransposed() const
     return temp;
 }
 
+/*!
+ * \en
+ * \brief LMatrix::inverse() inverse this matrix. if a*Matrix=b then b*inversed_Matrix is same a. type of a maybe LMatrix or LVector4
+ * \warning Before inverse be sure matrix is inversable with isInversable() .
+ * \return If matrix was not iversable returns false.
+ * \enden
+ *
+ * \sa getInversed()
+ * \sa isInversable()
+ */
 bool LMatrix::inverse()
 {
     // ToDo : Get Faster Algorithm
@@ -516,23 +693,40 @@ bool LMatrix::inverse()
     return true;
 }
 
+/*!
+ * \en
+ * \brief  check out this matrix is identity
+ * \enden
+ *
+ * \sa LMatrix::identity
+ */
 bool LMatrix::isIdentity() const
 {
     return(*this==identity);
 }
 
+/*!
+ * \en
+ * \brief  check out this matrix is Inversable or not
+ * \return if matrix was Inversable returns true
+ * \enden
+ *
+ * \sa inverse()
+ */
 bool LMatrix::isInversable() const
 {
     return (getDeterminant()!=0.0f);
 }
 
-/*
+/*!
+ * \en
  * will converted to
  *
  * m11 m12 m13 0
  * m21 m22 m23 0
  * m31 m32 m33 0
  * 0   0   0   1
+ * \enden
  */
 void LMatrix::removeTranslation()
 {
@@ -542,6 +736,12 @@ void LMatrix::removeTranslation()
     m44=1.0f;
 }
 
+/*!
+ * \en
+ * \brief  set Matrix with first value
+ * \enden
+ *
+ */
 void LMatrix::set(f32 _11, f32 _12, f32 _13, f32 _14,
                   f32 _21, f32 _22, f32 _23, f32 _24,
                   f32 _31, f32 _32, f32 _33, f32 _34,
@@ -568,6 +768,12 @@ void LMatrix::set(f32 _11, f32 _12, f32 _13, f32 _14,
     m44=_44;
 }
 
+/*!
+ * \en
+ * \brief  set matrix from pointer or array
+ * \enden
+ *
+ */
 void LMatrix::set(f32 *_in)
 {
     m11=_in[0];
@@ -591,6 +797,12 @@ void LMatrix::set(f32 *_in)
     m44=_in[15];
 }
 
+/*!
+ * \en
+ * \brief  set Matrix from 2D 4x4 array
+ * \enden
+ *
+ */
 void LMatrix::set(f32 _in[4][4])
 {
     m11=_in[0][0];
@@ -614,6 +826,17 @@ void LMatrix::set(f32 _in[4][4])
     m44=_in[3][3];
 }
 
+/*!
+ * \en
+ * \brief  transpose this matrix
+ * transposed matrix is
+ * Matrix = m11 m21 m31 m41
+ *          m12 m22 m32 m42
+ *          m13 m23 m33 m43
+ *          m14 m24 m34 m44
+ * \enden
+ * \sa getTransposed()
+ */
 void LMatrix::transpose()
 {
     lSwap(m12,m21);

@@ -1,4 +1,4 @@
-#ifndef LQUATERNION_H
+﻿#ifndef LQUATERNION_H
 #define LQUATERNION_H
 
 #include "lcore.h"
@@ -105,7 +105,7 @@ public:
     linline bool                isInversable()const;
 
     //! Get Linear Quaternion Interpolation
-    linline static LQuaternion  Lerp(const LQuaternion& _a1,const LQuaternion& _a2,const f32& _t);
+    linline static LQuaternion  lerp(const LQuaternion& _a1,const LQuaternion& _a2,const f32& _t);
 
     //! Normalize Quaternion
     linline void                normalize();
@@ -130,7 +130,7 @@ public:
     void                        set(const LVector3& _from,const LVector3& _to);
 
     //! Get Spherical Linear Quaternion Interpolation
-    linline static LQuaternion  SLerp(const LQuaternion& _a1,const LQuaternion& _a2,const f32& _t);
+    linline static LQuaternion  slerp(const LQuaternion& _a1,const LQuaternion& _a2,const f32& _t);
 
     //! Convert to an Axes
     void                        toAxes(LVector3& _right, LVector3& _up, LVector3& _forward)const;
@@ -358,7 +358,7 @@ bool LQuaternion::isInversable() const
     return (x*x+y*y+z*z+w*w>0.0f);
 }
 
-LQuaternion LQuaternion::Lerp(const LQuaternion &_a1, const LQuaternion &_a2, const f32 &_t)
+LQuaternion LQuaternion::lerp(const LQuaternion &_a1, const LQuaternion &_a2, const f32 &_t)
 {
     return (((_a2-_a1)*_t)+_a1);
 }
@@ -443,7 +443,7 @@ void LQuaternion::set(const LMatrix &_in)
     }
 }
 
-LQuaternion LQuaternion::SLerp(const LQuaternion &_a1, const LQuaternion &_a2, const f32 &_t)
+LQuaternion LQuaternion::slerp(const LQuaternion &_a1, const LQuaternion &_a2, const f32 &_t)
 {
     LQuaternion out;
     LQuaternion a1=_a1;

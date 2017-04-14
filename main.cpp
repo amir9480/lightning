@@ -1,19 +1,26 @@
+﻿//! \cond
 #include <iostream>
 #include <iomanip>
 #include <bits/stdc++.h>
+#include "windows.h"
 #include "Lightning"
 using namespace std;
+using namespace Lightning;
 
-int main(int argc, char *argv[])
+
+int main(int argc, char **argv)
 {
     L_UNUSED(argc);
     L_UNUSED(argv);
 
-    LBoundingBox a(LVector3(-1.0f,-1.0f,-1.0f),LVector3(1.0f,1.0f,1.0f));
-    LBoundingBox b(LVector3(2.0f,2.0f,2.0f),LVector3(3.0f,3.0f,3.0f));
-    cout<<a.isIntersect(b)<<endl;
-
+   // LString8 a="Hello";
+    //LString8 b="Hello";
+    //cout<<(a==b)<<endl;
+    LString a=L"say Hello World and again Hello to world";
+    cout<<a.findFromRight(L"Hello",25)<<endl;
+    MessageBoxW(0,a.getData(),L"Test",0);
     cout<<"\n\n";
     return 0;
 }
 
+//! \endcond

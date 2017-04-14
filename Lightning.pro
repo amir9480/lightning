@@ -15,7 +15,9 @@ SOURCES += main.cpp \
     lvector4.cpp \
     lboundingbox.cpp \
     lboundingsphere.cpp \
-    lray.cpp
+    lray.cpp \
+    lstring.cpp \
+    lmemory.cpp
 
 
 HEADERS += \
@@ -33,5 +35,8 @@ HEADERS += \
     lvector4.h \
     lboundingbox.h \
     lboundingsphere.h \
-    lray.h
+    lray.h \
+    lconfig.h \
+    lstring.h \
+    lmemory.h
 

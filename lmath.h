@@ -1,5 +1,19 @@
-#ifndef LMATH_H
+﻿#ifndef LMATH_H
 #define LMATH_H
+/*!
+ * \defgroup Math Math
+ * \en
+ * \brief This part contains all Math function and classes
+ * \enden
+ *
+ * \fa
+ * \brief  این قسمت شامل تمام توابع کلاس های ریاضی میشود
+ * \endfa
+ * <a href="lmathutilitynotes.html">Math functions</a>
+ *
+ *
+ * \page lmathutilitynotes
+*/
 
 #include "lmathutility.h"
 #include "lmatrix.h"

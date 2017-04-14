@@ -1,9 +1,35 @@
-#include "lboundingbox.h"
+﻿#include "lboundingbox.h"
 #include "lplane.h"
 #include "lboundingsphere.h"
 
 LNAMESPACE_BEGIN
 
+/*!
+ * \enum LBoundingBox::LCorner
+ * \en
+ * \brief Using to access to AABB corners
+ * \enden
+ *
+ * \fa
+ * \brief  جهت دسترسی به گوشه های یک جعبه می باشد
+ * \endfa
+ * \sa getCorner(LCorner _t)const
+ */
+
+
+/*!
+* \en
+* \brief BoundingBox-Plane Intersection Check
+* \param _other Plane that need to be check
+* \return if BoundingBox intersects other plane will returns true
+* \enden
+*
+* \fa
+* \brief تشخیص برخورد بین جعبه و صفحه
+* \param _other صفحه ای که باید چک بشه
+* \return اگه جعبه با صفحه دیگری برخورد داشت مقدار صحیح رو برمیگردونه
+* \endfa
+*/
 bool LBoundingBox::isIntersect(const LPlane &_other) const
 {
     bool a=_other.isFrontSide(mCorners[0]);
@@ -18,6 +44,19 @@ bool LBoundingBox::isIntersect(const LPlane &_other) const
             );
 }
 
+/*!
+* \en
+* \brief BoundingBox-BoundingSphere Intersection Check
+* \param _other Sphere that need to be check
+* \return if BoundingBox intersects other sphere returns true
+* \enden
+*
+* \fa
+* \brief تشخیص برخورد بین جعبه و کره
+* \param _other صفحه ای که باید چک بشه
+* \return اگه جعبه با صفحه دیگری برخورد داشت مقدار صحیح رو برمیگردونه
+* \endfa
+*/
 bool LBoundingBox::isIntersect(const LBoundingSphere &_other) const
 {
     LVector3 spos=_other.getPos();

@@ -1,7 +1,29 @@
-#ifndef LMATHUTILITY_H
+﻿#ifndef LMATHUTILITY_H
 #define LMATHUTILITY_H
 #include "lcore.h"
 LNAMESPACE_BEGIN
+
+/*!
+ * \file*/
+/*!
+ * \page lmathutilitynotes
+ * \ingroup Math
+ * \en
+ * All functions in lmathutility like sin and... is based on degree not Radian <br>
+ * All function name that ended with D is for working with double prections <br>
+ * \enden
+ *
+ * \fa
+ * <br> تمام توابع موجود در این فایل مثل سینوس بر اساس درجه کار میکند نه رادیان
+ * <br> ها میباشد double ختم میشود جهت کار با  D تمام توابعی که نامشان به
+ * \endfa
+ *
+ * \code{.cpp}
+ * float a=lSin(90.0f);//=1.0f
+ * double b=lTanD(45.0f);//=45.0f
+ * \endcode
+ */
+
 //! Value of PI ~= 3.14
 extern const f32 lPi;
 
@@ -51,7 +73,7 @@ f64 LAPI        lASinD(const f64& _in);
 f32 LAPI        lATan(const f32& _in);
 f64 LAPI        lATanD(const f64& _in);
 
-//! Compute aTan by degree
+//! Compute aTan by degree _y/_x
 f32 LAPI        lATan2(const f32& _y,const f32& _x);
 f64 LAPI        lATan2D(const f64& _y,const f64& _x);
 
@@ -134,6 +156,7 @@ f64 LAPI        lSinD(const f64& _in);
 
 //! Set FloatPoint to NaN
 linline void    lSetNaN(f32 &_in);
+//! \copydoc lSetNaN
 linline void    lSetNaND(f64& _in);
 
 //! sqrt
@@ -168,11 +191,29 @@ f64 lCeilD(const f64& _in)
     return -lFloorD(-_in);
 }
 
+/*!
+ * \en
+ * \brief Compare two float point number with precition limit
+ * \enden
+ *
+ * \fa
+ * \brief مقایسه دو شناور که با محدود کردن تعداد ارقام اعشار
+ * \endfa
+ * *Example usage of this*
+ * \code{.cpp}
+ * float p= 31.4f/10.0f;
+ * if(p==3.14f)// will be false
+ *    ....
+ * if(lCompareFloat(p,3.14f,2))// will be true
+ *    ....
+ * \endcode
+ */
 bool lCompareFloat(const f32& _a, const f32& _b, const u8& _precision)
 {
     return (lAbs(_a-_b)<1.0f/lPower(10,_precision));
 }
 
+//! \copydoc lCompareFloat
 bool lCompareDouble(const f64& _a, const f64& _b, const u8& _precision)
 {
     return (lAbs(_a-_b)<1.0/lPower(10,_precision));
@@ -220,6 +261,14 @@ f32 lLerpD(const f64 &_a, const f64 &_b, const f64 &_p)
     return ((_b-_a)*_p)+_a;
 }
 
+/*!
+ * \en
+ * when you send degree angle values to function this will convert it to a value between -90 and 90
+ * \enden
+ * \fa
+ * وقتی که یک زاویه بر حسب درجه به این تابع بفرستید براتون تبدیلش میکنه به یک زاویه بین نود و منفی نود
+ * \endfa
+ */
 f32 lLimitedAngle90(const f32& _angle)
 {
     f32 out=_angle;
@@ -230,6 +279,17 @@ f32 lLimitedAngle90(const f32& _angle)
     return out;
 }
 
+/*!
+ * \en
+ * when you send degree angle values to function this will convert it to a value between -180 and 180
+ * \enden
+ * \fa
+ * وقتی که یک زاویه بر حسب درجه به این تابع بفرستید براتون تبدیلش میکنه به یک زاویه بین صد و هشتاد  و منفی صد هشتاد
+ * \endfa
+ * \code
+ * float a= lLimitedAngle180(210);// a=-150
+ * \endcode
+ */
 f32 lLimitedAngle180(const f32& _angle)
 {
     f32 out=_angle;
@@ -270,6 +330,18 @@ i32 lPower(const i32& _a,const u32& _b)
     return out;
 }
 
+/*!
+ * \en
+ * \return rounded float value
+ * \enden
+ *
+ * \fa
+ * \return عدد ممیز شناور گرد شده
+ * \endfa
+ * float p=3.1415;
+ * float a=lRound(p);//a=3
+ * float b=lRound(p,2);//b=3.14
+ */
 f32 lRound(const f32& _in, const u32& _precision)
 {
     if(_in>=0.0f)
@@ -281,6 +353,7 @@ f32 lRound(const f32& _in, const u32& _precision)
     return o;
 }
 
+//! \copydoc lRound
 f64 lRoundD(const f64& _in, const u32& _precision)
 {
     if(_in>=0.0)

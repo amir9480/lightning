@@ -1,7 +1,7 @@
-#include "lquaternion.h"
-LNAMESPACE_BEGIN
-
+﻿#include "lquaternion.h"
 #include "lvector3.h"
+
+LNAMESPACE_BEGIN
 
 const LQuaternion LQuaternion::identity = LQuaternion(0.0f,0.0f,0.0f,1.0f);
 const LQuaternion LQuaternion::zero     = LQuaternion(0.0f,0.0f,0.0f,0.0f);

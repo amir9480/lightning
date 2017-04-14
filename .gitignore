@@ -1,4 +1,5 @@
 build-Lightning-Debug/
 build-Lightning-Release/
+docs/
 Lightning.pro.user
 main.cpp
