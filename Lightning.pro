@@ -17,7 +17,8 @@ SOURCES += main.cpp \
     lboundingsphere.cpp \
     lray.cpp \
     lstring.cpp \
-    lmemory.cpp
+    lmemory.cpp \
+    lfile.cpp
 
 
 HEADERS += \
@@ -38,5 +39,6 @@ HEADERS += \
     lray.h \
     lconfig.h \
     lstring.h \
-    lmemory.h
+    lmemory.h \
+    lfile.h
 

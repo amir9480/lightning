@@ -2,6 +2,12 @@
 #include "lmathutility.h"
 
 LNAMESPACE_BEGIN
+
+// type define
+template class LString_Base<wchar_t>;
+template class LString_Base<char>;
+template class LString_Base<char32_t>;
+
 template <typename chartype>
 const LString_Base<chartype> LString_Base<chartype>::empty;
 
@@ -23,14 +29,42 @@ LString_Base<chartype>::LString_Base(const chartype& _c)
 }
 
 template <typename chartype>
-LString_Base<chartype>::LString_Base(const chartype *_other)
+LString_Base<chartype>::LString_Base(const char *_firstvalue)
+{
+    mData=0;
+    (*this)=_firstvalue;
+}
+
+template <typename chartype>
+LString_Base<chartype>::LString_Base(const wchar_t *_firstvalue)
+{
+    mData=0;
+    (*this)=_firstvalue;
+}
+
+template <typename chartype>
+LString_Base<chartype>::LString_Base(const char32_t *_firstvalue)
+{
+    mData=0;
+    (*this)=_firstvalue;
+}
+
+template <typename chartype>
+LString_Base<chartype>::LString_Base(const LString_Base<char> &_other)
 {
     mData=0;
     (*this)=_other;
 }
 
 template <typename chartype>
-LString_Base<chartype>::LString_Base(const LString_Base<chartype> &_other)
+LString_Base<chartype>::LString_Base(const LString_Base<wchar_t> &_other)
+{
+    mData=0;
+    (*this)=_other;
+}
+
+template <typename chartype>
+LString_Base<chartype>::LString_Base(const LString_Base<char32_t> &_other)
 {
     mData=0;
     (*this)=_other;
@@ -102,7 +136,7 @@ u32 LString_Base<chartype>::find(const chartype *_what, u32 _from)const
 {
     u32 strc=getCapasity();
     u32 whatc=__utility_strlen(_what);
-    for(u32 i=_from;i<strc-whatc;i++)
+    for(u32 i=_from;i<strc-whatc+1;i++)
         if(mData[i]==_what[0])
             for(u32 j=0;j<whatc;j++)
             {
@@ -135,6 +169,82 @@ u32 LString_Base<chartype>::findFromRight(const chartype *_what, u32 _from) cons
                     return i;
             }
     return nothing;
+}
+
+template <typename chartype>
+LString_Base<chartype> LString_Base<chartype>::fromUTF8(const LString8 &_in)
+{
+    return LString_Base<chartype>::fromUTF8(_in.getData());
+}
+
+template <>
+LString_Base<char> LString_Base<char>::fromUTF8(const char* _in)
+{
+    //! TODO Add error
+    return LString_Base<char>(_in);
+}
+
+template <>
+LString_Base<wchar_t> LString_Base<wchar_t>::fromUTF8(const char* _in)
+{
+    LString_Base<wchar_t> o,out;
+    u32 ins=__utility_strlen(_in);
+    o.resize(ins);// maximum capasity that is needed
+    u32 l=0;
+    for(u32 i=0;i<ins;i++)
+    {
+        u32 t = __utility_utf8decode(&_in[l]);
+        wchar_t* ue=__utility_utf16encode(t);
+        u32 ues=(__utility_strlen(ue)+1)*sizeof(wchar_t);
+        lMemoryCopy(&o.mData[i],ue,ues);
+
+        if(t<=0x7f)
+            l+=1;
+        else if(t<=0x7ff)
+            l+=2;
+        else if(t<=0xffff)
+            l+=3;
+        else if(t<=0x1fffff)
+            l+=4;
+        else if(t<=0x3FFFFFF)
+            l+=5;
+        else if(t<=0x7FFFFFFF)
+            l+=6;
+        if(t>0x10000)
+            i++;
+    }
+    out=o;
+    return o;
+}
+
+template <>
+LString_Base<char32_t> LString_Base<char32_t>::fromUTF8(const char* _in)
+{
+    LString_Base<char32_t> o,out;
+    u32 ins=__utility_strlen(_in);
+    o.resize(ins);// maximum capasity that is needed
+    u32 l=0;
+    for(u32 i=0;i<ins;i++)
+    {
+        u32 t = __utility_utf8decode(&_in[l]);
+        o[i]=t;
+        o[i+1]=0;
+
+        if(t<=0x7f)
+            l+=1;
+        else if(t<=0x7ff)
+            l+=2;
+        else if(t<=0xffff)
+            l+=3;
+        else if(t<=0x1fffff)
+            l+=4;
+        else if(t<=0x3FFFFFF)
+            l+=5;
+        else if(t<=0x7FFFFFFF)
+            l+=6;
+    }
+    out=o;
+    return o;
 }
 
 template <typename chartype>
@@ -200,6 +310,28 @@ void LString_Base<chartype>::replace(u32 _index, const LString_Base<chartype> &_
 }
 
 template <typename chartype>
+void LString_Base<chartype>::replaceAll(const chartype *_what, const chartype *_with, u32 _start, u32 _end)
+{
+    LString_Base<chartype> t=*this;
+    if(_end==(u32)-1)
+        _end=getCapasity();
+    u32 whs=__utility_strlen(_what);
+    u32 li=_start-1;
+    while ((li=t.find(_what,li+1))!=LString::nothing && li<_end)
+    {
+        t.erase(li,whs);
+        t.insert(li,_with);
+    }
+    *this=t;
+}
+
+template <typename chartype>
+void LString_Base<chartype>::replaceAll(const LString_Base<chartype> &_what, const LString_Base<chartype> &_with, u32 _start, u32 _end)
+{
+    replaceAll(_what.mData,_with.mData,_start,_end);
+}
+
+template <typename chartype>
 void LString_Base<chartype>::resize(u32 ns)
 {
     u32 t_s=__utility_strlen(mData);
@@ -216,14 +348,63 @@ void LString_Base<chartype>::resize(u32 ns)
 }
 
 template <typename chartype>
-LString_Base<chartype> &LString_Base<chartype>::operator=(const chartype *_other)
+LString_Base<chartype> &LString_Base<chartype>::operator=(const char *_other)
 {
     u32 o_s=__utility_strlen(_other);
     clear();
     if(o_s==0)
         mData=0;
     resize(o_s);
-    lMemoryCopy(mData,_other,o_s*sizeof(*mData));
+    for(u32 i=0;i<o_s;i++)
+        mData[i]=(chartype)_other[i];
+    return *this;
+}
+
+template <typename chartype>
+LString_Base<chartype> &LString_Base<chartype>::operator=(const wchar_t *_other)
+{
+    u32 o_s=__utility_strlen(_other);
+    clear();
+    if(o_s==0)
+        mData=0;
+    resize(o_s);
+    for(u32 i=0;i<o_s;i++)
+        mData[i]=(chartype)_other[i];
+    return *this;
+}
+
+
+template <typename chartype>
+LString_Base<chartype> &LString_Base<chartype>::operator=(const char32_t *_other)
+{
+    u32 o_s=__utility_strlen(_other);
+    clear();
+    if(o_s==0)
+        mData=0;
+    resize(o_s);
+    for(u32 i=0;i<o_s;i++)
+        mData[i]=(chartype)_other[i];
+    return *this;
+}
+
+template <typename chartype>
+LString_Base<chartype> &LString_Base<chartype>::operator=(const LString_Base<char> &_other)
+{
+    *this=_other.mData;
+    return *this;
+}
+
+template <typename chartype>
+LString_Base<chartype> &LString_Base<chartype>::operator=(const LString_Base<wchar_t> &_other)
+{
+    *this=_other.mData;
+    return *this;
+}
+
+template <typename chartype>
+LString_Base<chartype> &LString_Base<chartype>::operator=(const LString_Base<char32_t> &_other)
+{
+    *this=_other.mData;
     return *this;
 }
 
@@ -250,19 +431,20 @@ LString_Base<chartype> &LString_Base<chartype>::operator+=(const chartype *_othe
 }
 
 template <typename chartype>
-LString_Base<chartype> &LString_Base<chartype>::operator=(const LString_Base<chartype>& _other)
-{
-    *this=_other.mData;
-    return *this;
-}
-
-template <typename chartype>
 LString_Base<chartype> &LString_Base<chartype>::operator=(LString_Base<chartype>&& _other)
 {
     clear();
     mData=_other.mData;
     _other.mData=0;
     return *this;
+}
+
+template <typename chartype>
+LString_Base<chartype> LString_Base<chartype>::operator+(const chartype _other)
+{
+    LString_Base o=*this;
+    o+=_other;
+    return o;
 }
 
 template <typename chartype>
@@ -279,6 +461,14 @@ LString_Base<chartype> LString_Base<chartype>::operator+(const LString_Base<char
     LString_Base o=*this;
     o+=_other;
     return o;
+}
+
+template <typename chartype>
+LString_Base<chartype> &LString_Base<chartype>::operator+=(const chartype _other)
+{
+    LString_Base<chartype> _o(_other);
+    *this+=_o;
+    return (*this);
 }
 
 template <typename chartype>
@@ -343,6 +533,45 @@ u32 LString_Base<chartype>::__utility_strlen(const T *_t)
         if(_t[i]==0)
             return i;
     return 0;
+}
+
+template<>
+LString8 LString_Base<wchar_t>::toUTF8() const
+{
+    LString8 o,out;
+    o.resize(getCapasity()*4*2);// maximum capasity is need for output
+    u32 l=0;
+    for(u32 i=0;i<getCapasity();i++)
+    {
+        u32 t=__utility_utf16decode(&mData[i]);
+        char* ed=__utility_utf8encode(t);
+        u32 eds=(__utility_strlen(ed)+1)*sizeof(char) ;
+        lMemoryCopy(&o.mData[l],ed,eds);
+        l+=eds-1;
+        //! Two charcters will show as one
+        if(t>0x10000)
+            i++;
+    }
+    out=o;
+    return out;
+}
+
+template<>
+LString8 LString_Base<char32_t>::toUTF8() const
+{
+    LString8 o,out;
+    o.resize(getCapasity()*4*4);// maximum capasity is need for output
+    u32 l=0;
+    for(u32 i=0;i<getCapasity();i++)
+    {
+        u32 t=mData[i];
+        char* ed=__utility_utf8encode(t);
+        u32 eds=(__utility_strlen(ed)+1)*sizeof(char);
+        lMemoryCopy(&o.mData[l],ed,eds);
+        l+=eds-1;
+    }
+    out=o;
+    return out;
 }
 
 template <typename chartype>
@@ -492,10 +721,5 @@ u32 LString_Base<chartype>::__utility_utf16decode(const wchar_t *_in)
     return o;
 }
 
-
-// type define
-template class LString_Base<wchar_t>;
-template class LString_Base<char>;
-template class LString_Base<char32_t>;
 
 LNAMESPACE_END

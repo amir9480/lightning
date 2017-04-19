@@ -15,5 +15,6 @@
 #include "lconfig.h"
 #include "ldefines.h"
 #include "lstring.h"
+#include "lfile.h"
 
 #endif // LCORE_H
