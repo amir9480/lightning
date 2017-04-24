@@ -22,7 +22,7 @@ SOURCES += main.cpp \
 
 
 HEADERS += \
-    Lightning\
+    Lightning.h\
     lmatrix.h \
     ldefines.h \
     lmath.h \
