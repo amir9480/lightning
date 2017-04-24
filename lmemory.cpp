@@ -1,7 +1,11 @@
 ﻿#include "lmemory.h"
 LNAMESPACE_BEGIN
 
+<<<<<<< HEAD
 void LAPI lMemoryCopy(void *_dest, const void *_source, u32 _copysize)
+=======
+void lMemoryCopy(void *_dest, const void *_source, u32 _copysize)
+>>>>>>> 4e1b2c6514b92827801431d7569f5fd59851993d
 {
     uchar* _d=(uchar*)_dest;
     uchar* _s=(uchar*)_source;
@@ -13,7 +17,11 @@ void LAPI lMemoryCopy(void *_dest, const void *_source, u32 _copysize)
         _d[i]=_s[i];
 }
 
+<<<<<<< HEAD
 void LAPI lMemoryCopy2(void *_dest, const void *_source, u32 _copysize)
+=======
+void lMemoryCopy2(void *_dest, const void *_source, u32 _copysize)
+>>>>>>> 4e1b2c6514b92827801431d7569f5fd59851993d
 {
     uchar* _d=(uchar*)_dest;
     uchar* _s=(uchar*)_source;
@@ -21,7 +29,11 @@ void LAPI lMemoryCopy2(void *_dest, const void *_source, u32 _copysize)
         _d[i]=_s[i];
 }
 
+<<<<<<< HEAD
 void LAPI lMemoryMove(void *_dest, const void *_source, u32 _copysize)
+=======
+void lMemoryMove(void *_dest, const void *_source, u32 _copysize)
+>>>>>>> 4e1b2c6514b92827801431d7569f5fd59851993d
 {
     uchar* _d=(uchar*)_dest;
     uchar* _s=(uchar*)_source;
@@ -34,7 +46,11 @@ void LAPI lMemoryMove(void *_dest, const void *_source, u32 _copysize)
     delete[] t;
 }
 
+<<<<<<< HEAD
 i8 LAPI lMemoryCompare(const void *_a, const void *_b, u32 s)
+=======
+i8 lMemoryCompare(const void *_a, const void *_b, u32 s)
+>>>>>>> 4e1b2c6514b92827801431d7569f5fd59851993d
 {
     char* a=(char*)_a;
     char* b=(char*)_b;

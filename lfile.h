@@ -7,7 +7,11 @@
 LNAMESPACE_BEGIN
 
 
+<<<<<<< HEAD
 class LAPI LFile
+=======
+class LFile
+>>>>>>> 4e1b2c6514b92827801431d7569f5fd59851993d
 {
 public:
     enum IOType
@@ -34,7 +38,11 @@ public:
     IOType      getOpenType() const;
 
     //! Get size of file in bytes
+<<<<<<< HEAD
     i64         getSize();
+=======
+    i32         getSize();
+>>>>>>> 4e1b2c6514b92827801431d7569f5fd59851993d
 
     //! is write/read position on end of file
     bool        isEndOfFile()const;
@@ -46,24 +54,36 @@ public:
     bool        open(LString _fname,IOType _opentype);
 
     //! write _size byte of _t on file
+<<<<<<< HEAD
     void        read(void* _t,u64 _size);
+=======
+    void        read(void* _t,u32 _size);
+>>>>>>> 4e1b2c6514b92827801431d7569f5fd59851993d
 
     //! reopen file with diffrent method
     bool        reopen(IOType _opentype);
 
     //! seek write/read pointer . set 0 to begin and -1 to end
+<<<<<<< HEAD
     void        seekp(i64 _newp);
+=======
+    void        seekp(i32 _newp);
+>>>>>>> 4e1b2c6514b92827801431d7569f5fd59851993d
 
     //! returns current pointer offset from first of file
     i32         tellp()const;
 
     //! write _size byte of _t on file
+<<<<<<< HEAD
     void        write(const void* _t,u64 _size);
 
     //! write some text
     void        write(const LString8& _in);
     void        write(const LString& _in);
     void        write(const LString32& _in);
+=======
+    void        write(const void* _t,u32 _size);
+>>>>>>> 4e1b2c6514b92827801431d7569f5fd59851993d
 //private:
     void*       mData;
     LString     mFilename;

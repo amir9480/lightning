@@ -9,7 +9,11 @@ LNAMESPACE_BEGIN
  * TO DO : Add Convertion from and to numbers
  */
 template <typename chartype>
+<<<<<<< HEAD
 class LAPI LString_Base
+=======
+class LString_Base
+>>>>>>> 4e1b2c6514b92827801431d7569f5fd59851993d
 {
     friend class LString_Base<char>;
     friend class LString_Base<wchar_t>;
