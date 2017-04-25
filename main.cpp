@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
     a.write(LString("Hello World"));
     a.close();
 
-    cout<<"Hello world"<<endl;
+    cout<<"Hello world122"<<endl;
 
     return 0;
 }
