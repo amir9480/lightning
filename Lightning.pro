@@ -22,7 +22,6 @@ SOURCES += main.cpp \
 
 
 HEADERS += \
-    Lightning.h\
     lmatrix.h \
     ldefines.h \
     lmath.h \
@@ -40,5 +39,6 @@ HEADERS += \
     lconfig.h \
     lstring.h \
     lmemory.h \
-    lfile.h
+    lfile.h \
+    Lightning
 

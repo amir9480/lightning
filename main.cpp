@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 #include <windows.h>
-#include "Lightning.h"
+#include "Lightning"
 
 using namespace std;
 using namespace Lightning;
@@ -14,6 +14,8 @@ int main(int argc, char *argv[])
     a.open("test.txt",LFile::IOType_Write);
     a.write(LString("Hello World"));
     a.close();
+
+    cout<<"Hello world"<<endl;
 
     return 0;
 }
