@@ -30,6 +30,13 @@ bool LFile::close()
     return false;
 }
 
+void LFile::flush()
+{
+    if(mData==0)
+        return;
+    fflush((FILE*)mData);
+}
+
 LString LFile::getFileName() const
 {
     return mFilename;

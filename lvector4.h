@@ -235,13 +235,21 @@ LVector4::LVector4(const LVector4 &_other)
  */
 f32& LVector4::at(u32 _i)
 {
-    //! ToDo: Add exception to i
+    if(_i>3)
+    {
+        lError("f32& LVector4::at(u32 _i): big value for _i ; must be between [0-3]");
+        return m[0];
+    }
     return m[_i];
 }
 
 f32 LVector4::at(u32 _i) const
 {
-    //! ToDo: Add exception to i
+    if(_i>3)
+    {
+        lError("f32& LVector4::at(u32 _i)const: big value for _i ; must be between [0-3]");
+        return m[0];
+    }
     return m[_i];
 }
 
@@ -320,25 +328,41 @@ LVector4 &LVector4::operator=(const LVector4 &_other)
  */
 f32& LVector4::operator[](u32 _i)
 {
-    //! ToDo: Add exception to i
+    if(_i>3)
+    {
+        lError("f32& LVector4::operator[](u32 _i): big value for _i ; must be between [0-3]");
+        return m[0];
+    }
     return m[_i];
 }
 
 f32& LVector4::operator()(u32 _i)
 {
-    //! ToDo: Add exception to i
+    if(_i>3)
+    {
+        lError("f32& LVector4::operator()(u32 _i): big value for _i ; must be between [0-3]");
+        return m[0];
+    }
     return m[_i];
 }
 
 f32 LVector4::operator[](u32 _i) const
 {
-    //! ToDo: Add exception to i
+    if(_i>3)
+    {
+        lError("f32& LVector4::operator[](u32 _i)const: big value for _i ; must be between [0-3]");
+        return m[0];
+    }
     return m[_i];
 }
 
 f32 LVector4::operator()(u32 _i) const
 {
-    //! ToDo: Add exception to i
+    if(_i>3)
+    {
+        lError("f32& LVector4::operator()(u32 _i)const: big value for _i ; must be between [0-3]");
+        return m[0];
+    }
     return m[_i];
 }
 

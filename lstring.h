@@ -8,8 +8,11 @@ LNAMESPACE_BEGIN
 /*
  * TO DO : Add Convertion from and to numbers
  */
-template <typename chartype>
 
+//! Literal for LString
+#define LSTR(_STR) (LString::fromUTF8(_STR))
+
+template <typename chartype>
 class LAPI LString_Base
 {
     friend class LString_Base<char>;
@@ -56,6 +59,9 @@ public:
     //! function searching inside str[0-_from]
     u32                             findFromRight(const chartype* _what,u32 _from=0) const;
 
+    //! Create string from integer \sa toInt
+    static LString_Base<chartype>   fromInt(const int& _in,const u32 _base=10);
+
     //! Create string from utf8-encoded string
     static LString_Base<chartype>   fromUTF8(const LString8& _in);
     static LString_Base<chartype>   fromUTF8(const char* _in);
@@ -67,6 +73,9 @@ public:
     //! returns string data directly
     chartype*                       getData()const;
 
+    //! get reversed copy of this
+    LString_Base<chartype>          getReversed()const;
+
     //! get part of string created from _n charcters from start. if end was -1 it means from _start to string end
     LString_Base<chartype>          getSubString(u32 _start,u32 _n=-1)const;
 
@@ -77,6 +86,9 @@ public:
     //! Check out this string is empty or not
     bool                            isEmpty()const;
 
+    //! Check all of string is integer number only
+    bool                            isInt()const;
+
     //! replace string from index with _val . note that if there was not enough space string will resize
     void                            replace(u32 _index,const chartype* _val);
     void                            replace(u32 _index,const LString_Base<chartype>& _val);
@@ -85,9 +97,20 @@ public:
     void                            replaceAll(const chartype* _what,const chartype* _with,u32 _start=0,u32 _end=-1);
     void                            replaceAll(const LString_Base<chartype>& _what,const LString_Base<chartype>& _with,u32 _start=0,u32 _end=-1);
 
-
     //! resize string
     void                            resize(u32 ns);
+
+    //! reverse string
+    void                            reverse();
+
+    //! Convert string to integer \sa fromInt
+    int                             toInt(const u32 _base=10)const;
+
+    //! Convert all latin characters to lowercase
+    LString_Base<chartype>          toLower()const;
+
+    //! Convert all latin characters to uppercase
+    LString_Base<chartype>          toUpper()const;
 
     //! Convert to utf8
     LString8                        toUTF8()const;
@@ -102,9 +125,9 @@ public:
     LString_Base&                   operator=(LString_Base<chartype>&& _other);
 
     //! returns this string that other appended
-    LString_Base                    operator+(const chartype _other);
-    LString_Base                    operator+(const chartype* _other);
-    LString_Base                    operator+(const LString_Base<chartype>& _other);
+    LString_Base                    operator+(const chartype _other)const;
+    LString_Base                    operator+(const chartype* _other)const;
+    LString_Base                    operator+(const LString_Base<chartype>& _other)const;
 
     //! just like append
     LString_Base&                   operator+=(const chartype _other);
@@ -143,6 +166,9 @@ public:
 protected:
     chartype* mData;
 };
+
+template<typename chartype>
+LString_Base<chartype> operator +(const chartype* _a,const LString_Base<chartype>& _b);
 
 typedef LString_Base<wchar_t>  LString;
 typedef LString_Base<char>     LString8;

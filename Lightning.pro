@@ -18,10 +18,12 @@ SOURCES += main.cpp \
     lray.cpp \
     lstring.cpp \
     lmemory.cpp \
-    lfile.cpp
+    lfile.cpp \
+    llog.cpp
 
 
 HEADERS += \
+    .gitignore\
     lmatrix.h \
     ldefines.h \
     lmath.h \
@@ -40,5 +42,6 @@ HEADERS += \
     lstring.h \
     lmemory.h \
     lfile.h \
-    Lightning
+    Lightning \
+    llog.h
 

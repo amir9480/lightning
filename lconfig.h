@@ -1,6 +1,11 @@
 ﻿#ifndef LCONFIG_H
 #define LCONFIG_H
 
+//! Name macro and version
+#define LIGHTNING "Lightning"
+#define LIGHTNING_VERSION "0.0.1"
+#define LVERSION 1
+
 //! Lightning compile type
 #define LTARGET_DEBUG   1
 #define LTARGET_RELEASE 2
@@ -9,7 +14,6 @@
 #define LCOMPILE_STATIC     1
 #define LCOMPILE_DYNAMIC    2
 
-///////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
 
 //! if Namespace is requied set this to 1
@@ -21,7 +25,13 @@
 //! How to make Lightning Library LCOMPILE_STATIC or LCOMPILE_DYNAMIC
 #define LCOMPILE_TYPE LCOMPILE_DYNAMIC
 
-#endif // LCONFIG_H
+///////////////////////////////////////////////////////////////////////////////////////
+
+//! where save Lightning logs ?
+#define LLOG_FILE "lightninglogs.txt"
+
+//! where save Lightning memory logs (for memory leak detector only)?
+#define LMLOG_FILE "lightningmemlogs.txt"
 
 /*!
  * \def LIGHTING_USING_NAMESPACE
@@ -55,3 +65,7 @@
  * \brief بود یعنی پروژه به صورت کتابخانه استاتیک هست LCOMPILE_STATIC بود یعنی پروژه به صورت کتاب خانه دینامیک کامپایل بشه و اگه  LCOMPILE_DYNAMIC اگه مقدار این برابر
  * \endfa
  */
+
+
+
+#endif // LCONFIG_H

@@ -27,6 +27,9 @@ public:
     //! close if file is open . returns false if something was wrong
     bool        close();
 
+    //! flush file
+    void        flush();
+
     //! Get full path and name of file that you passed for open
     LString     getFileName()const;
 
@@ -68,7 +71,7 @@ public:
 
     void        write(const void* _t,u32 _size);
 
-//private:
+protected:
     void*       mData;
     LString     mFilename;
     IOType      mOpenType;

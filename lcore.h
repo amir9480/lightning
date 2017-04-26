@@ -16,5 +16,6 @@
 #include "ldefines.h"
 #include "lstring.h"
 #include "lfile.h"
+#include "llog.h"
 
 #endif // LCORE_H

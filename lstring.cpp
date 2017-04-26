@@ -172,6 +172,28 @@ u32 LString_Base<chartype>::findFromRight(const chartype *_what, u32 _from) cons
 }
 
 template <typename chartype>
+LString_Base<chartype> LString_Base<chartype>::fromInt(const int &_in, const u32 _base)
+{
+    static const LString_Base<chartype> vt("0123456789ABCDEF");
+    if(_in==0)
+        return LString_Base<chartype>("0");
+    LString_Base<chartype> o;
+    o.resize(33);// maximum space requied (for _base = 2)
+    int v=(_in>0)?_in:-_in;
+
+    for(u32 i=0;v>0;i++)
+    {
+        o[i]=vt[v%_base];
+        o[i+1]=(chartype)0;
+        v/=_base;
+    }
+    o.reverse();
+    if(_in<0)
+        o.insert(0,"-");
+    return o;
+}
+
+template <typename chartype>
 LString_Base<chartype> LString_Base<chartype>::fromUTF8(const LString8 &_in)
 {
     return LString_Base<chartype>::fromUTF8(_in.getData());
@@ -260,6 +282,14 @@ chartype *LString_Base<chartype>::getData() const
 }
 
 template <typename chartype>
+LString_Base<chartype> LString_Base<chartype>::getReversed() const
+{
+    LString_Base<chartype> o=*this;
+    o.reverse();
+    return o;
+}
+
+template <typename chartype>
 LString_Base<chartype> LString_Base<chartype>::getSubString(u32 _start, u32 _n) const
 {
     LString_Base<chartype> o;
@@ -291,6 +321,19 @@ template <typename chartype>
 bool LString_Base<chartype>::isEmpty() const
 {
     return (getCapasity()==0);
+}
+
+template <typename chartype>
+bool LString_Base<chartype>::isInt() const
+{
+    u32 tc=getCapasity();
+    if(mData[0]!=(chartype)'+'&&mData[0]!=(chartype)'-')
+        if(mData[0]>(chartype)'9'||mData[0]<(chartype)'0')
+            return false;
+    for(u32 i=1;i<tc;i++)
+        if(mData[i]>(chartype)'9'||mData[i]<(chartype)'0')
+            return false;
+    return true;
 }
 
 template <typename chartype>
@@ -345,6 +388,59 @@ void LString_Base<chartype>::resize(u32 ns)
         lMemoryCopy(mData,_pd,lMin(t_s,ns)*sizeof(*mData));
         delete[] _pd;
     }
+}
+
+template <typename chartype>
+void LString_Base<chartype>::reverse()
+{
+    u32 sc=getCapasity();
+    for(u32 i=0;i<sc/2;i++)
+        lSwap(mData[i],mData[sc-i-1]);
+}
+
+template <typename chartype>
+int LString_Base<chartype>::toInt(const u32 _base) const
+{
+    static const LString_Base<chartype> vt("0123456789ABCDEF");
+    u32 sc=getCapasity();
+    int o=0;
+    u32 index=0,i=0;
+    LString_Base<chartype> theData=toUpper();
+    if(theData[0]==(chartype)'+'||theData[0]==(chartype)'-')
+        i=1;
+    for(;i<sc;i++)
+        if((index=vt.find(LString_Base<chartype>(theData[i])))!=nothing &&
+            index<_base)
+        {
+            o= o*_base+index;
+        }
+        else
+            return 0;
+    if(mData[0]==(chartype)'-')
+        o=-o;
+    return o;
+}
+
+template <typename chartype>
+LString_Base<chartype> LString_Base<chartype>::toLower() const
+{
+    u32 sc=getCapasity();
+    LString o=*this;
+    for (u32 i = 0; i < sc; i++)
+        if(o[i]>=(chartype)'A'&&o[i]<=(chartype)'Z')
+            o[i]+=(chartype)('z'-'Z');
+    return o;
+}
+
+template <typename chartype>
+LString_Base<chartype> LString_Base<chartype>::toUpper() const
+{
+    u32 sc=getCapasity();
+    LString o=*this;
+    for (u32 i = 0; i < sc; i++)
+        if(o[i]>=(chartype)'a'&&o[i]<=(chartype)'z')
+            o[i]-=(chartype)('z'-'Z');
+    return o;
 }
 
 template <typename chartype>
@@ -440,25 +536,25 @@ LString_Base<chartype> &LString_Base<chartype>::operator=(LString_Base<chartype>
 }
 
 template <typename chartype>
-LString_Base<chartype> LString_Base<chartype>::operator+(const chartype _other)
+LString_Base<chartype> LString_Base<chartype>::operator+(const chartype _other)const
 {
-    LString_Base o=*this;
+    LString_Base<chartype> o=*this;
     o+=_other;
     return o;
 }
 
 template <typename chartype>
-LString_Base<chartype> LString_Base<chartype>::operator+(const chartype *_other)
+LString_Base<chartype> LString_Base<chartype>::operator+(const chartype *_other)const
 {
-    LString_Base o=*this;
+    LString_Base<chartype> o=*this;
     o+=_other;
     return o;
 }
 
 template <typename chartype>
-LString_Base<chartype> LString_Base<chartype>::operator+(const LString_Base<chartype> &_other)
+LString_Base<chartype> LString_Base<chartype>::operator+(const LString_Base<chartype> &_other)const
 {
-    LString_Base o=*this;
+    LString_Base<chartype> o=*this;
     o+=_other;
     return o;
 }
@@ -721,5 +817,16 @@ u32 LString_Base<chartype>::__utility_utf16decode(const wchar_t *_in)
     return o;
 }
 
+template <typename chartype>
+LString_Base<chartype> operator +(const chartype *_a, const LString_Base<chartype> &_b)
+{
+    LString o=_a;
+    o+=_b;
+    return o;
+}
+
+template LString_Base<char> operator +(const char *_a, const LString_Base<char> &_b);
+template LString_Base<wchar_t> operator +(const wchar_t *_a, const LString_Base<wchar_t> &_b);
+template LString_Base<char32_t> operator +(const char32_t *_a, const LString_Base<char32_t> &_b);
 
 LNAMESPACE_END
