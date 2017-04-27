@@ -9,6 +9,17 @@
 #define         LUNUSED(IN)
 #endif
 
+#define LOVERLOADED_MACRO( _MACRONAME_ ,...) __MACRO( _MACRONAME_ , _COUNTARGS(__VA_ARGS__))(__VA_ARGS__)
+#define _COUNTARGS(...) __COUNTARGS((__VA_ARGS__,30,29,28,27,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1))
+#define __COUNTARGS(ARG) ___COUNTARGS ARG
+#define ___COUNTARGS(_1,_2,_3,_4,_5,_6,_7,_8,_9,_10,_11,_12,_13,_14,_15,_16,_17,_18,_19,_20,_21,_22,_23,_24,_25,_26,_27,_28,_29,_30,N,...) N
+#define __MACRO( name , number) __MACRO2( name , number )
+#define __MACRO2( name , number ) __MACRO3( name , number )
+#define __MACRO3( name , number ) name##number
+
+#define LTOSTRING(X) ______TOSTRING1(#X)
+#define ______TOSTRING1(X) X
+
 LNAMESPACE_BEGIN
 
 //! remove reference & from type

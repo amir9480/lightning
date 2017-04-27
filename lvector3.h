@@ -227,13 +227,13 @@ f32 LVector3::angle(const LVector3 &_a, const LVector3 &_b)
 
 f32& LVector3::at(u32 _i)
 {
-    //! ToDo: Add exception to i
+    lError(_i>2,"f32& LVector3::at(u32 _i): big value for _i ; must be between [0-2]",m[0]);
     return m[_i];
 }
 
 f32 LVector3::at(u32 _i) const
 {
-    //! ToDo: Add exception to i
+    lError(_i>2,"f32 LVector3::at(u32 _i)const: big value for _i ; must be between [0-2]",m[0]);
     return m[_i];
 }
 
@@ -404,25 +404,25 @@ LMatrix LVector3::toTranslationMatrix() const
 
 f32& LVector3::operator[](u32 _i)
 {
-    //! ToDo: Add exception to i
+    lError(_i>2,"f32& LVector3::operator[](u32 _i): big value for _i ; must be between [0-2]",m[0]);
     return m[_i];
 }
 
 f32& LVector3::operator()(u32 _i)
 {
-    //! ToDo: Add exception to i
+    lError(_i>2,"f32& LVector3::operator()(u32 _i): big value for _i ; must be between [0-2]",m[0]);
     return m[_i];
 }
 
 f32 LVector3::operator[](u32 _i) const
 {
-    //! ToDo: Add exception to i
+    lError(_i>2,"f32 LVector3::operator[](u32 _i) const: big value for _i ; must be between [0-2]",m[0]);
     return m[_i];
 }
 
 f32 LVector3::operator()(u32 _i) const
 {
-    //! ToDo: Add exception to i
+    lError(_i>2,"f32 LVector3::operator()(u32 _i) const: big value for _i ; must be between [0-2]",m[0]);
     return m[_i];
 }
 

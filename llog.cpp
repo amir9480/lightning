@@ -66,7 +66,7 @@ void __Log_Manager::addWarning(const LString &_message, const LString &_filename
     }
     __lastlog=_message;
     __log_repeat=1;
-    __logfile.write(L"[W] *WARNING* in"+_filename+L"["+LString::fromInt(_line)+L"] = "+_message);
+    __logfile.write(L"[W] *WARNING* in "+_filename+L"["+LString::fromInt(_line)+L"] = "+_message);
     __logfile.flush();
 }
 
@@ -84,7 +84,7 @@ void __Log_Manager::addError(const LString &_message, const LString &_filename, 
     }
     __lastlog=_message;
     __log_repeat=1;
-    __logfile.write(L"\n[E] !***ERROR***! in"+_filename+L"["+LString::fromInt(_line)+L"] = "+_message);
+    __logfile.write(L"\n[E] !***ERROR***! in "+_filename+L"["+LString::fromInt(_line)+L"] = "+_message);
     __logfile.flush();
 }
 
@@ -93,7 +93,7 @@ void __Log_Manager::addAssert(const LString &_message, const LString &_filename,
     __lastlog=_message;
     __log_repeat=1;
     __logfile.write(LSTR("\n\n==================================================\n\n"));
-    __logfile.write(L"[A] ASSERT in"+_filename+L"["+LString::fromInt(_line)+L"] = "+_message);
+    __logfile.write(L"[A] ASSERT in "+_filename+L"["+LString::fromInt(_line)+L"] = "+_message);
     __logfile.write(LSTR("\nPROGRAM IS GOING TO BE CLOSED"));
     __logfile.write(LSTR("\n\n==================================================\n\n"));
     __logfile.flush();
