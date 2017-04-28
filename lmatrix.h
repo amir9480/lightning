@@ -119,6 +119,12 @@ public:
     //! Get Scale (where the matrix is a scale matrix)
     LVector3                getScaleParameter()const;
 
+    //! Get Only scale and rotation part of this matrix (copy) \sa  removeTranslation
+    linline LMatrix         getRotationScaleOnly()const;
+
+    //! Get only translation part of this matrix (copy) \sa removeRotationScale
+    linline LMatrix         getTranslationOnly()const;
+
     //! Get Translation (where the matrix is a translation matrix)
     LVector3                getTranslationParameter()const;
 
@@ -135,7 +141,19 @@ public:
     linline bool            isInversable()const;
 
     //! remove translation part of matrix to convert to rotation and scale only
+    //! will convert to
+    //! m11 m12 m13 0
+    //! m21 m22 m23 0
+    //! m31 m32 m33 0
+    //! 0   0   0   1
     linline void            removeTranslation();
+
+    //! remove rotation/scale part of matrix and will convert to translation matix only
+    //! 1   0   0   0
+    //! 0   1   0   0
+    //! 0   0   1   0
+    //! m41 m42 m43 1
+    linline void            removeRotationScale();
 
     // set Matrix
     linline void            set(f32 _11,f32 _12,f32 _13,f32 _14,
@@ -328,25 +346,25 @@ LMatrix::LMatrix(const LMatrix &_other)
 
 f32& LMatrix::at(u32 i)
 {
-    //! To Do: Add i error exception log
+    lError(i>=16,"f32& LMatrix::at(u32 i) : i is  not acceptable",m[0][0]);
     return m[i/4][i%4];
 }
 
 f32& LMatrix::at(u32 i, u32 j)
 {
-    //! To Do: Add i,j error exception log
+    lError(i>=4||j>=4,"f32& LMatrix::at(u32 i, u32 j) : i or j is  not acceptable",m[0][0]);
     return m[i][j];
 }
 
 f32 LMatrix::at(u32 i)const
 {
-    //! To Do: Add i error exception log
+    lError(i>=16,"f32 LMatrix::at(u32 i)const : i is  not acceptable",m[0][0]);
     return m[i/4][i%4];
 }
 
 f32 LMatrix::at(u32 i, u32 j)const
 {
-    //! To Do: Add i,j error exception log
+    lError(i>=4||j>=4,"f32 LMatrix::at(u32 i, u32 j)const : i or j is  not acceptable",m[0][0]);
     return m[i][j];
 }
 
@@ -634,6 +652,20 @@ LMatrix LMatrix::getInverseTransposed() const
     return out;
 }
 
+LMatrix LMatrix::getRotationScaleOnly() const
+{
+    LMatrix o=*this;
+    o.removeTranslation();
+    return o;
+}
+
+LMatrix LMatrix::getTranslationOnly() const
+{
+    LMatrix o=*this;
+    o.removeRotationScale();
+    return o;
+}
+
 /*!
  * \en
  * \brief  Get Transposed of this matrix.
@@ -734,6 +766,12 @@ void LMatrix::removeTranslation()
     m42=m24=0.0f;
     m43=m34=0.0f;
     m44=1.0f;
+}
+
+void LMatrix::removeRotationScale()
+{
+    m12=m13=m14=m21=m23=m24=m31=m32=m34=0.0f;
+    m11=m22=m33=m44=1.0f;
 }
 
 /*!
@@ -849,37 +887,37 @@ void LMatrix::transpose()
 
 f32& LMatrix::operator()(u32 i)
 {
-    //! To Do: Add i error exception log
+    lError(i>=16,"f32& LMatrix::operator()(u32 i) : i is not acceptable",m[0][0]);
     return m[i/4][i%4];
 }
 
 f32& LMatrix::operator()(u32 i, u32 j)
 {
-    //! To Do: Add i,j error exception log
+    lError(i>=4||j>=4,"f32& LMatrix::operator()(u32 i, u32 j) : i is not acceptable",m[0][0]);
     return m[i][j];
 }
 
 f32 LMatrix::operator()(u32 i) const
 {
-    //! To Do: Add i error exception log
+    lError(i>=16,"f32& LMatrix::operator()(u32 i)const : i is not acceptable",m[0][0]);
     return m[i/4][i%4];
 }
 
 f32 LMatrix::operator()(u32 i, u32 j) const
 {
-    //! To Do: Add i,j error exception log
+    lError(i>=4||j>=4,"f32& LMatrix::operator()(u32 i, u32 j)const : i is not acceptable",m[0][0]);
     return m[i][j];
 }
 
 f32* LMatrix::operator[](u32 i)
 {
-    //! To Do: Add i error exception log
+    lError(i>=4,"f32* LMatrix::operator[](u32 i) : i is not acceptable",m[0]);
     return m[i];
 }
 
 const f32* LMatrix::operator[] (u32 i)const
 {
-    //! To Do: Add i error exception log
+    lError(i>=4,"f32* LMatrix::operator[](u32 i)const : i is not acceptable",m[0]);
     return m[i];
 }
 

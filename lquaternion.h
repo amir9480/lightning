@@ -226,13 +226,13 @@ LQuaternion::LQuaternion(const LQuaternion &_other)
 
 f32 &LQuaternion::at(u32 i)
 {
-    //! TO DO : Add assert to i
+    lError(i>=4,"f32 &LQuaternion::at(u32 i): value i is not acceptable . [0-3]",m[0]);
     return m[i];
 }
 
 f32 LQuaternion::at(u32 i) const
 {
-    //! TO DO : Add assert to i
+    lError(i>=4,"f32 &LQuaternion::at(u32 i)const: value i is not acceptable . [0-3]",m[0]);
     return m[i];
 }
 
@@ -507,13 +507,14 @@ LMatrix LQuaternion::toRotationMatrix() const
 
 f32 &LQuaternion::operator[](u32 i)
 {
-    //! TO DO : Add assert to i
+    lError(i>=4,"f32 &LQuaternion::operator[](u32 i) : value i is not acceptable . [0-3]",m[0]);
     return m[i];
 }
 
 f32 LQuaternion::operator [](u32 i) const
 {
-    //! TO DO : Add assert to i
+
+    lError(i>=4,"f32 &LQuaternion::operator[](u32 i)const : value i is not acceptable . [0-3]",m[0]);
     return m[i];
 }
 

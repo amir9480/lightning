@@ -17,5 +17,7 @@
 #include "lstring.h"
 #include "lfile.h"
 #include "llog.h"
+#include "lvector.h"
+#include "lutility.h"
 
 #endif // LCORE_H

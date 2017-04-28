@@ -19,8 +19,9 @@ class LAPI LString_Base
     friend class LString_Base<wchar_t>;
     friend class LString_Base<char32_t>;
 public:
-    typedef wchar_t*        iterator;
-    typedef const wchar_t*  const_iterator;
+    typedef chartype         type;
+    typedef chartype*        iterator;
+    typedef const chartype*  const_iterator;
 
     typedef LString_Base<wchar_t>  LString;
     typedef LString_Base<char>     LString8;
@@ -35,7 +36,7 @@ public:
     LString_Base(const LString_Base<char>& _other);
     LString_Base(const LString_Base<wchar_t>& _other);
     LString_Base(const LString_Base<char32_t>& _other);
-    LString_Base(LString_Base<chartype> &&_other);
+    LString_Base(LString_Base<chartype>&& _other);
     virtual ~LString_Base();
 
     //! Append another string to this
@@ -46,10 +47,18 @@ public:
     chartype&                       at(u32 i);
     chartype                        at(u32 i)const;
 
+    //! it's pointer to string start for range based for
+    iterator                        begin();
+    const_iterator                  begin()const;
+
     //! Clear string
     void                            clear();
 
-    //! erase part of string . _start = start point to erase and _n is size to erase if was -1 . it will erase from _start while string capasity
+    //! it's pointer to string end for range based for
+    iterator                        end();
+    const_iterator                  end()const;
+
+    //! erase part of string . _start = start point to erase and _n is size to erase if was -1 . it will erase from _start while string capacity
     void                            erase(u32 _start,u32 _n=-1);
 
     //! find index of a sub str. if was no result returns LString::nothing
@@ -66,12 +75,12 @@ public:
     static LString_Base<chartype>   fromUTF8(const LString8& _in);
     static LString_Base<chartype>   fromUTF8(const char* _in);
 
-    //! Get Capasity of string means that how much is allocated by string
+    //! Get capacity of string means that how much is allocated by string
     //! to get length you need use getLength
-    u32                             getCapasity()const;
+    u32                             getcapacity()const;
 
     //! returns string data directly
-    chartype*                       getData()const;
+    const chartype*                 getData()const;
 
     //! get reversed copy of this
     LString_Base<chartype>          getReversed()const;
@@ -87,7 +96,7 @@ public:
     bool                            isEmpty()const;
 
     //! Check all of string is integer number only
-    bool                            isInt()const;
+    bool                            isInt(u32 _base=10)const;
 
     //! replace string from index with _val . note that if there was not enough space string will resize
     void                            replace(u32 _index,const chartype* _val);
@@ -102,6 +111,9 @@ public:
 
     //! reverse string
     void                            reverse();
+
+    //! swap this string with another string
+    void                            swap(LString_Base<chartype>& _other);
 
     //! Convert string to integer \sa fromInt
     int                             toInt(const u32 _base=10)const;
@@ -159,7 +171,7 @@ public:
     static u32                      __utility_utf16decode(const wchar_t *_in);
     //! convert a utf16 encoded to unicode
     static wchar_t*                 __utility_utf16encode(u32 _in);
-    //! returns capasity of string t
+    //! returns capacity of string t
     template <typename T>
     static u32                      __utility_strlen(const T* _t);
 
@@ -167,8 +179,8 @@ protected:
     chartype* mData;
 };
 
-template<typename chartype>
-LString_Base<chartype> operator +(const chartype* _a,const LString_Base<chartype>& _b);
+template <typename chartype1,typename chartype2>
+LString_Base<chartype1> operator +(const chartype1 *_a, const LString_Base<chartype2> &_b);
 
 typedef LString_Base<wchar_t>  LString;
 typedef LString_Base<char>     LString8;

@@ -4,6 +4,5 @@
 
 #include "lcore.h"
 #include "lmath.h"
-#include "lutility.h"
 
 #endif // LIGHTNING_H

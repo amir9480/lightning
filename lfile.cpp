@@ -140,7 +140,7 @@ void LFile::write(const LString8 &_in)
 {
     if(mData==0)
         return;
-    u32 s= _in.getCapasity();
+    u32 s= _in.getcapacity();
     fwrite(_in.getData(),1,s,(FILE*)mData);
 }
 

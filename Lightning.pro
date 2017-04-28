@@ -19,7 +19,8 @@ SOURCES += main.cpp \
     lstring.cpp \
     lmemory.cpp \
     lfile.cpp \
-    llog.cpp
+    llog.cpp \
+    lvector.cpp
 
 
 HEADERS += \
@@ -43,5 +44,6 @@ HEADERS += \
     lmemory.h \
     lfile.h \
     Lightning \
-    llog.h
+    llog.h \
+    lvector.h
 

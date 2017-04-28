@@ -1,6 +1,6 @@
 #ifndef LUTILITY_H
 #define LUTILITY_H
-#include "lcore.h"
+#include "ldefines.h"
 
 #if LTARGET==LTARGET_DEBUG
 //! Disable Unused parameter warning
