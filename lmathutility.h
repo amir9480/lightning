@@ -173,6 +173,8 @@ linline f32     lToDegree(const f32& _in);
 //! Convert degree to radian
 linline f32     lToRadian(const f32& _in);
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 template <typename T>
 T lAbs(const T& _in)
 {

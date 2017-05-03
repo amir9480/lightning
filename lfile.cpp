@@ -1,5 +1,5 @@
 ﻿#include "lfile.h"
-#include "stdio.h"
+#include <stdio.h>
 LNAMESPACE_BEGIN
 
 LFile::LFile()

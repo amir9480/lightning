@@ -1,5 +1,5 @@
 #include "llog.h"
-
+#include <stdio.h>
 LNAMESPACE_BEGIN
 
 #if LTARGET==LTARGET_DEBUG
@@ -46,10 +46,13 @@ void __Log_Manager::addLog(const LString &_message, const LString &_filename, co
         if(!__lastlog.isEmpty())
             __logfile.write(LSTR(" (")+LString::fromInt(__log_repeat)+L")\n");
     }
+    LString _errormessage=L"[L] Message from "+_filename+L"["+LString::fromInt(_line)+L"] = "+_message;
     __lastlog=_message;
     __log_repeat=1;
-    __logfile.write(L"[L] Message from "+_filename+L"["+LString::fromInt(_line)+L"] = "+_message);
+    __logfile.write(_errormessage);
     __logfile.flush();
+
+    puts(_errormessage.toUTF8().getData());
 }
 
 void __Log_Manager::addWarning(const LString &_message, const LString &_filename, const i32 &_line)
@@ -64,10 +67,13 @@ void __Log_Manager::addWarning(const LString &_message, const LString &_filename
         if(!__lastlog.isEmpty())
             __logfile.write(LSTR(" (")+LString::fromInt(__log_repeat)+L")\n");
     }
+    LString _errormessage=L"[W] *WARNING* in "+_filename+L"["+LString::fromInt(_line)+L"] = "+_message;
     __lastlog=_message;
     __log_repeat=1;
-    __logfile.write(L"[W] *WARNING* in "+_filename+L"["+LString::fromInt(_line)+L"] = "+_message);
+    __logfile.write(_errormessage);
     __logfile.flush();
+
+    puts(_errormessage.toUTF8().getData());
 }
 
 void __Log_Manager::addError(const LString &_message, const LString &_filename, const i32 &_line)
@@ -82,21 +88,31 @@ void __Log_Manager::addError(const LString &_message, const LString &_filename, 
         if(!__lastlog.isEmpty())
             __logfile.write(LSTR(" (")+LString::fromInt(__log_repeat)+L")\n");
     }
+    LString errormessage=L"\n[E] !***ERROR***! in "+_filename+L"["+LString::fromInt(_line)+L"] = "+_message;
     __lastlog=_message;
     __log_repeat=1;
-    __logfile.write(L"\n[E] !***ERROR***! in "+_filename+L"["+LString::fromInt(_line)+L"] = "+_message);
+    __logfile.write(errormessage);
     __logfile.flush();
+
+    puts(errormessage.toUTF8().getData());
 }
 
 void __Log_Manager::addAssert(const LString &_message, const LString &_filename, const i32 &_line)
 {
     __lastlog=_message;
+    LString _errormessage=L"[A] ASSERT in "+_filename+L"["+LString::fromInt(_line)+L"] = "+_message;
     __log_repeat=1;
     __logfile.write(LSTR("\n\n==================================================\n\n"));
-    __logfile.write(L"[A] ASSERT in "+_filename+L"["+LString::fromInt(_line)+L"] = "+_message);
+    __logfile.write(_errormessage);
     __logfile.write(LSTR("\nPROGRAM IS GOING TO BE CLOSED"));
     __logfile.write(LSTR("\n\n==================================================\n\n"));
     __logfile.flush();
+
+    puts("\n\n==================================================\n\n");
+    puts(_errormessage.toUTF8().getData());
+    puts("\nPROGRAM IS GOING TO BE CLOSED");
+    puts("\n\n==================================================\n\n");
+
     while (1)
         throw 1;
 }
