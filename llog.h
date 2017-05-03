@@ -55,7 +55,7 @@ LNAMESPACE_BEGIN
 #endif// LIGHTING_USING_NAMESPACE
 
 //! singlton class for manage log file
-class __Log_Manager
+class LAPI __Log_Manager
 {
 private:
     __Log_Manager();

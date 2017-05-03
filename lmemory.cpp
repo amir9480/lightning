@@ -1,4 +1,6 @@
 ﻿#include "lmemory.h"
+
+
 LNAMESPACE_BEGIN
 
 void LAPI lMemoryCopy(void *_dest, const void *_source, u32 _copysize)
@@ -46,3 +48,4 @@ i8 LAPI lMemoryCompare(const void *_a, const void *_b, u32 s)
 }
 
 LNAMESPACE_END
+

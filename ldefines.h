@@ -2,6 +2,7 @@
 #define LDEFINES_H
 
 #include "lconfig.h"
+#include "lmemorylog.h"
 
 // set Lightning namespace Dynamically
 #if LIGHTING_USING_NAMESPACE
@@ -65,8 +66,6 @@
     #define linline inline
 #endif
 
-LNAMESPACE_BEGIN
-
 typedef char                     i8  ;
 typedef short int                i16 ;
 typedef int                      i32 ;
@@ -80,6 +79,9 @@ typedef unsigned long long int   u64 , ulong;
 typedef float                    f32 ;
 typedef double                   f64 ;
 typedef long double              f96 ;
+
+LNAMESPACE_BEGIN
+
 
 
 LNAMESPACE_END

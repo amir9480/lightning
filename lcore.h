@@ -19,5 +19,7 @@
 #include "llog.h"
 #include "lvector.h"
 #include "lutility.h"
+#include "lmemory.h"
+#include "lmemorylog.h"
 
 #endif // LCORE_H

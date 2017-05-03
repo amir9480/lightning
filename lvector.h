@@ -7,7 +7,7 @@
 LNAMESPACE_BEGIN
 
 template<typename T>
-class LVector
+class LAPI LVector
 {
 public:
     typedef T           type;
