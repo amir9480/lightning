@@ -77,7 +77,7 @@ public:
 
     //! Get capacity of string means that how much is allocated by string
     //! to get length you need use getLength
-    u32                             getcapacity()const;
+    u32                             getCapacity()const;
 
     //! returns string data directly
     const chartype*                 getData()const;

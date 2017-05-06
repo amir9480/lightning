@@ -4,6 +4,8 @@ CONFIG += console c++11
 CONFIG -= app_bundle
 CONFIG -= qt
 
+#QMAKE_CXXFLAGS+= -pedantic
+
 SOURCES += main.cpp \
     lmatrix.cpp \
     lmathutility.cpp \
@@ -21,7 +23,8 @@ SOURCES += main.cpp \
     lfile.cpp \
     llog.cpp \
     lvector.cpp \
-    lmemorylog.cpp
+    lmemorylog.cpp \
+    lpair.cpp
 
 
 HEADERS += \
@@ -47,5 +50,6 @@ HEADERS += \
     Lightning \
     llog.h \
     lvector.h \
-    lmemorylog.h
+    lmemorylog.h \
+    lpair.h
 

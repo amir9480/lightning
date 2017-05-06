@@ -217,8 +217,10 @@ public:
     static const LMatrix zero;
 
 public:
-    union{
-        struct{
+    union
+    {
+        struct
+        {
             f32 m11,m12,m13,m14;
             f32 m21,m22,m23,m24;
             f32 m31,m32,m33,m34;

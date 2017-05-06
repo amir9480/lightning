@@ -8,9 +8,9 @@ __Log_Manager __Log_Manager::get;
 
 __Log_Manager::__Log_Manager():__log_repeat(1)
 {
-    __logfile.open(LLOG_FILE,Lightning::LFile::IOType::IOType_Write);
+    __logfile.open(LLOG_FILE,Lightning::LFile::IOType::IOTypeWrite);
     __logfile.close();
-    __logfile.open(LLOG_FILE,Lightning::LFile::IOType::IOType_Append);
+    __logfile.open(LLOG_FILE,Lightning::LFile::IOType::IOTypeAppend);
     __logfile.write(LString("Welcome to Lightning "));
     __logfile.write(LString(LIGHTNING_VERSION));
     __logfile.write(LString("\n---------------------------------------------\n How to find by message type? ---> [A]=Asserts - [E]=Errors - [W]=Warnings - [L]=Logs\n---------------------------------------------\n"));

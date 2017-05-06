@@ -32,6 +32,8 @@ public:
     {
         FILE* f=fopen(LMLOG_FILE,"a");
 
+        fprintf(f,"undestroyed Allocated size is %d B \n\n",ptrssize+arrayptrssize);
+
         for(unsigned int i=0;i<ptrssize;i++)
             fprintf(f,"memory leak detected . var was allocated in %s ( %d ) address=%p \n\n",ptrs[i].mFile,ptrs[i].mLine,ptrs[i].mAddress);
 
@@ -40,6 +42,9 @@ public:
 
         if(ptrssize>0||arrayptrssize>0||wrongjob)
             printf("\n\n***Memory leak detected please check file =\"%s\"***\n\n",LMLOG_FILE);
+
+        if(ptrssize+arrayptrssize==0)
+            fprintf(f,"Every thing is OK . thanks for checking \n\n");
 
         fclose(f);
         free(ptrs);
@@ -141,41 +146,13 @@ private:
 
 extern _lptrlogmanager __lptrlogmanager;
 
-inline void* operator new (unsigned int _size,const char* _filename,unsigned int _line)
-{
-    void* o=malloc(_size);
-    _lptrobj a;
-    a.mAddress=o;
-    a.mFile=_filename;
-    a.mLine=_line;
-    a.mSize=_size;
-    __lptrlogmanager.addPtr(a);
-    return o;
-}
+void* operator new (unsigned int _size,const char* _filename,unsigned int _line);
 
-inline void* operator new[] (unsigned int _size,const char* _filename,unsigned int _line)
-{
-    void* o=malloc(_size);
-    _lptrobj a;
-    a.mAddress=o;
-    a.mFile=_filename;
-    a.mLine=_line;
-    a.mSize=_size;
-    __lptrlogmanager.addArrayPtr(a);
-    return o;
-}
+void* operator new[] (unsigned int _size,const char* _filename,unsigned int _line);
 
-inline void operator delete (void* ptr)
-{
-    __lptrlogmanager.removePtr(ptr);
-    free(ptr);
-}
+void operator delete (void* ptr)noexcept;
 
-inline void operator delete[] (void* ptr)
-{
-    __lptrlogmanager.removeArrayPtr(ptr);
-    free(ptr);
-}
+void operator delete[] (void* ptr)noexcept;
 
 #undef new
 #define new new(__FILE__,__LINE__)

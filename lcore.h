@@ -21,5 +21,6 @@
 #include "lutility.h"
 #include "lmemory.h"
 #include "lmemorylog.h"
+#include "lpair.h"
 
 #endif // LCORE_H

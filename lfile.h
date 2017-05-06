@@ -12,10 +12,10 @@ class LAPI LFile
 public:
     enum IOType
     {
-        IOType_Read     =0x01,
-        IOType_Write    =0x02,
-        IOType_Append   =0x04,
-        IOType_Binary   =0x08
+        IOTypeRead     =0x01,
+        IOTypeWrite    =0x02,
+        IOTypeAppend   =0x04,
+        IOTypeBinary   =0x08
     };
 
 public:

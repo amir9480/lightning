@@ -361,6 +361,92 @@ template<typename T1, typename T2=T1>
 struct Less{ const static bool value = !LIsSameType<decltype( *(T1*)(0) < *(T2*)(0) ),_No>::value;};
 }
 
+
+
+
+enum LSortType
+{
+    LSortTypeAscending,
+    LSortTypeDescending
+};
+
+template<typename T>
+linline u32 _qs_partitioninc(T*& _arr,u32 left,u32 right)
+{
+    u32 l=left;
+    u32 r=right-1;
+    T p=_arr[right];
+    while(1)
+    {
+        while(_arr[l]<p)
+            l++;
+        while(r>0&&_arr[r]>p)
+            r--;
+        if(l>=r)
+            break;
+        else
+            lSwap(_arr[l],_arr[r]);
+    }
+    lSwap(_arr[l],_arr[right]);
+    return l;
+}
+
+template<typename T>
+void lQuickSortInc(T* _arr,u32 _size,u32 left=0)
+{
+    if(left>=_size||_size<=1)
+        return;
+    int p=_qs_partitioninc<T>(_arr,left,_size-1);
+    lQuickSortInc(_arr,p,left);
+    lQuickSortInc(_arr,_size,p+1);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+template<typename T>
+linline u32 _qs_partitiondec(T*& _arr,u32 left,u32 right)
+{
+    u32 l=left;
+    u32 r=right-1;
+    T p=_arr[right];
+    while(1)
+    {
+        while(_arr[l]>p)
+            l++;
+        while(r>0&&_arr[r]<p)
+            r--;
+        if(l>=r)
+            break;
+        else
+            lSwap(_arr[l],_arr[r]);
+    }
+    lSwap(_arr[l],_arr[right]);
+    return l;
+}
+
+template<typename T>
+void lQuickSortDec(T* _arr,u32 _size,u32 left=0)
+{
+    if(left>=_size||_size<=1)
+        return;
+    int p=_qs_partitiondec<T>(_arr,left,_size-1);
+    lQuickSortDec(_arr,p,left);
+    lQuickSortDec(_arr,_size,p+1);
+}
+
+
+
+//! function to sort arrays
+template<typename T>
+void lSort(T* _arr,u32 _size,LSortType _type=LSortType::LSortTypeAscending)
+{
+    if(_type==LSortTypeAscending)
+        lQuickSortInc(_arr,_size);
+    else if(LSortTypeDescending)
+        lQuickSortDec(_arr,_size);
+
+}
+
 LNAMESPACE_END
 
 #endif // LUTILITY_H

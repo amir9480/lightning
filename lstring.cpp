@@ -100,14 +100,14 @@ void LString_Base<chartype>::append(LString_Base<chartype> _other)
 template <typename chartype>
 chartype &LString_Base<chartype>::at(u32 i)
 {
-    lError(i>=getcapacity(),"chartype &LString_Base<chartype>::at(u32 i): big value for i",mData[0]);
+    lError(i>=getCapacity(),"chartype &LString_Base<chartype>::at(u32 i): big value for i",mData[0]);
     return mData[i];
 }
 
 template <typename chartype>
 chartype LString_Base<chartype>::at(u32 i) const
 {
-    lError(i>=getcapacity(),"chartype &LString_Base<chartype>::at(u32 i)const: big value for i",mData[0]);
+    lError(i>=getCapacity(),"chartype &LString_Base<chartype>::at(u32 i)const: big value for i",mData[0]);
     return mData[i];
 }
 
@@ -134,19 +134,19 @@ void LString_Base<chartype>::clear()
 template <typename chartype>
 typename LString_Base<chartype>::iterator LString_Base<chartype>::end()
 {
-    return &mData[getcapacity()];
+    return &mData[getCapacity()];
 }
 
 template <typename chartype>
 typename LString_Base<chartype>::const_iterator LString_Base<chartype>::end() const
 {
-    return &mData[getcapacity()];
+    return &mData[getCapacity()];
 }
 
 template <typename chartype>
 void LString_Base<chartype>::erase(u32 _start, u32 _n)
 {
-    u32 pc=getcapacity();
+    u32 pc=getCapacity();
     lError(mData==0,"void LString_Base<chartype>::erase(u32 _start, u32 _n): string is completely empty. there is not any thing to erase");
     lError(_start>=pc,"void LString_Base<chartype>::erase(u32 _start, u32 _n): _start value is not acceptable");
     lError(_n>=pc&&_n!=(u32)-1,"void LString_Base<chartype>::erase(u32 _start, u32 _n): _n value is not acceptable");
@@ -159,13 +159,13 @@ void LString_Base<chartype>::erase(u32 _start, u32 _n)
         return;
     }
     lMemoryMove(&mData[_start],&mData[_start+_n],(pc-(_start+_n)+1)*sizeof(*mData));
-    resize(getcapacity());// flush
+    resize(getCapacity());// flush
 }
 
 template <typename chartype>
 u32 LString_Base<chartype>::find(const chartype *_what, u32 _from)const
 {
-    u32 strc=getcapacity();
+    u32 strc=getCapacity();
     lError(_from>=strc,"u32 LString_Base<chartype>::find(const chartype *_what, u32 _from)const: _from value is not acceptable",nothing);
     if(_what==0||mData==0)
         return nothing;
@@ -191,7 +191,7 @@ u32 LString_Base<chartype>::find(const LString_Base<chartype> _what, u32 _from) 
 template <typename chartype>
 u32 LString_Base<chartype>::findFromRight(const chartype *_what, u32 _from) const
 {
-    u32 strc=getcapacity();
+    u32 strc=getCapacity();
     lError(_from>=strc,"u32 LString_Base<chartype>::findFromRight(const chartype *_what, u32 _from)const: _from value is not acceptable",nothing);
     if(_what==0||mData==0)
         return nothing;
@@ -308,7 +308,7 @@ LString_Base<char32_t> LString_Base<char32_t>::fromUTF8(const char* _in)
 }
 
 template <typename chartype>
-u32 LString_Base<chartype>::getcapacity() const
+u32 LString_Base<chartype>::getCapacity() const
 {
     return __utility_strlen(mData);
 }
@@ -330,7 +330,7 @@ LString_Base<chartype> LString_Base<chartype>::getReversed() const
 template <typename chartype>
 LString_Base<chartype> LString_Base<chartype>::getSubString(u32 _start, u32 _n) const
 {
-    u32 sc=getcapacity();
+    u32 sc=getCapacity();
     lError(_start>=sc,"LString_Base<chartype> LString_Base<chartype>::getSubString(u32 _start, u32 _n) const: _start value is not acceptable",empty);
     lError(_n+_start>=sc&&_n!=(u32)-1,"LString_Base<chartype> LString_Base<chartype>::getSubString(u32 _start, u32 _n) const: _n value is not acceptable",empty);
     LString_Base<chartype> o;
@@ -346,11 +346,11 @@ template <typename chartype>
 void LString_Base<chartype>::insert(u32 _index, const chartype *_val)
 {
     u32 valc=__utility_strlen(_val);
-    u32 pc=getcapacity();
+    u32 pc=getCapacity();
     lError(_index>=pc,"void LString_Base<chartype>::insert(u32 _index, const chartype *_val): _index is not accptable");
     if(_val==0)
         return;
-    resize(getcapacity()+valc);
+    resize(getCapacity()+valc);
     lMemoryMove(&mData[_index+valc],&mData[_index],(pc-_index)*sizeof(*mData));
     lMemoryCopy(&mData[_index],_val,valc*sizeof(*mData));
 }
@@ -364,7 +364,7 @@ void LString_Base<chartype>::insert(u32 _index, const LString_Base<chartype> &_v
 template <typename chartype>
 bool LString_Base<chartype>::isEmpty() const
 {
-    return (getcapacity()==0);
+    return (getCapacity()==0);
 }
 
 template <typename chartype>
@@ -373,7 +373,7 @@ bool LString_Base<chartype>::isInt(u32 _base) const
     lError(_base>16||_base<2,"bool LString_Base<chartype>::isInt(u32 _base) const: _base is not acceptable [2,16]",false);
     static const LString_Base<chartype> vt("0123456789ABCDEF");
     LString_Base<chartype> _this=this->toUpper();
-    u32 tc=getcapacity();
+    u32 tc=getCapacity();
     _base-=1;// for access string index must be [0-15]
     if(_this.mData[0]!=(chartype)'+'&&_this.mData[0]!=(chartype)'-')
         if((_this.mData[0]>(chartype)vt[_base]||_this.mData[0]<(chartype)'0')||
@@ -390,10 +390,10 @@ template <typename chartype>
 void LString_Base<chartype>::replace(u32 _index,const chartype* _val)
 {
     u32 valc=__utility_strlen(_val);
-    lError(_index>=getcapacity(),"void LString_Base<chartype>::replace(u32 _index,const chartype* _val): _index is not accptable");
+    lError(_index>=getCapacity(),"void LString_Base<chartype>::replace(u32 _index,const chartype* _val): _index is not accptable");
     if(_val==0)
         return;
-    if(valc+_index>getcapacity())
+    if(valc+_index>getCapacity())
         resize(valc+_index);
     for(u32 i=0;i<valc;i++)
         mData[_index+i]=_val[i];
@@ -408,10 +408,10 @@ void LString_Base<chartype>::replace(u32 _index, const LString_Base<chartype> &_
 template <typename chartype>
 void LString_Base<chartype>::replaceAll(const chartype *_what, const chartype *_with, u32 _start, u32 _end)
 {
-    u32 sc=getcapacity();
+    u32 sc=getCapacity();
     LString_Base<chartype> t=*this;
     if(_end==(u32)-1)
-        _end=getcapacity();
+        _end=getCapacity();
     lError(_start>=sc,"void LString_Base<chartype>::replaceAll(const chartype *_what, const chartype *_with, u32 _start, u32 _end): _start is not accpetable");
     lError(_end>sc,"void LString_Base<chartype>::replaceAll(const chartype *_what, const chartype *_with, u32 _start, u32 _end): _end is not accpetable");
     u32 whs=__utility_strlen(_what);
@@ -459,7 +459,7 @@ void LString_Base<chartype>::resize(u32 ns)
 template <typename chartype>
 void LString_Base<chartype>::reverse()
 {
-    u32 sc=getcapacity();
+    u32 sc=getCapacity();
     for(u32 i=0;i<sc/2;i++)
         lSwap(mData[i],mData[sc-i-1]);
 }
@@ -474,7 +474,7 @@ template <typename chartype>
 int LString_Base<chartype>::toInt(const u32 _base) const
 {
     static const LString_Base<chartype> vt("0123456789ABCDEF");
-    u32 sc=getcapacity();
+    u32 sc=getCapacity();
     int o=0;
     u32 index=0,i=0;
     LString_Base<chartype> theData=toUpper();
@@ -498,7 +498,7 @@ int LString_Base<chartype>::toInt(const u32 _base) const
 template <typename chartype>
 LString_Base<chartype> LString_Base<chartype>::toLower() const
 {
-    u32 sc=getcapacity();
+    u32 sc=getCapacity();
     LString_Base<chartype> o=*this;
     for (u32 i = 0; i < sc; i++)
         if(o[i]>=(chartype)'A'&&o[i]<=(chartype)'Z')
@@ -509,7 +509,7 @@ LString_Base<chartype> LString_Base<chartype>::toLower() const
 template <typename chartype>
 LString_Base<chartype> LString_Base<chartype>::toUpper() const
 {
-    u32 sc=getcapacity();
+    u32 sc=getCapacity();
     LString_Base<chartype> o=*this;
     for (u32 i = 0; i < sc; i++)
         if(o[i]>=(chartype)'a'&&o[i]<=(chartype)'z')
@@ -709,9 +709,9 @@ template<>
 LString8 LString_Base<wchar_t>::toUTF8() const
 {
     LString8 o,out;
-    o.resize(getcapacity()*4);// maximum capacity is need for output
+    o.resize(getCapacity()*4);// maximum capacity is need for output
     u32 l=0;
-    for(u32 i=0;i<getcapacity();i++)
+    for(u32 i=0;i<getCapacity();i++)
     {
         u32 t=__utility_utf16decode(&mData[i]);
         char* ed=__utility_utf8encode(t);
@@ -730,9 +730,9 @@ template<>
 LString8 LString_Base<char32_t>::toUTF8() const
 {
     LString8 o,out;
-    o.resize(getcapacity()*6);// maximum capacity is need for output
+    o.resize(getCapacity()*6);// maximum capacity is need for output
     u32 l=0;
-    for(u32 i=0;i<getcapacity();i++)
+    for(u32 i=0;i<getCapacity();i++)
     {
         u32 t=mData[i];
         char* ed=__utility_utf8encode(t);

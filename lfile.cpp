@@ -52,34 +52,34 @@ bool LFile::open(LString _fname, LFile::IOType _opentype)
     if(mData)
         return false;
     switch ((int)_opentype) {
-    case (IOType::IOType_Read):
+    case (IOType::IOTypeRead):
         mData=fopen(_fname.toUTF8().getData(),"r");
         break;
-    case (IOType::IOType_Write):
+    case (IOType::IOTypeWrite):
         mData=fopen(_fname.toUTF8().getData(),"w");
         break;
-    case (IOType::IOType_Append):
+    case (IOType::IOTypeAppend):
         mData=fopen(_fname.toUTF8().getData(),"a");
         break;
-    case (IOType::IOType_Read|IOType::IOType_Write):
+    case (IOType::IOTypeRead|IOType::IOTypeWrite):
         mData=fopen(_fname.toUTF8().getData(),"r+");
         break;
-    case (IOType::IOType_Read|IOType::IOType_Append):
+    case (IOType::IOTypeRead|IOType::IOTypeAppend):
         mData=fopen(_fname.toUTF8().getData(),"a+");
         break;
-    case (IOType::IOType_Read|IOType_Binary):
+    case (IOType::IOTypeRead|IOType::IOTypeBinary):
         mData=fopen(_fname.toUTF8().getData(),"rb");
         break;
-    case (IOType::IOType_Write|IOType_Binary):
+    case (IOType::IOTypeWrite|IOType::IOTypeBinary):
         mData=fopen(_fname.toUTF8().getData(),"wb");
         break;
-    case (IOType::IOType_Append|IOType_Binary):
+    case (IOType::IOTypeAppend|IOType::IOTypeBinary):
         mData=fopen(_fname.toUTF8().getData(),"ab");
         break;
-    case (IOType::IOType_Read|IOType::IOType_Write|IOType_Binary):
+    case (IOType::IOTypeRead|IOType::IOTypeWrite|IOType::IOTypeBinary):
         mData=fopen(_fname.toUTF8().getData(),"r+b");
         break;
-    case (IOType::IOType_Read|IOType::IOType_Append|IOType_Binary):
+    case (IOType::IOTypeRead|IOType::IOTypeAppend|IOType::IOTypeBinary):
         mData=fopen(_fname.toUTF8().getData(),"a+b");
         break;
     default:
@@ -140,7 +140,7 @@ void LFile::write(const LString8 &_in)
 {
     if(mData==0)
         return;
-    u32 s= _in.getcapacity();
+    u32 s= _in.getCapacity();
     fwrite(_in.getData(),1,s,(FILE*)mData);
 }
 

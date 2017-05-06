@@ -3,6 +3,7 @@
 
 #include "llog.h"
 #include "ldefines.h"
+#include <initializer_list>
 
 LNAMESPACE_BEGIN
 
@@ -15,6 +16,7 @@ public:
     typedef const T*    const_iterator;
 public:
     LVector();
+    LVector(const std::initializer_list<T> _vals);
     virtual ~LVector();
 
     //! Get Access to vector Parameter
@@ -77,8 +79,14 @@ public:
     //! remove an element of vector in _index
     linline void                    remove(u32 _index);
 
+    //! reverse this vector element
+    linline void                    reverse();
+
     //! change capacity of Vector
     linline void                    resize(const u32 _newsize);
+
+    //! sort this vector if operator > and operator < is availbe for type T
+    linline void                    sort(LSortType _sorttype=LSortTypeAscending);
 
     //! swap this vector with another
     linline void                    swap(LVector<T>& _other);
@@ -101,11 +109,17 @@ protected:
     template<typename _T,typename _T2>
     struct _LVector_Search<_T,_T2,false>{ linline static u32 __find(_T* _data,u32 _size,const _T2& _what); linline static u32 __rfind(_T* _data,u32 _size,const _T2& _what); };
 
+    template<typename _T,const bool _have_operator>
+    struct _LVector_Sort{ linline static void _sort(_T* _data,u32 _size,LSortType _type);};
+    template<typename _T>
+    struct _LVector_Sort<_T,false>{ linline static void _sort(_T* _data,u32 _size,LSortType _type);};
+
 protected:
     T*  mData;
     u32 mSize;
     u32 mCapacity;
 };
+
 template<typename T>
 const u32 LVector<T>::nothing=(u32)-1;
 
@@ -115,6 +129,17 @@ LVector<T>::LVector()
     mData=0;
     mSize=0;
     mCapacity=0;
+}
+
+template<typename T>
+LVector<T>::LVector(const std::initializer_list<T> _vals)
+{
+    mData=0;
+    mSize=0;
+    mCapacity=0;
+    resize(_vals.size());
+    mSize=_vals.size();
+    lMemoryCopy(mData,_vals.begin(),_vals.size()*sizeof(T));
 }
 
 template<typename T>
@@ -310,6 +335,14 @@ void LVector<T>::remove(u32 _index)
 }
 
 template<typename T>
+void LVector<T>::reverse()
+{
+    u32 sc=getCapacity();
+    for(u32 i=0;i<sc/2;i++)
+        lSwap(mData[i],mData[sc-i-1]);
+}
+
+template<typename T>
 void LVector<T>::resize(const u32 _newsize)
 {
     // Exactly is same size
@@ -338,6 +371,12 @@ void LVector<T>::resize(const u32 _newsize)
             mData[i]=lMove(_pd[i]);
         delete[] _pd;
     }
+}
+
+template<typename T>
+void LVector<T>::sort(LSortType _sorttype)
+{
+    _LVector_Sort<T,LHasOperator::Greater<T>::value && LHasOperator::Less<T>::value>::_sort(mData,mSize,_sorttype);
 }
 
 template<typename T>
@@ -421,6 +460,23 @@ u32 LVector<T>::_LVector_Search<_T,_T2,false>::__rfind(_T *_data, u32 _size, con
     LString _error_message=LSTR("LVector:searching for this type is not available typeid= \"")+lGetTypeName<_T>()+" and "+lGetTypeName<_T2>()+"\" you need to define bool operator== for this type to support seraching";
     lError(1,_error_message,nothing);
     return nothing;
+}
+
+
+template<typename T> template<typename _T,bool _have_operator>
+void LVector<T>::_LVector_Sort<_T,_have_operator>::_sort(_T *_data, u32 _size,LSortType _type)
+{
+    lSort(_data,_size,_type);
+}
+
+template<typename T> template<typename _T>
+void LVector<T>::_LVector_Sort<_T,false>::_sort(_T *_data, u32 _size,LSortType _type)
+{
+    LUNUSED(_data);
+    LUNUSED(_size);
+    LUNUSED(_type);
+    LString _error_message=LSTR("LVector:sorting for this type is not available typeid= \"")+lGetTypeName<_T>()+"\" you need to define bool operator> and bool operator< for this type to support sorting";
+    lError(1,_error_message);
 }
 
 LNAMESPACE_END
