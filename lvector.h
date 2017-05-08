@@ -152,14 +152,16 @@ LVector<T>::~LVector()
 template<typename T>
 T &LVector<T>::at(const u32 _i)
 {
-    lError(_i>=mSize,"LVector<T>::at(u32 _i) : _i is bigger not accpetable",mData[0]);
+    static T d;
+    lError(_i>=mSize,"LVector<T>::at(u32 _i) : _i is bigger not accpetable",d);
     return mData[_i];
 }
 
 template<typename T>
 const T &LVector<T>::at(const u32 _i) const
 {
-    lError(_i>=mSize,"LVector<T>::at(u32 _i)const : _i is bigger not accpetable",mData[0]);
+    static T d;
+    lError(_i>=mSize,"LVector<T>::at(u32 _i)const : _i is bigger not accpetable",d);
     return mData[_i];
 }
 
@@ -397,14 +399,16 @@ void LVector<T>::swap(const u32 _i1,const u32 _i2)
 template<typename T>
 T &LVector<T>::operator[](const u32 _i)
 {
-    lError(_i>=mSize,"T &LVector<T>::operator[](u32 _i) : _i is bigger not accpetable",mData[0]);
+    static T d;
+    lError(_i>=mSize,"T &LVector<T>::operator[](u32 _i) : _i is bigger not accpetable",d);
     return mData[_i];
 }
 
 template<typename T>
 const T &LVector<T>::operator[](const u32 _i) const
 {
-    lError(_i>=mSize,"const T &LVector<T>::operator[](u32 _i)const : _i is bigger not accpetable",mData[0]);
+    static T d;
+    lError(_i>=mSize,"const T &LVector<T>::operator[](u32 _i)const : _i is bigger not accpetable",d);
     return mData[_i];
 }
 

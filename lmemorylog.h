@@ -41,7 +41,7 @@ public:
             fprintf(f,"memory leak detected . array was allocated in %s ( %d ) address=%p \n\n",arrayptrs[i].mFile,arrayptrs[i].mLine,arrayptrs[i].mAddress);
 
         if(ptrssize>0||arrayptrssize>0||wrongjob)
-            printf("\n\n***Memory leak detected please check file =\"%s\"***\n\n",LMLOG_FILE);
+            printf("\n*************************************************************************\n*** Memory leak detected please check file =\"%s\" ***\n*************************************************************************\n",LMLOG_FILE);
 
         if(ptrssize+arrayptrssize==0)
             fprintf(f,"Every thing is OK . thanks for checking \n\n");

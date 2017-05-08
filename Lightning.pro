@@ -24,7 +24,8 @@ SOURCES += main.cpp \
     llog.cpp \
     lvector.cpp \
     lmemorylog.cpp \
-    lpair.cpp
+    lpair.cpp \
+    llist.cpp
 
 
 HEADERS += \
@@ -51,5 +52,6 @@ HEADERS += \
     llog.h \
     lvector.h \
     lmemorylog.h \
-    lpair.h
+    lpair.h \
+    llist.h
 
