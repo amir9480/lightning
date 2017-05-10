@@ -12,11 +12,13 @@ class LAPI LVector
 {
 public:
     typedef T           type;
-    typedef T*          iterator;
-    typedef const T*    const_iterator;
+    typedef T*          Iterator;
+    typedef const T*    ConstIterator;
 public:
-    LVector();
-    LVector(const std::initializer_list<T> _vals);
+    linline LVector();
+    linline LVector(const std::initializer_list<T> _vals);
+    linline LVector(const LVector<T>& _other);
+    linline LVector(LVector<T>&& _other);
     virtual ~LVector();
 
     //! Get Access to vector Parameter
@@ -24,15 +26,15 @@ public:
     linline const T&                at(const u32 _i)const;
 
     //! it's pointer to vector start for range based for
-    linline iterator                begin();
-    linline const_iterator          begin()const;
+    linline Iterator                begin();
+    linline ConstIterator           begin()const;
 
     //! clear vector
     linline void                    clear();
 
     //! it's pointer to vector end for range based for
-    linline iterator                end();
-    linline const_iterator          end()const;
+    linline Iterator                end();
+    linline ConstIterator           end()const;
 
     //! erase part of vector . from _from to _from+_count
     linline void                    erase(u32 _from,u32 _count=(u32)-1);
@@ -40,11 +42,11 @@ public:
     //! resize this vector as needed
     linline void                    flush();
 
-    // get index of _what in vector from _from . if there was nothing returns false
+    // get index of _what in vector from _from . if there was nothing returns LVector::nothing
     template<typename T2>
     linline u32                     find(const T2& _what,u32 _from=0) const;
 
-    // get index of _what in vector from _from . if there was nothing returns false . this starts searching from right
+    // get index of _what in vector from _from . if there was nothing returns LVector::nothing . this starts searching from right
     template<typename T2>
     linline u32                     findFromRight(const T2& _what,u32 _from=(u32)-1) const;
 
@@ -60,7 +62,6 @@ public:
     //! insert a new item at middle of vector
     linline void                    insert(const u32 _i,const T& _newitem);
     linline void                    insert(const u32 _i,T&& _newitem);
-
 
     //! Append a new Item at end of vector
     linline void                    pushBack(const T& _newitem);
@@ -82,8 +83,8 @@ public:
     //! reverse this vector element
     linline void                    reverse();
 
-    //! change capacity of Vector
-    linline void                    resize(const u32 _newsize);
+    //! change capacity of Vector . if _change_capacity_only was false . size also will changed
+    linline void                    resize(const u32 _newsize,bool _change_capacity_only=false);
 
     //! sort this vector if operator > and operator < is availbe for type T
     linline void                    sort(LSortType _sorttype=LSortTypeAscending);
@@ -101,6 +102,12 @@ public:
     //! Just like pushBack
     linline LVector<T>&             operator<<(const T& _newitem);
     linline LVector<T>&             operator<<(T&& _newitem);
+
+    //! Copy Assign
+    linline LVector<T>&             operator=(const LVector<T>& _other);
+
+    //! Move Assign
+    linline LVector<T>&             operator=(LVector<T>&& _other);
 
     static const u32                nothing;
 protected:
@@ -143,6 +150,22 @@ LVector<T>::LVector(const std::initializer_list<T> _vals)
 }
 
 template<typename T>
+LVector<T>::LVector(const LVector<T> &_other)
+{
+    mSize=mCapacity=0;
+    mData=nullptr;
+    *this=_other;
+}
+
+template<typename T>
+LVector<T>::LVector(LVector<T> &&_other)
+{
+    mSize=mCapacity=0;
+    mData=nullptr;
+    *this=lMove(_other);
+}
+
+template<typename T>
 LVector<T>::~LVector()
 {
     if(mData)
@@ -166,13 +189,13 @@ const T &LVector<T>::at(const u32 _i) const
 }
 
 template<typename T>
-typename LVector<T>::iterator LVector<T>::begin()
+typename LVector<T>::Iterator LVector<T>::begin()
 {
     return mData;
 }
 
 template<typename T>
-typename LVector<T>::const_iterator LVector<T>::begin() const
+typename LVector<T>::ConstIterator LVector<T>::begin() const
 {
     return mData;
 }
@@ -184,13 +207,13 @@ void LVector<T>::clear()
 }
 
 template<typename T>
-typename LVector<T>::iterator LVector<T>::end()
+typename LVector<T>::Iterator LVector<T>::end()
 {
     return &mData[mSize];
 }
 
 template<typename T>
-typename LVector<T>::const_iterator LVector<T>::end() const
+typename LVector<T>::ConstIterator LVector<T>::end() const
 {
     return &mData[mSize];
 }
@@ -202,7 +225,7 @@ void LVector<T>::erase(u32 _from, u32 _count)
         _count=mSize-_from;
     lError(_from>=mSize||_from+_count>mSize || _count==0,"void LVector<T>::erase(u32 _from, u32 _count): one of paramets is not acceptable");
     for(u32 i=_from;i<mSize-_count;i++)
-        mData[i]=mData[i+_count];
+        mData[i]=lMove(mData[i+_count]);
     mSize-=_count;
 }
 
@@ -253,8 +276,8 @@ void LVector<T>::insert(const u32 _i,T &&_newitem)
     if(mSize>=mCapacity)
         resize(mCapacity+ 16 );
     for(u32 i=_i;i<mSize;i++)
-        mData[i+1]=mData[i];
-    mData[_i]=_newitem;
+        mData[i+1]=lMove(mData[i]);
+    mData[_i]=lMove(_newitem);
     mSize++;
 }
 
@@ -265,7 +288,7 @@ void LVector<T>::insert(const u32 _i,const T &_newitem)
     if(mSize>=mCapacity)
         resize(mCapacity+ 16 );
     for(u32 i=_i;i<mSize;i++)
-        mData[i+1]=mData[i];
+        mData[i+1]=lMove(mData[i]);
     mData[_i]=_newitem;
     mSize++;
 }
@@ -324,7 +347,7 @@ T LVector<T>::popFront()
     lError(mSize==0,"T LVector<T>::popFront(): vector size is not enough to pop",T());
     T o=mData[0];
     for(u32 i=0;i<mSize-1;i++)
-        mData[i]=mData[i+1];
+        mData[i]=lMove(mData[i+1]);
     mSize--;
     return o;
 }
@@ -339,13 +362,13 @@ void LVector<T>::remove(u32 _index)
 template<typename T>
 void LVector<T>::reverse()
 {
-    u32 sc=getCapacity();
+    u32 sc=getSize();
     for(u32 i=0;i<sc/2;i++)
         lSwap(mData[i],mData[sc-i-1]);
 }
 
 template<typename T>
-void LVector<T>::resize(const u32 _newsize)
+void LVector<T>::resize(const u32 _newsize,bool _change_capacity_only)
 {
     // Exactly is same size
     if(_newsize==mCapacity)
@@ -373,6 +396,8 @@ void LVector<T>::resize(const u32 _newsize)
             mData[i]=lMove(_pd[i]);
         delete[] _pd;
     }
+    if(_change_capacity_only==false)
+        mSize=mCapacity;
 }
 
 template<typename T>
@@ -423,6 +448,29 @@ template<typename T>
 LVector<T> &LVector<T>::operator<<(T &&_newitem)
 {
     pushBack(_newitem);
+    return *this;
+}
+
+template<typename T>
+LVector<T> &LVector<T>::operator=(const LVector<T> &_other)
+{
+    clear();
+    resize(_other.mSize);
+    mSize=_other.mSize;
+    for(u32 i=0;i<mSize;i++)
+        mData[i]=_other.mData[i];
+    return *this;
+}
+
+template<typename T>
+LVector<T> &LVector<T>::operator=(LVector<T> &&_other)
+{
+    clear();
+    mSize=_other.mSize;
+    mCapacity=_other.mCapacity;
+    mData=_other.mData;
+    _other.mSize=_other.mCapacity=0;
+    _other.mData=nullptr;
     return *this;
 }
 

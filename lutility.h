@@ -312,19 +312,6 @@ const char* lGetTypeName()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-//! Swap two value
-template<typename T>
-linline void    lSwap(T& _a,T& b);
-
-
-template<typename T>
-linline void lSwap(T& _a,T& _b)
-{
-    T temp=_a;
-    _a=_b;
-    _b=temp;
-}
-
 //! force to use move operator instead of copy operator
 template<typename T>
 linline typename LRemoveReference<T>::type&& lMove(T&& _in)
@@ -332,6 +319,14 @@ linline typename LRemoveReference<T>::type&& lMove(T&& _in)
     return static_cast<typename LRemoveReference<T>::type&&>(_in);
 }
 
+//! Swap two value
+template<typename T>
+linline void    lSwap(T& _a,T& _b)
+{
+    T temp=lMove(_a);
+    _a=lMove(_b);
+    _b=lMove(temp);
+}
 
 
 //! to check some operators is availabe
@@ -361,6 +356,22 @@ template<typename T1, typename T2=T1>
 struct Less{ const static bool value = !LIsSameType<decltype( *(T1*)(0) < *(T2*)(0) ),_No>::value;};
 }
 
+//! Checkout default constructor is availble or not
+template <typename T>
+struct LHasDefaultConstructor
+{
+    struct _No{bool _m[2];};
+
+    template<typename U>
+    static decltype(U(),bool()) is(u8);
+
+
+    template<typename U>
+    static _No is(...);
+
+    const static bool value = !LIsSameType<decltype( is<T>(0) ),_No>::value;
+
+};
 
 
 
@@ -370,12 +381,12 @@ enum LSortType
     LSortTypeDescending
 };
 
-template<typename T>
-linline u32 _qs_partitioninc(T*& _arr,u32 left,u32 right)
+template<typename T,typename ET>
+linline u32 _qs_partitioninc(T& _arr,u32 left,u32 right)
 {
     u32 l=left;
     u32 r=right-1;
-    T p=_arr[right];
+    ET p=_arr[right];
     while(1)
     {
         while(_arr[l]<p)
@@ -392,23 +403,23 @@ linline u32 _qs_partitioninc(T*& _arr,u32 left,u32 right)
 }
 
 template<typename T>
-void lQuickSortInc(T* _arr,u32 _size,u32 left=0)
+void lQuickSortInc(T& _arr,u32 _size,u32 left=0)
 {
     if(left>=_size||_size<=1)
         return;
-    int p=_qs_partitioninc<T>(_arr,left,_size-1);
+    int p=_qs_partitioninc<T,decltype(_arr[0])>(_arr,left,_size-1);
     lQuickSortInc(_arr,p,left);
     lQuickSortInc(_arr,_size,p+1);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-template<typename T>
-linline u32 _qs_partitiondec(T*& _arr,u32 left,u32 right)
+template<typename T,typename ET>
+linline u32 _qs_partitiondec(T& _arr,u32 left,u32 right)
 {
     u32 l=left;
     u32 r=right-1;
-    T p=_arr[right];
+    ET p=_arr[right];
     while(1)
     {
         while(_arr[l]>p)
@@ -425,11 +436,11 @@ linline u32 _qs_partitiondec(T*& _arr,u32 left,u32 right)
 }
 
 template<typename T>
-void lQuickSortDec(T* _arr,u32 _size,u32 left=0)
+void lQuickSortDec(T& _arr,u32 _size,u32 left=0)
 {
     if(left>=_size||_size<=1)
         return;
-    int p=_qs_partitiondec<T>(_arr,left,_size-1);
+    int p=_qs_partitiondec<T,decltype(_arr[0])>(_arr,left,_size-1);
     lQuickSortDec(_arr,p,left);
     lQuickSortDec(_arr,_size,p+1);
 }
@@ -438,7 +449,7 @@ void lQuickSortDec(T* _arr,u32 _size,u32 left=0)
 
 //! function to sort arrays
 template<typename T>
-void lSort(T* _arr,u32 _size,LSortType _type=LSortType::LSortTypeAscending)
+void lSort(T& _arr,u32 _size,LSortType _type=LSortType::LSortTypeAscending)
 {
     if(_type==LSortTypeAscending)
         lQuickSortInc(_arr,_size);

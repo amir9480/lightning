@@ -75,7 +75,7 @@ template <typename chartype>
 LString_Base<chartype>::LString_Base(LString_Base<chartype>&& _other)
 {
     mData=0;
-    (*this)=_other;
+    (*this)=lMove(_other);
 }
 
 template <typename chartype>
