@@ -9,7 +9,7 @@ LNAMESPACE_BEGIN
 
 //! Class to hold linked list
 template<typename T>
-class LList
+class LAPI LList
 {
 public:
     struct ListNode
@@ -35,6 +35,7 @@ public:
         linline Iterator    operator -(i32 _i)const;
         linline T&          operator *();
         linline T&          operator [](i32 _i);
+        linline T*          operator->();
         linline operator    bool()const;
         linline bool        operator !()const;
         linline Iterator&   operator++();
@@ -43,6 +44,30 @@ public:
         linline Iterator    operator--(i32 _i);
         linline bool        operator==(const Iterator& _other)const;
         linline bool        operator!=(const Iterator& _other)const;
+    private:
+        ListNode* mNode;
+    };
+
+    class ConstIterator
+    {
+        friend class LList;
+    public:
+        linline ConstIterator();
+        linline ConstIterator(ListNode* _n);
+
+        linline ConstIterator    operator +(i32 _i)const;
+        linline ConstIterator    operator -(i32 _i)const;
+        linline const T&         operator *()const;
+        linline const T&         operator [](i32 _i)const;
+        linline const T*         operator->()const;
+        linline operator         bool()const;
+        linline bool             operator !()const;
+        linline ConstIterator&   operator++();
+        linline ConstIterator&   operator--();
+        linline ConstIterator    operator++(i32 _i);
+        linline ConstIterator    operator--(i32 _i);
+        linline bool             operator==(const ConstIterator& _other)const;
+        linline bool             operator!=(const ConstIterator& _other)const;
     private:
         ListNode* mNode;
     };
@@ -60,12 +85,14 @@ public:
 
     //! iterator for list from start
     linline Iterator                begin();
+    linline ConstIterator           begin()const;
 
     //! Clear all elements of list
     linline void                    clear();
 
     //! iterator for list from end
     linline Iterator                end();
+    linline ConstIterator           end()const;
 
     //! erase part of list . from _from to _from+_count
     linline void                    erase(u32 _from,u32 _count=(u32)-1);
@@ -167,7 +194,7 @@ LList<T>::Iterator::Iterator()
 }
 
 template<typename T>
-LList<T>::Iterator::Iterator(LList::ListNode *_n)
+LList<T>::Iterator::Iterator(LList<T>::ListNode *_n)
 {
     mNode=_n;
 }
@@ -232,6 +259,14 @@ T& LList<T>::Iterator::operator[](i32 _i)
 }
 
 template<typename T>
+T* LList<T>::Iterator::operator->()
+{
+    static T d;
+    lError(mNode==nullptr,"T* LList<T>::Iterator::operator->(): iterator is nothing",(&d));
+    return &(mNode->mVal);
+}
+
+template<typename T>
 bool LList<T>::Iterator::operator!()const
 {
     return (mNode==nullptr);
@@ -287,6 +322,142 @@ bool LList<T>::Iterator::operator!=(const typename LList<T>::Iterator& _other)co
     return (mNode!=_other.mNode);
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+template<typename T>
+LList<T>::ConstIterator::ConstIterator()
+{
+    mNode=nullptr;
+}
+
+template<typename T>
+LList<T>::ConstIterator::ConstIterator(LList<T>::ListNode *_n)
+{
+    mNode=_n;
+}
+
+template<typename T>
+typename LList<T>::ConstIterator LList<T>::ConstIterator::operator+(i32 _i)const
+{
+    LList<T>::ConstIterator o;
+    o.mNode=mNode;
+    if(_i>=0)
+    {
+        for(i32 i=0;i<_i;i++)
+        {
+            if(o.mNode!=nullptr)
+                o.mNode=o.mNode->mNext;
+            else
+            {
+                o.mNode=mNode;
+                lError(1,LSTR("LList<T>::Iterator LList<T>::Iterator::operator+(i32 _i): _i is not acceptable or this Iterator is nothing"),o);
+            }
+        }
+    }
+    else
+    {
+        for(i32 i=0;i>_i;i--)
+        {
+            if(o.mNode!=nullptr)
+                o.mNode=o.mNode->mPrev;
+            else
+            {
+                o.mNode=mNode;
+                lError(1,LSTR("LList<T>::Iterator LList<T>::Iterator::operator+(i32 _i): _i is not acceptable or this Iterator is nothing"),o);
+            }
+        }
+    }
+    return o;
+}
+
+template<typename T>
+typename LList<T>::ConstIterator LList<T>::ConstIterator::operator-(i32 _i)const
+{
+    return (*this)+(-_i);
+}
+
+template<typename T>
+const T& LList<T>::ConstIterator::operator*()const
+{
+    static T d;
+    lError(mNode==nullptr,"LList<T>::Iterator LList<T>::Iterator::operator*(), iterator is nothing",d);
+    return mNode->mVal;
+}
+
+template<typename T>
+const T& LList<T>::ConstIterator::operator[](i32 _i)const
+{
+    static T d;
+    ConstIterator ot;
+    if(mNode!=nullptr)
+        ot=(*this)+_i;
+    lError(ot.mNode==nullptr,"T& LList<T>::Iterator::operator[](i32 _i),_is is not acceptable or iterator is nothing",d);
+    return ot.mNode->mVal;
+}
+
+template<typename T>
+const T* LList<T>::ConstIterator::operator->()const
+{
+    static T d;
+    lError(mNode==nullptr,"T* LList<T>::Iterator::operator->(): iterator is nothing",(&d));
+    return &(mNode->mVal);
+}
+
+template<typename T>
+bool LList<T>::ConstIterator::operator!()const
+{
+    return (mNode==nullptr);
+}
+
+template<typename T>
+LList<T>::ConstIterator::operator bool()const
+{
+    return (mNode!=nullptr);
+}
+
+template<typename T>
+typename LList<T>::ConstIterator& LList<T>::ConstIterator::operator++()
+{
+    (*this)=(*this)+1;
+    return (*this);
+}
+
+template<typename T>
+typename LList<T>::ConstIterator& LList<T>::ConstIterator::operator--()
+{
+    (*this)=(*this)+(-1);
+    return (*this);
+}
+
+template<typename T>
+typename LList<T>::ConstIterator LList<T>::ConstIterator::operator++(i32 _i)
+{
+    LUNUSED(_i);
+    Iterator o=(*this);
+    (*this)=(*this)+1;
+    return (o);
+}
+
+template<typename T>
+typename LList<T>::ConstIterator LList<T>::ConstIterator::operator--(i32 _i)
+{
+    LUNUSED(_i);
+    Iterator o=(*this);
+    (*this)=(*this)+(-1);
+    return (o);
+}
+
+template<typename T>
+bool LList<T>::ConstIterator::operator==(const typename LList<T>::ConstIterator& _other)const
+{
+    return (mNode==_other.mNode);
+}
+
+template<typename T>
+bool LList<T>::ConstIterator::operator!=(const typename LList<T>::ConstIterator& _other)const
+{
+    return (mNode!=_other.mNode);
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -369,6 +540,14 @@ typename LList<T>::Iterator LList<T>::begin()
 }
 
 template<typename T>
+typename LList<T>::ConstIterator LList<T>::begin()const
+{
+    ConstIterator o;
+    o.mNode=mFirst;
+    return o;
+}
+
+template<typename T>
 void LList<T>::clear()
 {
     ListNode* ttd=mFirst;
@@ -388,7 +567,13 @@ template<typename T>
 typename LList<T>::Iterator LList<T>::end()
 {
     Iterator o;
-    o.mNode=mLast;
+    return o;
+}
+
+template<typename T>
+typename LList<T>::ConstIterator LList<T>::end()const
+{
+    ConstIterator o;
     return o;
 }
 
@@ -746,7 +931,7 @@ template<typename T> template<typename _T,typename _T2,bool _have_operator>
 u32 LList<T>::_LList_Search<_T,_T2,_have_operator>::__rfind(_T _data, u32 _size, const _T2 &_what,u32 _from)
 {
     LUNUSED(_size);
-    for(u32 i=_from;i>=0;i--)
+    for(i64 i=_from;i>=0;i--)
         if(_data[i]==_what)
             return i;
     return nothing;

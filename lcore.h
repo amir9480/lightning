@@ -19,6 +19,7 @@
 #include "llog.h"
 #include "lvector.h"
 #include "llist.h"
+#include "lmap.h"
 #include "lutility.h"
 #include "lmemory.h"
 #include "lmemorylog.h"

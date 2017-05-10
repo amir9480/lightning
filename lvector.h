@@ -83,8 +83,12 @@ public:
     //! reverse this vector element
     linline void                    reverse();
 
-    //! change capacity of Vector . if _change_capacity_only was false . size also will changed
-    linline void                    resize(const u32 _newsize,bool _change_capacity_only=false);
+    //! change size of Vector .
+    linline void                    resize(const u32 _newsize);
+
+    //! reserve capacity for add new items for futur . every (16) insertion will make a new operate and
+    //! will cause speed down insertion . use this when you tring to add many items . it's highly recomended
+    linline void                    reserve(const u32 _newsize);
 
     //! sort this vector if operator > and operator < is availbe for type T
     linline void                    sort(LSortType _sorttype=LSortTypeAscending);
@@ -144,7 +148,7 @@ LVector<T>::LVector(const std::initializer_list<T> _vals)
     mData=0;
     mSize=0;
     mCapacity=0;
-    resize(_vals.size());
+    reserve(_vals.size());
     mSize=_vals.size();
     lMemoryCopy(mData,_vals.begin(),_vals.size()*sizeof(T));
 }
@@ -232,7 +236,7 @@ void LVector<T>::erase(u32 _from, u32 _count)
 template<typename T>
 void LVector<T>::flush()
 {
-    resize(mSize);
+    reserve(mSize);
 }
 
 template<typename T> template<typename T2>
@@ -245,6 +249,8 @@ u32 LVector<T>::find(const T2 &_what, u32 _from) const
 template<typename T> template<typename T2>
 u32 LVector<T>::findFromRight(const T2 &_what, u32 _from) const
 {
+    if(_from==(u32)-1)
+        _from=mSize-1;
     lError(_from>=mSize,"u32 LVector<T>::find(const T2 &_what, u32 _from) const: _from is not acceptable",nothing);
     if(_from==(u32)-1)
         _from=mSize-1;
@@ -274,7 +280,7 @@ void LVector<T>::insert(const u32 _i,T &&_newitem)
 {
     lError(_i>=mSize+1,"void LVector<T>::insert(const u32 _i,T &&_newitem): _i is not acceptable");
     if(mSize>=mCapacity)
-        resize(mCapacity+ 16 );
+        reserve(mCapacity+ 16 );
     for(u32 i=_i;i<mSize;i++)
         mData[i+1]=lMove(mData[i]);
     mData[_i]=lMove(_newitem);
@@ -286,7 +292,7 @@ void LVector<T>::insert(const u32 _i,const T &_newitem)
 {
     lError(_i>=mSize+1,"void LVector<T>::insert(u32 _i,const T &_newitem): _i is not acceptable");
     if(mSize>=mCapacity)
-        resize(mCapacity+ 16 );
+        reserve(mCapacity+ 16 );
     for(u32 i=_i;i<mSize;i++)
         mData[i+1]=lMove(mData[i]);
     mData[_i]=_newitem;
@@ -297,7 +303,7 @@ template<typename T>
 void LVector<T>::pushBack(T &&_newitem)
 {
     if(mSize>=mCapacity)
-        resize(mCapacity+ 16 );
+        reserve(mCapacity+ 16 );
     mData[mSize]=lMove(_newitem);
     mSize++;
 }
@@ -306,7 +312,7 @@ template<typename T>
 void LVector<T>::pushBack(const T &_newitem)
 {
     if(mSize>=mCapacity)
-        resize(mCapacity+ 16 );
+        reserve(mCapacity+ 16 );
     mData[mSize]=_newitem;
     mSize++;
 }
@@ -323,7 +329,7 @@ template<typename T>
 void LVector<T>::pushFront(T &&_newitem)
 {
     if(mSize>=mCapacity)
-        resize(mCapacity+ 16 );
+        reserve(mCapacity+ 16 );
     for(u32 i=mSize;i>0;i--)
         mData[i]=lMove(mData[i-1]);
     mData[0]=lMove(_newitem);
@@ -334,7 +340,7 @@ template<typename T>
 void LVector<T>::pushFront(const T &_newitem)
 {
     if(mSize>=mCapacity)
-        resize(mCapacity+ 16 );
+        reserve(mCapacity+ 16 );
     for(u32 i=mSize;i>0;i--)
         mData[i]=lMove(mData[i-1]);
     mData[0]=_newitem;
@@ -368,7 +374,14 @@ void LVector<T>::reverse()
 }
 
 template<typename T>
-void LVector<T>::resize(const u32 _newsize,bool _change_capacity_only)
+void LVector<T>::resize(const u32 _newsize)
+{
+    reserve(_newsize);
+    mSize=mCapacity;
+}
+
+template<typename T>
+void LVector<T>::reserve(const u32 _newsize)
 {
     // Exactly is same size
     if(_newsize==mCapacity)
@@ -396,8 +409,6 @@ void LVector<T>::resize(const u32 _newsize,bool _change_capacity_only)
             mData[i]=lMove(_pd[i]);
         delete[] _pd;
     }
-    if(_change_capacity_only==false)
-        mSize=mCapacity;
 }
 
 template<typename T>
@@ -455,7 +466,7 @@ template<typename T>
 LVector<T> &LVector<T>::operator=(const LVector<T> &_other)
 {
     clear();
-    resize(_other.mSize);
+    reserve(_other.mSize);
     mSize=_other.mSize;
     for(u32 i=0;i<mSize;i++)
         mData[i]=_other.mData[i];
@@ -497,7 +508,7 @@ u32 LVector<T>::_LVector_Search<_T,_T2,false>::__find(_T *_data, u32 _size, cons
 template<typename T> template<typename _T,typename _T2,bool _have_operator>
 u32 LVector<T>::_LVector_Search<_T,_T2,_have_operator>::__rfind(_T *_data, u32 _size, const _T2 &_what)
 {
-    for(u32 i=_size;i>=0;i--)
+    for(i64 i=_size;i>=0;i--)
         if(_data[i]==_what)
             return i;
     return nothing;
