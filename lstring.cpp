@@ -387,6 +387,13 @@ bool LString_Base<chartype>::isInt(u32 _base) const
 }
 
 template <typename chartype>
+void LString_Base<chartype>::remove(u32 _index)
+{
+    lError(_index>=getCapacity(),"void LString_Base<chartype>::remove(u32 _index): _index is not accpetable");
+    erase(_index,1);
+}
+
+template <typename chartype>
 void LString_Base<chartype>::replace(u32 _index,const chartype* _val)
 {
     u32 valc=__utility_strlen(_val);
@@ -649,7 +656,13 @@ LString_Base<chartype> &LString_Base<chartype>::operator+=(const LString_Base &_
 }
 
 template <typename chartype>
-bool LString_Base<chartype>::operator==(const chartype *_other) const
+bool LString_Base<chartype>::operator==(const LString_Base<chartype> &_other) const
+{
+    return (*this==_other.getData());
+}
+
+template <typename chartype>
+bool LString_Base<chartype>::operator==(const char *_other)const
 {
     if(mData==0&&_other==0)
         return true;
@@ -661,13 +674,48 @@ bool LString_Base<chartype>::operator==(const chartype *_other) const
     u32 os = __utility_strlen(_other);
     if(ts!=os)
         return false;
-    return (lMemoryCompare(mData,_other,ts*sizeof(*mData))==0);
+    for(u32 i=0;i<ts;i++)
+        if(mData[i]!=(chartype)_other[i])
+            return false;
+    return true;
 }
 
 template <typename chartype>
-bool LString_Base<chartype>::operator==(const LString_Base<chartype> &_other) const
+bool LString_Base<chartype>::operator==(const wchar_t *_other)const
 {
-    return (*this==_other.getData());
+    if(mData==0&&_other==0)
+        return true;
+    else if(mData==0&&_other!=0)
+        return false;
+    else if(mData!=0&&_other==0)
+        return false;
+    u32 ts = __utility_strlen(mData);
+    u32 os = __utility_strlen(_other);
+    if(ts!=os)
+        return false;
+    for(u32 i=0;i<ts;i++)
+        if(mData[i]!=(chartype)_other[i])
+            return false;
+    return true;
+}
+
+template <typename chartype>
+bool LString_Base<chartype>::operator==(const char32_t *_other)const
+{
+    if(mData==0&&_other==0)
+        return true;
+    else if(mData==0&&_other!=0)
+        return false;
+    else if(mData!=0&&_other==0)
+        return false;
+    u32 ts = __utility_strlen(mData);
+    u32 os = __utility_strlen(_other);
+    if(ts!=os)
+        return false;
+    for(u32 i=0;i<ts;i++)
+        if(mData[i]!=(chartype)_other[i])
+            return false;
+    return true;
 }
 
 template <typename chartype>

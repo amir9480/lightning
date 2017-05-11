@@ -26,7 +26,8 @@ SOURCES += main.cpp \
     lmemorylog.cpp \
     lpair.cpp \
     llist.cpp \
-    lmap.cpp
+    lmap.cpp \
+    lreflection.cpp
 
 
 HEADERS += \
@@ -55,5 +56,6 @@ HEADERS += \
     lmemorylog.h \
     lpair.h \
     llist.h \
-    lmap.h
+    lmap.h \
+    lreflection.h
 

@@ -24,5 +24,6 @@
 #include "lmemory.h"
 #include "lmemorylog.h"
 #include "lpair.h"
+#include "lreflection.h"
 
 #endif // LCORE_H

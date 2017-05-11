@@ -29,6 +29,8 @@ template <typename... A> linline void _lunused(A&&...) {}
 #define __MACRO2( name , number ) __MACRO3( name , number )
 #define __MACRO3( name , number ) name##number
 
+#define LVAARGS(...) _COUNTARGS(__VA_ARGS__), __VA_ARGS__
+
 #define LTO_STRING(X) ______TOSTRING1(#X)
 #define ______TOSTRING1(X) X
 

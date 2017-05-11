@@ -161,7 +161,7 @@ LFile::IOType LFile::getOpenType() const
 
 i64 LFile::getSize()
 {
-    if(mFilename==0)
+    if(mFilename.isEmpty())
         return -1;
     i32 p1=tellp();
     seekp(-1);

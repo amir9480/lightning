@@ -98,6 +98,9 @@ public:
     //! Check all of string is integer number only
     bool                            isInt(u32 _base=10)const;
 
+    //! remove a character in _index
+    void                            remove(u32 _index);
+
     //! replace string from index with _val . note that if there was not enough space string will resize
     void                            replace(u32 _index,const chartype* _val);
     void                            replace(u32 _index,const LString_Base<chartype>& _val);
@@ -147,7 +150,9 @@ public:
     LString_Base&                   operator+=(const LString_Base<chartype>& _other);
 
     //! Compare functions
-    bool                            operator==(const chartype* _other)const;
+    bool                            operator==(const char* _other)const;
+    bool                            operator==(const wchar_t* _other)const;
+    bool                            operator==(const char32_t* _other)const;
     bool                            operator==(const LString_Base<chartype>& _other)const;
 
     bool                            operator!=(const chartype* _other)const;
