@@ -5,6 +5,7 @@
 #include "llog.h"
 #include "lutility.h"
 #include "lvector.h"
+#include "lstring.h"
 
 #include "stdarg.h"
 
@@ -71,10 +72,11 @@ linline LString _l_get_mfunc_name(const char* _classname,const char* fname,const
 class LFunctionPtr
 {
 public:
-    LFunctionPtr(LString argtypes, LString fullname);
+    LFunctionPtr(LString argtypes, LString fullname,void* _pointer);
     virtual ~LFunctionPtr();
     const LString mArgtypes;
     const LString mFullname;
+    const void*   mPointer;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -88,9 +90,9 @@ template<typename RT>// RT = Return Type
 class LFunction<RT(*)()>:public LFunctionPtr
 {
 public:
-    linline LFunction(LString _fullname,RT(*Fptr)()):
-        LFunctionPtr(LString::empty,_fullname),
-        mPtrF(Fptr)
+    linline LFunction(LString _fullname,RT(*_Fptr)()):
+        LFunctionPtr(LString::empty,_fullname,(void*)_Fptr),
+        mPtrF(_Fptr)
     {
     }
     linline void operator()()
@@ -106,9 +108,9 @@ template<typename RT,typename A1>// RT = Return Type , A1 = argument type 1 and 
 class LFunction<RT(*)(A1)>:public LFunctionPtr
 {
 public:
-    linline LFunction(LString _fullname,RT(*Fptr)(A1)):
-        LFunctionPtr(_l_get_types_as_string<A1>::get(),_fullname),
-        mPtrF(Fptr)
+    linline LFunction(LString _fullname,RT(*_Fptr)(A1)):
+        LFunctionPtr(_l_get_types_as_string<A1>::get(),_fullname,(void*)_Fptr),
+        mPtrF(_Fptr)
     {
     }
     linline void operator()(A1 _a1)
@@ -124,9 +126,9 @@ template<typename RT,typename A1,typename A2>// RT = Return Type , A1 = argument
 class LFunction<RT(*)(A1,A2)>:public LFunctionPtr
 {
 public:
-    linline LFunction(LString _fullname,RT(*Fptr)(A1,A2)):
-        LFunctionPtr(_l_get_types_as_string<A1,A2>::get(),_fullname),
-        mPtrF(Fptr)
+    linline LFunction(LString _fullname,RT(*_Fptr)(A1,A2)):
+        LFunctionPtr(_l_get_types_as_string<A1,A2>::get(),_fullname,(void*)_Fptr),
+        mPtrF(_Fptr)
     {
     }
     linline void operator()(A1 _a1,A2 _a2)
@@ -142,9 +144,9 @@ template<typename RT,typename A1,typename A2,typename A3>// RT = Return Type , A
 class LFunction<RT(*)(A1,A2,A3)>:public LFunctionPtr
 {
 public:
-    linline LFunction(LString _fullname,RT(*Fptr)(A1,A2,A3)):
-        LFunctionPtr(_l_get_types_as_string<A1,A2,A3>::get(),_fullname),
-        mPtrF(Fptr)
+    linline LFunction(LString _fullname,RT(*_Fptr)(A1,A2,A3)):
+        LFunctionPtr(_l_get_types_as_string<A1,A2,A3>::get(),_fullname,(void*)_Fptr),
+        mPtrF(_Fptr)
     {
     }
     linline void operator()(A1 _a1,A2 _a2,A3 _a3)
@@ -161,9 +163,9 @@ template<typename RT,typename A1,typename A2,typename A3,typename A4>// RT = Ret
 class LFunction<RT(*)(A1,A2,A3,A4)>:public LFunctionPtr
 {
 public:
-    linline LFunction(LString _fullname,RT(*Fptr)(A1,A2,A3,A4)):
-        LFunctionPtr(_l_get_types_as_string<A1,A2,A3,A4>::get(),_fullname),
-        mPtrF(Fptr)
+    linline LFunction(LString _fullname,RT(*_Fptr)(A1,A2,A3,A4)):
+        LFunctionPtr(_l_get_types_as_string<A1,A2,A3,A4>::get(),_fullname,(void*)_Fptr),
+        mPtrF(_Fptr)
     {
     }
     linline void operator()(A1 _a1,A2 _a2,A3 _a3,A4 _a4)
@@ -179,9 +181,9 @@ template<typename RT,typename A1,typename A2,typename A3,typename A4,typename A5
 class LFunction<RT(*)(A1,A2,A3,A4,A5)>:public LFunctionPtr
 {
 public:
-    linline LFunction(LString _fullname,RT(*Fptr)(A1,A2,A3,A4,A5)):
-        LFunctionPtr(_l_get_types_as_string<A1,A2,A3,A4,A5>::get(),_fullname),
-        mPtrF(Fptr)
+    linline LFunction(LString _fullname,RT(*_Fptr)(A1,A2,A3,A4,A5)):
+        LFunctionPtr(_l_get_types_as_string<A1,A2,A3,A4,A5>::get(),_fullname,(void*)_Fptr),
+        mPtrF(_Fptr)
     {
     }
     linline void operator()(A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5)
@@ -197,9 +199,9 @@ template<typename RT,typename A1,typename A2,typename A3,typename A4,typename A5
 class LFunction<RT(*)(A1,A2,A3,A4,A5,A6)>:public LFunctionPtr
 {
 public:
-    linline LFunction(LString _fullname,RT(*Fptr)(A1,A2,A3,A4,A5,A6)):
-        LFunctionPtr(_l_get_types_as_string<A1,A2,A3,A4,A5,A6>::get(),_fullname),
-        mPtrF(Fptr)
+    linline LFunction(LString _fullname,RT(*_Fptr)(A1,A2,A3,A4,A5,A6)):
+        LFunctionPtr(_l_get_types_as_string<A1,A2,A3,A4,A5,A6>::get(),_fullname,(void*)_Fptr),
+        mPtrF(_Fptr)
     {
     }
     linline void operator()(A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6)
@@ -215,9 +217,9 @@ template<typename RT,typename A1,typename A2,typename A3,typename A4,typename A5
 class LFunction<RT(*)(A1,A2,A3,A4,A5,A6,A7)>:public LFunctionPtr
 {
 public:
-    linline LFunction(LString _fullname,RT(*Fptr)(A1,A2,A3,A4,A5,A6,A7)):
-        LFunctionPtr(_l_get_types_as_string<A1,A2,A3,A4,A5,A6,A7>::get(),_fullname),
-        mPtrF(Fptr)
+    linline LFunction(LString _fullname,RT(*_Fptr)(A1,A2,A3,A4,A5,A6,A7)):
+        LFunctionPtr(_l_get_types_as_string<A1,A2,A3,A4,A5,A6,A7>::get(),_fullname,(void*)_Fptr),
+        mPtrF(_Fptr)
     {
     }
     linline void operator()(A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7)
@@ -233,9 +235,9 @@ template<typename RT,typename A1,typename A2,typename A3,typename A4,typename A5
 class LFunction<RT(*)(A1,A2,A3,A4,A5,A6,A7,A8)>:public LFunctionPtr
 {
 public:
-    linline LFunction(LString _fullname,RT(*Fptr)(A1,A2,A3,A4,A5,A6,A7,A8)):
-        LFunctionPtr(_l_get_types_as_string<A1,A2,A3,A4,A5,A6,A7,A8>::get(),_fullname),
-        mPtrF(Fptr)
+    linline LFunction(LString _fullname,RT(*_Fptr)(A1,A2,A3,A4,A5,A6,A7,A8)):
+        LFunctionPtr(_l_get_types_as_string<A1,A2,A3,A4,A5,A6,A7,A8>::get(),_fullname,(void*)_Fptr),
+        mPtrF(_Fptr)
     {
     }
     linline void operator()(A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8)
@@ -251,9 +253,9 @@ template<typename RT,typename A1,typename A2,typename A3,typename A4,typename A5
 class LFunction<RT(*)(A1,A2,A3,A4,A5,A6,A7,A8,A9)>:public LFunctionPtr
 {
 public:
-    linline LFunction(LString _fullname,RT(*Fptr)(A1,A2,A3,A4,A5,A6,A7,A8,A9)):
-        LFunctionPtr(_l_get_types_as_string<A1,A2,A3,A4,A5,A6,A7,A8,A9>::get(),_fullname),
-        mPtrF(Fptr)
+    linline LFunction(LString _fullname,RT(*_Fptr)(A1,A2,A3,A4,A5,A6,A7,A8,A9)):
+        LFunctionPtr(_l_get_types_as_string<A1,A2,A3,A4,A5,A6,A7,A8,A9>::get(),_fullname,(void*)_Fptr),
+        mPtrF(_Fptr)
     {
     }
     linline void operator()(A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8,A9 _a9)
@@ -269,9 +271,9 @@ template<typename RT,typename A1,typename A2,typename A3,typename A4,typename A5
 class LFunction<RT(*)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)>:public LFunctionPtr
 {
 public:
-    linline LFunction(LString _fullname,RT(*Fptr)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)):
-        LFunctionPtr(_l_get_types_as_string<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10>::get(),_fullname),
-        mPtrF(Fptr)
+    linline LFunction(LString _fullname,RT(*_Fptr)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)):
+        LFunctionPtr(_l_get_types_as_string<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10>::get(),_fullname,(void*)_Fptr),
+        mPtrF(_Fptr)
     {
     }
     linline void operator()(A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8,A9 _a9,A10 _a10)
@@ -295,9 +297,9 @@ template<typename OT,typename RT>// RT = Return Type
 class LMemberFunction<RT(OT::*)()>:public LFunctionPtr
 {
 public:
-    linline LMemberFunction(LString _fullname,RT(OT::*Fptr)()):
-        LFunctionPtr(LString::empty,_fullname),
-        mPtrF(Fptr)
+    linline LMemberFunction(LString _fullname,RT(OT::*_Fptr)()):
+        LFunctionPtr(LString::empty,_fullname,(void*)_Fptr),
+        mPtrF(_Fptr)
     {
     }
     linline void operator()(OT &_o)
@@ -313,9 +315,9 @@ template<typename OT,typename RT,typename A1>// RT = Return Type , A1 = argument
 class LMemberFunction<RT(OT::*)(A1)>:public LFunctionPtr
 {
 public:
-    linline LMemberFunction(LString _fullname,RT(OT::*Fptr)(A1)):
-        LFunctionPtr(_lm_get_types_as_string<A1>::get(),_fullname),
-        mPtrF(Fptr)
+    linline LMemberFunction(LString _fullname,RT(OT::*_Fptr)(A1)):
+        LFunctionPtr(_lm_get_types_as_string<A1>::get(),_fullname,(void*)_Fptr),
+        mPtrF(_Fptr)
     {
     }
     linline void operator()(OT &_o,A1 _a1)
@@ -331,9 +333,9 @@ template<typename OT,typename RT,typename A1,typename A2>// RT = Return Type , A
 class LMemberFunction<RT(OT::*)(A1,A2)>:public LFunctionPtr
 {
 public:
-    linline LMemberFunction(LString _fullname,RT(OT::*Fptr)(A1,A2)):
-        LFunctionPtr(_lm_get_types_as_string<A1,A2>::get(),_fullname),
-        mPtrF(Fptr)
+    linline LMemberFunction(LString _fullname,RT(OT::*_Fptr)(A1,A2)):
+        LFunctionPtr(_lm_get_types_as_string<A1,A2>::get(),_fullname,(void*)_Fptr),
+        mPtrF(_Fptr)
     {
     }
     linline void operator()(OT &_o,A1 _a1,A2 _a2)
@@ -349,9 +351,9 @@ template<typename OT,typename RT,typename A1,typename A2,typename A3>// RT = Ret
 class LMemberFunction<RT(OT::*)(A1,A2,A3)>:public LFunctionPtr
 {
 public:
-    linline LMemberFunction(LString _fullname,RT(OT::*Fptr)(A1,A2,A3)):
-        LFunctionPtr(_lm_get_types_as_string<A1,A2,A3>::get(),_fullname),
-        mPtrF(Fptr)
+    linline LMemberFunction(LString _fullname,RT(OT::*_Fptr)(A1,A2,A3)):
+        LFunctionPtr(_lm_get_types_as_string<A1,A2,A3>::get(),_fullname,(void*)_Fptr),
+        mPtrF(_Fptr)
     {
     }
     linline void operator()(OT &_o,A1 _a1,A2 _a2,A3 _a3)
@@ -368,9 +370,9 @@ template<typename OT,typename RT,typename A1,typename A2,typename A3,typename A4
 class LMemberFunction<RT(OT::*)(A1,A2,A3,A4)>:public LFunctionPtr
 {
 public:
-    linline LMemberFunction(LString _fullname,RT(OT::*Fptr)(A1,A2,A3,A4)):
-        LFunctionPtr(_lm_get_types_as_string<A1,A2,A3,A4>::get(),_fullname),
-        mPtrF(Fptr)
+    linline LMemberFunction(LString _fullname,RT(OT::*_Fptr)(A1,A2,A3,A4)):
+        LFunctionPtr(_lm_get_types_as_string<A1,A2,A3,A4>::get(),_fullname,(void*)_Fptr),
+        mPtrF(_Fptr)
     {
     }
     linline void operator()(OT &_o,A1 _a1,A2 _a2,A3 _a3,A4 _a4)
@@ -386,9 +388,9 @@ template<typename OT,typename RT,typename A1,typename A2,typename A3,typename A4
 class LMemberFunction<RT(OT::*)(A1,A2,A3,A4,A5)>:public LFunctionPtr
 {
 public:
-    linline LMemberFunction(LString _fullname,RT(OT::*Fptr)(A1,A2,A3,A4,A5)):
-        LFunctionPtr(_lm_get_types_as_string<A1,A2,A3,A4,A5>::get(),_fullname),
-        mPtrF(Fptr)
+    linline LMemberFunction(LString _fullname,RT(OT::*_Fptr)(A1,A2,A3,A4,A5)):
+        LFunctionPtr(_lm_get_types_as_string<A1,A2,A3,A4,A5>::get(),_fullname,(void*)_Fptr),
+        mPtrF(_Fptr)
     {
     }
     linline void operator()(OT &_o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5)
@@ -404,9 +406,9 @@ template<typename OT,typename RT,typename A1,typename A2,typename A3,typename A4
 class LMemberFunction<RT(OT::*)(A1,A2,A3,A4,A5,A6)>:public LFunctionPtr
 {
 public:
-    linline LMemberFunction(LString _fullname,RT(OT::*Fptr)(A1,A2,A3,A4,A5,A6)):
-        LFunctionPtr(_lm_get_types_as_string<A1,A2,A3,A4,A5,A6>::get(),_fullname),
-        mPtrF(Fptr)
+    linline LMemberFunction(LString _fullname,RT(OT::*_Fptr)(A1,A2,A3,A4,A5,A6)):
+        LFunctionPtr(_lm_get_types_as_string<A1,A2,A3,A4,A5,A6>::get(),_fullname,(void*)_Fptr),
+        mPtrF(_Fptr)
     {
     }
     linline void operator()(OT &_o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6)
@@ -422,9 +424,9 @@ template<typename OT,typename RT,typename A1,typename A2,typename A3,typename A4
 class LMemberFunction<RT(OT::*)(A1,A2,A3,A4,A5,A6,A7)>:public LFunctionPtr
 {
 public:
-    linline LMemberFunction(LString _fullname,RT(OT::*Fptr)(A1,A2,A3,A4,A5,A6,A7)):
-        LFunctionPtr(_lm_get_types_as_string<A1,A2,A3,A4,A5,A6,A7>::get(),_fullname),
-        mPtrF(Fptr)
+    linline LMemberFunction(LString _fullname,RT(OT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7)):
+        LFunctionPtr(_lm_get_types_as_string<A1,A2,A3,A4,A5,A6,A7>::get(),_fullname,(void*)_Fptr),
+        mPtrF(_Fptr)
     {
     }
     linline void operator()(OT &_o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7)
@@ -440,9 +442,9 @@ template<typename OT,typename RT,typename A1,typename A2,typename A3,typename A4
 class LMemberFunction<RT(OT::*)(A1,A2,A3,A4,A5,A6,A7,A8)>:public LFunctionPtr
 {
 public:
-    linline LMemberFunction(LString _fullname,RT(OT::*Fptr)(A1,A2,A3,A4,A5,A6,A7,A8)):
-        LFunctionPtr(_lm_get_types_as_string<A1,A2,A3,A4,A5,A6,A7,A8>::get(),_fullname),
-        mPtrF(Fptr)
+    linline LMemberFunction(LString _fullname,RT(OT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7,A8)):
+        LFunctionPtr(_lm_get_types_as_string<A1,A2,A3,A4,A5,A6,A7,A8>::get(),_fullname,(void*)_Fptr),
+        mPtrF(_Fptr)
     {
     }
     linline void operator()(OT &_o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8)
@@ -458,9 +460,9 @@ template<typename OT,typename RT,typename A1,typename A2,typename A3,typename A4
 class LMemberFunction<RT(OT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9)>:public LFunctionPtr
 {
 public:
-    linline LMemberFunction(LString _fullname,RT(OT::*Fptr)(A1,A2,A3,A4,A5,A6,A7,A8,A9)):
-        LFunctionPtr(_lm_get_types_as_string<A1,A2,A3,A4,A5,A6,A7,A8,A9>::get(),_fullname),
-        mPtrF(Fptr)
+    linline LMemberFunction(LString _fullname,RT(OT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7,A8,A9)):
+        LFunctionPtr(_lm_get_types_as_string<A1,A2,A3,A4,A5,A6,A7,A8,A9>::get(),_fullname,(void*)_Fptr),
+        mPtrF(_Fptr)
     {
     }
     linline void operator()(OT &_o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8,A9 _a9)
@@ -476,9 +478,9 @@ template<typename OT,typename RT,typename A1,typename A2,typename A3,typename A4
 class LMemberFunction<RT(OT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)>:public LFunctionPtr
 {
 public:
-    linline LMemberFunction(LString _fullname,RT(OT::*Fptr)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)):
-        LFunctionPtr(_lm_get_types_as_string<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10>::get(),_fullname),
-        mPtrF(Fptr)
+    linline LMemberFunction(LString _fullname,RT(OT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)):
+        LFunctionPtr(_lm_get_types_as_string<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10>::get(),_fullname,(void*)_Fptr),
+        mPtrF(_Fptr)
     {
     }
     linline void operator()(OT &_o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8,A9 _a9,A10 _a10)
@@ -489,6 +491,206 @@ public:
 protected:
     RT(OT::*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10);
 };
+////////////////////////////////////////////////////////////////////////////////////////////////////
+template<typename OT,typename RT>// RT = Return Type
+class LMemberFunction<RT(OT::*)()const>:public LFunctionPtr
+{
+public:
+    linline LMemberFunction(LString _fullname,RT(OT::*_Fptr)()const):
+        LFunctionPtr(LString::empty,_fullname,(void*)_Fptr),
+        mPtrF(_Fptr)
+    {
+    }
+    linline void operator()(OT &_o)
+    {
+       if(mArgtypes==LString::empty)
+          (_o.*mPtrF)();
+    }
+protected:
+    RT(OT::*mPtrF)()const;
+};
+
+template<typename OT,typename RT,typename A1>// RT = Return Type , A1 = argument type 1 and ...
+class LMemberFunction<RT(OT::*)(A1)const>:public LFunctionPtr
+{
+public:
+    linline LMemberFunction(LString _fullname,RT(OT::*_Fptr)(A1)const):
+        LFunctionPtr(_lm_get_types_as_string<A1>::get(),_fullname,(void*)_Fptr),
+        mPtrF(_Fptr)
+    {
+    }
+    linline void operator()(OT &_o,A1 _a1)
+    {
+        if(mArgtypes==_lm_get_types_as_string<A1>::get())
+            (_o.*mPtrF)(_a1);
+    }
+protected:
+    RT(OT::*mPtrF)(A1)const;
+};
+
+template<typename OT,typename RT,typename A1,typename A2>// RT = Return Type , A1 = argument type 1 and ...
+class LMemberFunction<RT(OT::*)(A1,A2)const>:public LFunctionPtr
+{
+public:
+    linline LMemberFunction(LString _fullname,RT(OT::*_Fptr)(A1,A2)const):
+        LFunctionPtr(_lm_get_types_as_string<A1,A2>::get(),_fullname,(void*)_Fptr),
+        mPtrF(_Fptr)
+    {
+    }
+    linline void operator()(OT &_o,A1 _a1,A2 _a2)
+    {
+        if(mArgtypes==_lm_get_types_as_string<A1,A2>::get())
+            (_o.*mPtrF)(_a1,_a2);
+    }
+protected:
+    RT(OT::*mPtrF)(A1,A2)const;
+};
+
+template<typename OT,typename RT,typename A1,typename A2,typename A3>// RT = Return Type , A1 = argument type 1 and ...
+class LMemberFunction<RT(OT::*)(A1,A2,A3)const>:public LFunctionPtr
+{
+public:
+    linline LMemberFunction(LString _fullname,RT(OT::*_Fptr)(A1,A2,A3)const):
+        LFunctionPtr(_lm_get_types_as_string<A1,A2,A3>::get(),_fullname,(void*)_Fptr),
+        mPtrF(_Fptr)
+    {
+    }
+    linline void operator()(OT &_o,A1 _a1,A2 _a2,A3 _a3)
+    {
+        if(mArgtypes==_lm_get_types_as_string<A1,A2,A3>::get())
+            (_o.*mPtrF)(_a1,_a2,_a3);
+    }
+protected:
+    RT(OT::*mPtrF)(A1,A2,A3)const;
+
+};
+
+template<typename OT,typename RT,typename A1,typename A2,typename A3,typename A4>// RT = Return Type , A1 = argument type 1 and ...
+class LMemberFunction<RT(OT::*)(A1,A2,A3,A4)const>:public LFunctionPtr
+{
+public:
+    linline LMemberFunction(LString _fullname,RT(OT::*_Fptr)(A1,A2,A3,A4)const):
+        LFunctionPtr(_lm_get_types_as_string<A1,A2,A3,A4>::get(),_fullname,(void*)_Fptr),
+        mPtrF(_Fptr)
+    {
+    }
+    linline void operator()(OT &_o,A1 _a1,A2 _a2,A3 _a3,A4 _a4)
+    {
+        if(mArgtypes==_lm_get_types_as_string<A1,A2,A3,A4>::get())
+            (_o.*mPtrF)(_a1,_a2,_a3);
+    }
+protected:
+    RT(OT::*mPtrF)(A1,A2,A3,A4)const;
+};
+
+template<typename OT,typename RT,typename A1,typename A2,typename A3,typename A4,typename A5>// RT = Return Type , A1 = argument type 1 and ...
+class LMemberFunction<RT(OT::*)(A1,A2,A3,A4,A5)const>:public LFunctionPtr
+{
+public:
+    linline LMemberFunction(LString _fullname,RT(OT::*_Fptr)(A1,A2,A3,A4,A5)const):
+        LFunctionPtr(_lm_get_types_as_string<A1,A2,A3,A4,A5>::get(),_fullname,(void*)_Fptr),
+        mPtrF(_Fptr)
+    {
+    }
+    linline void operator()(OT &_o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5)
+    {
+        if(mArgtypes==_lm_get_types_as_string<A1,A2,A3,A4,A5>::get())
+            (_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5);
+    }
+protected:
+    RT(OT::*mPtrF)(A1,A2,A3,A4,A5)const;
+};
+
+template<typename OT,typename RT,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6>// RT = Return Type , A1 = argument type 1 and ...
+class LMemberFunction<RT(OT::*)(A1,A2,A3,A4,A5,A6)const>:public LFunctionPtr
+{
+public:
+    linline LMemberFunction(LString _fullname,RT(OT::*_Fptr)(A1,A2,A3,A4,A5,A6)const):
+        LFunctionPtr(_lm_get_types_as_string<A1,A2,A3,A4,A5,A6>::get(),_fullname,(void*)_Fptr),
+        mPtrF(_Fptr)
+    {
+    }
+    linline void operator()(OT &_o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6)
+    {
+        if(mArgtypes==_lm_get_types_as_string<A1,A2,A3,A4,A5,A6>::get())
+            (_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5,_a6);
+    }
+protected:
+    RT(OT::*mPtrF)(A1,A2,A3,A4,A5,A6)const;
+};
+
+template<typename OT,typename RT,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7>// RT = Return Type , A1 = argument type 1 and ...
+class LMemberFunction<RT(OT::*)(A1,A2,A3,A4,A5,A6,A7)const>:public LFunctionPtr
+{
+public:
+    linline LMemberFunction(LString _fullname,RT(OT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7)const):
+        LFunctionPtr(_lm_get_types_as_string<A1,A2,A3,A4,A5,A6,A7>::get(),_fullname,(void*)_Fptr),
+        mPtrF(_Fptr)
+    {
+    }
+    linline void operator()(OT &_o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7)
+    {
+        if(mArgtypes==_lm_get_types_as_string<A1,A2,A3,A4,A5,A6,A7>::get())
+            (_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5,_a6,_a7);
+    }
+protected:
+    RT(OT::*mPtrF)(A1,A2,A3,A4,A5,A6,A7)const;
+};
+
+template<typename OT,typename RT,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8>// RT = Return Type , A1 = argument type 1 and ...
+class LMemberFunction<RT(OT::*)(A1,A2,A3,A4,A5,A6,A7,A8)const>:public LFunctionPtr
+{
+public:
+    linline LMemberFunction(LString _fullname,RT(OT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7,A8)const):
+        LFunctionPtr(_lm_get_types_as_string<A1,A2,A3,A4,A5,A6,A7,A8>::get(),_fullname,(void*)_Fptr),
+        mPtrF(_Fptr)
+    {
+    }
+    linline void operator()(OT &_o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8)
+    {
+        if(mArgtypes==_lm_get_types_as_string<A1,A2,A3,A4,A5,A6,A7,A8>::get())
+            (_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5,_a6,_a7,_a8);
+    }
+protected:
+    RT(OT::*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8)const;
+};
+
+template<typename OT,typename RT,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8,typename A9>// RT = Return Type , A1 = argument type 1 and ...
+class LMemberFunction<RT(OT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9)const>:public LFunctionPtr
+{
+public:
+    linline LMemberFunction(LString _fullname,RT(OT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7,A8,A9)const):
+        LFunctionPtr(_lm_get_types_as_string<A1,A2,A3,A4,A5,A6,A7,A8,A9>::get(),_fullname,(void*)_Fptr),
+        mPtrF(_Fptr)
+    {
+    }
+    linline void operator()(OT &_o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8,A9 _a9)
+    {
+        if(mArgtypes==_lm_get_types_as_string<A1,A2,A3,A4,A5,A6,A7,A8,A9>::get())
+            (_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5,_a6,_a7,_a8,_a9);
+    }
+protected:
+    RT(OT::*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8,A9)const;
+};
+
+template<typename OT,typename RT,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8,typename A9,typename A10>// RT = Return Type , A1 = argument type 1 and ...
+class LMemberFunction<RT(OT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)const>:public LFunctionPtr
+{
+public:
+    linline LMemberFunction(LString _fullname,RT(OT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)const):
+        LFunctionPtr(_lm_get_types_as_string<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10>::get(),_fullname,(void*)_Fptr),
+        mPtrF(_Fptr)
+    {
+    }
+    linline void operator()(OT &_o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8,A9 _a9,A10 _a10)
+    {
+        if(mArgtypes==_lm_get_types_as_string<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10>::get())
+            (_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5,_a6,_a7,_a8,_a9,_a10);
+    }
+protected:
+    RT(OT::*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)const;
+};
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -570,6 +772,14 @@ public:
     {
         mProperties.pushBack(_f);
         return *this;
+    }
+
+    LFunctionPtr* getFunction(void* ptr)
+    {
+        for(u32 i=0;i<mFunctions.getSize();i++)
+            if(ptr==mFunctions[i]->mPointer)
+                return mFunctions[i];
+        lError(1,LSTR("Function Not found , please be carefull about function pointer"),nullptr);
     }
 
     LFunctionPtr* getFunction(LString fullname)

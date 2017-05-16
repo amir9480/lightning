@@ -2,9 +2,10 @@
 
 LNAMESPACE_BEGIN
 
-LFunctionPtr::LFunctionPtr(LString argtypes,LString fullname):
+LFunctionPtr::LFunctionPtr(LString argtypes, LString fullname, void *_pointer):
     mArgtypes(argtypes),
-    mFullname(fullname)
+    mFullname(fullname),
+    mPointer(_pointer)
 {
 
 }

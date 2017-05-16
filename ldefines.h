@@ -62,6 +62,7 @@
 #if LCOMPILER==LCOMPILER_MINGW || LCOMPILER == LCOMPILER_GCC
     //! Causes inline functions always be inline
     #define linline inline __attribute__((always_inline))
+    #pragma GCC diagnostic ignored "-Wpmf-conversions"// prevent from this type warning
 #else
     #define linline inline
 #endif
