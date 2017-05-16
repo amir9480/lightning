@@ -101,6 +101,9 @@ public:
     //! remove a character in _index
     void                            remove(u32 _index);
 
+    //! remove all white spaces
+    void                            removeWhiteSpaces();
+
     //! replace string from index with _val . note that if there was not enough space string will resize
     void                            replace(u32 _index,const chartype* _val);
     void                            replace(u32 _index,const LString_Base<chartype>& _val);

@@ -27,7 +27,8 @@ SOURCES += main.cpp \
     lpair.cpp \
     llist.cpp \
     lmap.cpp \
-    lreflection.cpp
+    lreflection.cpp \
+    lvariant.cpp
 
 
 HEADERS += \
@@ -57,5 +58,6 @@ HEADERS += \
     lpair.h \
     llist.h \
     lmap.h \
-    lreflection.h
+    lreflection.h \
+    lvariant.h
 

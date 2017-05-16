@@ -394,6 +394,17 @@ void LString_Base<chartype>::remove(u32 _index)
 }
 
 template <typename chartype>
+void LString_Base<chartype>::removeWhiteSpaces()
+{
+    for(u32 i=0;i<getCapacity();i++)
+        if(mData[i]==(chartype)' ')
+        {
+            remove(i);
+            i--;
+        }
+}
+
+template <typename chartype>
 void LString_Base<chartype>::replace(u32 _index,const chartype* _val)
 {
     u32 valc=__utility_strlen(_val);

@@ -29,6 +29,8 @@ template <typename... A> linline void _lunused(A&&...) {}
 #define __MACRO2( name , number ) __MACRO3( name , number )
 #define __MACRO3( name , number ) name##number
 
+#define LCAT( _FIRST , _SECOND ) __MACRO(_FIRST,_SECOND)
+
 #define LVAARGS(...) _COUNTARGS(__VA_ARGS__), __VA_ARGS__
 
 #define LTO_STRING(X) ______TOSTRING1(#X)
@@ -37,6 +39,73 @@ template <typename... A> linline void _lunused(A&&...) {}
 #define LPAR_OPEN (
 #define LPAR_CLOSE )
 #define LCOMMA ,
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*!
+ *
+ * lCallOnStart use this for function that need to be called right on program start before every thing
+ *
+ * sample:
+ *
+ * void lCallOnStart()
+ * {
+ *     cout<<"Hello World"<<endl;
+ * }
+ *
+ * note: function type can not be changed
+ * note: function is not a real function ! so you can NOT call it (but there is secret way to do that :D)
+ * note: you can define this function multiple times inside a file !
+ *
+ */
+#define lCallOnStart \
+static  LCAT(____lcall__,__LINE__)();\
+namespace {\
+    struct LCAT(_____fake_type_,__LINE__)\
+    {\
+        LCAT(_____fake_type_,__LINE__)()\
+        {\
+            LCAT(____lcall__,__LINE__)();\
+        }\
+    };\
+}\
+static const LCAT(_____fake_type_,__LINE__) LCAT(____fake_obj,__LINE__);\
+static void LCAT(____lcall__,__LINE__)
+
+
+/*!
+ *
+ * lCallOnEnd use this for function that need to be called right on program exit.
+ *
+ * sample:
+ *
+ * void lCallOnEnd()
+ * {
+ *     cout<<"Good Bye World"<<endl;
+ * }
+ *
+ * note: if program crash this function will not be called
+ * note: function type can not be changed
+ * note: function is not a real function ! so you can NOT call it (but there is secret way to do that :D)
+ * note: you can define this function multiple times inside a file !
+ *
+ */
+#define lCallOnEnd \
+static LCAT(____lcall2__,__LINE__)();\
+namespace {\
+    struct LCAT(_____fake_type2_,__LINE__)\
+    {\
+        LCAT(_____fake_type2_,__LINE__)(){}\
+        ~ LCAT(_____fake_type2_,__LINE__)()\
+        {\
+            LCAT(____lcall2__,__LINE__)();\
+        }\
+    };\
+}\
+static const LCAT(_____fake_type2_,__LINE__) LCAT(____fake_obj,__LINE__);\
+static void LCAT(____lcall2__,__LINE__)
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #define lHasMember(NAME,FUNCNAME)\
 template<typename ____Th,typename __Sign>\
@@ -306,6 +375,14 @@ struct LEnable_If<true,T>
 template<typename __T>
 const char* lGetTypeName()
 {
+    return typeid(__T).name();
+}
+
+//! will returns a unique string for each value type
+template<typename __T>
+const char* lGetTypeName(__T in)
+{
+    LUNUSED(in);
     return typeid(__T).name();
 }
 

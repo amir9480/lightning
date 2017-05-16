@@ -6,11 +6,13 @@
 #include "lutility.h"
 #include "lvector.h"
 #include "lstring.h"
+#include "lpair.h"
 
 #include "stdarg.h"
 
 LNAMESPACE_BEGIN
 
+//! get function argument types as string for validation
 template<typename T1,typename... T2>
 struct _l_get_types_as_string
 {
@@ -29,6 +31,7 @@ struct _l_get_types_as_string<T1>
     }
 };
 
+//! get member function argument types as string for validation
 template<typename T1,typename... T2>
 struct _lm_get_types_as_string
 {
@@ -46,9 +49,10 @@ struct _lm_get_types_as_string<T1>
         return lGetTypeName<T1>()+LSTR(",_M_");
     }
 };
-LString _l_get_args_names(u32 _count);
-LString _l_get_args_names(u32 _count,const char* _b,...);
+LString LAPI _l_get_args_names(u32 _count);
+LString LAPI _l_get_args_names(u32 _count,const char* _b,...);
 
+//! get function name as string for validation
 template<typename... _args_>
 linline LString _l_get_func_name(const char* fname,const char* _returntype,_args_... args)
 {
@@ -59,6 +63,7 @@ linline LString _l_get_func_name(const char* fname,const char* _returntype,_args
     return o;
 }
 
+//! get member function name as string for validation
 template<typename... _args_>
 linline LString _l_get_mfunc_name(const char* _classname,const char* fname,const char* _returntype,_args_... args)
 {
@@ -69,7 +74,8 @@ linline LString _l_get_mfunc_name(const char* _classname,const char* fname,const
     return o;
 }
 
-class LFunctionPtr
+//! base class for functions pointers
+class LAPI LFunctionPtr
 {
 public:
     LFunctionPtr(LString argtypes, LString fullname,void* _pointer);
@@ -81,6 +87,7 @@ public:
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//! create a pointer to function
 template<typename... FT>// FT = Function Type
 class LFunction:public LFunctionPtr
 {
@@ -287,7 +294,7 @@ protected:
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+//! create pointer to member function
 template<typename... FT>// FT = Function Type
 class LMemberFunction:public LFunctionPtr
 {
@@ -694,6 +701,7 @@ protected:
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//! base to holding properties
 template<typename ClassType>
 struct LPropertyBase
 {
@@ -745,6 +753,40 @@ protected:
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+//! base to create enums
+struct LEnum
+{
+    LEnum(LString _name):
+        mEnumName(_name)
+    {}
+    virtual ~LEnum(){}
+    const LString mEnumName;
+};
+
+template<typename T>
+struct LMetaEnum:LEnum
+{
+    LMetaEnum(LString _name):
+        LEnum(_name)
+    {}
+    LMetaEnum& add(LString _name,T _val)
+    {
+        mOptions.pushBack(LPair<LString,T>(_name,_val));
+        return *this;
+    }
+
+    T get(LString _name)const
+    {
+        for(u32 i=0;i<mOptions.getSize();i++)
+            if(mOptions[i].first==_name)
+                return mOptions[i].second;
+        lError(1,_name+" Not Found",*((T*)0));
+    }
+
+private:
+    LVector <LPair<LString,T>> mOptions;
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 template<typename T>
 class LMetaObject
@@ -760,6 +802,8 @@ public:
             delete mFunctions[i];
         for(u32 i=0;i<mProperties.getSize();i++)
             delete mProperties[i];
+        for(u32 i=0;i<mEnums.getSize();i++)
+            delete mEnums[i];
     }
 
     LMetaObject& addFunction(LFunctionPtr* _f)
@@ -774,7 +818,13 @@ public:
         return *this;
     }
 
-    LFunctionPtr* getFunction(void* ptr)
+    LMetaObject& addEnum(LEnum* _f)
+    {
+        mEnums.pushBack(_f);
+        return *this;
+    }
+
+    LFunctionPtr* getFunction(void* ptr)const
     {
         for(u32 i=0;i<mFunctions.getSize();i++)
             if(ptr==mFunctions[i]->mPointer)
@@ -782,7 +832,7 @@ public:
         lError(1,LSTR("Function Not found , please be carefull about function pointer"),nullptr);
     }
 
-    LFunctionPtr* getFunction(LString fullname)
+    LFunctionPtr* getFunction(LString fullname)const
     {
         for(u32 i=0;i<mFunctions.getSize();i++)
             if(fullname==mFunctions[i]->mFullname)
@@ -790,7 +840,7 @@ public:
         lError(1,LSTR("Function \"")+fullname+"\" Not found , please be carefull about function name",nullptr);
     }
 
-    LPropertyBase<T>* getProperty(LString name)
+    LPropertyBase<T>* getProperty(LString name)const
     {
         for(u32 i=0;i<mProperties.getSize();i++)
             if(name==mProperties[i]->mName)
@@ -798,16 +848,38 @@ public:
         lError(1,LSTR("Property \"")+name+"\" Not found , please be carefull about property name",nullptr);
     }
 
+    LEnum* getEnum(LString name)const
+    {
+        for(u32 i=0;i<mEnums.getSize();i++)
+            if(name==mEnums[i]->mEnumName)
+                return mEnums[i];
+        lError(1,LSTR("Enum \"")+name+"\" Not found , please be carefull about enum name",nullptr);
+    }
+
+    LVector<LFunctionPtr*>& getFunctions()const
+    {
+        return mFunctions;
+    }
+    LVector<LPropertyBase<T>*>& getProperties()const
+    {
+        return mProperties;
+    }
+    LVector<LEnum*>& getEnums()const
+    {
+        return mEnums;
+    }
+
     const LString mMetaType;
 private:
     LVector<LFunctionPtr*>      mFunctions;
     LVector<LPropertyBase<T>*>  mProperties;
+    LVector<LEnum*>             mEnums;
 };
 
 template<typename T>
 struct LMetaObjectManager
 {
-    static LMetaObject<T>* get()
+    static void* get()
     {
         lError(1,LSTR("MetaObjectManager is undefined for ")+lGetTypeName<T>(),nullptr);
     }
