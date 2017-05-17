@@ -259,6 +259,12 @@ LVariant::LVariant(const std::initializer_list<const char *> &_in):
     (*this)=_in;
 }
 
+LVariant::LVariant(const LVariant &_other):
+    LVariant()
+{
+    (*this)=_other;
+}
+
 
 LVariant::~LVariant()
 {
@@ -498,6 +504,103 @@ LString LVariant::toString() const
 
     lWarning(1,"variant type is not String ");
     return LString::empty;
+}
+
+LVariant &LVariant::operator=(const LVariant &_in)
+{
+    this->destroy();
+    mTypeName=_in.mTypeName;
+    mType=_in.mType;
+    switch(_in.mType)
+    {
+    case VariantType::TNull:
+        break;
+    case VariantType::TInt:
+        mInt=_in.mInt;
+        break;
+    case VariantType::TUInt:
+        mUInt=_in.mUInt;
+        break;
+    case VariantType::TFloat:
+        mFloat=_in.mFloat;
+        break;
+    case VariantType::TDouble:
+        mDouble=_in.mDouble;
+        break;
+    case VariantType::TLongDouble:
+        mLongDouble=_in.mLongDouble;
+        break;
+    case VariantType::TChar:
+        mChar=_in.mChar;
+        break;
+    case VariantType::TUChar:
+        mUChar=_in.mUChar;
+        break;
+    case VariantType::TBool:
+        mBool=_in.mBool;
+        break;
+    case VariantType::TShortInt:
+        mShortInt=_in.mShortInt;
+        break;
+    case VariantType::TUShortInt:
+        mUShortInt=_in.mUShortInt;
+        break;
+    case VariantType::TLongLongInt:
+        mLongLongInt=_in.mLongLongInt;
+        break;
+    case VariantType::TULongLongInt:
+        mULongLongInt=_in.mULongLongInt;
+        break;
+    case VariantType::TWChar_t:
+        mWCharT=_in.mWCharT;
+        break;
+    case VariantType::TString:
+        mString=_in.mString;
+        break;
+
+
+    case VariantType::TIntR:
+    case VariantType::TUIntR:
+    case VariantType::TFloatR:
+    case VariantType::TDoubleR:
+    case VariantType::TLongDoubleR:
+    case VariantType::TBoolR:
+    case VariantType::TShortIntR:
+    case VariantType::TUShortIntR:
+    case VariantType::TLongLongIntR:
+    case VariantType::TULongLongIntR:
+    case VariantType::TStringR:
+        mCustom=_in.mCustom;
+
+        break;
+    case VariantType::TIntA:
+    case VariantType::TUIntA:
+    case VariantType::TFloatA:
+    case VariantType::TDoubleA:
+    case VariantType::TLongDoubleA:
+    case VariantType::TCharA:
+    case VariantType::TUCharA:
+    case VariantType::TBoolA:
+    case VariantType::TShortIntA:
+    case VariantType::TUShortIntA:
+    case VariantType::TLongLongIntA:
+    case VariantType::TULongLongIntA:
+    case VariantType::TWChar_tA:
+    case VariantType::TStringA:
+        mArray=_in.mArray;
+        break;
+    case VariantType::TCustom:
+        lError2(1,LSTR("Coping with custom class context is not allowed. use\"var1=var2.to<YourclassType>();\" instead"));
+        mType=VariantType::TNull;
+        mTypeName.clear();
+        break;
+    case VariantType::TCustomReference:
+        mCustom=_in.mCustom;
+        break;
+    default:
+        break;
+    }
+    return *this;
 }
 
 LVariant &LVariant::operator=(int _in)

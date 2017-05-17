@@ -9,12 +9,20 @@
 
 LNAMESPACE_BEGIN
 
+class LVariant;
+
 class LAPI LCustomVariant
 {
     friend class LVariant;
 public:
     LCustomVariant(){}
     virtual ~LCustomVariant(){}
+
+    virtual void        fromString(const LString _in)=0;
+    virtual LString     toString()const=0;
+
+    virtual LVariant    getProperty()const=0;
+    virtual void        setProperty(const LVariant& _in)=0;
 protected:
     void* mData;
 };
@@ -25,7 +33,42 @@ class LClassVariant:public LCustomVariant
 public:
     LClassVariant(const T& _in);
     virtual ~LClassVariant();
+
+    void fromString(const LString _in);
+    LString toString() const;
+    void setProperty(const LString& _name,const LVariant &_in);
+    LVariant getProperty(const LString &_name)const;
 };
+
+/*!
+ * Working with vaiants
+ *
+ * //how to define a variant
+ * LVariant a = 12;
+ *
+ * //how to use it's value
+ * cout<<a.toInt()<<endl;
+ *
+ * // how to destroy variant
+ * a.destroy(); // will convert to null
+ *
+ * // how to create variant for custom class type
+ * LVariant a=TestClass(...);
+ *
+ * // how to use it's value
+ * a.to<TestClass>(). ....
+ *
+ * // how to create variant as reference
+ * int value = 12;
+ * LVariant a= & value;
+ * cout<<a.toInt()<<" "<<value<<endl; // prints 12 12
+ * a=444;
+ * cout<<a.toInt()<<" "<<value<<endl; // prints 444 444
+ * a.destroy(); // destroy current session and prevent from changing value
+ * a=147;
+ * cout<<a.toInt()<<" "<<value<<endl; // prints 147 444
+ *
+ */
 
 class LAPI LVariant
 {
@@ -131,6 +174,7 @@ public:
     LVariant(const std::initializer_list<wchar_t>& _in);
     LVariant(const std::initializer_list<const char*>& _in);// for string
 
+    LVariant(const LVariant& _other);
     virtual ~LVariant();
 
     //! destroy current data
@@ -223,6 +267,8 @@ public:
     template<typename T>
     LVariant& operator=(T _in);
 
+    virtual LVariant& operator=(const LVariant& _in);
+
     virtual LVariant& operator[](u32 _i)const;
 
 protected:
@@ -253,6 +299,12 @@ protected:
     };
 };
 
+lConfigCallIfExist      (has_fromString,void,fromString,const LString&)
+lConfigCallIfExistConst (has_toString,LString,toString)
+
+lConfigCallIfExist      (has_setProperty,void,setProperty,const LString&,const LVariant&)
+lConfigCallIfExistConst (has_getProperty,LVariant,getProperty,const LString&)
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 template<typename T>
@@ -266,6 +318,30 @@ LClassVariant<T>::~LClassVariant()
 {
     T* ptr = (T*)mData;
     delete ptr;
+}
+
+template<typename T>
+void LClassVariant<T>::fromString(const LString _in)
+{
+    lCallIfExistA((*(T*)mData),has_fromString,_in);
+}
+
+template<typename T>
+LString LClassVariant<T>::toString() const
+{
+    return lCallIfExist((*(T*)mData),has_toString);
+}
+
+template<typename T>
+LVariant LClassVariant<T>::getProperty(const LString& _name)const
+{
+    return lCallIfExistA((*(T*)mData),has_getProperty,_name);
+}
+
+template<typename T>
+void LClassVariant<T>::setProperty(const LString &_name, const LVariant &_in)
+{
+    lCallIfExistA((*(T*)mData),has_setProperty,_name,_in);
 }
 
 template<typename T>
