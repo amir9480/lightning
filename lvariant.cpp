@@ -7,261 +7,261 @@ LVariant::LVariant()
     mType=VariantType::TNull;
 }
 
-LVariant::LVariant(int _in):
-    LVariant()
+LVariant::LVariant(int _in)
 {
+    mType=VariantType::TNull;
     (*this)=_in;
 }
 
-LVariant::LVariant(unsigned int _in):
-    LVariant()
+LVariant::LVariant(unsigned int _in)
 {
+    mType=VariantType::TNull;
     (*this)=_in;
 }
 
-LVariant::LVariant(float _in):
-    LVariant()
+LVariant::LVariant(float _in)
 {
+    mType=VariantType::TNull;
     (*this)=_in;
 }
 
-LVariant::LVariant(double _in):
-    LVariant()
+LVariant::LVariant(double _in)
 {
+    mType=VariantType::TNull;
     (*this)=_in;
 }
 
-LVariant::LVariant(long double _in):
-    LVariant()
+LVariant::LVariant(long double _in)
 {
+    mType=VariantType::TNull;
     (*this)=_in;
 }
 
-LVariant::LVariant(char _in):
-    LVariant()
+LVariant::LVariant(char _in)
 {
+    mType=VariantType::TNull;
     (*this)=_in;
 }
 
-LVariant::LVariant(unsigned char _in):
-    LVariant()
+LVariant::LVariant(unsigned char _in)
 {
+    mType=VariantType::TNull;
     (*this)=_in;
 }
 
-LVariant::LVariant(bool _in):
-    LVariant()
+LVariant::LVariant(bool _in)
 {
+    mType=VariantType::TNull;
     (*this)=_in;
 }
 
-LVariant::LVariant(short _in):
-    LVariant()
+LVariant::LVariant(short _in)
 {
+    mType=VariantType::TNull;
     (*this)=_in;
 }
 
-LVariant::LVariant(unsigned short _in):
-    LVariant()
+LVariant::LVariant(unsigned short _in)
 {
+    mType=VariantType::TNull;
     (*this)=_in;
 }
 
-LVariant::LVariant(long long _in):
-    LVariant()
+LVariant::LVariant(long long _in)
 {
+    mType=VariantType::TNull;
     (*this)=_in;
 }
 
-LVariant::LVariant(unsigned long long _in):
-    LVariant()
+LVariant::LVariant(unsigned long long _in)
 {
+    mType=VariantType::TNull;
     (*this)=_in;
 }
 
-LVariant::LVariant(wchar_t _in):
-    LVariant()
+LVariant::LVariant(wchar_t _in)
 {
+    mType=VariantType::TNull;
     (*this)=_in;
 }
 
-LVariant::LVariant(LString _in):
-    LVariant()
+LVariant::LVariant(LString _in)
 {
+    mType=VariantType::TNull;
     (*this)=_in;
 }
 
-LVariant::LVariant(const char *_in):
-    LVariant()
+LVariant::LVariant(const char *_in)
 {
+    mType=VariantType::TNull;
     (*this)=_in;
 }
 
-LVariant::LVariant(const wchar_t *_in):
-    LVariant()
+LVariant::LVariant(const wchar_t *_in)
 {
+    mType=VariantType::TNull;
     (*this)=_in;
 }
 
-LVariant::LVariant(const char32_t *_in):
-    LVariant()
+LVariant::LVariant(const char32_t *_in)
 {
+    mType=VariantType::TNull;
     (*this)=_in;
 }
 
-LVariant::LVariant(int *_in):
-    LVariant()
+LVariant::LVariant(int *_in)
 {
+    mType=VariantType::TNull;
     (*this)=_in;
 }
 
-LVariant::LVariant(unsigned int *_in):
-    LVariant()
+LVariant::LVariant(unsigned int *_in)
 {
+    mType=VariantType::TNull;
     (*this)=_in;
 }
 
-LVariant::LVariant(float *_in):
-    LVariant()
+LVariant::LVariant(float *_in)
 {
+    mType=VariantType::TNull;
     (*this)=_in;
 }
 
-LVariant::LVariant(double *_in):
-    LVariant()
+LVariant::LVariant(double *_in)
 {
+    mType=VariantType::TNull;
     (*this)=_in;
 }
 
-LVariant::LVariant(long double *_in):
-    LVariant()
+LVariant::LVariant(long double *_in)
 {
+    mType=VariantType::TNull;
     (*this)=_in;
 }
 
-LVariant::LVariant(bool *_in):
-    LVariant()
+LVariant::LVariant(bool *_in)
 {
+    mType=VariantType::TNull;
     (*this)=_in;
 }
 
-LVariant::LVariant(short *_in):
-    LVariant()
+LVariant::LVariant(short *_in)
 {
+    mType=VariantType::TNull;
     (*this)=_in;
 }
 
-LVariant::LVariant(unsigned short *_in):
-    LVariant()
+LVariant::LVariant(unsigned short *_in)
 {
+    mType=VariantType::TNull;
     (*this)=_in;
 }
 
-LVariant::LVariant(long long *_in):
-    LVariant()
+LVariant::LVariant(long long *_in)
 {
+    mType=VariantType::TNull;
     (*this)=_in;
 }
 
-LVariant::LVariant(unsigned long long *_in):
-    LVariant()
+LVariant::LVariant(unsigned long long *_in)
 {
+    mType=VariantType::TNull;
     (*this)=_in;
 }
 
-LVariant::LVariant(LString *_in):
-    LVariant()
+LVariant::LVariant(LString *_in)
 {
+    mType=VariantType::TNull;
     (*this)=_in;
 }
 
-LVariant::LVariant(const std::initializer_list<int> &_in):
-    LVariant()
+LVariant::LVariant(const std::initializer_list<int> &_in)
 {
+    mType=VariantType::TNull;
     (*this)=_in;
 }
 
-LVariant::LVariant(const std::initializer_list<unsigned int> &_in):
-    LVariant()
+LVariant::LVariant(const std::initializer_list<unsigned int> &_in)
 {
+    mType=VariantType::TNull;
     (*this)=_in;
 }
 
-LVariant::LVariant(const std::initializer_list<float> &_in):
-    LVariant()
+LVariant::LVariant(const std::initializer_list<float> &_in)
 {
+    mType=VariantType::TNull;
     (*this)=_in;
 }
 
-LVariant::LVariant(const std::initializer_list<double> &_in):
-    LVariant()
+LVariant::LVariant(const std::initializer_list<double> &_in)
 {
+    mType=VariantType::TNull;
     (*this)=_in;
 }
 
-LVariant::LVariant(const std::initializer_list<long double> &_in):
-    LVariant()
+LVariant::LVariant(const std::initializer_list<long double> &_in)
 {
+    mType=VariantType::TNull;
     (*this)=_in;
 }
 
-LVariant::LVariant(const std::initializer_list<char> &_in):
-    LVariant()
+LVariant::LVariant(const std::initializer_list<char> &_in)
 {
+    mType=VariantType::TNull;
     (*this)=_in;
 }
 
-LVariant::LVariant(const std::initializer_list<unsigned char> &_in):
-    LVariant()
+LVariant::LVariant(const std::initializer_list<unsigned char> &_in)
 {
+    mType=VariantType::TNull;
     (*this)=_in;
 }
 
-LVariant::LVariant(const std::initializer_list<bool> &_in):
-    LVariant()
+LVariant::LVariant(const std::initializer_list<bool> &_in)
 {
+    mType=VariantType::TNull;
     (*this)=_in;
 }
 
-LVariant::LVariant(const std::initializer_list<short> &_in):
-    LVariant()
+LVariant::LVariant(const std::initializer_list<short> &_in)
 {
+    mType=VariantType::TNull;
     (*this)=_in;
 }
 
-LVariant::LVariant(const std::initializer_list<unsigned short> &_in):
-    LVariant()
+LVariant::LVariant(const std::initializer_list<unsigned short> &_in)
 {
+    mType=VariantType::TNull;
     (*this)=_in;
 }
 
-LVariant::LVariant(const std::initializer_list<long long> &_in):
-    LVariant()
+LVariant::LVariant(const std::initializer_list<long long> &_in)
 {
+    mType=VariantType::TNull;
     (*this)=_in;
 }
 
-LVariant::LVariant(const std::initializer_list<unsigned long long> &_in):
-    LVariant()
+LVariant::LVariant(const std::initializer_list<unsigned long long> &_in)
 {
+    mType=VariantType::TNull;
     (*this)=_in;
 }
 
-LVariant::LVariant(const std::initializer_list<wchar_t> &_in):
-    LVariant()
+LVariant::LVariant(const std::initializer_list<wchar_t> &_in)
 {
+    mType=VariantType::TNull;
     (*this)=_in;
 }
 
-LVariant::LVariant(const std::initializer_list<const char *> &_in):
-    LVariant()
+LVariant::LVariant(const std::initializer_list<const char *> &_in)
 {
+    mType=VariantType::TNull;
     (*this)=_in;
 }
 
-LVariant::LVariant(const LVariant &_other):
-    LVariant()
+LVariant::LVariant(const LVariant &_other)
 {
+    mType=VariantType::TNull;
     (*this)=_other;
 }
 
@@ -293,6 +293,7 @@ void LVariant::destroy()
         delete mArray;
         break;
     case VariantType::TCustom:
+    case VariantType::TCustomReference:
         delete mCustomClass;
         break;
     default:
@@ -304,6 +305,11 @@ void LVariant::destroy()
 
 void LVariant::fromString(const LString &_in)
 {
+    if(mType==VariantType::TCustom||mType==VariantType::TCustomReference)
+    {
+        mCustomClass->fromString(_in);
+        return;
+    }
     destroy();
     mType=VariantType::TString;
     mTypeName=lGetTypeName<LString>();
@@ -321,10 +327,15 @@ LString LVariant::getTypeName() const
     return mTypeName;
 }
 
-const LVariant *LVariant::getProperty(const LString &_propertyname) const
+const LVariant LVariant::getProperty(const LString &_propertyname) const
 {
+    if(mType==VariantType::TCustom||mType==VariantType::TCustomReference)
+    {
+        return mCustomClass->getProperty(_propertyname);
+    }
     LUNUSED(_propertyname);
-    lError(1,LSTR("properties is not availble for this type : ")+mTypeName,nullptr);
+    lError2(1,LSTR("properties is not availble for this type : ")+mTypeName);
+    return LVariant();
 }
 
 bool LVariant::isValidArray() const
@@ -370,8 +381,11 @@ bool LVariant::isValidReference() const
 
 void LVariant::setProperty(const LString &_propertyname, const LVariant &_newvalue)
 {
-    LUNUSED(_propertyname);
-    LUNUSED(_newvalue);
+    if(mType==VariantType::TCustom||mType==VariantType::TCustomReference)
+    {
+        mCustomClass->setProperty(_propertyname,_newvalue);
+        return;
+    }
     lError(1,LSTR("properties is not availble for this type : ")+mTypeName);
 }
 
@@ -481,6 +495,10 @@ wchar_t LVariant::toWCharT() const
 
 LString LVariant::toString() const
 {
+    if(mType==VariantType::TCustom||mType==VariantType::TCustomReference)
+    {
+        return mCustomClass->toString();
+    }
     ///TODO update LVariant::toString()
     if(isValidReference())
         return *((LString*)mCustom);
@@ -590,12 +608,10 @@ LVariant &LVariant::operator=(const LVariant &_in)
         mArray=_in.mArray;
         break;
     case VariantType::TCustom:
+    case VariantType::TCustomReference:
         lError2(1,LSTR("Coping with custom class context is not allowed. use\"var1=var2.to<YourclassType>();\" instead"));
         mType=VariantType::TNull;
         mTypeName.clear();
-        break;
-    case VariantType::TCustomReference:
-        mCustom=_in.mCustom;
         break;
     default:
         break;
@@ -1142,6 +1158,18 @@ LVariant& LVariant::operator[](u32 i) const
     static LVariant d;
     lError(!isValidArray(),"Varaiant type is not valid array",d);
     return (*mArray)[i];
+}
+
+LVariant LCustomVariant::getProperty(const LString &_name) const
+{
+    LUNUSED(_name);
+    return LVariant();
+}
+
+void LCustomVariant::setProperty(const LString &_name, const LVariant &_in)
+{
+    LUNUSED(_in);
+    LUNUSED(_name);
 }
 
 
