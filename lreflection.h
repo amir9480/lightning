@@ -698,6 +698,40 @@ protected:
     RT(OT::*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)const;
 };
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//! base to create enums
+struct LEnum
+{
+    LEnum(LString _name):
+        mEnumName(_name)
+    {}
+    virtual ~LEnum(){}
+    const LString mEnumName;
+};
+
+template<typename T>
+struct LMetaEnum:LEnum
+{
+    LMetaEnum(LString _name):
+        LEnum(_name)
+    {}
+    LMetaEnum& add(LString _name,T _val)
+    {
+        mOptions.pushBack(LPair<LString,T>(_name,_val));
+        return *this;
+    }
+
+    T get(LString _name)const
+    {
+        for(u32 i=0;i<mOptions.getSize();i++)
+            if(mOptions[i].first==_name)
+                return mOptions[i].second;
+        lError(1,_name+" Not Found",*((T*)0));
+    }
+
+private:
+    LVector <LPair<LString,T>> mOptions;
+};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -750,41 +784,6 @@ struct LProperty:LPropertyBase<ClassType>
     }
 protected:
     T ClassType::*mData;
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//! base to create enums
-struct LEnum
-{
-    LEnum(LString _name):
-        mEnumName(_name)
-    {}
-    virtual ~LEnum(){}
-    const LString mEnumName;
-};
-
-template<typename T>
-struct LMetaEnum:LEnum
-{
-    LMetaEnum(LString _name):
-        LEnum(_name)
-    {}
-    LMetaEnum& add(LString _name,T _val)
-    {
-        mOptions.pushBack(LPair<LString,T>(_name,_val));
-        return *this;
-    }
-
-    T get(LString _name)const
-    {
-        for(u32 i=0;i<mOptions.getSize();i++)
-            if(mOptions[i].first==_name)
-                return mOptions[i].second;
-        lError(1,_name+" Not Found",*((T*)0));
-    }
-
-private:
-    LVector <LPair<LString,T>> mOptions;
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -118,29 +118,51 @@ struct NAME\
 };
 
 #define lCallIf(NAME,FUNCNAME)\
-template<typename ____Th,bool __value>\
+template<typename ____Th,typename RT,bool __value>\
 struct NAME{\
+    template<typename ...ARGS>\
+    linline static RT call(____Th in,ARGS... args){return in.FUNCNAME(args...);}\
+};\
+template<typename ____Th,typename RT>\
+struct NAME <____Th,RT,false>{\
+    template<typename ...ARGS>\
+    linline static RT call(____Th in,ARGS... args){LUNUSED(in);LUNUSED(args...);static RT o;return o;}\
+};\
+template<typename ____Th,typename RT>\
+struct NAME<____Th,RT&,true>{\
+    template<typename ...ARGS>\
+    linline static RT& call(____Th in,ARGS... args){return in.FUNCNAME(args...);}\
+};\
+template<typename ____Th,typename RT>\
+struct NAME <____Th,RT&,false>{\
+    template<typename ...ARGS>\
+    linline static RT& call(____Th in,ARGS... args){LUNUSED(in);LUNUSED(args...);static RT o;return o;}\
+};\
+template<typename ____Th>\
+struct NAME<____Th,void,true>{\
     template<typename ...ARGS>\
     linline static void call(____Th in,ARGS... args){in.FUNCNAME(args...);}\
 };\
 template<typename ____Th>\
-struct NAME <____Th,false>{\
+struct NAME <____Th,void,false>{\
     template<typename ...ARGS>\
     linline static void call(____Th in,ARGS... args){LUNUSED(in);LUNUSED(args...);}\
 };
 
 #define lCaller(NAME,CHECKERNAME,RETURNTYPE,FUNCNAME)\
 template<typename ____Th>\
-void NAME(____Th in)\
+RETURNTYPE NAME(____Th in)\
 {\
-    l_call_if_##CHECKERNAME <____Th,l_has_##CHECKERNAME<____Th,RETURNTYPE(____Th::*)()>::value>::call(in);\
+    return l_call_if_##CHECKERNAME <____Th,RETURNTYPE,l_has_##CHECKERNAME<____Th,RETURNTYPE(____Th::*)()>::value>::call(in);\
 }
 #define lCallerA(NAME,CHECKERNAME,RETURNTYPE,FUNCNAME,ARGS)\
 template<typename ____Th , typename... __args>\
-void NAME(____Th in,__args... ___args)\
+RETURNTYPE NAME(____Th in,__args... ___args)\
 {\
-    l_call_if_##CHECKERNAME <____Th,l_has_##CHECKERNAME<____Th,RETURNTYPE(____Th::*) ARGS >::value>::call(in,___args...);\
+    return l_call_if_##CHECKERNAME <____Th,RETURNTYPE,l_has_##CHECKERNAME<____Th,RETURNTYPE(____Th::*) ARGS >::value>::call(in,___args...);\
 }
+
+
 
 #define lConfigCallIfExist(...) LOVERLOADED_MACRO(_lConfigCallIfExist,__VA_ARGS__)
 
@@ -198,6 +220,79 @@ lCallerA(l_caller_##CHECKNAME,CHECKNAME,RETURNTYPE,FUNCNAME,LPAR_OPEN A1 LCOMMA 
 lHasMember(l_has_##CHECKNAME,FUNCNAME)\
 lCallIf(l_call_if_##CHECKNAME,FUNCNAME)\
 lCallerA(l_caller_##CHECKNAME,CHECKNAME,RETURNTYPE,FUNCNAME,LPAR_OPEN A1 LCOMMA A2 LCOMMA A3 LCOMMA A4 LCOMMA A5 LCOMMA A6 LCOMMA A7  LCOMMA A8 LCOMMA A9 LCOMMA A10 LPAR_CLOSE)
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#define lCallerConst(NAME,CHECKERNAME,RETURNTYPE,FUNCNAME)\
+template<typename ____Th>\
+RETURNTYPE NAME(____Th in)\
+{\
+    return l_call_if_##CHECKERNAME <____Th,RETURNTYPE,l_has_##CHECKERNAME<____Th,RETURNTYPE(____Th::*)()const>::value>::call(in);\
+}
+#define lCallerAConst(NAME,CHECKERNAME,RETURNTYPE,FUNCNAME,ARGS)\
+template<typename ____Th , typename... __args>\
+RETURNTYPE NAME(____Th in,__args... ___args)\
+{\
+    return l_call_if_##CHECKERNAME <____Th,RETURNTYPE,l_has_##CHECKERNAME<____Th,RETURNTYPE(____Th::*) ARGS const>::value>::call(in,___args...);\
+}
+
+#define lConfigCallIfExistConst(...) LOVERLOADED_MACRO(_lConfigCallIfExistConst,__VA_ARGS__)
+
+#define _lConfigCallIfExistConst3(CHECKNAME,RETURNTYPE,FUNCNAME)\
+lHasMember(l_has_##CHECKNAME,FUNCNAME)\
+lCallIf(l_call_if_##CHECKNAME,FUNCNAME)\
+lCallerConst(l_caller_##CHECKNAME,CHECKNAME,RETURNTYPE,FUNCNAME)
+
+#define _lConfigCallIfExistConst4(CHECKNAME,RETURNTYPE,FUNCNAME,A1)\
+lHasMember(l_has_##CHECKNAME,FUNCNAME)\
+lCallIf(l_call_if_##CHECKNAME,FUNCNAME)\
+lCallerA(l_caller_##CHECKNAME,CHECKNAME,RETURNTYPE,FUNCNAME,LPAR_OPEN A1 LPAR_CLOSE)
+
+#define _lConfigCallIfExistConst5(CHECKNAME,RETURNTYPE,FUNCNAME,A1,A2)\
+lHasMember(l_has_##CHECKNAME,FUNCNAME)\
+lCallIf(l_call_if_##CHECKNAME,FUNCNAME)\
+lCallerAConst(l_caller_##CHECKNAME,CHECKNAME,RETURNTYPE,FUNCNAME,LPAR_OPEN A1 LCOMMA A2 LPAR_CLOSE)
+
+#define _lConfigCallIfExistConst6(CHECKNAME,RETURNTYPE,FUNCNAME,A1,A2,A3)\
+lHasMember(l_has_##CHECKNAME,FUNCNAME)\
+lCallIf(l_call_if_##CHECKNAME,FUNCNAME)\
+lCallerAConst(l_caller_##CHECKNAME,CHECKNAME,RETURNTYPE,FUNCNAME,LPAR_OPEN A1 LCOMMA A2 LCOMMA A3 LPAR_CLOSE)
+
+#define _lConfigCallIfExistConst7(CHECKNAME,RETURNTYPE,FUNCNAME,A1,A2,A3,A4)\
+lHasMember(l_has_##CHECKNAME,FUNCNAME)\
+lCallIf(l_call_if_##CHECKNAME,FUNCNAME)\
+lCallerAConst(l_caller_##CHECKNAME,CHECKNAME,RETURNTYPE,FUNCNAME,LPAR_OPEN A1 LCOMMA A2 LCOMMA A3 LCOMMA A4 LPAR_CLOSE)
+
+#define _lConfigCallIfExistConst8(CHECKNAME,RETURNTYPE,FUNCNAME,A1,A2,A3,A4,A5)\
+lHasMember(l_has_##CHECKNAME,FUNCNAME)\
+lCallIf(l_call_if_##CHECKNAME,FUNCNAME)\
+lCallerAConst(l_caller_##CHECKNAME,CHECKNAME,RETURNTYPE,FUNCNAME,LPAR_OPEN A1 LCOMMA A2 LCOMMA A3 LCOMMA A4 LCOMMA A5 LPAR_CLOSE)
+
+#define _lConfigCallIfExistConst9(CHECKNAME,RETURNTYPE,FUNCNAME,A1,A2,A3,A4,A5,A6)\
+lHasMember(l_has_##CHECKNAME,FUNCNAME)\
+lCallIf(l_call_if_##CHECKNAME,FUNCNAME)\
+lCallerAConst(l_caller_##CHECKNAME,CHECKNAME,RETURNTYPE,FUNCNAME,LPAR_OPEN A1 LCOMMA A2 LCOMMA A3 LCOMMA A4 LCOMMA A5 LCOMMA A6 LPAR_CLOSE)
+
+#define _lConfigCallIfExistConst10(CHECKNAME,RETURNTYPE,FUNCNAME,A1,A2,A3,A4,A5,A6,A7)\
+lHasMember(l_has_##CHECKNAME,FUNCNAME)\
+lCallIf(l_call_if_##CHECKNAME,FUNCNAME)\
+lCallerAConst(l_caller_##CHECKNAME,CHECKNAME,RETURNTYPE,FUNCNAME,LPAR_OPEN A1 LCOMMA A2 LCOMMA A3 LCOMMA A4 LCOMMA A5 LCOMMA A6 LCOMMA A7 LPAR_CLOSE)
+
+#define _lConfigCallIfExistConst11(CHECKNAME,RETURNTYPE,FUNCNAME,A1,A2,A3,A4,A5,A6,A7,A8)\
+lHasMember(l_has_##CHECKNAME,FUNCNAME)\
+lCallIf(l_call_if_##CHECKNAME,FUNCNAME)\
+lCallerAConst(l_caller_##CHECKNAME,CHECKNAME,RETURNTYPE,FUNCNAME,LPAR_OPEN A1 LCOMMA A2 LCOMMA A3 LCOMMA A4 LCOMMA A5 LCOMMA A6 LCOMMA A7  LCOMMA A8 LPAR_CLOSE)
+
+#define _lConfigCallIfExistConst12(CHECKNAME,RETURNTYPE,FUNCNAME,A1,A2,A3,A4,A5,A6,A7,A8,A9)\
+lHasMember(l_has_##CHECKNAME,FUNCNAME)\
+lCallIf(l_call_if_##CHECKNAME,FUNCNAME)\
+lCallerAConst(l_caller_##CHECKNAME,CHECKNAME,RETURNTYPE,FUNCNAME,LPAR_OPEN A1 LCOMMA A2 LCOMMA A3 LCOMMA A4 LCOMMA A5 LCOMMA A6 LCOMMA A7  LCOMMA A8 LCOMMA A9 LPAR_CLOSE)
+
+#define _lConfigCallIfExistConst13(CHECKNAME,RETURNTYPE,FUNCNAME,A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)\
+lHasMember(l_has_##CHECKNAME,FUNCNAME)\
+lCallIf(l_call_if_##CHECKNAME,FUNCNAME)\
+lCallerAConst(l_caller_##CHECKNAME,CHECKNAME,RETURNTYPE,FUNCNAME,LPAR_OPEN A1 LCOMMA A2 LCOMMA A3 LCOMMA A4 LCOMMA A5 LCOMMA A6 LCOMMA A7  LCOMMA A8 LCOMMA A9 LCOMMA A10 LPAR_CLOSE)
+
 
 #define lCallIfExist(OBJ,CHECKNAME)\
 l_caller_##CHECKNAME(OBJ);
@@ -302,6 +397,16 @@ l_caller_##CHECKNAME(OBJ);
 
 #define lCallIfExistA(OBJ,CHECKNAME,...)\
 l_caller_##CHECKNAME(OBJ, __VA_ARGS__ );
+
+
+NOTE : use lConfigCallIfExistConst instead of lConfigCallIfExist for const functions
+sample:
+struct A
+{
+    void test()const{}
+};
+
+lConfigCallIfExistConst(has_a,void,test)
  */
 
 
@@ -359,6 +464,33 @@ struct LIsSameType<T1,T1>
     static const bool value=true;
 };
 
+//! check is A Derived from B .
+//!
+//!struct A
+//!{
+//!};
+//!struct B:A
+//!{
+//!};
+//!
+//! cout<<lIsDerivedFrom<B,A>::value<<endl; // is true
+//!
+template <typename A, typename B>
+struct lIsDerivedFrom
+{
+    template <typename _B, typename _A>
+    struct ___ltest__
+    {
+        operator _B*() const;
+        operator _A*();
+    };
+    struct yes{bool a[2];};
+    struct no{bool a[1];};
+    template <typename T>
+    static yes check(A*,T);
+    static no check(B*, int);
+    static const bool value = LIsSameType<decltype(check(___ltest__<B,A>(), int())),yes>::value;
+};
 
 //! type is availble if first parameter was true
 template<bool _con,typename T=void>
@@ -386,7 +518,17 @@ const char* lGetTypeName(__T in)
     return typeid(__T).name();
 }
 
+template<typename T>
+struct LIsPointer
+{
+    const static bool value=false;
+};
 
+template<typename T>
+struct LIsPointer<T*>
+{
+    const static bool value=true;
+};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -452,7 +594,7 @@ struct LHasDefaultConstructor
 
 };
 
-
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 enum LSortType
 {

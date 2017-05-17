@@ -9,6 +9,24 @@
 
 LNAMESPACE_BEGIN
 
+class LAPI LCustomVariant
+{
+    friend class LVariant;
+public:
+    LCustomVariant(){}
+    virtual ~LCustomVariant(){}
+protected:
+    void* mData;
+};
+
+template<typename T>
+class LClassVariant:public LCustomVariant
+{
+public:
+    LClassVariant(const T& _in);
+    virtual ~LClassVariant();
+};
+
 class LAPI LVariant
 {
 public:
@@ -30,8 +48,18 @@ public:
         TULongLongInt,
         TWChar_t,
         TString,
-        TCustom, // custom classes
 
+        TIntR, // int Reference
+        TUIntR,
+        TFloatR,
+        TDoubleR,
+        TLongDoubleR,
+        TBoolR,
+        TShortIntR,
+        TUShortIntR,
+        TLongLongIntR,
+        TULongLongIntR,
+        TStringR,
 
         TIntA, // int array
         TUIntA,
@@ -47,6 +75,10 @@ public:
         TULongLongIntA,
         TWChar_tA,
         TStringA,
+
+
+        TCustom, // custom classes
+        TCustomReference//reference type
     };
 
     LVariant();
@@ -68,6 +100,21 @@ public:
     LVariant(const char* _in);
     LVariant(const wchar_t* _in);
     LVariant(const char32_t* _in);
+
+    LVariant(int* _in);
+    LVariant(unsigned int* _in);
+    LVariant(float* _in);
+    LVariant(double* _in);
+    LVariant(long double* _in);
+    LVariant(bool* _in);
+    LVariant(short int* _in);
+    LVariant(unsigned short int* _in);
+    LVariant(long long int* _in);
+    LVariant(unsigned long long int* _in);
+    LVariant(LString* _in);
+
+    template<typename T>
+    LVariant(T _in);
 
     LVariant(const std::initializer_list<int>& _in);
     LVariant(const std::initializer_list<unsigned int>& _in);
@@ -98,8 +145,17 @@ public:
     //! Get Type name of this Varaint
     LString                         getTypeName() const;
 
+    //! Get Property of Class Varaint
+    virtual const LVariant*         getProperty(const LString& _propertyname)const;
+
     //! check is this a valid array
     bool                            isValidArray()const;
+
+    //! check is this a valid reference
+    bool                            isValidReference()const;
+
+    //! set Property of Class Varaint
+    virtual void                    setProperty(const LString& _propertyname,const LVariant& _newvalue);
 
     int                             toInt()const;
     unsigned int                    toUInt()const;
@@ -116,42 +172,58 @@ public:
     wchar_t                         toWCharT()const;
     virtual LString                 toString()const;
     template<typename T>
-    linline T                       to()const;
+    T                               to()const;
 
-    LVariant& operator=(int _in);
-    LVariant& operator=(unsigned int _in);
-    LVariant& operator=(float _in);
-    LVariant& operator=(double _in);
-    LVariant& operator=(long double _in);
-    LVariant& operator=(char _in);
-    LVariant& operator=(unsigned char _in);
-    LVariant& operator=(bool _in);
-    LVariant& operator=(short int _in);
-    LVariant& operator=(unsigned short int _in);
-    LVariant& operator=(long long int  _in);
-    LVariant& operator=(unsigned long long int _in);
-    LVariant& operator=(wchar_t _in);
-    LVariant& operator=(LString _in);
-    LVariant& operator=(const char* _in);
-    LVariant& operator=(const wchar_t* _in);
-    LVariant& operator=(const char32_t* _in);
+    virtual LVariant& operator=(int _in);
+    virtual LVariant& operator=(unsigned int _in);
+    virtual LVariant& operator=(float _in);
+    virtual LVariant& operator=(double _in);
+    virtual LVariant& operator=(long double _in);
+    virtual LVariant& operator=(char _in);
+    virtual LVariant& operator=(unsigned char _in);
+    virtual LVariant& operator=(bool _in);
+    virtual LVariant& operator=(short int _in);
+    virtual LVariant& operator=(unsigned short int _in);
+    virtual LVariant& operator=(long long int  _in);
+    virtual LVariant& operator=(unsigned long long int _in);
+    virtual LVariant& operator=(wchar_t _in);
+    virtual LVariant& operator=(LString _in);
+    virtual LVariant& operator=(const char* _in);
+    virtual LVariant& operator=(const wchar_t* _in);
+    virtual LVariant& operator=(const char32_t* _in);
 
-    LVariant& operator=(const std::initializer_list<int>& _in);
-    LVariant& operator=(const std::initializer_list<unsigned int>& _in);
-    LVariant& operator=(const std::initializer_list<float>& _in);
-    LVariant& operator=(const std::initializer_list<double>& _in);
-    LVariant& operator=(const std::initializer_list<long double>& _in);
-    LVariant& operator=(const std::initializer_list<char>& _in);
-    LVariant& operator=(const std::initializer_list<unsigned char>& _in);
-    LVariant& operator=(const std::initializer_list<bool>& _in);
-    LVariant& operator=(const std::initializer_list<short int>& _in);
-    LVariant& operator=(const std::initializer_list<unsigned short int>& _in);
-    LVariant& operator=(const std::initializer_list<long long int>&  _in);
-    LVariant& operator=(const std::initializer_list<unsigned long long int>& _in);
-    LVariant& operator=(const std::initializer_list<wchar_t>& _in);
-    LVariant& operator=(const std::initializer_list<const char*>& _in);// for string
+    virtual LVariant& operator=(int* _in);
+    virtual LVariant& operator=(unsigned int* _in);
+    virtual LVariant& operator=(float* _in);
+    virtual LVariant& operator=(double* _in);
+    virtual LVariant& operator=(long double* _in);
+    virtual LVariant& operator=(bool* _in);
+    virtual LVariant& operator=(short int* _in);
+    virtual LVariant& operator=(unsigned short int* _in);
+    virtual LVariant& operator=(long long int* _in);
+    virtual LVariant& operator=(unsigned long long int* _in);
+    virtual LVariant& operator=(LString* _in);
 
-    LVariant  operator[](u32 _i)const;
+
+    virtual LVariant& operator=(const std::initializer_list<int>& _in);
+    virtual LVariant& operator=(const std::initializer_list<unsigned int>& _in);
+    virtual LVariant& operator=(const std::initializer_list<float>& _in);
+    virtual LVariant& operator=(const std::initializer_list<double>& _in);
+    virtual LVariant& operator=(const std::initializer_list<long double>& _in);
+    virtual LVariant& operator=(const std::initializer_list<char>& _in);
+    virtual LVariant& operator=(const std::initializer_list<unsigned char>& _in);
+    virtual LVariant& operator=(const std::initializer_list<bool>& _in);
+    virtual LVariant& operator=(const std::initializer_list<short int>& _in);
+    virtual LVariant& operator=(const std::initializer_list<unsigned short int>& _in);
+    virtual LVariant& operator=(const std::initializer_list<long long int>&  _in);
+    virtual LVariant& operator=(const std::initializer_list<unsigned long long int>& _in);
+    virtual LVariant& operator=(const std::initializer_list<wchar_t>& _in);
+    virtual LVariant& operator=(const std::initializer_list<const char*>& _in);// for string
+
+    template<typename T>
+    LVariant& operator=(T _in);
+
+    virtual LVariant& operator[](u32 _i)const;
 
 protected:
     VariantType mType;
@@ -173,149 +245,163 @@ protected:
         wchar_t                          mWCharT;
         LString*                         mString;
 
-        LVector<int>*                    mIntA;
-        LVector<unsigned int>*           mUIntA;
-        LVector<float>*                  mFloatA;
-        LVector<double>*                 mDoubleA;
-        LVector<long double>*            mLongDoubleA;
-        LVector<char>*                   mCharA;
-        LVector<unsigned char>*          mUCharA;
-        LVector<bool>*                   mBoolA;
-        LVector<short int>*              mShortIntA;
-        LVector<unsigned short int>*     mUShortIntA;
-        LVector<long long int>*          mLongLongIntA;
-        LVector<unsigned long long int>* mULongLongIntA;
-        LVector<wchar_t>*                mWCharTA;
-        LVector<LString>*                mStringA;
+        LVector<LVariant>*               mArray;
 
         void*                            mCustom;
+
+        LCustomVariant*                  mCustomClass;
     };
 };
 
-
-template<typename T>
-class LClassVariant:public LVariant
-{
-public:
-    LClassVariant();
-    LClassVariant(const T& _in);
-    virtual ~LClassVariant();
-
-    void destroy();
-
-    void fromString(const LString &_in);
-
-    LString toString() const;
-
-    LClassVariant<T>& operator=(const LClassVariant<T>& _in);
-
-};
-
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-template<typename T>
-T LVariant::to() const
-{
-    lError2(mTypeName!=lGetTypeName<T>(),"Looks like type is not correct");
-    if( LIsSameType<T,int>::value )
-        return *((T*)&mInt);
-    if( LIsSameType<T,unsigned int>::value )
-        return *((T*)&mUInt);
-    if( LIsSameType<T,float>::value )
-        return *((T*)&mFloat);
-    if( LIsSameType<T,double>::value )
-        return *((T*)&mDouble);
-    if( LIsSameType<T,long double>::value )
-        return *((T*)&mLongDouble);
-    if( LIsSameType<T,char>::value )
-        return *((T*)&mChar);
-    if( LIsSameType<T,unsigned char>::value )
-        return *((T*)&mUChar);
-    if( LIsSameType<T,bool>::value )
-        return *((T*)&mBool);
-    if( LIsSameType<T,short int>::value )
-        return *((T*)&mShortInt);
-    if( LIsSameType<T,unsigned short int>::value )
-        return *((T*)&mUShortInt);
-    if( LIsSameType<T,long long int>::value )
-        return *((T*)&mLongLongInt);
-    if( LIsSameType<T,unsigned long long int>::value )
-        return *((T*)&mULongLongInt);
-    if( LIsSameType<T,wchar_t>::value )
-        return *((T*)&mWCharT);
-    return *static_cast<T*>(mCustom);
-}
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-template<typename T>
-LClassVariant<T>::LClassVariant()
-{
-    mType=VariantType::TCustom;
-    mTypeName=lGetTypeName<T>();
-    mCustom=(void*)new T;
-}
 
 template<typename T>
 LClassVariant<T>::LClassVariant(const T &_in)
 {
-    mType=VariantType::TCustom;
-    mTypeName=lGetTypeName<T>();
-    mCustom=(void*)new T(_in);
+    mData=new T(_in);
 }
 
 template<typename T>
 LClassVariant<T>::~LClassVariant()
 {
-    destroy();
-}
-
-template<typename T>
-void LClassVariant<T>::destroy()
-{
-    if(mType==VariantType::TNull)
-        return;
-    if(mTypeName!=lGetTypeName<T>())
-    {
-        dynamic_cast<LVariant*>(this)->destroy();
-        return;
-    }
-    T* ptr=(T*)mCustom;
+    T* ptr = (T*)mData;
     delete ptr;
-    mType=VariantType::TNull;
-    mTypeName.clear();
 }
 
 template<typename T>
-void LClassVariant<T>::fromString(const LString &_in)
+LVariant::LVariant(const T _in):
+    LVariant()
 {
-    if(mType!=TCustom)
-        return;
-    T* ptr=(T*)mCustom;
-    ptr->lFromString(_in);
+    (*this)=_in;
 }
 
-template<typename T>
-LString LClassVariant<T>::toString() const
+template<bool con>
+struct ___l_var_callif
 {
-    if(mType!=TCustom)
-        return LString::empty;
-    T* ptr=(T*)mCustom;
-    return ptr->lToString();
-}
+    template<typename A,typename B>
+    static void call(A _a,B _b){LUNUSED(_a);LUNUSED(_b);}
+};
+template<>
+struct ___l_var_callif<true>
+{
+    static void call(void*& _a,void* _b){_a=_b;}
+};
 
 template<typename T>
-LClassVariant<T>& LClassVariant<T>::operator=(const LClassVariant<T>& _in)
+LVariant &LVariant::operator=(T _in)
 {
-    destroy();
-    mType=_in.mType;
-    mTypeName=_in.mTypeName;
-    mCustom=new T;
-    T* ptr=(T*)mCustom;
-    (*ptr)=*((T*)_in.mCustom);
+    if(mTypeName==lGetTypeName<T>()&&mType==VariantType::TCustom)
+    {
+        T* ptr=(T*)mCustomClass->mData;
+        (*ptr)=_in;
+        return *this;
+    }
+    if(mTypeName==lGetTypeName<T>()&&mType==VariantType::TCustomReference)
+    {
+        T* ptr=(T*)mCustom;
+        (*ptr)=_in;
+        return *this;
+    }
+
+    if(LIsPointer<T>::value)
+    {
+        this->destroy();
+        mTypeName=lGetTypeName<typename LRemovePointer<T>::type>();
+        mType=VariantType::TCustomReference;
+        ___l_var_callif<LIsPointer<T>::value>::call(mCustom,_in);
+    }
+    else
+    {
+        this->destroy();
+        mTypeName=lGetTypeName<T>();
+        mType=VariantType::TCustom;
+        mCustomClass=new LClassVariant<T>(_in);
+    }
     return *this;
 }
+
+
+template<typename T>
+T LVariant::to() const
+{
+    //lError2(mTypeName!=lGetTypeName<T>(),LSTR("Looks like type is not correct current type:(")+mTypeName+") and what you want ("+lGetTypeName<T>()+")");
+    if(!isValidReference())
+    {
+        if( LIsSameType<typename LRemoveReference<T>::type,int>::value )
+            return *((T*)&mInt);
+        if( LIsSameType<typename LRemoveReference<T>::type,unsigned int>::value )
+            return *((T*)&mUInt);
+        if( LIsSameType<typename LRemoveReference<T>::type,float>::value )
+            return *((T*)&mFloat);
+        if( LIsSameType<typename LRemoveReference<T>::type,double>::value )
+            return *((T*)&mDouble);
+        if( LIsSameType<typename LRemoveReference<T>::type,long double>::value )
+            return *((T*)&mLongDouble);
+        if( LIsSameType<typename LRemoveReference<T>::type,char>::value )
+            return *((T*)&mChar);
+        if( LIsSameType<typename LRemoveReference<T>::type,unsigned char>::value )
+            return *((T*)&mUChar);
+        if( LIsSameType<typename LRemoveReference<T>::type,bool>::value )
+            return *((T*)&mBool);
+        if( LIsSameType<typename LRemoveReference<T>::type,short int>::value )
+            return *((T*)&mShortInt);
+        if( LIsSameType<typename LRemoveReference<T>::type,unsigned short int>::value )
+            return *((T*)&mUShortInt);
+        if( LIsSameType<typename LRemoveReference<T>::type,long long int>::value )
+            return *((T*)&mLongLongInt);
+        if( LIsSameType<typename LRemoveReference<T>::type,unsigned long long int>::value )
+            return *((T*)&mULongLongInt);
+        if( LIsSameType<typename LRemoveReference<T>::type,wchar_t>::value )
+            return *((T*)&mWCharT);
+        if( LIsSameType<typename LRemoveReference<T>::type,LString>::value )
+        {
+            LString o=toString();
+            return *((T*)&o);
+        }
+    }
+    else
+    {
+        if( LIsSameType<typename LRemoveReference<T>::type,int&>::value )
+            return *((T*)mCustom);
+        if( LIsSameType<typename LRemoveReference<T>::type,unsigned int&>::value )
+            return *((T*)mCustom);
+        if( LIsSameType<typename LRemoveReference<T>::type,float&>::value )
+            return *((T*)mCustom);
+        if( LIsSameType<typename LRemoveReference<T>::type,double&>::value )
+            return *((T*)mCustom);
+        if( LIsSameType<typename LRemoveReference<T>::type,long double&>::value )
+            return *((T*)mCustom);
+        if( LIsSameType<typename LRemoveReference<T>::type,char&>::value )
+            return *((T*)mCustom);
+        if( LIsSameType<typename LRemoveReference<T>::type,unsigned char&>::value )
+            return *((T*)mCustom);
+        if( LIsSameType<typename LRemoveReference<T>::type,bool&>::value )
+            return *((T*)mCustom);
+        if( LIsSameType<typename LRemoveReference<T>::type,short int&>::value )
+            return *((T*)mCustom);
+        if( LIsSameType<typename LRemoveReference<T>::type,unsigned short int&>::value )
+            return *((T*)mCustom);
+        if( LIsSameType<typename LRemoveReference<T>::type,long long int&>::value )
+            return *((T*)mCustom);
+        if( LIsSameType<typename LRemoveReference<T>::type,unsigned long long int&>::value )
+            return *((T*)mCustom);
+        if( LIsSameType<typename LRemoveReference<T>::type,wchar_t&>::value )
+            return *((T*)mCustom);
+        if( LIsSameType<typename LRemoveReference<T>::type,LString>::value )
+        {
+            return *((T*)mCustom);
+        }
+    }
+
+    if(mType==VariantType::TCustom)
+        return *((T*)mCustomClass->mData);
+    if(mType==VariantType::TCustomReference)
+        return *((T*)mCustom);
+
+    return *static_cast<T*>(mCustom);
+}
+
+
 
 
 LNAMESPACE_END
