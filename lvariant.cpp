@@ -7,258 +7,6 @@ LVariant::LVariant()
     mType=VariantType::TNull;
 }
 
-LVariant::LVariant(int _in)
-{
-    mType=VariantType::TNull;
-    (*this)=_in;
-}
-
-LVariant::LVariant(unsigned int _in)
-{
-    mType=VariantType::TNull;
-    (*this)=_in;
-}
-
-LVariant::LVariant(float _in)
-{
-    mType=VariantType::TNull;
-    (*this)=_in;
-}
-
-LVariant::LVariant(double _in)
-{
-    mType=VariantType::TNull;
-    (*this)=_in;
-}
-
-LVariant::LVariant(long double _in)
-{
-    mType=VariantType::TNull;
-    (*this)=_in;
-}
-
-LVariant::LVariant(char _in)
-{
-    mType=VariantType::TNull;
-    (*this)=_in;
-}
-
-LVariant::LVariant(unsigned char _in)
-{
-    mType=VariantType::TNull;
-    (*this)=_in;
-}
-
-LVariant::LVariant(bool _in)
-{
-    mType=VariantType::TNull;
-    (*this)=_in;
-}
-
-LVariant::LVariant(short _in)
-{
-    mType=VariantType::TNull;
-    (*this)=_in;
-}
-
-LVariant::LVariant(unsigned short _in)
-{
-    mType=VariantType::TNull;
-    (*this)=_in;
-}
-
-LVariant::LVariant(long long _in)
-{
-    mType=VariantType::TNull;
-    (*this)=_in;
-}
-
-LVariant::LVariant(unsigned long long _in)
-{
-    mType=VariantType::TNull;
-    (*this)=_in;
-}
-
-LVariant::LVariant(wchar_t _in)
-{
-    mType=VariantType::TNull;
-    (*this)=_in;
-}
-
-LVariant::LVariant(LString _in)
-{
-    mType=VariantType::TNull;
-    (*this)=_in;
-}
-
-LVariant::LVariant(const char *_in)
-{
-    mType=VariantType::TNull;
-    (*this)=_in;
-}
-
-LVariant::LVariant(const wchar_t *_in)
-{
-    mType=VariantType::TNull;
-    (*this)=_in;
-}
-
-LVariant::LVariant(const char32_t *_in)
-{
-    mType=VariantType::TNull;
-    (*this)=_in;
-}
-
-LVariant::LVariant(int *_in)
-{
-    mType=VariantType::TNull;
-    (*this)=_in;
-}
-
-LVariant::LVariant(unsigned int *_in)
-{
-    mType=VariantType::TNull;
-    (*this)=_in;
-}
-
-LVariant::LVariant(float *_in)
-{
-    mType=VariantType::TNull;
-    (*this)=_in;
-}
-
-LVariant::LVariant(double *_in)
-{
-    mType=VariantType::TNull;
-    (*this)=_in;
-}
-
-LVariant::LVariant(long double *_in)
-{
-    mType=VariantType::TNull;
-    (*this)=_in;
-}
-
-LVariant::LVariant(bool *_in)
-{
-    mType=VariantType::TNull;
-    (*this)=_in;
-}
-
-LVariant::LVariant(short *_in)
-{
-    mType=VariantType::TNull;
-    (*this)=_in;
-}
-
-LVariant::LVariant(unsigned short *_in)
-{
-    mType=VariantType::TNull;
-    (*this)=_in;
-}
-
-LVariant::LVariant(long long *_in)
-{
-    mType=VariantType::TNull;
-    (*this)=_in;
-}
-
-LVariant::LVariant(unsigned long long *_in)
-{
-    mType=VariantType::TNull;
-    (*this)=_in;
-}
-
-LVariant::LVariant(LString *_in)
-{
-    mType=VariantType::TNull;
-    (*this)=_in;
-}
-
-LVariant::LVariant(const std::initializer_list<int> &_in)
-{
-    mType=VariantType::TNull;
-    (*this)=_in;
-}
-
-LVariant::LVariant(const std::initializer_list<unsigned int> &_in)
-{
-    mType=VariantType::TNull;
-    (*this)=_in;
-}
-
-LVariant::LVariant(const std::initializer_list<float> &_in)
-{
-    mType=VariantType::TNull;
-    (*this)=_in;
-}
-
-LVariant::LVariant(const std::initializer_list<double> &_in)
-{
-    mType=VariantType::TNull;
-    (*this)=_in;
-}
-
-LVariant::LVariant(const std::initializer_list<long double> &_in)
-{
-    mType=VariantType::TNull;
-    (*this)=_in;
-}
-
-LVariant::LVariant(const std::initializer_list<char> &_in)
-{
-    mType=VariantType::TNull;
-    (*this)=_in;
-}
-
-LVariant::LVariant(const std::initializer_list<unsigned char> &_in)
-{
-    mType=VariantType::TNull;
-    (*this)=_in;
-}
-
-LVariant::LVariant(const std::initializer_list<bool> &_in)
-{
-    mType=VariantType::TNull;
-    (*this)=_in;
-}
-
-LVariant::LVariant(const std::initializer_list<short> &_in)
-{
-    mType=VariantType::TNull;
-    (*this)=_in;
-}
-
-LVariant::LVariant(const std::initializer_list<unsigned short> &_in)
-{
-    mType=VariantType::TNull;
-    (*this)=_in;
-}
-
-LVariant::LVariant(const std::initializer_list<long long> &_in)
-{
-    mType=VariantType::TNull;
-    (*this)=_in;
-}
-
-LVariant::LVariant(const std::initializer_list<unsigned long long> &_in)
-{
-    mType=VariantType::TNull;
-    (*this)=_in;
-}
-
-LVariant::LVariant(const std::initializer_list<wchar_t> &_in)
-{
-    mType=VariantType::TNull;
-    (*this)=_in;
-}
-
-LVariant::LVariant(const std::initializer_list<const char *> &_in)
-{
-    mType=VariantType::TNull;
-    (*this)=_in;
-}
-
 LVariant::LVariant(const LVariant &_other)
 {
     mType=VariantType::TNull;
@@ -305,6 +53,8 @@ void LVariant::destroy()
 
 void LVariant::fromString(const LString &_in)
 {
+    if(mType==VariantType::TNull)
+        return;
     if(mType==VariantType::TCustom||mType==VariantType::TCustomReference)
     {
         mCustomClass->fromString(_in);
@@ -329,6 +79,8 @@ LString LVariant::getTypeName() const
 
 const LVariant LVariant::getProperty(const LString &_propertyname) const
 {
+    if(mType==VariantType::TNull)
+        return LVariant();
     if(mType==VariantType::TCustom||mType==VariantType::TCustomReference)
     {
         return mCustomClass->getProperty(_propertyname);
@@ -373,7 +125,8 @@ bool LVariant::isValidReference() const
         mType==VariantType::TUShortIntR||
         mType==VariantType::TLongLongIntR||
         mType==VariantType::TULongLongIntR||
-        mType==VariantType::TStringR
+        mType==VariantType::TStringR||
+        mType==VariantType::TCustomReference
             )
         return true;
     return false;
@@ -381,6 +134,8 @@ bool LVariant::isValidReference() const
 
 void LVariant::setProperty(const LString &_propertyname, const LVariant &_newvalue)
 {
+    if(mType==VariantType::TNull)
+        return;
     if(mType==VariantType::TCustom||mType==VariantType::TCustomReference)
     {
         mCustomClass->setProperty(_propertyname,_newvalue);
@@ -392,6 +147,8 @@ void LVariant::setProperty(const LString &_propertyname, const LVariant &_newval
 int LVariant::toInt() const
 {
     lWarning(mType!=VariantType::TInt&&mType!=VariantType::TIntR,"variant type is not int");
+    if(mType==VariantType::TNull)
+        return 0;
     if(isValidReference())
         return *((int*)mCustom);
     return mInt;
@@ -400,6 +157,8 @@ int LVariant::toInt() const
 unsigned int LVariant::toUInt() const
 {
     lWarning(mType!=VariantType::TUInt&&mType!=VariantType::TUIntR,"variant type is not unsigned int");
+    if(mType==VariantType::TNull)
+        return 0;
     if(isValidReference())
         return *((unsigned int*)mCustom);
     return mUInt;
@@ -408,6 +167,8 @@ unsigned int LVariant::toUInt() const
 float LVariant::toFloat() const
 {
     lWarning(mType!=VariantType::TFloat&&mType!=VariantType::TFloatR,"variant type is not float");
+    if(mType==VariantType::TNull)
+        return 0.0f;
     if(isValidReference())
         return *((float*)mCustom);
     return mFloat;
@@ -416,6 +177,8 @@ float LVariant::toFloat() const
 double LVariant::toDouble() const
 {
     lWarning(mType!=VariantType::TDouble&&mType!=VariantType::TDoubleR,"variant type is not double");
+    if(mType==VariantType::TNull)
+        return 0.0;
     if(isValidReference())
         return *((double*)mCustom);
     return mDouble;
@@ -424,6 +187,8 @@ double LVariant::toDouble() const
 long double LVariant::toLongDouble() const
 {
     lWarning(mType!=VariantType::TLongDouble&&mType!=VariantType::TLongDoubleR,"variant type is not long double");
+    if(mType==VariantType::TNull)
+        return 0.0;
     if(isValidReference())
         return *((long double*)mCustom);
     return mLongDouble;
@@ -432,6 +197,8 @@ long double LVariant::toLongDouble() const
 char LVariant::toChar() const
 {
     lWarning(mType!=VariantType::TChar,"variant type is not char");
+    if(mType==VariantType::TNull)
+        return '\0';
     if(isValidReference())
         return *((char*)mCustom);
     return mChar;
@@ -440,6 +207,8 @@ char LVariant::toChar() const
 unsigned char LVariant::toUChar() const
 {
     lWarning(mType!=VariantType::TUChar,"variant type is not unsigned char");
+    if(mType==VariantType::TNull)
+        return '\0';
     if(isValidReference())
         return *((unsigned char*)mCustom);
     return mUChar;
@@ -448,6 +217,8 @@ unsigned char LVariant::toUChar() const
 bool LVariant::toBool() const
 {
     lWarning(mType!=VariantType::TBool&&mType!=VariantType::TBoolR,"variant type is not bool");
+    if(mType==VariantType::TNull)
+        return 0;
     if(isValidReference())
         return *((bool*)mCustom);
     return mBool;
@@ -456,6 +227,8 @@ bool LVariant::toBool() const
 short int LVariant::toShortInt() const
 {
     lWarning(mType!=VariantType::TShortInt&&mType!=VariantType::TShortIntR,"variant type is not short int");
+    if(mType==VariantType::TNull)
+        return 0;
     if(isValidReference())
         return *((short int*)mCustom);
     return mShortInt;
@@ -464,6 +237,8 @@ short int LVariant::toShortInt() const
 unsigned short LVariant::toUShortInt() const
 {
     lWarning(mType!=VariantType::TUShortInt&&mType!=VariantType::TUShortIntR,"variant type is not unsigned short");
+    if(mType==VariantType::TNull)
+        return 0;
     if(isValidReference())
         return *((unsigned short int*)mCustom);
     return mUShortInt;
@@ -472,6 +247,8 @@ unsigned short LVariant::toUShortInt() const
 long long int LVariant::toLongLongInt() const
 {
     lWarning(mType!=VariantType::TLongLongInt&&mType!=VariantType::TLongLongIntR,"variant type is not long long int");
+    if(mType==VariantType::TNull)
+        return 0;
     if(isValidReference())
         return *((long long int*)mCustom);
     return mLongLongInt;
@@ -480,6 +257,8 @@ long long int LVariant::toLongLongInt() const
 unsigned long long int LVariant::toULongLongInt() const
 {
     lWarning(mType!=VariantType::TULongLongInt&&mType!=VariantType::TULongLongIntR,"variant type is not unsigned long long int");
+    if(mType==VariantType::TNull)
+        return 0;
     if(isValidReference())
         return *((unsigned long long int*)mCustom);
     return mULongLongInt;
@@ -488,6 +267,8 @@ unsigned long long int LVariant::toULongLongInt() const
 wchar_t LVariant::toWCharT() const
 {
     lWarning(mType!=VariantType::TWChar_t,"variant type is not wchar_t");
+    if(mType==VariantType::TNull)
+        return L'\0';
     if(isValidReference())
         return *((wchar_t*)mCustom);
     return mWCharT;
@@ -495,6 +276,8 @@ wchar_t LVariant::toWCharT() const
 
 LString LVariant::toString() const
 {
+    if(mType==VariantType::TNull)
+        return LString::empty;
     if(mType==VariantType::TCustom||mType==VariantType::TCustomReference)
     {
         return mCustomClass->toString();
@@ -619,7 +402,7 @@ LVariant &LVariant::operator=(const LVariant &_in)
     return *this;
 }
 
-LVariant &LVariant::operator=(int _in)
+LVariant &LVariant::operator=(const int& _in)
 {
     if(mType==VariantType::TIntR)
     {
@@ -634,7 +417,7 @@ LVariant &LVariant::operator=(int _in)
     return *this;
 }
 
-LVariant &LVariant::operator=(unsigned int _in)
+LVariant &LVariant::operator=(const unsigned int& _in)
 {
     if(mType==VariantType::TUIntR)
     {
@@ -649,7 +432,7 @@ LVariant &LVariant::operator=(unsigned int _in)
     return *this;
 }
 
-LVariant &LVariant::operator=(float _in)
+LVariant &LVariant::operator=(const float& _in)
 {
     if(mType==VariantType::TFloatR)
     {
@@ -664,7 +447,7 @@ LVariant &LVariant::operator=(float _in)
     return *this;
 }
 
-LVariant &LVariant::operator=(double _in)
+LVariant &LVariant::operator=(const double& _in)
 {
     if(mType==VariantType::TDoubleR)
     {
@@ -679,7 +462,7 @@ LVariant &LVariant::operator=(double _in)
     return *this;
 }
 
-LVariant &LVariant::operator=(long double _in)
+LVariant &LVariant::operator=(const long double& _in)
 {
     if(mType==VariantType::TLongDoubleR)
     {
@@ -694,7 +477,7 @@ LVariant &LVariant::operator=(long double _in)
     return *this;
 }
 
-LVariant &LVariant::operator=(char _in)
+LVariant &LVariant::operator=(const char& _in)
 {
     this->destroy();
     mTypeName=lGetTypeName(_in);
@@ -703,7 +486,7 @@ LVariant &LVariant::operator=(char _in)
     return *this;
 }
 
-LVariant &LVariant::operator=(unsigned char _in)
+LVariant &LVariant::operator=(const unsigned char& _in)
 {
     this->destroy();
     mTypeName=lGetTypeName(_in);
@@ -712,7 +495,7 @@ LVariant &LVariant::operator=(unsigned char _in)
     return *this;
 }
 
-LVariant &LVariant::operator=(bool _in)
+LVariant &LVariant::operator=(const bool& _in)
 {
     if(mType==VariantType::TBoolR)
     {
@@ -727,7 +510,7 @@ LVariant &LVariant::operator=(bool _in)
     return *this;
 }
 
-LVariant &LVariant::operator=(short _in)
+LVariant &LVariant::operator=(const short& _in)
 {
     if(mType==VariantType::TShortIntR)
     {
@@ -742,7 +525,7 @@ LVariant &LVariant::operator=(short _in)
     return *this;
 }
 
-LVariant &LVariant::operator=(unsigned short _in)
+LVariant &LVariant::operator=(const unsigned short& _in)
 {
     if(mType==VariantType::TUShortIntR)
     {
@@ -757,7 +540,7 @@ LVariant &LVariant::operator=(unsigned short _in)
     return *this;
 }
 
-LVariant &LVariant::operator=(long long _in)
+LVariant &LVariant::operator=(const long long& _in)
 {
     if(mType==VariantType::TLongLongIntR)
     {
@@ -772,7 +555,7 @@ LVariant &LVariant::operator=(long long _in)
     return *this;
 }
 
-LVariant &LVariant::operator=(unsigned long long _in)
+LVariant &LVariant::operator=(const unsigned long long& _in)
 {
     if(mType==VariantType::TULongLongIntR)
     {
@@ -787,7 +570,7 @@ LVariant &LVariant::operator=(unsigned long long _in)
     return *this;
 }
 
-LVariant &LVariant::operator=(wchar_t _in)
+LVariant &LVariant::operator=(const wchar_t& _in)
 {
     this->destroy();
     mTypeName=lGetTypeName(_in);
@@ -796,7 +579,7 @@ LVariant &LVariant::operator=(wchar_t _in)
     return *this;
 }
 
-LVariant &LVariant::operator=(LString _in)
+LVariant &LVariant::operator=(const LString& _in)
 {
     if(mType==VariantType::TStringR)
     {
@@ -928,6 +711,106 @@ LVariant &LVariant::operator=(LString* _in)
     mTypeName=lGetTypeName(_in);
     mType=VariantType::TStringR;
     mCustom=_in;
+    return *this;
+}
+
+
+LVariant &LVariant::operator=(const int* _in)
+{
+    this->destroy();
+    mTypeName=lGetTypeName(_in);
+    mType=VariantType::TIntR;
+    mCustom=(void*)_in;
+    return *this;
+}
+
+LVariant &LVariant::operator=(const unsigned int* _in)
+{
+    this->destroy();
+    mTypeName=lGetTypeName(_in);
+    mType=VariantType::TUIntR;
+    mCustom=(void*)_in;
+    return *this;
+}
+
+LVariant &LVariant::operator=(const float* _in)
+{
+    this->destroy();
+    mTypeName=lGetTypeName(_in);
+    mType=VariantType::TFloatR;
+    mCustom=(void*)_in;
+    return *this;
+}
+
+LVariant &LVariant::operator=(const double* _in)
+{
+    this->destroy();
+    mTypeName=lGetTypeName(_in);
+    mType=VariantType::TDoubleR;
+    mCustom=(void*)_in;
+    return *this;
+}
+
+LVariant &LVariant::operator=(const long double* _in)
+{
+    this->destroy();
+    mTypeName=lGetTypeName(_in);
+    mType=VariantType::TLongDoubleR;
+    mCustom=(void*)_in;
+    return *this;
+}
+
+LVariant &LVariant::operator=(const bool* _in)
+{
+    this->destroy();
+    mTypeName=lGetTypeName(_in);
+    mType=VariantType::TBoolR;
+    mCustom=(void*)_in;
+    return *this;
+}
+
+LVariant &LVariant::operator=(const short* _in)
+{
+    this->destroy();
+    mTypeName=lGetTypeName(_in);
+    mType=VariantType::TShortIntR;
+    mCustom =(void*)_in;
+    return *this;
+}
+
+LVariant &LVariant::operator=(const unsigned short* _in)
+{
+    this->destroy();
+    mTypeName=lGetTypeName(_in);
+    mType=VariantType::TUShortIntR;
+    mCustom=(void*)_in;
+    return *this;
+}
+
+LVariant &LVariant::operator=(const long long* _in)
+{
+    this->destroy();
+    mTypeName=lGetTypeName(_in);
+    mType=VariantType::TLongLongIntR;
+    mCustom=(void*)_in;
+    return *this;
+}
+
+LVariant &LVariant::operator=(const unsigned long long* _in)
+{
+    this->destroy();
+    mTypeName=lGetTypeName(_in);
+    mType=VariantType::TULongLongIntR;
+    mCustom=(void*)_in;
+    return *this;
+}
+
+LVariant &LVariant::operator=(const LString* _in)
+{
+    this->destroy();
+    mTypeName=lGetTypeName(_in);
+    mType=VariantType::TStringR;
+    mCustom=(void*)_in;
     return *this;
 }
 
@@ -1156,6 +1039,8 @@ LVariant &LVariant::operator=(const std::initializer_list<const char*>& _in)
 LVariant& LVariant::operator[](u32 i) const
 {
     static LVariant d;
+    if(mType==VariantType::TNull)
+        return d;
     lError(!isValidArray(),"Varaiant type is not valid array",d);
     return (*mArray)[i];
 }
