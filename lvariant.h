@@ -18,11 +18,14 @@ public:
     LCustomVariant(){}
     virtual ~LCustomVariant(){}
 
-    virtual void        fromString(const LString _in){LUNUSED(_in);}
-    virtual LString     toString()const{ return LString::empty;}
+    //! Get a copy of this
+    virtual LCustomVariant*     clone()=0;
 
-    virtual LVariant    getProperty(const LString& _name)const;
-    virtual void        setProperty(const LString& _name,const LVariant& _in);
+    virtual void                fromString(const LString _in)=0;
+    virtual LString             toString()const=0;
+
+    virtual LVariant            getProperty(const LString& _name)const=0;
+    virtual void                setProperty(const LString& _name,const LVariant& _in)=0;
 protected:
     void* mData;
 };
@@ -34,10 +37,11 @@ public:
     LClassVariant(const T& _in);
     virtual ~LClassVariant();
 
-    void        fromString(const LString _in)override;
-    LString     toString() const override;
-    void        setProperty(const LString& _name,const LVariant &_in)override;
-    LVariant    getProperty(const LString &_name)const override;
+    LCustomVariant* clone();
+    void            fromString(const LString _in)override;
+    LString         toString() const override;
+    void            setProperty(const LString& _name,const LVariant &_in)override;
+    LVariant        getProperty(const LString &_name)const override;
 };
 
 template<typename T>
@@ -47,10 +51,11 @@ public:
     LClassVariantReference(const T& _in);
     virtual ~LClassVariantReference();
 
-    void        fromString(const LString _in)override;
-    LString     toString() const override;
-    void        setProperty(const LString& _name,const LVariant &_in)override;
-    LVariant    getProperty(const LString &_name)const override;
+    LCustomVariant* clone();
+    void            fromString(const LString _in)override;
+    LString         toString() const override;
+    void            setProperty(const LString& _name,const LVariant &_in)override;
+    LVariant        getProperty(const LString &_name)const override;
 };
 
 
@@ -89,6 +94,14 @@ public:
  *
  * // how create reference from custom class
  * a=(CustomClass*)&obj;
+ *
+ * note : for custom class references and classes , your class must have these functions
+ *
+ * void fromString(const LString _in);
+ * LString toString() const;
+ * void setProperty(const LString& _name,const LVariant &_in);
+ * LVariant getProperty(const LString &_name)const;
+ *
  */
 
 class LAPI LVariant
@@ -139,6 +152,7 @@ public:
         TULongLongIntA,
         TWChar_tA,
         TStringA,
+        TVariantA,
 
 
         TCustom, // custom classes
@@ -146,7 +160,24 @@ public:
     };
 
     LVariant();
-
+    LVariant(const std::initializer_list<int>& _in);
+    LVariant(const std::initializer_list<unsigned int>& _in);
+    LVariant(const std::initializer_list<float>& _in);
+    LVariant(const std::initializer_list<double>& _in);
+    LVariant(const std::initializer_list<long double>& _in);
+    LVariant(const std::initializer_list<char>& _in);
+    LVariant(const std::initializer_list<unsigned char>& _in);
+    LVariant(const std::initializer_list<bool>& _in);
+    LVariant(const std::initializer_list<short int>& _in);
+    LVariant(const std::initializer_list<unsigned short int>& _in);
+    LVariant(const std::initializer_list<long long int>&  _in);
+    LVariant(const std::initializer_list<unsigned long long int>& _in);
+    LVariant(const std::initializer_list<wchar_t>& _in);
+    LVariant(const std::initializer_list<const char*>& _in);// for string
+    LVariant(const std::initializer_list<const wchar_t*>& _in);// for string
+    LVariant(const std::initializer_list<const char32_t*>& _in);// for string
+    LVariant(const std::initializer_list<const LString>& _in);// for string
+    LVariant(const std::initializer_list<const LVariant>& _in);
     LVariant(const LVariant& _other);
 
     template<typename T>
@@ -159,6 +190,10 @@ public:
 
     //! set variant from stirng
     virtual void                    fromString(const LString& _in);
+
+    //! Convert to custom reference ( only for custom classes and custom class references )
+    template<typename T>
+    T*                              getCustomData();
 
     //! Get Valid type of this variant
     VariantType                     getType()const;
@@ -174,6 +209,10 @@ public:
 
     //! check is this a valid reference
     bool                            isValidReference()const;
+
+    //! set variant from dynamic pointer
+    template<typename T>
+    void                            setFromPointer(T* _in);
 
     //! set Property of Class Varaint
     virtual void                    setProperty(const LString& _propertyname,const LVariant& _newvalue);
@@ -252,6 +291,11 @@ public:
     virtual LVariant& operator=(const std::initializer_list<unsigned long long int>& _in);
     virtual LVariant& operator=(const std::initializer_list<wchar_t>& _in);
     virtual LVariant& operator=(const std::initializer_list<const char*>& _in);// for string
+    virtual LVariant& operator=(const std::initializer_list<const wchar_t*>& _in);// for string
+    virtual LVariant& operator=(const std::initializer_list<const char32_t*>& _in);// for string
+    virtual LVariant& operator=(const std::initializer_list<const LString>& _in);// for string
+
+    virtual LVariant& operator=(const std::initializer_list<const LVariant>& _in);
 
     virtual LVariant& operator=(const LVariant& _in);
 
@@ -310,6 +354,13 @@ LClassVariant<T>::~LClassVariant()
 }
 
 template<typename T>
+LCustomVariant *LClassVariant<T>::clone()
+{
+    LCustomVariant* o = new LClassVariant(*((T*)mData));
+    return o;
+}
+
+template<typename T>
 void LClassVariant<T>::fromString(const LString _in)
 {
     T* d=((T*)mData);
@@ -352,6 +403,13 @@ LClassVariantReference<T>::~LClassVariantReference()
 }
 
 template<typename T>
+LCustomVariant *LClassVariantReference<T>::clone()
+{
+    LCustomVariant* o = new LClassVariantReference(*((T*)mData));
+    return o;
+}
+
+template<typename T>
 void LClassVariantReference<T>::fromString(const LString _in)
 {
     T* d=((T*)mData);
@@ -386,6 +444,17 @@ LVariant::LVariant(T _in)
 {
     mType=VariantType::TNull;
     (*this)=_in;
+}
+
+template<typename T>
+void LVariant::setFromPointer(T *_in)
+{
+    this->destroy();
+    mTypeName=lGetTypeName<T>();
+    mType=VariantType::TCustom;
+    mCustomClass=new LClassVariant<T>(*_in);
+    delete reinterpret_cast<T*>(mCustomClass->mData);
+    mCustomClass->mData = _in;
 }
 
 template<bool con>
@@ -434,6 +503,13 @@ LVariant &LVariant::operator=(const T* _in)
     mType=VariantType::TCustomReference;
     mCustomClass=new LClassVariantReference<T>(*_in);
     return *this;
+}
+
+template<typename T>
+T* LVariant::getCustomData()
+{
+    lError(mType!=VariantType::TCustom&&mType!=VariantType::TCustomReference,"Variant Type is not OK to call this function",nullptr);
+    return ((T*)mCustomClass->mData);
 }
 
 template<typename T>
