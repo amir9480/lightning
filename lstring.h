@@ -68,8 +68,32 @@ public:
     //! function searching inside str[0-_from]
     u32                             findFromRight(const chartype* _what,u32 _from=0) const;
 
+    //! Create string from short integer
+    static LString_Base<chartype>   fromShortInt(const short int& _in,const u32 _base=10);
+
+    //! Create string from unsigned short integer
+    static LString_Base<chartype>   fromUShortInt(const short unsigned int& _in,const u32 _base=10);
+
     //! Create string from integer \sa toInt
     static LString_Base<chartype>   fromInt(const int& _in,const u32 _base=10);
+
+    //! Create string from unsigned integer
+    static LString_Base<chartype>   fromUInt(const unsigned int& _in,const u32 _base=10);
+
+    //! Create string from integer \sa toInt
+    static LString_Base<chartype>   fromLongLongInt(const long long int& _in,const u32 _base=10);
+
+    //! Create string from unsigned integer
+    static LString_Base<chartype>   fromULongLongInt(const unsigned long long int& _in,const u32 _base=10);
+
+    //! Create string from float
+    static LString_Base<chartype>   fromFloat(const float& _in);
+
+    //! Create string from double
+    static LString_Base<chartype>   fromDouble(const double& _in);
+
+    //! Create string from long double (this function is not working well)
+    static LString_Base<chartype>   fromLongDouble(const long double& _in);
 
     //! Create string from utf8-encoded string
     static LString_Base<chartype>   fromUTF8(const LString8& _in);
@@ -88,6 +112,9 @@ public:
     //! get part of string created from _n charcters from start. if end was -1 it means from _start to string end
     LString_Base<chartype>          getSubString(u32 _start,u32 _n=-1)const;
 
+    //! Get copy of this string without white spaces
+    LString_Base<chartype>          getWithoutWhiteSpaces()const;
+
     //! insert another string inside this string
     void                            insert(u32 _index,const chartype* _val);
     void                            insert(u32 _index,const LString_Base<chartype>& _val);
@@ -97,6 +124,9 @@ public:
 
     //! Check all of string is integer number only
     bool                            isInt(u32 _base=10)const;
+
+    //! Check all of string is unsigned integer number only
+    bool                            isUInt(u32 _base=10)const;
 
     //! remove a character in _index
     void                            remove(u32 _index);
@@ -121,8 +151,32 @@ public:
     //! swap this string with another string
     void                            swap(LString_Base<chartype>& _other);
 
+    //! Convert string to short integer
+    short int                       toShortInt(const u32 _base=10)const;
+
+    //! Convert string to unsigned short integer
+    unsigned short int              toUShortInt(const u32 _base=10)const;
+
     //! Convert string to integer \sa fromInt
     int                             toInt(const u32 _base=10)const;
+
+    //! Convert string to unsigned integer
+    unsigned int                    toUInt(const u32 _base=10)const;
+
+    //! Convert string to long integer
+    long long int                   toLongLongInt(const u32 _base=10)const;
+
+    //! Convert string to unsigned long integer
+    unsigned long long int          toULongLongInt(const u32 _base=10)const;
+
+    //! Convert string to float
+    float                           toFloat()const;
+
+    //! Convert string to double
+    double                          toDouble()const;
+
+    //! Convert string to long double
+    long double                     toLongDouble()const;
 
     //! Convert all latin characters to lowercase
     LString_Base<chartype>          toLower()const;
@@ -158,6 +212,16 @@ public:
     bool                            operator==(const char32_t* _other)const;
     bool                            operator==(const LString_Base<chartype>& _other)const;
 
+    bool                            operator>(const char* _other)const;
+    bool                            operator>(const wchar_t* _other)const;
+    bool                            operator>(const char32_t* _other)const;
+    bool                            operator>(const LString_Base<chartype>& _other)const;
+
+    bool                            operator<(const char* _other)const;
+    bool                            operator<(const wchar_t* _other)const;
+    bool                            operator<(const char32_t* _other)const;
+    bool                            operator<(const LString_Base<chartype>& _other)const;
+
     bool                            operator!=(const chartype* _other)const;
     bool                            operator!=(const LString_Base<chartype>& _other)const;
 
@@ -189,6 +253,9 @@ protected:
 
 template <typename chartype1,typename chartype2>
 LString_Base<chartype1> operator +(const chartype1 *_a, const LString_Base<chartype2> &_b);
+
+template <typename chartype1,typename chartype2>
+bool operator==(const chartype1 *_a, const LString_Base<chartype2> &_b);
 
 typedef LString_Base<wchar_t>  LString;
 typedef LString_Base<char>     LString8;

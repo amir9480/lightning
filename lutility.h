@@ -380,8 +380,6 @@ LNAMESPACE_END
 
 
 
-
-
 template<typename T>
 struct ___fake_return{static T call(){T o;return o;}};
 template<>
@@ -443,7 +441,7 @@ struct NAME\
     static ___yes check(decltype(static_cast<RETURNTYPE(U::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)>(&U::FUNCNAME)),void *);\
     template<typename U>\
     static ___no check(...);\
-    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+    const static bool value=LIsSameType<___yes,decltype(check<T>(0,0))>::value;\
 \
     typedef decltype(check<T>(0,0)) CT;\
     template <typename U>static RETURNTYPE __call(const ___yes,U& _in,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6,A7 a7,A8 a8,A9 a9,A10 a10){return _in.FUNCNAME(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10);}\
@@ -461,7 +459,7 @@ struct NAME\
     static ___yes check(decltype(static_cast<RETURNTYPE(U::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9)>(&U::FUNCNAME)),void *);\
     template<typename U>\
     static ___no check(...);\
-    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+    const static bool value=LIsSameType<___yes,decltype(check<T>(0,0))>::value;\
 \
     typedef decltype(check<T>(0,0)) CT;\
     template <typename U>static RETURNTYPE __call(const ___yes,U& _in,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6,A7 a7,A8 a8,A9 a9){return _in.FUNCNAME(a1,a2,a3,a4,a5,a6,a7,a8,a9);}\
@@ -479,7 +477,7 @@ struct NAME\
     static ___yes check(decltype(static_cast<RETURNTYPE(U::*)(A1,A2,A3,A4,A5,A6,A7,A8)>(&U::FUNCNAME)),void *);\
     template<typename U>\
     static ___no check(...);\
-    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+    const static bool value=LIsSameType<___yes,decltype(check<T>(0,0))>::value;\
 \
     typedef decltype(check<T>(0,0)) CT;\
     template <typename U>static RETURNTYPE __call(const ___yes,U& _in,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6,A7 a7,A8 a8){return _in.FUNCNAME(a1,a2,a3,a4,a5,a6,a7,a8);}\
@@ -497,7 +495,7 @@ struct NAME\
     static ___yes check(decltype(static_cast<RETURNTYPE(U::*)(A1,A2,A3,A4,A5,A6,A7)>(&U::FUNCNAME)),void *);\
     template<typename U>\
     static ___no check(...);\
-    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+    const static bool value=LIsSameType<___yes,decltype(check<T>(0,0))>::value;\
 \
     typedef decltype(check<T>(0,0)) CT;\
     template <typename U>static RETURNTYPE __call(const ___yes,U& _in,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6,A7 a7){return _in.FUNCNAME(a1,a2,a3,a4,a5,a6,a7);}\
@@ -515,7 +513,7 @@ struct NAME\
     static ___yes check(decltype(static_cast<RETURNTYPE(U::*)(A1,A2,A3,A4,A5,A6)>(&U::FUNCNAME)),void *);\
     template<typename U>\
     static ___no check(...);\
-    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+    const static bool value=LIsSameType<___yes,decltype(check<T>(0,0))>::value;\
 \
     typedef decltype(check<T>(0,0)) CT;\
     template <typename U>static RETURNTYPE __call(const ___yes,U& _in,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6){return _in.FUNCNAME(a1,a2,a3,a4,a5,a6);}\
@@ -533,7 +531,7 @@ struct NAME\
     static ___yes check(decltype(static_cast<RETURNTYPE(U::*)(A1,A2,A3,A4,A5)>(&U::FUNCNAME)),void *);\
     template<typename U>\
     static ___no check(...);\
-    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+    const static bool value=LIsSameType<___yes,decltype(check<T>(0,0))>::value;\
 \
     typedef decltype(check<T>(0,0)) CT;\
     template <typename U>static RETURNTYPE __call(const ___yes,U& _in,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5){return _in.FUNCNAME(a1,a2,a3,a4,a5);}\
@@ -551,7 +549,7 @@ struct NAME\
     static ___yes check(decltype(static_cast<RETURNTYPE(U::*)(A1,A2,A3,A4)>(&U::FUNCNAME)),void *);\
     template<typename U>\
     static ___no check(...);\
-    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+    const static bool value=LIsSameType<___yes,decltype(check<T>(0,0))>::value;\
 \
     typedef decltype(check<T>(0,0)) CT;\
     template <typename U>static RETURNTYPE __call(const ___yes,U& _in,A1 a1,A2 a2,A3 a3,A4 a4){return _in.FUNCNAME(a1,a2,a3,a4);}\
@@ -569,7 +567,7 @@ struct NAME\
     static ___yes check(decltype(static_cast<RETURNTYPE(U::*)(A1,A2,A3)>(&U::FUNCNAME)),void *);\
     template<typename U>\
     static ___no check(...);\
-    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+    const static bool value=LIsSameType<___yes,decltype(check<T>(0,0))>::value;\
 \
     typedef decltype(check<T>(0,0)) CT;\
     template <typename U>static RETURNTYPE __call(const ___yes,U& _in,A1 a1,A2 a2,A3 a3){return _in.FUNCNAME(a1,a2,a3);}\
@@ -587,7 +585,7 @@ struct NAME\
     static ___yes check(decltype(static_cast<RETURNTYPE(U::*)(A1,A2)>(&U::FUNCNAME)),void *);\
     template<typename U>\
     static ___no check(...);\
-    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+    const static bool value=LIsSameType<___yes,decltype(check<T>(0,0))>::value;\
 \
     typedef decltype(check<T>(0,0)) CT;\
     template <typename U>static RETURNTYPE __call(const ___yes,U& _in,A1 a1,A2 a2){return _in.FUNCNAME(a1,a2);}\
@@ -605,7 +603,7 @@ struct NAME\
     static ___yes check(decltype(static_cast<RETURNTYPE(U::*)(A1)>(&U::FUNCNAME)),void *);\
     template<typename U>\
     static ___no check(...);\
-    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+    const static bool value=LIsSameType<___yes,decltype(check<T>(0,0))>::value;\
 \
     typedef decltype(check<T>(0,0)) CT;\
     template <typename U>static RETURNTYPE __call(const ___yes,U& _in,A1 a1){return _in.FUNCNAME(a1);}\
@@ -623,7 +621,7 @@ struct NAME\
     static ___yes check(decltype(static_cast<RETURNTYPE(U::*)()>(&U::FUNCNAME)),void *);\
     template<typename U>\
     static ___no check(...);\
-    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+    const static bool value=LIsSameType<___yes,decltype(check<T>(0,0))>::value;\
 \
     typedef decltype(check<T>(0,0)) CT;\
     template <typename U>static RETURNTYPE __call(const ___yes,U& _in){return _in.FUNCNAME();}\
@@ -643,7 +641,7 @@ struct NAME\
     static ___yes check(decltype(static_cast<RETURNTYPE(U::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)const>(&U::FUNCNAME)),void *);\
     template<typename U>\
     static ___no check(...);\
-    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+    const static bool value=LIsSameType<___yes,decltype(check<T>(0,0))>::value;\
 \
     typedef decltype(check<T>(0,0)) CT;\
     template <typename U>static RETURNTYPE __call(const ___yes,U& _in,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6,A7 a7,A8 a8,A9 a9,A10 a10){return _in.FUNCNAME(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10);}\
@@ -661,7 +659,7 @@ struct NAME\
     static ___yes check(decltype(static_cast<RETURNTYPE(U::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9)const>(&U::FUNCNAME)),void *);\
     template<typename U>\
     static ___no check(...);\
-    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+    const static bool value=LIsSameType<___yes,decltype(check<T>(0,0))>::value;\
 \
     typedef decltype(check<T>(0,0)) CT;\
     template <typename U>static RETURNTYPE __call(const ___yes,U& _in,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6,A7 a7,A8 a8,A9 a9){return _in.FUNCNAME(a1,a2,a3,a4,a5,a6,a7,a8,a9);}\
@@ -679,7 +677,7 @@ struct NAME\
     static ___yes check(decltype(static_cast<RETURNTYPE(U::*)(A1,A2,A3,A4,A5,A6,A7,A8)const>(&U::FUNCNAME)),void *);\
     template<typename U>\
     static ___no check(...);\
-    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+    const static bool value=LIsSameType<___yes,decltype(check<T>(0,0))>::value;\
 \
     typedef decltype(check<T>(0,0)) CT;\
     template <typename U>static RETURNTYPE __call(const ___yes,U& _in,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6,A7 a7,A8 a8){return _in.FUNCNAME(a1,a2,a3,a4,a5,a6,a7,a8);}\
@@ -697,7 +695,7 @@ struct NAME\
     static ___yes check(decltype(static_cast<RETURNTYPE(U::*)(A1,A2,A3,A4,A5,A6,A7)const>(&U::FUNCNAME)),void *);\
     template<typename U>\
     static ___no check(...);\
-    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+    const static bool value=LIsSameType<___yes,decltype(check<T>(0,0))>::value;\
 \
     typedef decltype(check<T>(0,0)) CT;\
     template <typename U>static RETURNTYPE __call(const ___yes,U& _in,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6,A7 a7){return _in.FUNCNAME(a1,a2,a3,a4,a5,a6,a7);}\
@@ -715,7 +713,7 @@ struct NAME\
     static ___yes check(decltype(static_cast<RETURNTYPE(U::*)(A1,A2,A3,A4,A5,A6)const>(&U::FUNCNAME)),void *);\
     template<typename U>\
     static ___no check(...);\
-    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+    const static bool value=LIsSameType<___yes,decltype(check<T>(0,0))>::value;\
 \
     typedef decltype(check<T>(0,0)) CT;\
     template <typename U>static RETURNTYPE __call(const ___yes,U& _in,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6){return _in.FUNCNAME(a1,a2,a3,a4,a5,a6);}\
@@ -733,7 +731,7 @@ struct NAME\
     static ___yes check(decltype(static_cast<RETURNTYPE(U::*)(A1,A2,A3,A4,A5)const>(&U::FUNCNAME)),void *);\
     template<typename U>\
     static ___no check(...);\
-    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+    const static bool value=LIsSameType<___yes,decltype(check<T>(0,0))>::value;\
 \
     typedef decltype(check<T>(0,0)) CT;\
     template <typename U>static RETURNTYPE __call(const ___yes,U& _in,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5){return _in.FUNCNAME(a1,a2,a3,a4,a5);}\
@@ -751,7 +749,7 @@ struct NAME\
     static ___yes check(decltype(static_cast<RETURNTYPE(U::*)(A1,A2,A3,A4)const>(&U::FUNCNAME)),void *);\
     template<typename U>\
     static ___no check(...);\
-    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+    const static bool value=LIsSameType<___yes,decltype(check<T>(0,0))>::value;\
 \
     typedef decltype(check<T>(0,0)) CT;\
     template <typename U>static RETURNTYPE __call(const ___yes,U& _in,A1 a1,A2 a2,A3 a3,A4 a4){return _in.FUNCNAME(a1,a2,a3,a4);}\
@@ -769,7 +767,7 @@ struct NAME\
     static ___yes check(decltype(static_cast<RETURNTYPE(U::*)(A1,A2,A3)const>(&U::FUNCNAME)),void *);\
     template<typename U>\
     static ___no check(...);\
-    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+    const static bool value=LIsSameType<___yes,decltype(check<T>(0,0))>::value;\
 \
     typedef decltype(check<T>(0,0)) CT;\
     template <typename U>static RETURNTYPE __call(const ___yes,U& _in,A1 a1,A2 a2,A3 a3){return _in.FUNCNAME(a1,a2,a3);}\
@@ -787,7 +785,7 @@ struct NAME\
     static ___yes check(decltype(static_cast<RETURNTYPE(U::*)(A1,A2)const>(&U::FUNCNAME)),void *);\
     template<typename U>\
     static ___no check(...);\
-    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+    const static bool value=LIsSameType<___yes,decltype(check<T>(0,0))>::value;\
 \
     typedef decltype(check<T>(0,0)) CT;\
     template <typename U>static RETURNTYPE __call(const ___yes,U& _in,A1 a1,A2 a2){return _in.FUNCNAME(a1,a2);}\
@@ -805,7 +803,7 @@ struct NAME\
     static ___yes check(decltype(static_cast<RETURNTYPE(U::*)(A1)const>(&U::FUNCNAME)),void *);\
     template<typename U>\
     static ___no check(...);\
-    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+    const static bool value=LIsSameType<___yes,decltype(check<T>(0,0))>::value;\
 \
     typedef decltype(check<T>(0,0)) CT;\
     template <typename U>static RETURNTYPE __call(const ___yes,U& _in,A1 a1){return _in.FUNCNAME(a1);}\
@@ -823,7 +821,7 @@ struct NAME\
     static ___yes check(decltype(static_cast<RETURNTYPE(U::*)()const>(&U::FUNCNAME)),void *);\
     template<typename U>\
     static ___no check(...);\
-    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+    const static bool value=LIsSameType<___yes,decltype(check<T>(0,0))>::value;\
 \
     typedef decltype(check<T>(0,0)) CT;\
     template <typename U>static RETURNTYPE __call(const ___yes,U& _in){return _in.FUNCNAME();}\

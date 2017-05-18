@@ -104,6 +104,7 @@ linline f64     lFloorD(const f64& _in);
 //! Get Mod of float points
 f32             lFMod(const f32& _a,const f32& _b);
 f64             lFModD(const f64& _a,const f64& _b);
+f96             lFModLD(const f64& _a,const f64& _b);
 
 //! CheckOut FloatPoint is NaN
 linline bool    lIsNaN(const f32& _in);

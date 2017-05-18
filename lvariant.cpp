@@ -393,30 +393,55 @@ LString LVariant::toString() const
         return mCustomClass->toString();
     }
     ///TODO update LVariant::toString()
-    if(isValidReference())
-        return *((LString*)mCustom);
     switch(mType)
     {
+    case VariantType::TNull:
+        return LSTR("null");
     case VariantType::TString:
         return *mString;
-        break;
-    case VariantType::TInt:
-        return LString::fromInt(toInt());
-        break;
+    case VariantType::TStringR:
+        return *((LString*)mCustom);
     case VariantType::TChar:case VariantType::TUChar:
         return LString(toChar());
-        break;
     case VariantType::TWChar_t:
         return LString(toWCharT());
-        break;
+    case VariantType::TBool:
+        if(this->mBool)
+            return LSTR("true");
+        else
+            return LSTR("false");
+    case VariantType::TBoolR:
+        if( *((bool*)mCustom) )
+            return LSTR("true");
+        else
+            return LSTR("false");
+    case VariantType::TDouble:case VariantType::TDoubleR:
+        return LString::fromDouble(toDouble());
+    case VariantType::TFloat:case VariantType::TFloatR:
+        return LString::fromFloat(toFloat());
+    case VariantType::TLongDouble:case VariantType::TLongDoubleR:
+        return LString::fromLongDouble(toLongDouble());
+
+    case VariantType::TInt:case VariantType::TIntR:
+        return LString::fromInt(toInt());
+    case VariantType::TLongLongInt:case VariantType::TLongLongIntR:
+        return LString::fromLongLongInt(toLongLongInt());
+    case VariantType::TShortInt:case VariantType::TShortIntR:
+        return LString::fromShortInt(toShortInt());
+
+    case VariantType::TUInt:case VariantType::TUIntR:
+        return LString::fromUInt(toUInt());
+    case VariantType::TULongLongInt:case VariantType::TULongLongIntR:
+        return LString::fromULongLongInt(toULongLongInt());
+    case VariantType::TUShortInt:case VariantType::TUShortIntR:
+        return LString::fromUShortInt(toUShortInt());
     default:
         break;
     }
 
-    lWarning(1,"variant type is not String ");
+    lWarning(1,"variant type can not convert to string ");
     return LString::empty;
 }
-
 
 LVariant &LVariant::operator=(const LVariant &_in)
 {

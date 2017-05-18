@@ -7,7 +7,7 @@
 LNAMESPACE_BEGIN
 
 template<typename T>
-class LUniquePointer
+class LAPI LUniquePointer
 {
 public:
     LUniquePointer(T* _in)
@@ -100,7 +100,7 @@ private:
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 template<typename T>
-class LSharedPointer
+class LAPI LSharedPointer
 {
 public:
     LSharedPointer(T* _in)

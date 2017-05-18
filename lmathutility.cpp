@@ -106,6 +106,11 @@ f64 lFModD(const f64 &_a, const f64 &_b)
     return fmod(_a,_b);
 }
 
+f96 lFModLD(const f64 &_a, const f64 &_b)
+{
+    return fmodl(_a,_b);
+}
+
 f32 lLog(const f32 &_in)
 {
     return logf(_in);

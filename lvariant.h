@@ -21,7 +21,7 @@ public:
     //! Get a copy of this
     virtual LCustomVariant*     clone()=0;
 
-    virtual void                fromString(const LString _in)=0;
+    virtual void                fromString(const LString& _in)=0;
     virtual LString             toString()const=0;
 
     virtual LVariant            getProperty(const LString& _name)const=0;
@@ -38,7 +38,7 @@ public:
     virtual ~LClassVariant();
 
     LCustomVariant* clone();
-    void            fromString(const LString _in)override;
+    void            fromString(const LString& _in)override;
     LString         toString() const override;
     void            setProperty(const LString& _name,const LVariant &_in)override;
     LVariant        getProperty(const LString &_name)const override;
@@ -52,7 +52,7 @@ public:
     virtual ~LClassVariantReference();
 
     LCustomVariant* clone();
-    void            fromString(const LString _in)override;
+    void            fromString(const LString& _in)override;
     LString         toString() const override;
     void            setProperty(const LString& _name,const LVariant &_in)override;
     LVariant        getProperty(const LString &_name)const override;
@@ -95,12 +95,12 @@ public:
  * // how create reference from custom class
  * a=(CustomClass*)&obj;
  *
- * note : for custom class references and classes , your class must have these functions
+ * note : for custom class references and classes , your class should have these functions
  *
- * void fromString(const LString _in);
- * LString toString() const;
- * void setProperty(const LString& _name,const LVariant &_in);
- * LVariant getProperty(const LString &_name)const;
+ * void lFromString(const LString& _in);
+ * LString lToString() const;
+ * void lSetProperty(const LString& _name,const LVariant &_in);
+ * LVariant lGetProperty(const LString &_name)const;
  *
  */
 
@@ -234,6 +234,7 @@ public:
     template<typename T>
     T                               to()const;
 
+
     virtual LVariant& operator=(const int& _in);
     virtual LVariant& operator=(const unsigned int& _in);
     virtual LVariant& operator=(const float& _in);
@@ -339,6 +340,11 @@ protected:
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+lConfigCallIfExist(_lhas_fromString,void,lFromString,const LString&)
+lConfigCallIfExistConst(_lhas_toString,LString,lToString)
+
+lConfigCallIfExist(_lhas_setProperty,void,lSetProperty,const LString&,const LVariant&)
+lConfigCallIfExistConst(_lhas_getProperty,LVariant,lGetProperty,const LString&)
 
 template<typename T>
 LClassVariant<T>::LClassVariant(const T &_in)
@@ -361,31 +367,31 @@ LCustomVariant *LClassVariant<T>::clone()
 }
 
 template<typename T>
-void LClassVariant<T>::fromString(const LString _in)
+void LClassVariant<T>::fromString(const LString& _in)
 {
     T* d=((T*)mData);
-    d->fromString(_in);
+    _lhas_fromString<T>::call(*d,_in);
 }
 
 template<typename T>
 LString LClassVariant<T>::toString() const
 {
     T* d=((T*)mData);
-    return d->toString();
+    return _lhas_toString<T>::call(*d);
 }
 
 template<typename T>
 LVariant LClassVariant<T>::getProperty(const LString& _name)const
 {
     T* d=((T*)mData);
-    return d->getProperty(_name);
+    return _lhas_getProperty<T>::call(*d,_name);
 }
 
 template<typename T>
 void LClassVariant<T>::setProperty(const LString &_name, const LVariant &_in)
 {
     T* d=((T*)mData);
-    d->setProperty(_name,_in);
+    _lhas_setProperty<T>::call(*d,_name,_in);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -410,31 +416,31 @@ LCustomVariant *LClassVariantReference<T>::clone()
 }
 
 template<typename T>
-void LClassVariantReference<T>::fromString(const LString _in)
+void LClassVariantReference<T>::fromString(const LString& _in)
 {
     T* d=((T*)mData);
-    d->fromString(_in);
+    _lhas_fromString<T>::call(*d,_in);
 }
 
 template<typename T>
 LString LClassVariantReference<T>::toString() const
 {
     T* d=((T*)mData);
-    return d->toString();
+    return _lhas_toString<T>::call(*d);
 }
 
 template<typename T>
 LVariant LClassVariantReference<T>::getProperty(const LString& _name)const
 {
     T* d=((T*)mData);
-    return d->getProperty(_name);
+    return _lhas_getProperty<T>::call(*d,_name);
 }
 
 template<typename T>
 void LClassVariantReference<T>::setProperty(const LString &_name, const LVariant &_in)
 {
     T* d=((T*)mData);
-    d->setProperty(_name,_in);
+    return _lhas_setProperty<T>::call(*d,_name,_in);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

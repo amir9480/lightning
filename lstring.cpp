@@ -1,6 +1,7 @@
 ﻿#include "lstring.h"
 #include "lmathutility.h"
 #include "llog.h"
+#include <cstdlib>
 
 LNAMESPACE_BEGIN
 
@@ -209,12 +210,55 @@ u32 LString_Base<chartype>::findFromRight(const chartype *_what, u32 _from) cons
 }
 
 template <typename chartype>
+LString_Base<chartype> LString_Base<chartype>::fromShortInt(const short int &_in, const u32 _base)
+{
+    static const LString_Base<chartype> vt("0123456789ABCDEF");
+    if(_in==0)
+        return LString_Base<chartype>("0");
+    lError(_base<=1||_base>16," _base value is not accpetable . must be [2-16]",empty);
+    LString_Base<chartype> o;
+    o.resize(33);// maximum space requied (for _base = 2)
+    short int v=(_in>0)?_in:-_in;
+
+    for(u32 i=0;v>0;i++)
+    {
+        o[i]=vt[v%_base];
+        o[i+1]=(chartype)0;
+        v/=_base;
+    }
+    o.reverse();
+    if(_in<0)
+        o.insert(0,"-");
+    return o;
+}
+
+template <typename chartype>
+LString_Base<chartype> LString_Base<chartype>::fromUShortInt(const unsigned short int &_in, const u32 _base)
+{
+    static const LString_Base<chartype> vt("0123456789ABCDEF");
+    if(_in==0)
+        return LString_Base<chartype>("0");
+    lError(_base<=1||_base>16," _base value is not accpetable . must be [2-16]",empty);
+    LString_Base<chartype> o;
+    o.resize(33);// maximum space requied (for _base = 2)
+    unsigned short int v=_in;
+    for(u32 i=0;v>0;i++)
+    {
+        o[i]=vt[v%_base];
+        o[i+1]=(chartype)0;
+        v/=_base;
+    }
+    o.reverse();
+    return o;
+}
+
+template <typename chartype>
 LString_Base<chartype> LString_Base<chartype>::fromInt(const int &_in, const u32 _base)
 {
     static const LString_Base<chartype> vt("0123456789ABCDEF");
     if(_in==0)
         return LString_Base<chartype>("0");
-    lError(_base<=1||_base>16,"LString_Base<chartype> LString_Base<chartype>::fromInt(const int &_in, const u32 _base): _base value is not accpetable . must be [2-16]",empty);
+    lError(_base<=1||_base>16," _base value is not accpetable . must be [2-16]",empty);
     LString_Base<chartype> o;
     o.resize(33);// maximum space requied (for _base = 2)
     int v=(_in>0)?_in:-_in;
@@ -232,6 +276,99 @@ LString_Base<chartype> LString_Base<chartype>::fromInt(const int &_in, const u32
 }
 
 template <typename chartype>
+LString_Base<chartype> LString_Base<chartype>::fromUInt(const unsigned int &_in, const u32 _base)
+{
+    static const LString_Base<chartype> vt("0123456789ABCDEF");
+    if(_in==0)
+        return LString_Base<chartype>("0");
+    lError(_base<=1||_base>16," _base value is not accpetable . must be [2-16]",empty);
+    LString_Base<chartype> o;
+    o.resize(33);// maximum space requied (for _base = 2)
+    unsigned int v=_in;
+    for(u32 i=0;v>0;i++)
+    {
+        o[i]=vt[v%_base];
+        o[i+1]=(chartype)0;
+        v/=_base;
+    }
+    o.reverse();
+    return o;
+}
+
+template <typename chartype>
+LString_Base<chartype> LString_Base<chartype>::fromLongLongInt(const long long int &_in, const u32 _base)
+{
+    static const LString_Base<chartype> vt("0123456789ABCDEF");
+    if(_in==0)
+        return LString_Base<chartype>("0");
+    lError(_base<=1||_base>16," _base value is not accpetable . must be [2-16]",empty);
+    LString_Base<chartype> o;
+    o.resize(33);// maximum space requied (for _base = 2)
+    long long int v=(_in>0)?_in:-_in;
+
+    for(u32 i=0;v>0;i++)
+    {
+        o[i]=vt[v%_base];
+        o[i+1]=(chartype)0;
+        v/=_base;
+    }
+    o.reverse();
+    if(_in<0)
+        o.insert(0,"-");
+    return o;
+}
+
+template <typename chartype>
+LString_Base<chartype> LString_Base<chartype>::fromULongLongInt(const unsigned long long int &_in, const u32 _base)
+{
+    static const LString_Base<chartype> vt("0123456789ABCDEF");
+    if(_in==0)
+        return LString_Base<chartype>("0");
+    lError(_base<=1||_base>16,"_base value is not accpetable . must be [2-16]",empty);
+    LString_Base<chartype> o;
+    o.resize(33);// maximum space requied (for _base = 2)
+    unsigned long long int v=_in;
+    for(u32 i=0;v>0;i++)
+    {
+        o[i]=vt[v%_base];
+        o[i+1]=(chartype)0;
+        v/=_base;
+    }
+    o.reverse();
+    return o;
+}
+
+template <typename chartype>
+LString_Base<chartype> LString_Base<chartype>::fromFloat(const float &_in)
+{
+    LString_Base<chartype> o;
+    static char _data[255];
+    snprintf(_data,254,"%f",_in);
+    o=_data;
+    return o;
+}
+
+template <typename chartype>
+LString_Base<chartype> LString_Base<chartype>::fromDouble(const double &_in)
+{
+    LString_Base<chartype> o;
+    static char _data[255];
+    snprintf(_data,254,"%lf",_in);
+    o=_data;
+    return o;
+}
+
+template <typename chartype>
+LString_Base<chartype> LString_Base<chartype>::fromLongDouble(const long double &_in)
+{
+    LString_Base<chartype> o;
+    static char _data[255];
+    snprintf(_data,254,"%lf",(double)_in);
+    o=_data;
+    return o;
+}
+
+template <typename chartype>
 LString_Base<chartype> LString_Base<chartype>::fromUTF8(const LString8 &_in)
 {
     return LString_Base<chartype>::fromUTF8(_in.getData());
@@ -240,7 +377,6 @@ LString_Base<chartype> LString_Base<chartype>::fromUTF8(const LString8 &_in)
 template <>
 LString_Base<char> LString_Base<char>::fromUTF8(const char* _in)
 {
-    lError(1,"LString_Base<char> LString_Base<char>::fromUTF8(const char* _in) : this function is unuseful. please do not call!",LString_Base<char>(_in));
     return LString_Base<char>(_in);
 }
 
@@ -343,6 +479,14 @@ LString_Base<chartype> LString_Base<chartype>::getSubString(u32 _start, u32 _n) 
 }
 
 template <typename chartype>
+LString_Base<chartype> LString_Base<chartype>::getWithoutWhiteSpaces() const
+{
+    LString_Base<chartype> o=(*this);
+    o.removeWhiteSpaces();
+    return o;
+}
+
+template <typename chartype>
 void LString_Base<chartype>::insert(u32 _index, const chartype *_val)
 {
     u32 valc=__utility_strlen(_val);
@@ -374,11 +518,26 @@ bool LString_Base<chartype>::isInt(u32 _base) const
     static const LString_Base<chartype> vt("0123456789ABCDEF");
     LString_Base<chartype> _this=this->toUpper();
     u32 tc=getCapacity();
-    _base-=1;// for access string index must be [0-15]
+    _base -= 1;// for access string index must be [0-15]
     if(_this.mData[0]!=(chartype)'+'&&_this.mData[0]!=(chartype)'-')
         if((_this.mData[0]>(chartype)vt[_base]||_this.mData[0]<(chartype)'0')||
            (_this.mData[0]>(chartype)'9'&&_this.mData[0]<(chartype)'A'))
             return false;
+    for(u32 i=1;i<tc;i++)
+        if((_this.mData[i]>(chartype)vt[_base]||_this.mData[i]<(chartype)'0')||
+           (_this.mData[i]>(chartype)'9'&&_this.mData[i]<(chartype)'A'))
+            return false;
+    return true;
+}
+
+template <typename chartype>
+bool LString_Base<chartype>::isUInt(u32 _base) const
+{
+    lError(_base>16||_base<2,"bool LString_Base<chartype>::isUInt(u32 _base) const: _base is not acceptable [2,16]",false);
+    static const LString_Base<chartype> vt("0123456789ABCDEF");
+    LString_Base<chartype> _this=this->toUpper();
+    u32 tc=getCapacity();
+    _base -= 1;// for access string index must be [0-15]
     for(u32 i=1;i<tc;i++)
         if((_this.mData[i]>(chartype)vt[_base]||_this.mData[i]<(chartype)'0')||
            (_this.mData[i]>(chartype)'9'&&_this.mData[i]<(chartype)'A'))
@@ -489,17 +648,17 @@ void LString_Base<chartype>::swap(LString_Base<chartype>& _other)
 }
 
 template <typename chartype>
-int LString_Base<chartype>::toInt(const u32 _base) const
+short int LString_Base<chartype>::toShortInt(const u32 _base) const
 {
     static const LString_Base<chartype> vt("0123456789ABCDEF");
     u32 sc=getCapacity();
-    int o=0;
+    short int o=0;
     u32 index=0,i=0;
     LString_Base<chartype> theData=toUpper();
     if(theData[0]==(chartype)'+'||theData[0]==(chartype)'-')
         i=1;
-    lError(_base<2||_base>16,"int LString_Base<chartype>::toInt(const u32 _base) const: _base is not acceptable",0);
-    lWarning(!isInt(_base),"int LString_Base<chartype>::toInt(const u32 _base) const: string is not integer");
+    lError(_base<2||_base>16," _base is not acceptable",0);
+    lWarning(!isInt(_base)," string is not integer");
     for(;i<sc;i++)
         if((index=vt.find(LString_Base<chartype>(theData[i])))!=nothing &&
             index<_base)
@@ -511,6 +670,158 @@ int LString_Base<chartype>::toInt(const u32 _base) const
     if(mData[0]==(chartype)'-')
         o=-o;
     return o;
+}
+
+template <typename chartype>
+unsigned short int LString_Base<chartype>::toUShortInt(const u32 _base) const
+{
+    static const LString_Base<chartype> vt("0123456789ABCDEF");
+    u32 sc=getCapacity();
+    unsigned short int o=0;
+    u32 index=0,i=0;
+    LString_Base<chartype> theData=toUpper();
+    lError(_base<2||_base>16," _base is not acceptable",0);
+    lWarning(!isInt(_base),"const: string is not integer");
+    for(;i<sc;i++)
+        if((index=vt.find(LString_Base<chartype>(theData[i])))!=nothing &&
+            index<_base)
+        {
+            o= o*_base+index;
+        }
+        else
+            return 0;
+    return o;
+}
+
+template <typename chartype>
+int LString_Base<chartype>::toInt(const u32 _base) const
+{
+    static const LString_Base<chartype> vt("0123456789ABCDEF");
+    u32 sc=getCapacity();
+    int o=0;
+    u32 index=0,i=0;
+    LString_Base<chartype> theData=toUpper();
+    if(theData[0]==(chartype)'+'||theData[0]==(chartype)'-')
+        i=1;
+    lError(_base<2||_base>16," _base is not acceptable",0);
+    lWarning(!isInt(_base)," string is not integer");
+    for(;i<sc;i++)
+        if((index=vt.find(LString_Base<chartype>(theData[i])))!=nothing &&
+            index<_base)
+        {
+            o= o*_base+index;
+        }
+        else
+            return 0;
+    if(mData[0]==(chartype)'-')
+        o=-o;
+    return o;
+}
+
+template <typename chartype>
+unsigned int LString_Base<chartype>::toUInt(const u32 _base) const
+{
+    static const LString_Base<chartype> vt("0123456789ABCDEF");
+    u32 sc=getCapacity();
+    unsigned int o=0;
+    u32 index=0,i=0;
+    LString_Base<chartype> theData=toUpper();
+    lError(_base<2||_base>16," _base is not acceptable",0);
+    lWarning(!isInt(_base),"const: string is not integer");
+    for(;i<sc;i++)
+        if((index=vt.find(LString_Base<chartype>(theData[i])))!=nothing &&
+            index<_base)
+        {
+            o= o*_base+index;
+        }
+        else
+            return 0;
+    return o;
+}
+
+template <typename chartype>
+long long int LString_Base<chartype>::toLongLongInt(const u32 _base) const
+{
+    static const LString_Base<chartype> vt("0123456789ABCDEF");
+    u32 sc=getCapacity();
+    long long int o=0;
+    u32 index=0,i=0;
+    LString_Base<chartype> theData=toUpper();
+    if(theData[0]==(chartype)'+'||theData[0]==(chartype)'-')
+        i=1;
+    lError(_base<2||_base>16," _base is not acceptable",0);
+    lWarning(!isInt(_base)," string is not integer");
+    for(;i<sc;i++)
+        if((index=vt.find(LString_Base<chartype>(theData[i])))!=nothing &&
+            index<_base)
+        {
+            o= o*_base+index;
+        }
+        else
+            return 0;
+    if(mData[0]==(chartype)'-')
+        o=-o;
+    return o;
+}
+
+template <typename chartype>
+unsigned long long int LString_Base<chartype>::toULongLongInt(const u32 _base) const
+{
+    static const LString_Base<chartype> vt("0123456789ABCDEF");
+    u32 sc=getCapacity();
+    unsigned long long int o=0;
+    u32 index=0,i=0;
+    LString_Base<chartype> theData=toUpper();
+    lError(_base<2||_base>16," _base is not acceptable",0);
+    lWarning(!isInt(_base),"const: string is not integer");
+    for(;i<sc;i++)
+        if((index=vt.find(LString_Base<chartype>(theData[i])))!=nothing &&
+            index<_base)
+        {
+            o= o*_base+index;
+        }
+        else
+            return 0;
+    return o;
+}
+
+template <typename chartype>
+float LString_Base<chartype>::toFloat() const
+{
+    char* _end;
+    u32 tc=getCapacity();
+    char* _data=new char[tc];
+    for(u32 i=0;i<tc;i++)
+        _data[i]=(char)mData[i];
+    float _o=strtof(_data,&_end);
+    delete[] _data;
+    return _o;
+}
+
+template <typename chartype>
+double LString_Base<chartype>::toDouble() const
+{
+    char* _end;
+    u32 tc=getCapacity();
+    char* _data=new char[tc];
+    for(u32 i=0;i<tc;i++)
+        _data[i]=(char)mData[i];
+    double _o=strtod(_data,&_end);
+    delete[] _data;
+    return _o;
+}
+
+template <typename chartype>
+long double LString_Base<chartype>::toLongDouble() const
+{
+    char* _end;
+    u32 tc=getCapacity();
+    char* _data=new char[tc];
+    for(u32 i=0;i<tc;i++)
+        _data[i]=(char)mData[i];
+    long double _o=strtold(_data,&_end);
+    delete[] _data;
+    return _o;
 }
 
 template <typename chartype>
@@ -728,6 +1039,130 @@ bool LString_Base<chartype>::operator==(const char32_t *_other)const
             return false;
     return true;
 }
+
+
+template <typename chartype>
+bool LString_Base<chartype>::operator>(const LString_Base<chartype> &_other) const
+{
+    return (*this>_other.getData());
+}
+
+template <typename chartype>
+bool LString_Base<chartype>::operator>(const char *_other)const
+{
+    if(mData==0||_other==0)
+        return false;
+    u32 ts = __utility_strlen(mData);
+    ts = lMin(ts,__utility_strlen(_other));
+    LString_Base<chartype> _l=toLower();
+    LString_Base<chartype> _r=_other;
+    _r=_r.toLower();
+    for(u32 i=0;i<ts;i++)
+        if(_l.mData[i]>(chartype)_r.mData[i])
+            return true;
+        else if(_l.mData[i]<(chartype)_r.mData[i])
+            return false;
+    return false;
+}
+
+template <typename chartype>
+bool LString_Base<chartype>::operator>(const wchar_t *_other)const
+{
+    if(mData==0||_other==0)
+        return false;
+    u32 ts = __utility_strlen(mData);
+    ts = lMin(ts,__utility_strlen(_other));
+    LString_Base<chartype> _l=toLower();
+    LString_Base<chartype> _r=_other;
+    _r=_r.toLower();
+    for(u32 i=0;i<ts;i++)
+        if(_l.mData[i]>(chartype)_r.mData[i])
+            return true;
+        else if(_l.mData[i]<(chartype)_r.mData[i])
+            return false;
+    return false;
+}
+
+template <typename chartype>
+bool LString_Base<chartype>::operator>(const char32_t *_other)const
+{
+    if(mData==0||_other==0)
+        return false;
+    u32 ts = __utility_strlen(mData);
+    ts = lMin(ts,__utility_strlen(_other));
+    LString_Base<chartype> _l=toLower();
+    LString_Base<chartype> _r=_other;
+    _r=_r.toLower();
+    for(u32 i=0;i<ts;i++)
+        if(_l.mData[i]>(chartype)_r.mData[i])
+            return true;
+        else if(_l.mData[i]<(chartype)_r.mData[i])
+            return false;
+    return false;
+}
+
+
+template <typename chartype>
+bool LString_Base<chartype>::operator<(const LString_Base<chartype> &_other) const
+{
+    return (*this<_other.getData());
+}
+
+template <typename chartype>
+bool LString_Base<chartype>::operator<(const char *_other)const
+{
+    if(mData==0||_other==0)
+        return false;
+    u32 ts = __utility_strlen(mData);
+    ts = lMin(ts,__utility_strlen(_other));
+    LString_Base<chartype> _l=toLower();
+    LString_Base<chartype> _r=_other;
+    _r=_r.toLower();
+    for(u32 i=0;i<ts;i++)
+        if(_l.mData[i]<(chartype)_r.mData[i])
+            return true;
+        else if(_l.mData[i]>(chartype)_r.mData[i])
+            return false;
+    return false;
+}
+
+template <typename chartype>
+bool LString_Base<chartype>::operator<(const wchar_t *_other)const
+{
+    if(mData==0||_other==0)
+        return false;
+    u32 ts = __utility_strlen(mData);
+    ts = lMin(ts,__utility_strlen(_other));
+    LString_Base<chartype> _l=toLower();
+    LString_Base<chartype> _r=_other;
+    _r=_r.toLower();
+    for(u32 i=0;i<ts;i++)
+        if(_l.mData[i]<(chartype)_r.mData[i])
+            return true;
+        else if(_l.mData[i]>(chartype)_r.mData[i])
+            return false;
+    return false;
+}
+
+template <typename chartype>
+bool LString_Base<chartype>::operator<(const char32_t *_other)const
+{
+    if(mData==0||_other==0)
+        return false;
+    u32 ts = __utility_strlen(mData);
+    ts = lMin(ts,__utility_strlen(_other));
+    LString_Base<chartype> _l=toLower();
+    LString_Base<chartype> _r=_other;
+    _r=_r.toLower();
+    for(u32 i=0;i<ts;i++)
+        if(_l.mData[i]<(chartype)_r.mData[i])
+            return true;
+        else if(_l.mData[i]>(chartype)_r.mData[i])
+            return false;
+    return false;
+}
+
+
 
 template <typename chartype>
 bool LString_Base<chartype>::operator!=(const chartype *_other) const
@@ -958,6 +1393,12 @@ LString_Base<chartype1> operator +(const chartype1 *_a, const LString_Base<chart
     return o;
 }
 
+template <typename chartype1,typename chartype2>
+bool operator ==(const chartype1 *_a, const LString_Base<chartype2> &_b)
+{
+    return (_b==_a);
+}
+
 template LString_Base<char> operator +(const char *_a, const LString_Base<char> &_b);
 template LString_Base<char> operator +(const char *_a, const LString_Base<wchar_t> &_b);
 template LString_Base<char> operator +(const char *_a, const LString_Base<char32_t> &_b);
@@ -969,5 +1410,19 @@ template LString_Base<wchar_t> operator +(const wchar_t *_a, const LString_Base<
 template LString_Base<char32_t> operator +(const char32_t *_a, const LString_Base<char> &_b);
 template LString_Base<char32_t> operator +(const char32_t *_a, const LString_Base<wchar_t> &_b);
 template LString_Base<char32_t> operator +(const char32_t *_a, const LString_Base<char32_t> &_b);
+
+
+
+template bool operator ==(const char *_a, const LString_Base<char> &_b);
+template bool operator ==(const char *_a, const LString_Base<wchar_t> &_b);
+template bool operator ==(const char *_a, const LString_Base<char32_t> &_b);
+
+template bool operator ==(const wchar_t *_a, const LString_Base<char> &_b);
+template bool operator ==(const wchar_t *_a, const LString_Base<wchar_t> &_b);
+template bool operator ==(const wchar_t *_a, const LString_Base<char32_t> &_b);
+
+template bool operator ==(const char32_t *_a, const LString_Base<char> &_b);
+template bool operator ==(const char32_t *_a, const LString_Base<wchar_t> &_b);
+template bool operator ==(const char32_t *_a, const LString_Base<char32_t> &_b);
 
 LNAMESPACE_END
