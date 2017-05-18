@@ -67,6 +67,32 @@ public:
         totalarrayptrsize+=_in.mSize;
     }
 
+    bool isValidPointer(void* address)
+    {
+        for(unsigned int i=0;i<ptrssize;i++)
+            if(ptrs[i].mAddress==address)
+                return true;
+        for(unsigned int i=0;i<arrayptrssize;i++)
+            if(arrayptrs[i].mAddress==address)
+                return true;
+        return false;
+    }
+
+    bool isSimplePointer(void* address)
+    {
+        for(unsigned int i=0;i<ptrssize;i++)
+            if(ptrs[i].mAddress==address)
+                return true;
+        return false;
+    }
+    bool isArrayPointer(void* address)
+    {
+        for(unsigned int i=0;i<arrayptrssize;i++)
+            if(arrayptrs[i].mAddress==address)
+                return true;
+        return false;
+    }
+
     void removePtr(void* address)
     {
         for(unsigned int i=0;i<ptrssize;i++)
@@ -115,6 +141,7 @@ public:
         wrongjob=true;
         fclose(f);
     }
+
 
 private:
     void removePtrItem(unsigned int _index)

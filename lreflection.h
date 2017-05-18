@@ -7,6 +7,8 @@
 #include "lvector.h"
 #include "lstring.h"
 #include "lpair.h"
+#include "lvariant.h"
+#include "lmemorymanager.h"
 
 #include "stdarg.h"
 
@@ -700,7 +702,7 @@ protected:
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //! base to create enums
-struct LEnum
+struct LAPI LEnum
 {
     LEnum(LString _name):
         mEnumName(_name)
@@ -710,7 +712,7 @@ struct LEnum
 };
 
 template<typename T>
-struct LMetaEnum:LEnum
+struct LAPI LMetaEnum:LEnum
 {
     LMetaEnum(LString _name):
         LEnum(_name)
@@ -736,149 +738,111 @@ private:
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //! base to holding properties
-template<typename ClassType>
-struct LPropertyBase
+struct LAPI LPropertyBase
 {
     LPropertyBase(LString _name,LString _type):
         mName(_name),
-        mType(_type)
+        mType(_type),
+        mObj(nullptr)
     {
     }
     virtual ~LPropertyBase(){}
 
-    virtual void    fromString(ClassType& _o,const LString _in)=0;
-    virtual LString toString(ClassType& _o)const=0;
+    virtual LPropertyBase* clone()=0;
+
+    virtual LVariant get()=0;
+
+    void setObj(void* _in)
+    {
+        mObj=_in;
+    }
 
     const LString mName;
     const LString mType;
+protected:
+    void* mObj;
 };
 
 template<typename ClassType,typename T>
-struct LProperty:LPropertyBase<ClassType>
+struct LAPI LProperty:LPropertyBase
 {
     LProperty(LString _name,T ClassType::*_data):
-        LPropertyBase<ClassType>(_name,lGetTypeName<T>()),
+        LPropertyBase(_name,lGetTypeName<T>()),
         mData(_data)
     {
     }
-    T& get(ClassType& _o)
+    LProperty(LString _name,T ClassType::*_data,T& _obj):
+        LPropertyBase(_name,lGetTypeName<T>()),
+        mData(_data)
     {
-        if(dynamic_cast<LPropertyBase<ClassType>*>(this)->mType==lGetTypeName<T>())
-            return _o.*mData;
-        static T o;
-        lWarning(1,"LProperty::get() , type is not correct");
+        mObj=(void*)&_obj;
+    }
+    virtual ~LProperty(){}
+
+    LPropertyBase *clone()
+    {
+        LPropertyBase* o=new LProperty<ClassType,T>(mName,mData);
+        o->setObj(mObj);
         return o;
     }
 
-    virtual void fromString(ClassType& _o,const LString _in)
+    virtual LVariant get()
     {
-        LUNUSED(_in);
-        LUNUSED(_o);
-        lWarning(1,"LProperty::fromString() , from string is not supported by this type");
+        if(mObj)
+        {
+            ClassType* cp=(ClassType*)mObj;
+            LVariant o;
+            o=&(cp->*mData);
+            return o;
+        }
+        lError2(1,"Property has no Obj . use setObj function to set object ");
+        return LVariant();
     }
-    virtual LString toString(ClassType& _o)const
-    {
-        LUNUSED(_o);
-        lWarning(1,"LProperty::toString() , to string is not supported by this type");
-        return LString::empty;
-    }
+
 protected:
     T ClassType::*mData;
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-template<typename T>
-class LMetaObject
+class LAPI LMetaObject
 {
 public:
-    LMetaObject(LString _metatype):
-        mMetaType(_metatype)
-    {
-    }
-    ~LMetaObject()
-    {
-        for(u32 i=0;i<mFunctions.getSize();i++)
-            delete mFunctions[i];
-        for(u32 i=0;i<mProperties.getSize();i++)
-            delete mProperties[i];
-        for(u32 i=0;i<mEnums.getSize();i++)
-            delete mEnums[i];
-    }
+    LMetaObject(LString _metatype);
+    ~LMetaObject();
 
-    LMetaObject& addFunction(LFunctionPtr* _f)
-    {
-        mFunctions.pushBack(_f);
-        return *this;
-    }
+    LMetaObject&                    addFunction(LFunctionPtr* _f);
 
-    LMetaObject& addProperty(LPropertyBase<T>* _f)
-    {
-        mProperties.pushBack(_f);
-        return *this;
-    }
+    LMetaObject&                    addProperty(LPropertyBase* _f);
 
-    LMetaObject& addEnum(LEnum* _f)
-    {
-        mEnums.pushBack(_f);
-        return *this;
-    }
+    LMetaObject&                    addEnum(LEnum* _f);
 
-    LFunctionPtr* getFunction(void* ptr)const
-    {
-        for(u32 i=0;i<mFunctions.getSize();i++)
-            if(ptr==mFunctions[i]->mPointer)
-                return mFunctions[i];
-        lError(1,LSTR("Function Not found , please be carefull about function pointer"),nullptr);
-    }
+    LFunctionPtr*                   getFunction(void* ptr)const;
 
-    LFunctionPtr* getFunction(LString fullname)const
-    {
-        for(u32 i=0;i<mFunctions.getSize();i++)
-            if(fullname==mFunctions[i]->mFullname)
-                return mFunctions[i];
-        lError(1,LSTR("Function \"")+fullname+"\" Not found , please be carefull about function name",nullptr);
-    }
+    LFunctionPtr*                   getFunction(LString fullname)const;
 
-    LPropertyBase<T>* getProperty(LString name)const
-    {
-        for(u32 i=0;i<mProperties.getSize();i++)
-            if(name==mProperties[i]->mName)
-                return mProperties[i];
-        lError(1,LSTR("Property \"")+name+"\" Not found , please be carefull about property name",nullptr);
-    }
+    LPropertyBase*                  getProperty(LString name)const;
 
-    LEnum* getEnum(LString name)const
-    {
-        for(u32 i=0;i<mEnums.getSize();i++)
-            if(name==mEnums[i]->mEnumName)
-                return mEnums[i];
-        lError(1,LSTR("Enum \"")+name+"\" Not found , please be carefull about enum name",nullptr);
-    }
+    LUniquePointer<LPropertyBase>   getProperty(void* _obj,LString name)const;
 
-    LVector<LFunctionPtr*>& getFunctions()const
-    {
-        return mFunctions;
-    }
-    LVector<LPropertyBase<T>*>& getProperties()const
-    {
-        return mProperties;
-    }
-    LVector<LEnum*>& getEnums()const
-    {
-        return mEnums;
-    }
+    LEnum*                          getEnum(LString name)const;
+
+    const LVector<LFunctionPtr*>&   getFunctions()const;
+
+    const LVector<LPropertyBase*>&  getProperties()const;
+
+    const LVector<LEnum*>&          getEnums()const;
 
     const LString mMetaType;
 private:
     LVector<LFunctionPtr*>      mFunctions;
-    LVector<LPropertyBase<T>*>  mProperties;
+    LVector<LPropertyBase*>     mProperties;
     LVector<LEnum*>             mEnums;
 };
 
 template<typename T>
 struct LMetaObjectManager
 {
-    static void* get()
+    static LMetaObject* get()
     {
         lError(1,LSTR("MetaObjectManager is undefined for ")+lGetTypeName<T>(),nullptr);
     }

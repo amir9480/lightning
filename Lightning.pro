@@ -28,7 +28,8 @@ SOURCES += main.cpp \
     llist.cpp \
     lmap.cpp \
     lreflection.cpp \
-    lvariant.cpp
+    lvariant.cpp \
+    lmemorymanager.cpp
 
 
 HEADERS += \
@@ -59,5 +60,6 @@ HEADERS += \
     llist.h \
     lmap.h \
     lreflection.h \
-    lvariant.h
+    lvariant.h \
+    lmemorymanager.h
 

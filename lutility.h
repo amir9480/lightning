@@ -105,313 +105,6 @@ namespace {\
 static const LCAT(_____fake_type2_,__LINE__) LCAT(____fake_obj,__LINE__);\
 static void LCAT(____lcall2__,__LINE__)
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-#define lHasMember(NAME,FUNCNAME)\
-template<typename ____Th,typename __Sign>\
-struct NAME\
-{\
-   template <typename U,U> struct AAA;\
-   template <typename A> linline static char Check(AAA<__Sign,&A::FUNCNAME >* in);\
-   template <typename A> linline static int Check(...);\
-   const static bool value = sizeof(Check<____Th>(0))==sizeof(char);\
-};
-
-#define lCallIf(NAME,FUNCNAME)\
-template<typename ____Th,typename RT,bool __value>\
-struct NAME{\
-    template<typename ...ARGS>\
-    linline static RT call(____Th in,ARGS... args){return in.FUNCNAME(args...);}\
-};\
-template<typename ____Th,typename RT>\
-struct NAME <____Th,RT,false>{\
-    template<typename ...ARGS>\
-    linline static RT call(____Th in,ARGS... args){LUNUSED(in);LUNUSED(args...);static RT o;return o;}\
-};\
-template<typename ____Th,typename RT>\
-struct NAME<____Th,RT&,true>{\
-    template<typename ...ARGS>\
-    linline static RT& call(____Th in,ARGS... args){return in.FUNCNAME(args...);}\
-};\
-template<typename ____Th,typename RT>\
-struct NAME <____Th,RT&,false>{\
-    template<typename ...ARGS>\
-    linline static RT& call(____Th in,ARGS... args){LUNUSED(in);LUNUSED(args...);static RT o;return o;}\
-};\
-template<typename ____Th>\
-struct NAME<____Th,void,true>{\
-    template<typename ...ARGS>\
-    linline static void call(____Th in,ARGS... args){in.FUNCNAME(args...);}\
-};\
-template<typename ____Th>\
-struct NAME <____Th,void,false>{\
-    template<typename ...ARGS>\
-    linline static void call(____Th in,ARGS... args){LUNUSED(in);LUNUSED(args...);}\
-};
-
-#define lCaller(NAME,CHECKERNAME,RETURNTYPE,FUNCNAME)\
-template<typename ____Th>\
-RETURNTYPE NAME(____Th in)\
-{\
-    return l_call_if_##CHECKERNAME <____Th,RETURNTYPE,l_has_##CHECKERNAME<____Th,RETURNTYPE(____Th::*)()>::value>::call(in);\
-}
-#define lCallerA(NAME,CHECKERNAME,RETURNTYPE,FUNCNAME,ARGS)\
-template<typename ____Th , typename... __args>\
-RETURNTYPE NAME(____Th in,__args... ___args)\
-{\
-    return l_call_if_##CHECKERNAME <____Th,RETURNTYPE,l_has_##CHECKERNAME<____Th,RETURNTYPE(____Th::*) ARGS >::value>::call(in,___args...);\
-}
-
-
-
-#define lConfigCallIfExist(...) LOVERLOADED_MACRO(_lConfigCallIfExist,__VA_ARGS__)
-
-#define _lConfigCallIfExist3(CHECKNAME,RETURNTYPE,FUNCNAME)\
-lHasMember(l_has_##CHECKNAME,FUNCNAME)\
-lCallIf(l_call_if_##CHECKNAME,FUNCNAME)\
-lCaller(l_caller_##CHECKNAME,CHECKNAME,RETURNTYPE,FUNCNAME)
-
-#define _lConfigCallIfExist4(CHECKNAME,RETURNTYPE,FUNCNAME,A1)\
-lHasMember(l_has_##CHECKNAME,FUNCNAME)\
-lCallIf(l_call_if_##CHECKNAME,FUNCNAME)\
-lCallerA(l_caller_##CHECKNAME,CHECKNAME,RETURNTYPE,FUNCNAME,LPAR_OPEN A1 LPAR_CLOSE)
-
-#define _lConfigCallIfExist5(CHECKNAME,RETURNTYPE,FUNCNAME,A1,A2)\
-lHasMember(l_has_##CHECKNAME,FUNCNAME)\
-lCallIf(l_call_if_##CHECKNAME,FUNCNAME)\
-lCallerA(l_caller_##CHECKNAME,CHECKNAME,RETURNTYPE,FUNCNAME,LPAR_OPEN A1 LCOMMA A2 LPAR_CLOSE)
-
-#define _lConfigCallIfExist6(CHECKNAME,RETURNTYPE,FUNCNAME,A1,A2,A3)\
-lHasMember(l_has_##CHECKNAME,FUNCNAME)\
-lCallIf(l_call_if_##CHECKNAME,FUNCNAME)\
-lCallerA(l_caller_##CHECKNAME,CHECKNAME,RETURNTYPE,FUNCNAME,LPAR_OPEN A1 LCOMMA A2 LCOMMA A3 LPAR_CLOSE)
-
-#define _lConfigCallIfExist7(CHECKNAME,RETURNTYPE,FUNCNAME,A1,A2,A3,A4)\
-lHasMember(l_has_##CHECKNAME,FUNCNAME)\
-lCallIf(l_call_if_##CHECKNAME,FUNCNAME)\
-lCallerA(l_caller_##CHECKNAME,CHECKNAME,RETURNTYPE,FUNCNAME,LPAR_OPEN A1 LCOMMA A2 LCOMMA A3 LCOMMA A4 LPAR_CLOSE)
-
-#define _lConfigCallIfExist8(CHECKNAME,RETURNTYPE,FUNCNAME,A1,A2,A3,A4,A5)\
-lHasMember(l_has_##CHECKNAME,FUNCNAME)\
-lCallIf(l_call_if_##CHECKNAME,FUNCNAME)\
-lCallerA(l_caller_##CHECKNAME,CHECKNAME,RETURNTYPE,FUNCNAME,LPAR_OPEN A1 LCOMMA A2 LCOMMA A3 LCOMMA A4 LCOMMA A5 LPAR_CLOSE)
-
-#define _lConfigCallIfExist9(CHECKNAME,RETURNTYPE,FUNCNAME,A1,A2,A3,A4,A5,A6)\
-lHasMember(l_has_##CHECKNAME,FUNCNAME)\
-lCallIf(l_call_if_##CHECKNAME,FUNCNAME)\
-lCallerA(l_caller_##CHECKNAME,CHECKNAME,RETURNTYPE,FUNCNAME,LPAR_OPEN A1 LCOMMA A2 LCOMMA A3 LCOMMA A4 LCOMMA A5 LCOMMA A6 LPAR_CLOSE)
-
-#define _lConfigCallIfExist10(CHECKNAME,RETURNTYPE,FUNCNAME,A1,A2,A3,A4,A5,A6,A7)\
-lHasMember(l_has_##CHECKNAME,FUNCNAME)\
-lCallIf(l_call_if_##CHECKNAME,FUNCNAME)\
-lCallerA(l_caller_##CHECKNAME,CHECKNAME,RETURNTYPE,FUNCNAME,LPAR_OPEN A1 LCOMMA A2 LCOMMA A3 LCOMMA A4 LCOMMA A5 LCOMMA A6 LCOMMA A7 LPAR_CLOSE)
-
-#define _lConfigCallIfExist11(CHECKNAME,RETURNTYPE,FUNCNAME,A1,A2,A3,A4,A5,A6,A7,A8)\
-lHasMember(l_has_##CHECKNAME,FUNCNAME)\
-lCallIf(l_call_if_##CHECKNAME,FUNCNAME)\
-lCallerA(l_caller_##CHECKNAME,CHECKNAME,RETURNTYPE,FUNCNAME,LPAR_OPEN A1 LCOMMA A2 LCOMMA A3 LCOMMA A4 LCOMMA A5 LCOMMA A6 LCOMMA A7  LCOMMA A8 LPAR_CLOSE)
-
-#define _lConfigCallIfExist12(CHECKNAME,RETURNTYPE,FUNCNAME,A1,A2,A3,A4,A5,A6,A7,A8,A9)\
-lHasMember(l_has_##CHECKNAME,FUNCNAME)\
-lCallIf(l_call_if_##CHECKNAME,FUNCNAME)\
-lCallerA(l_caller_##CHECKNAME,CHECKNAME,RETURNTYPE,FUNCNAME,LPAR_OPEN A1 LCOMMA A2 LCOMMA A3 LCOMMA A4 LCOMMA A5 LCOMMA A6 LCOMMA A7  LCOMMA A8 LCOMMA A9 LPAR_CLOSE)
-
-#define _lConfigCallIfExist13(CHECKNAME,RETURNTYPE,FUNCNAME,A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)\
-lHasMember(l_has_##CHECKNAME,FUNCNAME)\
-lCallIf(l_call_if_##CHECKNAME,FUNCNAME)\
-lCallerA(l_caller_##CHECKNAME,CHECKNAME,RETURNTYPE,FUNCNAME,LPAR_OPEN A1 LCOMMA A2 LCOMMA A3 LCOMMA A4 LCOMMA A5 LCOMMA A6 LCOMMA A7  LCOMMA A8 LCOMMA A9 LCOMMA A10 LPAR_CLOSE)
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-#define lCallerConst(NAME,CHECKERNAME,RETURNTYPE,FUNCNAME)\
-template<typename ____Th>\
-RETURNTYPE NAME(____Th in)\
-{\
-    return l_call_if_##CHECKERNAME <____Th,RETURNTYPE,l_has_##CHECKERNAME<____Th,RETURNTYPE(____Th::*)()const>::value>::call(in);\
-}
-#define lCallerAConst(NAME,CHECKERNAME,RETURNTYPE,FUNCNAME,ARGS)\
-template<typename ____Th , typename... __args>\
-RETURNTYPE NAME(____Th in,__args... ___args)\
-{\
-    return l_call_if_##CHECKERNAME <____Th,RETURNTYPE,l_has_##CHECKERNAME<____Th,RETURNTYPE(____Th::*) ARGS const>::value>::call(in,___args...);\
-}
-
-#define lConfigCallIfExistConst(...) LOVERLOADED_MACRO(_lConfigCallIfExistConst,__VA_ARGS__)
-
-#define _lConfigCallIfExistConst3(CHECKNAME,RETURNTYPE,FUNCNAME)\
-lHasMember(l_has_##CHECKNAME,FUNCNAME)\
-lCallIf(l_call_if_##CHECKNAME,FUNCNAME)\
-lCallerConst(l_caller_##CHECKNAME,CHECKNAME,RETURNTYPE,FUNCNAME)
-
-#define _lConfigCallIfExistConst4(CHECKNAME,RETURNTYPE,FUNCNAME,A1)\
-lHasMember(l_has_##CHECKNAME,FUNCNAME)\
-lCallIf(l_call_if_##CHECKNAME,FUNCNAME)\
-lCallerA(l_caller_##CHECKNAME,CHECKNAME,RETURNTYPE,FUNCNAME,LPAR_OPEN A1 LPAR_CLOSE)
-
-#define _lConfigCallIfExistConst5(CHECKNAME,RETURNTYPE,FUNCNAME,A1,A2)\
-lHasMember(l_has_##CHECKNAME,FUNCNAME)\
-lCallIf(l_call_if_##CHECKNAME,FUNCNAME)\
-lCallerAConst(l_caller_##CHECKNAME,CHECKNAME,RETURNTYPE,FUNCNAME,LPAR_OPEN A1 LCOMMA A2 LPAR_CLOSE)
-
-#define _lConfigCallIfExistConst6(CHECKNAME,RETURNTYPE,FUNCNAME,A1,A2,A3)\
-lHasMember(l_has_##CHECKNAME,FUNCNAME)\
-lCallIf(l_call_if_##CHECKNAME,FUNCNAME)\
-lCallerAConst(l_caller_##CHECKNAME,CHECKNAME,RETURNTYPE,FUNCNAME,LPAR_OPEN A1 LCOMMA A2 LCOMMA A3 LPAR_CLOSE)
-
-#define _lConfigCallIfExistConst7(CHECKNAME,RETURNTYPE,FUNCNAME,A1,A2,A3,A4)\
-lHasMember(l_has_##CHECKNAME,FUNCNAME)\
-lCallIf(l_call_if_##CHECKNAME,FUNCNAME)\
-lCallerAConst(l_caller_##CHECKNAME,CHECKNAME,RETURNTYPE,FUNCNAME,LPAR_OPEN A1 LCOMMA A2 LCOMMA A3 LCOMMA A4 LPAR_CLOSE)
-
-#define _lConfigCallIfExistConst8(CHECKNAME,RETURNTYPE,FUNCNAME,A1,A2,A3,A4,A5)\
-lHasMember(l_has_##CHECKNAME,FUNCNAME)\
-lCallIf(l_call_if_##CHECKNAME,FUNCNAME)\
-lCallerAConst(l_caller_##CHECKNAME,CHECKNAME,RETURNTYPE,FUNCNAME,LPAR_OPEN A1 LCOMMA A2 LCOMMA A3 LCOMMA A4 LCOMMA A5 LPAR_CLOSE)
-
-#define _lConfigCallIfExistConst9(CHECKNAME,RETURNTYPE,FUNCNAME,A1,A2,A3,A4,A5,A6)\
-lHasMember(l_has_##CHECKNAME,FUNCNAME)\
-lCallIf(l_call_if_##CHECKNAME,FUNCNAME)\
-lCallerAConst(l_caller_##CHECKNAME,CHECKNAME,RETURNTYPE,FUNCNAME,LPAR_OPEN A1 LCOMMA A2 LCOMMA A3 LCOMMA A4 LCOMMA A5 LCOMMA A6 LPAR_CLOSE)
-
-#define _lConfigCallIfExistConst10(CHECKNAME,RETURNTYPE,FUNCNAME,A1,A2,A3,A4,A5,A6,A7)\
-lHasMember(l_has_##CHECKNAME,FUNCNAME)\
-lCallIf(l_call_if_##CHECKNAME,FUNCNAME)\
-lCallerAConst(l_caller_##CHECKNAME,CHECKNAME,RETURNTYPE,FUNCNAME,LPAR_OPEN A1 LCOMMA A2 LCOMMA A3 LCOMMA A4 LCOMMA A5 LCOMMA A6 LCOMMA A7 LPAR_CLOSE)
-
-#define _lConfigCallIfExistConst11(CHECKNAME,RETURNTYPE,FUNCNAME,A1,A2,A3,A4,A5,A6,A7,A8)\
-lHasMember(l_has_##CHECKNAME,FUNCNAME)\
-lCallIf(l_call_if_##CHECKNAME,FUNCNAME)\
-lCallerAConst(l_caller_##CHECKNAME,CHECKNAME,RETURNTYPE,FUNCNAME,LPAR_OPEN A1 LCOMMA A2 LCOMMA A3 LCOMMA A4 LCOMMA A5 LCOMMA A6 LCOMMA A7  LCOMMA A8 LPAR_CLOSE)
-
-#define _lConfigCallIfExistConst12(CHECKNAME,RETURNTYPE,FUNCNAME,A1,A2,A3,A4,A5,A6,A7,A8,A9)\
-lHasMember(l_has_##CHECKNAME,FUNCNAME)\
-lCallIf(l_call_if_##CHECKNAME,FUNCNAME)\
-lCallerAConst(l_caller_##CHECKNAME,CHECKNAME,RETURNTYPE,FUNCNAME,LPAR_OPEN A1 LCOMMA A2 LCOMMA A3 LCOMMA A4 LCOMMA A5 LCOMMA A6 LCOMMA A7  LCOMMA A8 LCOMMA A9 LPAR_CLOSE)
-
-#define _lConfigCallIfExistConst13(CHECKNAME,RETURNTYPE,FUNCNAME,A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)\
-lHasMember(l_has_##CHECKNAME,FUNCNAME)\
-lCallIf(l_call_if_##CHECKNAME,FUNCNAME)\
-lCallerAConst(l_caller_##CHECKNAME,CHECKNAME,RETURNTYPE,FUNCNAME,LPAR_OPEN A1 LCOMMA A2 LCOMMA A3 LCOMMA A4 LCOMMA A5 LCOMMA A6 LCOMMA A7  LCOMMA A8 LCOMMA A9 LCOMMA A10 LPAR_CLOSE)
-
-
-#define lCallIfExist(OBJ,CHECKNAME)\
-l_caller_##CHECKNAME(OBJ);
-
-#define lCallIfExistA(OBJ,CHECKNAME,...)\
-l_caller_##CHECKNAME(OBJ, __VA_ARGS__ );
-
-/*!
- * \def lCallIfExist using to calling an object's method if and only if it was exist .
- * before you call this Macro you need to declare \def lConfigCallIfExist
- *
- * \def lConfigCallIfExist(what you want call it (I thing ID is good so it's "ID"),member function return type , member function name , member fucntion argument types)
- * \def lCallIfExist(Object,ID)
- * \def lCallIfExistA(Object,ID,function arguments)
- *
- * sample:
- * \code{.cpp}
- *
-struct A
-{
-    A& call0(){cout<<"Call0"<<endl;return *this;}
-    void call1(int _in){cout<<"Call1 "<<_in<<endl;}
-    A& operator +(int _in){cout<<"operator"<<_in<<endl;return *this;}
-};
-
-struct B
-{
-
-};
-
-//! ( ID , Return Type,Function name , Argument Types...)
-lConfigCallIfExist(test1,A&,call0)
-lConfigCallIfExist(test2,void,call1,int)
-lConfigCallIfExist(test3,A&,operator+ ,int)
-
-
-int main()
-{
-    A a;
-    B b;
-    // (obj,ID)
-    lCallIfExist(a,test1);// will call a.call0()
-    lCallIfExist(b,test1);// there is not any thing to call
-
-    // (obj,ID,arguments)
-    lCallIfExistA(a,test2,12);// will call a.call1(12)
-    lCallIfExistA(b,test2,12);// there is not any thing to call
-
-    lCallIfExistA(a,test3,80);// will call a.operator+(80)
-    lCallIfExistA(b,test3,80);// there is not any thing to call
-
-    return 0;
-}
- *
- * \endcode
- *
- * Additional Options Available with this macro
- * this macro will generate following macros
- *
-#define lConfigCallIfExist(CHECKNAME,RETURNTYPE,FUNCNAME,...)\
-lHasMember(l_has_##CHECKNAME,FUNCNAME)\
-lCallIf(l_call_if_##CHECKNAME,FUNCNAME)\
-lCaller(l_caller_##CHECKNAME,CHECKNAME,RETURNTYPE,FUNCNAME,...)
- *
- *
- * this is an example
- *
-struct A
-{
-    void call1(int _in){cout<<"Call1 "<<_in<<endl;}
-};
-
-struct B
-{
-
-};
-
-lConfigCallIfExist(test1,void,call1,int)
-
-
-option to check function is exist or not
-    l_has_ID<classtype,function pointer type>::value
-
-    ID is same first argument you passed for lConfigCallIfExist
-
-    cout<<l_has_test1<A,void(A::*)(int)>::value<<endl;// will be 1
-    cout<<l_has_test1<B,void(B::*)(int)>::value<<endl;// will be 0
-
-option to call a function or not at compile time (NOT runtime check)
-
-l_call_if_ID<Object type,Compile time condition>::call(obj,arguments...)
-    ID is same first argument you passed for lConfigCallIfExist
-
-l_call_if_test1<A,1>::call(a,15);// will call  call1(15)
-l_call_if_test1<A,0>::call(a,25);// there is nothing to call
-
-and last option is availble is  same call if exist
-l_caller_ID(OBJ,ARGS...);
-
-#define lCallIfExist(OBJ,CHECKNAME)\
-l_caller_##CHECKNAME(OBJ);
-
-#define lCallIfExistA(OBJ,CHECKNAME,...)\
-l_caller_##CHECKNAME(OBJ, __VA_ARGS__ );
-
-
-NOTE : use lConfigCallIfExistConst instead of lConfigCallIfExist for const functions
-sample:
-struct A
-{
-    void test()const{}
-};
-
-lConfigCallIfExistConst(has_a,void,test)
- */
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -680,5 +373,462 @@ void lSort(T& _arr,u32 _size,LSortType _type=LSortType::LSortTypeAscending)
 }
 
 LNAMESPACE_END
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+template<typename T>
+struct ___fake_return{static T call(){T o;return o;}};
+template<>
+struct ___fake_return<void>{static void call(){}};
+
+/*!
+* how use call if exist.
+* first define lConfigCallIfExist( checkID,Function_Return_Type,Function_Name, ARGUMENT_TYPES )
+*
+* then you can use it like this
+* checkID<YourType>::value ; // if YourType has Function_Name with Function_Return_Type return type and ARGUMENT_TYPES argument types . then this will be true
+* checkID<YourType>::call(your_object,arguments...);// this will call your_object.Function_Name(arguments...) if exist
+*
+* note : use lConfigCallIfExistConst instead for const functions
+* sample:
+*
+* struct A
+* {
+*     void foo(int g)const{cout<<"FOO"<<endl;}
+* };
+* struct B
+* {
+*     void foo(int g)const{cout<<"FOO CONST"<<endl;}
+* };
+* struct C
+* {
+* };
+*
+* lConfigCallIfExist(has_foo,void,foo,int)
+* lConfigCallIfExistConst(has_foo_const,void,foo,int)
+*
+* int main()
+* {
+*     A a;
+*     B b;
+*     C c;
+*     int d;
+*     has_foo<A>::call(a,3);// output FOO
+*     has_foo<B>::call(b,4);
+*     has_foo<C>::call(c,5);
+*     has_foo<int>::call(d,6);
+
+*     has_foo_const<A>::call(a,3);
+*     has_foo_const<B>::call(b,4);// output FOOCONST
+*     has_foo_const<C>::call(c,5);
+*     has_foo_const<int>::call(d,6);
+*
+* }
+*/
+#define lConfigCallIfExist(...) LOVERLOADED_MACRO(__lConfigCallIfExist,__VA_ARGS__)
+////////////////////////////////////////////////////////////////////////////////////////////////////
+#define __lConfigCallIfExist13(NAME,RETURNTYPE,FUNCNAME,A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)\
+template<typename T>\
+struct NAME\
+{\
+    struct ___yes{bool b[1];};\
+    struct ___no{bool b[2];};\
+    template <typename U>\
+    static ___yes check(decltype(static_cast<RETURNTYPE(U::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)>(&U::FUNCNAME)),void *);\
+    template<typename U>\
+    static ___no check(...);\
+    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+\
+    typedef decltype(check<T>(0,0)) CT;\
+    template <typename U>static RETURNTYPE __call(const ___yes,U& _in,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6,A7 a7,A8 a8,A9 a9,A10 a10){return _in.FUNCNAME(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10);}\
+    static RETURNTYPE __call(const ___no,...){return ___fake_return<RETURNTYPE>::call();}\
+    static RETURNTYPE call(T& _in,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6,A7 a7,A8 a8,A9 a9,A10 a10){return __call(CT(),_in,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10);}\
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////
+#define __lConfigCallIfExist12(NAME,RETURNTYPE,FUNCNAME,A1,A2,A3,A4,A5,A6,A7,A8,A9)\
+template<typename T>\
+struct NAME\
+{\
+    struct ___yes{bool b[1];};\
+    struct ___no{bool b[2];};\
+    template <typename U>\
+    static ___yes check(decltype(static_cast<RETURNTYPE(U::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9)>(&U::FUNCNAME)),void *);\
+    template<typename U>\
+    static ___no check(...);\
+    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+\
+    typedef decltype(check<T>(0,0)) CT;\
+    template <typename U>static RETURNTYPE __call(const ___yes,U& _in,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6,A7 a7,A8 a8,A9 a9){return _in.FUNCNAME(a1,a2,a3,a4,a5,a6,a7,a8,a9);}\
+    static RETURNTYPE __call(const ___no,...){return ___fake_return<RETURNTYPE>::call();}\
+    static RETURNTYPE call(T& _in,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6,A7 a7,A8 a8,A9 a9){return __call(CT(),_in,a1,a2,a3,a4,a5,a6,a7,a8,a9);}\
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////
+#define __lConfigCallIfExist11(NAME,RETURNTYPE,FUNCNAME,A1,A2,A3,A4,A5,A6,A7,A8)\
+template<typename T>\
+struct NAME\
+{\
+    struct ___yes{bool b[1];};\
+    struct ___no{bool b[2];};\
+    template <typename U>\
+    static ___yes check(decltype(static_cast<RETURNTYPE(U::*)(A1,A2,A3,A4,A5,A6,A7,A8)>(&U::FUNCNAME)),void *);\
+    template<typename U>\
+    static ___no check(...);\
+    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+\
+    typedef decltype(check<T>(0,0)) CT;\
+    template <typename U>static RETURNTYPE __call(const ___yes,U& _in,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6,A7 a7,A8 a8){return _in.FUNCNAME(a1,a2,a3,a4,a5,a6,a7,a8);}\
+    static RETURNTYPE __call(const ___no,...){return ___fake_return<RETURNTYPE>::call();}\
+    static RETURNTYPE call(T& _in,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6,A7 a7,A8 a8){return __call(CT(),_in,a1,a2,a3,a4,a5,a6,a7,a8);}\
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////
+#define __lConfigCallIfExist10(NAME,RETURNTYPE,FUNCNAME,A1,A2,A3,A4,A5,A6,A7)\
+template<typename T>\
+struct NAME\
+{\
+    struct ___yes{bool b[1];};\
+    struct ___no{bool b[2];};\
+    template <typename U>\
+    static ___yes check(decltype(static_cast<RETURNTYPE(U::*)(A1,A2,A3,A4,A5,A6,A7)>(&U::FUNCNAME)),void *);\
+    template<typename U>\
+    static ___no check(...);\
+    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+\
+    typedef decltype(check<T>(0,0)) CT;\
+    template <typename U>static RETURNTYPE __call(const ___yes,U& _in,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6,A7 a7){return _in.FUNCNAME(a1,a2,a3,a4,a5,a6,a7);}\
+    static RETURNTYPE __call(const ___no,...){return ___fake_return<RETURNTYPE>::call();}\
+    static RETURNTYPE call(T& _in,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6,A7 a7){return __call(CT(),_in,a1,a2,a3,a4,a5,a6,a7);}\
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////
+#define __lConfigCallIfExist9(NAME,RETURNTYPE,FUNCNAME,A1,A2,A3,A4,A5,A6)\
+template<typename T>\
+struct NAME\
+{\
+    struct ___yes{bool b[1];};\
+    struct ___no{bool b[2];};\
+    template <typename U>\
+    static ___yes check(decltype(static_cast<RETURNTYPE(U::*)(A1,A2,A3,A4,A5,A6)>(&U::FUNCNAME)),void *);\
+    template<typename U>\
+    static ___no check(...);\
+    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+\
+    typedef decltype(check<T>(0,0)) CT;\
+    template <typename U>static RETURNTYPE __call(const ___yes,U& _in,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6){return _in.FUNCNAME(a1,a2,a3,a4,a5,a6);}\
+    static RETURNTYPE __call(const ___no,...){return ___fake_return<RETURNTYPE>::call();}\
+    static RETURNTYPE call(T& _in,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6){return __call(CT(),_in,a1,a2,a3,a4,a5,a6);}\
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////
+#define __lConfigCallIfExist8(NAME,RETURNTYPE,FUNCNAME,A1,A2,A3,A4,A5)\
+template<typename T>\
+struct NAME\
+{\
+    struct ___yes{bool b[1];};\
+    struct ___no{bool b[2];};\
+    template <typename U>\
+    static ___yes check(decltype(static_cast<RETURNTYPE(U::*)(A1,A2,A3,A4,A5)>(&U::FUNCNAME)),void *);\
+    template<typename U>\
+    static ___no check(...);\
+    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+\
+    typedef decltype(check<T>(0,0)) CT;\
+    template <typename U>static RETURNTYPE __call(const ___yes,U& _in,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5){return _in.FUNCNAME(a1,a2,a3,a4,a5);}\
+    static RETURNTYPE __call(const ___no,...){return ___fake_return<RETURNTYPE>::call();}\
+    static RETURNTYPE call(T& _in,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5){return __call(CT(),_in,a1,a2,a3,a4,a5);}\
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////
+#define __lConfigCallIfExist7(NAME,RETURNTYPE,FUNCNAME,A1,A2,A3,A4)\
+template<typename T>\
+struct NAME\
+{\
+    struct ___yes{bool b[1];};\
+    struct ___no{bool b[2];};\
+    template <typename U>\
+    static ___yes check(decltype(static_cast<RETURNTYPE(U::*)(A1,A2,A3,A4)>(&U::FUNCNAME)),void *);\
+    template<typename U>\
+    static ___no check(...);\
+    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+\
+    typedef decltype(check<T>(0,0)) CT;\
+    template <typename U>static RETURNTYPE __call(const ___yes,U& _in,A1 a1,A2 a2,A3 a3,A4 a4){return _in.FUNCNAME(a1,a2,a3,a4);}\
+    static RETURNTYPE __call(const ___no,...){return ___fake_return<RETURNTYPE>::call();}\
+    static RETURNTYPE call(T& _in,A1 a1,A2 a2,A3 a3,A4 a4){return __call(CT(),_in,a1,a2,a3,a4);}\
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////
+#define __lConfigCallIfExist6(NAME,RETURNTYPE,FUNCNAME,A1,A2,A3)\
+template<typename T>\
+struct NAME\
+{\
+    struct ___yes{bool b[1];};\
+    struct ___no{bool b[2];};\
+    template <typename U>\
+    static ___yes check(decltype(static_cast<RETURNTYPE(U::*)(A1,A2,A3)>(&U::FUNCNAME)),void *);\
+    template<typename U>\
+    static ___no check(...);\
+    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+\
+    typedef decltype(check<T>(0,0)) CT;\
+    template <typename U>static RETURNTYPE __call(const ___yes,U& _in,A1 a1,A2 a2,A3 a3){return _in.FUNCNAME(a1,a2,a3);}\
+    static RETURNTYPE __call(const ___no,...){return ___fake_return<RETURNTYPE>::call();}\
+    static RETURNTYPE call(T& _in,A1 a1,A2 a2,A3 a3){return __call(CT(),_in,a1,a2,a3);}\
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////
+#define __lConfigCallIfExist5(NAME,RETURNTYPE,FUNCNAME,A1,A2)\
+template<typename T>\
+struct NAME\
+{\
+    struct ___yes{bool b[1];};\
+    struct ___no{bool b[2];};\
+    template <typename U>\
+    static ___yes check(decltype(static_cast<RETURNTYPE(U::*)(A1,A2)>(&U::FUNCNAME)),void *);\
+    template<typename U>\
+    static ___no check(...);\
+    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+\
+    typedef decltype(check<T>(0,0)) CT;\
+    template <typename U>static RETURNTYPE __call(const ___yes,U& _in,A1 a1,A2 a2){return _in.FUNCNAME(a1,a2);}\
+    static RETURNTYPE __call(const ___no,...){return ___fake_return<RETURNTYPE>::call();}\
+    static RETURNTYPE call(T& _in,A1 a1,A2 a2){return __call(CT(),_in,a1,a2);}\
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////
+#define __lConfigCallIfExist4(NAME,RETURNTYPE,FUNCNAME,A1)\
+template<typename T>\
+struct NAME\
+{\
+    struct ___yes{bool b[1];};\
+    struct ___no{bool b[2];};\
+    template <typename U>\
+    static ___yes check(decltype(static_cast<RETURNTYPE(U::*)(A1)>(&U::FUNCNAME)),void *);\
+    template<typename U>\
+    static ___no check(...);\
+    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+\
+    typedef decltype(check<T>(0,0)) CT;\
+    template <typename U>static RETURNTYPE __call(const ___yes,U& _in,A1 a1){return _in.FUNCNAME(a1);}\
+    static RETURNTYPE __call(const ___no,...){return ___fake_return<RETURNTYPE>::call();}\
+    static RETURNTYPE call(T& _in,A1 a1){return __call(CT(),_in,a1);}\
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////
+#define __lConfigCallIfExist3(NAME,RETURNTYPE,FUNCNAME)\
+template<typename T>\
+struct NAME\
+{\
+    struct ___yes{bool b[1];};\
+    struct ___no{bool b[2];};\
+    template <typename U>\
+    static ___yes check(decltype(static_cast<RETURNTYPE(U::*)()>(&U::FUNCNAME)),void *);\
+    template<typename U>\
+    static ___no check(...);\
+    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+\
+    typedef decltype(check<T>(0,0)) CT;\
+    template <typename U>static RETURNTYPE __call(const ___yes,U& _in){return _in.FUNCNAME();}\
+    static RETURNTYPE __call(const ___no,...){return ___fake_return<RETURNTYPE>::call();}\
+    static RETURNTYPE call(T& _in){return __call(CT(),_in);}\
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////
+#define lConfigCallIfExistConst(...) LOVERLOADED_MACRO(__lConfigCallIfExistConst,__VA_ARGS__)
+////////////////////////////////////////////////////////////////////////////////////////////////////
+#define __lConfigCallIfExistConst13(NAME,RETURNTYPE,FUNCNAME,A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)\
+template<typename T>\
+struct NAME\
+{\
+    struct ___yes{bool b[1];};\
+    struct ___no{bool b[2];};\
+    template <typename U>\
+    static ___yes check(decltype(static_cast<RETURNTYPE(U::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)const>(&U::FUNCNAME)),void *);\
+    template<typename U>\
+    static ___no check(...);\
+    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+\
+    typedef decltype(check<T>(0,0)) CT;\
+    template <typename U>static RETURNTYPE __call(const ___yes,U& _in,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6,A7 a7,A8 a8,A9 a9,A10 a10){return _in.FUNCNAME(a1,a2,a3,a4,a5,a6,a7,a8,a9,a10);}\
+    static RETURNTYPE __call(const ___no,...){return ___fake_return<RETURNTYPE>::call();}\
+    static RETURNTYPE call(T& _in,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6,A7 a7,A8 a8,A9 a9,A10 a10){return __call(CT(),_in,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10);}\
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////
+#define __lConfigCallIfExistConst12(NAME,RETURNTYPE,FUNCNAME,A1,A2,A3,A4,A5,A6,A7,A8,A9)\
+template<typename T>\
+struct NAME\
+{\
+    struct ___yes{bool b[1];};\
+    struct ___no{bool b[2];};\
+    template <typename U>\
+    static ___yes check(decltype(static_cast<RETURNTYPE(U::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9)const>(&U::FUNCNAME)),void *);\
+    template<typename U>\
+    static ___no check(...);\
+    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+\
+    typedef decltype(check<T>(0,0)) CT;\
+    template <typename U>static RETURNTYPE __call(const ___yes,U& _in,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6,A7 a7,A8 a8,A9 a9){return _in.FUNCNAME(a1,a2,a3,a4,a5,a6,a7,a8,a9);}\
+    static RETURNTYPE __call(const ___no,...){return ___fake_return<RETURNTYPE>::call();}\
+    static RETURNTYPE call(T& _in,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6,A7 a7,A8 a8,A9 a9){return __call(CT(),_in,a1,a2,a3,a4,a5,a6,a7,a8,a9);}\
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////
+#define __lConfigCallIfExistConst11(NAME,RETURNTYPE,FUNCNAME,A1,A2,A3,A4,A5,A6,A7,A8)\
+template<typename T>\
+struct NAME\
+{\
+    struct ___yes{bool b[1];};\
+    struct ___no{bool b[2];};\
+    template <typename U>\
+    static ___yes check(decltype(static_cast<RETURNTYPE(U::*)(A1,A2,A3,A4,A5,A6,A7,A8)const>(&U::FUNCNAME)),void *);\
+    template<typename U>\
+    static ___no check(...);\
+    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+\
+    typedef decltype(check<T>(0,0)) CT;\
+    template <typename U>static RETURNTYPE __call(const ___yes,U& _in,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6,A7 a7,A8 a8){return _in.FUNCNAME(a1,a2,a3,a4,a5,a6,a7,a8);}\
+    static RETURNTYPE __call(const ___no,...){return ___fake_return<RETURNTYPE>::call();}\
+    static RETURNTYPE call(T& _in,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6,A7 a7,A8 a8){return __call(CT(),_in,a1,a2,a3,a4,a5,a6,a7,a8);}\
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////
+#define __lConfigCallIfExistConst10(NAME,RETURNTYPE,FUNCNAME,A1,A2,A3,A4,A5,A6,A7)\
+template<typename T>\
+struct NAME\
+{\
+    struct ___yes{bool b[1];};\
+    struct ___no{bool b[2];};\
+    template <typename U>\
+    static ___yes check(decltype(static_cast<RETURNTYPE(U::*)(A1,A2,A3,A4,A5,A6,A7)const>(&U::FUNCNAME)),void *);\
+    template<typename U>\
+    static ___no check(...);\
+    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+\
+    typedef decltype(check<T>(0,0)) CT;\
+    template <typename U>static RETURNTYPE __call(const ___yes,U& _in,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6,A7 a7){return _in.FUNCNAME(a1,a2,a3,a4,a5,a6,a7);}\
+    static RETURNTYPE __call(const ___no,...){return ___fake_return<RETURNTYPE>::call();}\
+    static RETURNTYPE call(T& _in,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6,A7 a7){return __call(CT(),_in,a1,a2,a3,a4,a5,a6,a7);}\
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////
+#define __lConfigCallIfExistConst9(NAME,RETURNTYPE,FUNCNAME,A1,A2,A3,A4,A5,A6)\
+template<typename T>\
+struct NAME\
+{\
+    struct ___yes{bool b[1];};\
+    struct ___no{bool b[2];};\
+    template <typename U>\
+    static ___yes check(decltype(static_cast<RETURNTYPE(U::*)(A1,A2,A3,A4,A5,A6)const>(&U::FUNCNAME)),void *);\
+    template<typename U>\
+    static ___no check(...);\
+    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+\
+    typedef decltype(check<T>(0,0)) CT;\
+    template <typename U>static RETURNTYPE __call(const ___yes,U& _in,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6){return _in.FUNCNAME(a1,a2,a3,a4,a5,a6);}\
+    static RETURNTYPE __call(const ___no,...){return ___fake_return<RETURNTYPE>::call();}\
+    static RETURNTYPE call(T& _in,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6){return __call(CT(),_in,a1,a2,a3,a4,a5,a6);}\
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////
+#define __lConfigCallIfExistConst8(NAME,RETURNTYPE,FUNCNAME,A1,A2,A3,A4,A5)\
+template<typename T>\
+struct NAME\
+{\
+    struct ___yes{bool b[1];};\
+    struct ___no{bool b[2];};\
+    template <typename U>\
+    static ___yes check(decltype(static_cast<RETURNTYPE(U::*)(A1,A2,A3,A4,A5)const>(&U::FUNCNAME)),void *);\
+    template<typename U>\
+    static ___no check(...);\
+    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+\
+    typedef decltype(check<T>(0,0)) CT;\
+    template <typename U>static RETURNTYPE __call(const ___yes,U& _in,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5){return _in.FUNCNAME(a1,a2,a3,a4,a5);}\
+    static RETURNTYPE __call(const ___no,...){return ___fake_return<RETURNTYPE>::call();}\
+    static RETURNTYPE call(T& _in,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5){return __call(CT(),_in,a1,a2,a3,a4,a5);}\
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////
+#define __lConfigCallIfExistConst7(NAME,RETURNTYPE,FUNCNAME,A1,A2,A3,A4)\
+template<typename T>\
+struct NAME\
+{\
+    struct ___yes{bool b[1];};\
+    struct ___no{bool b[2];};\
+    template <typename U>\
+    static ___yes check(decltype(static_cast<RETURNTYPE(U::*)(A1,A2,A3,A4)const>(&U::FUNCNAME)),void *);\
+    template<typename U>\
+    static ___no check(...);\
+    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+\
+    typedef decltype(check<T>(0,0)) CT;\
+    template <typename U>static RETURNTYPE __call(const ___yes,U& _in,A1 a1,A2 a2,A3 a3,A4 a4){return _in.FUNCNAME(a1,a2,a3,a4);}\
+    static RETURNTYPE __call(const ___no,...){return ___fake_return<RETURNTYPE>::call();}\
+    static RETURNTYPE call(T& _in,A1 a1,A2 a2,A3 a3,A4 a4){return __call(CT(),_in,a1,a2,a3,a4);}\
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////
+#define __lConfigCallIfExistConst6(NAME,RETURNTYPE,FUNCNAME,A1,A2,A3)\
+template<typename T>\
+struct NAME\
+{\
+    struct ___yes{bool b[1];};\
+    struct ___no{bool b[2];};\
+    template <typename U>\
+    static ___yes check(decltype(static_cast<RETURNTYPE(U::*)(A1,A2,A3)const>(&U::FUNCNAME)),void *);\
+    template<typename U>\
+    static ___no check(...);\
+    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+\
+    typedef decltype(check<T>(0,0)) CT;\
+    template <typename U>static RETURNTYPE __call(const ___yes,U& _in,A1 a1,A2 a2,A3 a3){return _in.FUNCNAME(a1,a2,a3);}\
+    static RETURNTYPE __call(const ___no,...){return ___fake_return<RETURNTYPE>::call();}\
+    static RETURNTYPE call(T& _in,A1 a1,A2 a2,A3 a3){return __call(CT(),_in,a1,a2,a3);}\
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////
+#define __lConfigCallIfExistConst5(NAME,RETURNTYPE,FUNCNAME,A1,A2)\
+template<typename T>\
+struct NAME\
+{\
+    struct ___yes{bool b[1];};\
+    struct ___no{bool b[2];};\
+    template <typename U>\
+    static ___yes check(decltype(static_cast<RETURNTYPE(U::*)(A1,A2)const>(&U::FUNCNAME)),void *);\
+    template<typename U>\
+    static ___no check(...);\
+    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+\
+    typedef decltype(check<T>(0,0)) CT;\
+    template <typename U>static RETURNTYPE __call(const ___yes,U& _in,A1 a1,A2 a2){return _in.FUNCNAME(a1,a2);}\
+    static RETURNTYPE __call(const ___no,...){return ___fake_return<RETURNTYPE>::call();}\
+    static RETURNTYPE call(T& _in,A1 a1,A2 a2){return __call(CT(),_in,a1,a2);}\
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////
+#define __lConfigCallIfExistConst4(NAME,RETURNTYPE,FUNCNAME,A1)\
+template<typename T>\
+struct NAME\
+{\
+    struct ___yes{bool b[1];};\
+    struct ___no{bool b[2];};\
+    template <typename U>\
+    static ___yes check(decltype(static_cast<RETURNTYPE(U::*)(A1)const>(&U::FUNCNAME)),void *);\
+    template<typename U>\
+    static ___no check(...);\
+    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+\
+    typedef decltype(check<T>(0,0)) CT;\
+    template <typename U>static RETURNTYPE __call(const ___yes,U& _in,A1 a1){return _in.FUNCNAME(a1);}\
+    static RETURNTYPE __call(const ___no,...){return ___fake_return<RETURNTYPE>::call();}\
+    static RETURNTYPE call(T& _in,A1 a1){return __call(CT(),_in,a1);}\
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////
+#define __lConfigCallIfExistConst3(NAME,RETURNTYPE,FUNCNAME)\
+template<typename T>\
+struct NAME\
+{\
+    struct ___yes{bool b[1];};\
+    struct ___no{bool b[2];};\
+    template <typename U>\
+    static ___yes check(decltype(static_cast<RETURNTYPE(U::*)()const>(&U::FUNCNAME)),void *);\
+    template<typename U>\
+    static ___no check(...);\
+    const static bool value=is_same<___yes,decltype(check<T>(0,0))>::value;\
+\
+    typedef decltype(check<T>(0,0)) CT;\
+    template <typename U>static RETURNTYPE __call(const ___yes,U& _in){return _in.FUNCNAME();}\
+    static RETURNTYPE __call(const ___no,...){return ___fake_return<RETURNTYPE>::call();}\
+    static RETURNTYPE call(T& _in){return __call(CT(),_in);}\
+};
 
 #endif // LUTILITY_H

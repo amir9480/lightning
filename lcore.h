@@ -23,6 +23,7 @@
 #include "lutility.h"
 #include "lmemory.h"
 #include "lmemorylog.h"
+#include "lmemorymanager.h"
 #include "lpair.h"
 #include "lvariant.h"
 #include "lreflection.h"
