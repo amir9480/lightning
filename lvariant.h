@@ -102,6 +102,17 @@ public:
  * void lSetProperty(const LString& _name,const LVariant &_in);
  * LVariant lGetProperty(const LString &_name)const;
  *
+ *
+ * // Variant and Variant Arrays
+ * // to create an array
+ *
+ * LVariant a={1,2,3};
+ *
+ * //and to use it
+ *
+ * for(int i=0;i<a.getArraySize();i++)
+ *    cout<<a[i].toInt()<<endl;
+ *
  */
 
 class LAPI LVariant
@@ -203,6 +214,9 @@ public:
 
     //! Get Property of Class Varaint
     virtual const LVariant          getProperty(const LString& _propertyname)const;
+
+    //! if was array variant . returns size of array
+    u32                             getArraySize()const;
 
     //! check is this a valid array
     bool                            isValidArray()const;
@@ -311,6 +325,9 @@ public:
 
     virtual LVariant& operator[](u32 _i)const;
 
+protected:
+    template<typename T>
+    T                 _convert()const;
 protected:
     VariantType mType;
     LString     mTypeName;
@@ -522,72 +539,75 @@ template<typename T>
 T LVariant::to() const
 {
     //lError2(mTypeName!=lGetTypeName<T>(),LSTR("Looks like type is not correct current type:(")+mTypeName+") and what you want ("+lGetTypeName<T>()+")");
-    if(!isValidReference())
+    if( LIsSameType<typename LRemoveReference<T>::type,int>::value )
     {
-        if( LIsSameType<typename LRemoveReference<T>::type,int>::value )
-            return *((T*)&mInt);
-        if( LIsSameType<typename LRemoveReference<T>::type,unsigned int>::value )
-            return *((T*)&mUInt);
-        if( LIsSameType<typename LRemoveReference<T>::type,float>::value )
-            return *((T*)&mFloat);
-        if( LIsSameType<typename LRemoveReference<T>::type,double>::value )
-            return *((T*)&mDouble);
-        if( LIsSameType<typename LRemoveReference<T>::type,long double>::value )
-            return *((T*)&mLongDouble);
-        if( LIsSameType<typename LRemoveReference<T>::type,char>::value )
-            return *((T*)&mChar);
-        if( LIsSameType<typename LRemoveReference<T>::type,unsigned char>::value )
-            return *((T*)&mUChar);
-        if( LIsSameType<typename LRemoveReference<T>::type,bool>::value )
-            return *((T*)&mBool);
-        if( LIsSameType<typename LRemoveReference<T>::type,short int>::value )
-            return *((T*)&mShortInt);
-        if( LIsSameType<typename LRemoveReference<T>::type,unsigned short int>::value )
-            return *((T*)&mUShortInt);
-        if( LIsSameType<typename LRemoveReference<T>::type,long long int>::value )
-            return *((T*)&mLongLongInt);
-        if( LIsSameType<typename LRemoveReference<T>::type,unsigned long long int>::value )
-            return *((T*)&mULongLongInt);
-        if( LIsSameType<typename LRemoveReference<T>::type,wchar_t>::value )
-            return *((T*)&mWCharT);
-        if( LIsSameType<typename LRemoveReference<T>::type,LString>::value )
-        {
-            LString o=toString();
-            return *((T*)&o);
-        }
+        static int o=toInt();
+        return *((T*)&o);
     }
-    else
+    if( LIsSameType<typename LRemoveReference<T>::type,unsigned int>::value )
     {
-        if( LIsSameType<typename LRemoveReference<T>::type,int&>::value )
-            return *((T*)mCustom);
-        if( LIsSameType<typename LRemoveReference<T>::type,unsigned int&>::value )
-            return *((T*)mCustom);
-        if( LIsSameType<typename LRemoveReference<T>::type,float&>::value )
-            return *((T*)mCustom);
-        if( LIsSameType<typename LRemoveReference<T>::type,double&>::value )
-            return *((T*)mCustom);
-        if( LIsSameType<typename LRemoveReference<T>::type,long double&>::value )
-            return *((T*)mCustom);
-        if( LIsSameType<typename LRemoveReference<T>::type,char&>::value )
-            return *((T*)mCustom);
-        if( LIsSameType<typename LRemoveReference<T>::type,unsigned char&>::value )
-            return *((T*)mCustom);
-        if( LIsSameType<typename LRemoveReference<T>::type,bool&>::value )
-            return *((T*)mCustom);
-        if( LIsSameType<typename LRemoveReference<T>::type,short int&>::value )
-            return *((T*)mCustom);
-        if( LIsSameType<typename LRemoveReference<T>::type,unsigned short int&>::value )
-            return *((T*)mCustom);
-        if( LIsSameType<typename LRemoveReference<T>::type,long long int&>::value )
-            return *((T*)mCustom);
-        if( LIsSameType<typename LRemoveReference<T>::type,unsigned long long int&>::value )
-            return *((T*)mCustom);
-        if( LIsSameType<typename LRemoveReference<T>::type,wchar_t&>::value )
-            return *((T*)mCustom);
-        if( LIsSameType<typename LRemoveReference<T>::type,LString>::value )
-        {
-            return *((T*)mCustom);
-        }
+        static unsigned int o=toUInt();
+        return *((T*)&o);
+    }
+    if( LIsSameType<typename LRemoveReference<T>::type,float>::value )
+    {
+        static float o=toFloat();
+        return *((T*)&o);
+    }
+    if( LIsSameType<typename LRemoveReference<T>::type,double>::value )
+    {
+        static double o=toDouble();
+        return *((T*)&o);
+    }
+    if( LIsSameType<typename LRemoveReference<T>::type,long double>::value )
+    {
+        static long double o=toLongDouble();
+        return *((T*)&o);
+    }
+    if( LIsSameType<typename LRemoveReference<T>::type,char>::value )
+    {
+        static char o=toChar();
+        return *((T*)&o);
+    }
+    if( LIsSameType<typename LRemoveReference<T>::type,unsigned char>::value )
+    {
+        static unsigned char o=toUChar();
+        return *((T*)&o);
+    }
+    if( LIsSameType<typename LRemoveReference<T>::type,bool>::value )
+    {
+        static bool o=toBool();
+        return *((T*)&o);
+    }
+    if( LIsSameType<typename LRemoveReference<T>::type,short int>::value )
+    {
+        static short int o=toShortInt();
+        return *((T*)&o);
+    }
+    if( LIsSameType<typename LRemoveReference<T>::type,unsigned short int>::value )
+    {
+        static unsigned short int o=toUShortInt();
+        return *((T*)&o);
+    }
+    if( LIsSameType<typename LRemoveReference<T>::type,long long int>::value )
+    {
+        static long long int o=toLongLongInt();
+        return *((T*)&o);
+    }
+    if( LIsSameType<typename LRemoveReference<T>::type,unsigned long long int>::value )
+    {
+        static unsigned long long int o=toULongLongInt();
+        return *((T*)&o);
+    }
+    if( LIsSameType<typename LRemoveReference<T>::type,wchar_t>::value )
+    {
+        static wchar_t o=toWCharT();
+        return *((T*)&o);
+    }
+    if( LIsSameType<typename LRemoveReference<T>::type,LString>::value )
+    {
+        static LString o=toString();
+        return *((T*)&o);
     }
 
     if(mType==VariantType::TCustom)
@@ -599,6 +619,76 @@ T LVariant::to() const
 }
 
 
+
+template<typename T>
+T LVariant::_convert() const
+{
+    //lError2(mTypeName!=lGetTypeName<T>(),LSTR("Looks like type is not correct current type:(")+mTypeName+") and what you want ("+lGetTypeName<T>()+")");
+    if(!isValidReference())
+    {
+        if( mType == VariantType::TInt )
+            return (T)mInt;
+        if( mType == VariantType::TUInt )
+            return (T)mUInt;
+        if( mType == VariantType::TFloat )
+            return (T)mFloat;
+        if( mType == VariantType::TDouble )
+            return (T)mDouble;
+        if( mType == VariantType::TLongDouble )
+            return (T)mLongDouble;
+        if( mType == VariantType::TChar )
+            return (T)mChar;
+        if( mType == VariantType::TUChar )
+            return (T)mUChar;
+        if( mType == VariantType::TBool )
+            return (T)mBool;
+        if( mType == VariantType::TShortInt )
+            return (T)mShortInt;
+        if( mType == VariantType::TUShortInt )
+            return (T)mUShortInt;
+        if( mType == VariantType::TLongLongInt )
+            return (T)mLongLongInt;
+        if( mType == VariantType::TULongLongInt )
+            return (T)mULongLongInt;
+        if( mType == VariantType::TWChar_t )
+            return (T)mWCharT;
+        if( mType == VariantType::TString )
+        {
+            LString o=toString();
+            return *((T*)&o);
+        }
+    }
+    else
+    {
+        if( mType == VariantType::TIntR )
+            return (T)(*((int*)mCustom));
+        if( mType == VariantType::TUIntR )
+            return (T)(*((unsigned int*)mCustom));
+        if( mType == VariantType::TFloatR )
+            return (T)(*((float*)mCustom));
+        if( mType == VariantType::TDoubleR )
+            return (T)(*((double*)mCustom));
+        if( mType == VariantType::TLongDoubleR )
+            return (T)(*((long double*)mCustom));
+        if( mType == VariantType::TBoolR )
+            return (T)(*((bool*)mCustom));
+        if( mType == VariantType::TShortIntR )
+            return (T)(*((short int*)mCustom));
+        if( mType == VariantType::TUShortIntR )
+            return (T)(*((unsigned short int*)mCustom));
+        if( mType == VariantType::TLongLongIntR )
+            return (T)(*((long long int*)mCustom));
+        if( mType == VariantType::TULongLongIntR )
+            return (T)(*((unsigned long long int*)mCustom));
+        if( mType == VariantType::TStringR )
+        {
+            LString o=toString();
+            return (T)o.toLongLongInt();
+        }
+    }
+
+    return *static_cast<T*>(mCustom);
+}
 
 
 LNAMESPACE_END

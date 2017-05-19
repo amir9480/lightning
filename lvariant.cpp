@@ -199,6 +199,13 @@ const LVariant LVariant::getProperty(const LString &_propertyname) const
     return LVariant();
 }
 
+u32 LVariant::getArraySize() const
+{
+    if(isValidArray())
+        return mArray->getSize();
+    return 0;
+}
+
 bool LVariant::isValidArray() const
 {
     if(
@@ -256,132 +263,113 @@ void LVariant::setProperty(const LString &_propertyname, const LVariant &_newval
 
 int LVariant::toInt() const
 {
-    lWarning(mType!=VariantType::TInt&&mType!=VariantType::TIntR,"variant type is not int");
     if(mType==VariantType::TNull)
         return 0;
-    if(isValidReference())
+    if(mType==VariantType::TIntR)
         return *((int*)mCustom);
-    return mInt;
+    return _convert<int>();
 }
 
 unsigned int LVariant::toUInt() const
 {
-    lWarning(mType!=VariantType::TUInt&&mType!=VariantType::TUIntR,"variant type is not unsigned int");
     if(mType==VariantType::TNull)
         return 0;
-    if(isValidReference())
+    if(mType==VariantType::TUIntR)
         return *((unsigned int*)mCustom);
-    return mUInt;
+    return _convert<unsigned int>();;
 }
 
 float LVariant::toFloat() const
 {
-    lWarning(mType!=VariantType::TFloat&&mType!=VariantType::TFloatR,"variant type is not float");
     if(mType==VariantType::TNull)
         return 0.0f;
-    if(isValidReference())
+    if(mType==VariantType::TFloatR)
         return *((float*)mCustom);
-    return mFloat;
+    return _convert<float>();;
 }
 
 double LVariant::toDouble() const
 {
-    lWarning(mType!=VariantType::TDouble&&mType!=VariantType::TDoubleR,"variant type is not double");
     if(mType==VariantType::TNull)
         return 0.0;
-    if(isValidReference())
+    if(mType==VariantType::TDoubleR)
         return *((double*)mCustom);
-    return mDouble;
+    return _convert<double>();;
 }
 
 long double LVariant::toLongDouble() const
 {
-    lWarning(mType!=VariantType::TLongDouble&&mType!=VariantType::TLongDoubleR,"variant type is not long double");
     if(mType==VariantType::TNull)
         return 0.0;
-    if(isValidReference())
+    if(mType==VariantType::TLongDoubleR)
         return *((long double*)mCustom);
-    return mLongDouble;
+    return _convert<long double>();;
 }
 
 char LVariant::toChar() const
 {
-    lWarning(mType!=VariantType::TChar,"variant type is not char");
     if(mType==VariantType::TNull)
         return '\0';
-    if(isValidReference())
-        return *((char*)mCustom);
-    return mChar;
+    return _convert<char>();;
 }
 
 unsigned char LVariant::toUChar() const
 {
-    lWarning(mType!=VariantType::TUChar,"variant type is not unsigned char");
     if(mType==VariantType::TNull)
         return '\0';
-    if(isValidReference())
-        return *((unsigned char*)mCustom);
-    return mUChar;
+    return _convert<unsigned char>();;
 }
 
 bool LVariant::toBool() const
 {
-    lWarning(mType!=VariantType::TBool&&mType!=VariantType::TBoolR,"variant type is not bool");
     if(mType==VariantType::TNull)
         return 0;
-    if(isValidReference())
+    if(mType==VariantType::TBoolR)
         return *((bool*)mCustom);
-    return mBool;
+    return _convert<bool>();;
 }
 
 short int LVariant::toShortInt() const
 {
-    lWarning(mType!=VariantType::TShortInt&&mType!=VariantType::TShortIntR,"variant type is not short int");
     if(mType==VariantType::TNull)
         return 0;
-    if(isValidReference())
+    if(mType==VariantType::TShortIntR)
         return *((short int*)mCustom);
-    return mShortInt;
+    return _convert<short int>();;
 }
 
 unsigned short LVariant::toUShortInt() const
 {
-    lWarning(mType!=VariantType::TUShortInt&&mType!=VariantType::TUShortIntR,"variant type is not unsigned short");
     if(mType==VariantType::TNull)
         return 0;
-    if(isValidReference())
+    if(mType==VariantType::TUShortIntR)
         return *((unsigned short int*)mCustom);
-    return mUShortInt;
+    return _convert<unsigned short int>();;
 }
 
 long long int LVariant::toLongLongInt() const
 {
-    lWarning(mType!=VariantType::TLongLongInt&&mType!=VariantType::TLongLongIntR,"variant type is not long long int");
     if(mType==VariantType::TNull)
         return 0;
-    if(isValidReference())
+    if(mType==VariantType::TLongLongIntR)
         return *((long long int*)mCustom);
-    return mLongLongInt;
+    return _convert<long long int>();;
 }
 
 unsigned long long int LVariant::toULongLongInt() const
 {
-    lWarning(mType!=VariantType::TULongLongInt&&mType!=VariantType::TULongLongIntR,"variant type is not unsigned long long int");
     if(mType==VariantType::TNull)
         return 0;
-    if(isValidReference())
+    if(mType==VariantType::TULongLongIntR)
         return *((unsigned long long int*)mCustom);
-    return mULongLongInt;
+    return _convert<unsigned long long int>();
 }
 
 wchar_t LVariant::toWCharT() const
 {
-    lWarning(mType!=VariantType::TWChar_t,"variant type is not wchar_t");
     if(mType==VariantType::TNull)
         return L'\0';
-    if(isValidReference())
-        return *((wchar_t*)mCustom);
-    return mWCharT;
+    return _convert<wchar_t>();;
 }
 
 LString LVariant::toString() const

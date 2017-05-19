@@ -58,7 +58,7 @@ template <typename... A> linline void _lunused(A&&...) {}
  * note: you can define this function multiple times inside a file !
  *
  */
-#define lCallOnStart \
+#define lCallOnStart() \
 static  LCAT(____lcall__,__LINE__)();\
 namespace {\
     struct LCAT(_____fake_type_,__LINE__)\
@@ -67,10 +67,11 @@ namespace {\
         {\
             LCAT(____lcall__,__LINE__)();\
         }\
+        static const LCAT(_____fake_type_,__LINE__) m;\
     };\
+const LCAT(_____fake_type_,__LINE__) LCAT(_____fake_type_,__LINE__)::m;\
 }\
-static const LCAT(_____fake_type_,__LINE__) LCAT(____fake_obj,__LINE__);\
-static void LCAT(____lcall__,__LINE__)
+static void LCAT(____lcall__,__LINE__)()
 
 
 /*!
@@ -90,20 +91,20 @@ static void LCAT(____lcall__,__LINE__)
  * note: you can define this function multiple times inside a file !
  *
  */
-#define lCallOnEnd \
-static LCAT(____lcall2__,__LINE__)();\
+#define lCallOnEnd() \
+static  LCAT(____lcall__,__LINE__)();\
 namespace {\
-    struct LCAT(_____fake_type2_,__LINE__)\
+    struct LCAT(_____fake_type_,__LINE__)\
     {\
-        LCAT(_____fake_type2_,__LINE__)(){}\
-        ~ LCAT(_____fake_type2_,__LINE__)()\
+        ~ LCAT(_____fake_type_,__LINE__)()\
         {\
-            LCAT(____lcall2__,__LINE__)();\
+            LCAT(____lcall__,__LINE__)();\
         }\
+        static const LCAT(_____fake_type_,__LINE__) m;\
     };\
+const LCAT(_____fake_type_,__LINE__) LCAT(_____fake_type_,__LINE__)::m;\
 }\
-static const LCAT(_____fake_type2_,__LINE__) LCAT(____fake_obj,__LINE__);\
-static void LCAT(____lcall2__,__LINE__)
+static void LCAT(____lcall__,__LINE__)()
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -169,7 +170,7 @@ struct LIsSameType<T1,T1>
 //! cout<<lIsDerivedFrom<B,A>::value<<endl; // is true
 //!
 template <typename A, typename B>
-struct lIsDerivedFrom
+struct LIsDerivedFrom
 {
     template <typename _B, typename _A>
     struct ___ltest__
