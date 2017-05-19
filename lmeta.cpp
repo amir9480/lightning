@@ -1,4 +1,4 @@
-#include "lreflection.h"
+#include "lmeta.h"
 
 LNAMESPACE_BEGIN
 
@@ -37,6 +37,11 @@ LString _l_get_args_names(u32 _count,const char* _b,...)
     va_end(args);
     return o;
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 
 
 

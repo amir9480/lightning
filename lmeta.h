@@ -82,6 +82,28 @@ linline LString _l_get_mfunc_name(const char* _classname,const char* fname,const
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //! base class for functions pointers
+//! how work with LFunctionPointer?
+//!
+//! how create common function pointer?
+//! void testfoo(int _in)
+//! {
+//!     cout<<"Hello "<<_in<<endl;
+//! }
+//!
+//! //to create function pointer for test foo
+//! LFunctionPointer* a=new LFunction<void(*)(int)>("testfoo(int)",&testfoo);
+//! // "testfoo(int)" is unique name for your function . you can access it with 'mFullname' field
+//! // void(*)(int) is type of pointer to testfoo like   RETURNTYPE(*)(ARGUMENTTYPES...)
+//! // max arguments allowed is 10
+//!
+//! how to call pointer to function?
+//! (*a)(12);
+//!
+//! please make sure your argument values ( types ) is OK and same thing
+//!
+//!
+//! how to call fucntion
+//!
 class LAPI LFunctionPointer
 {
 public:
@@ -107,6 +129,8 @@ public:
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#define _F_VARIANTCHECK
 
 //! create a pointer to function
 template<typename... FT>// FT = Function Type
@@ -148,7 +172,8 @@ public:
     }
     virtual void operator()(LVariant a1)
     {
-         (*mPtrF)(a1.to<A1>());
+         if(((a1.getType()!=LVariant::VariantType::TCustomReference&&a1.getType()!=LVariant::VariantType::TCustom)||a1.getTypeName()==lGetTypeName<A1>()))
+             (*mPtrF)(a1.to<A1>());
     }
 protected:
     RT(*mPtrF)(A1);
@@ -849,7 +874,12 @@ protected:
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+class LMetaEnum
+{
+public:
+    LMetaEnum();
+    virtual ~LMetaEnum();
+};
 
 
 LNAMESPACE_END

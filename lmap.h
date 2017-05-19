@@ -86,6 +86,11 @@ public:
     linline T2&                             operator[](const T1& _key);
     linline const T2                        operator[](const T1& _key)const;
 
+    //! Copy Assign
+    linline LMap<T1,T2>&                    operator=(const LMap<T1,T2>& _other);
+
+    //! Move Assign
+    linline LMap<T1,T2>&                    operator=(const LMap<T1,T2>&& _other);
 
     static const u32                        nothing;
 protected:
@@ -96,6 +101,8 @@ protected:
 private:
     LVector<LPair<T1,T2>> mData;
 };
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 template<typename T1,typename T2>
 const u32 LMap<T1,T2>::nothing=(u32)-1;
@@ -338,6 +345,21 @@ const T2 LMap<T1,T2>::operator[](const T1 &_key) const
     insert(_key,T2());
     return mData[ds].second;
 }
+
+template<typename T1,typename T2>
+LMap<T1,T2> &LMap<T1,T2>::operator=(const LMap<T1,T2> &_other)
+{
+    mData=_other.mData;
+    return *this;
+}
+
+template<typename T1,typename T2>
+LMap<T1,T2> &LMap<T1,T2>::operator=(const LMap<T1,T2> &&_other)
+{
+    mData=lMove(_other.mData);
+    return *this;
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

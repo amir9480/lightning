@@ -27,9 +27,9 @@ SOURCES += main.cpp \
     lpair.cpp \
     llist.cpp \
     lmap.cpp \
-    lreflection.cpp \
     lvariant.cpp \
-    lmemorymanager.cpp
+    lmemorymanager.cpp \
+    lmeta.cpp
 
 
 HEADERS += \
@@ -59,7 +59,7 @@ HEADERS += \
     lpair.h \
     llist.h \
     lmap.h \
-    lreflection.h \
     lvariant.h \
-    lmemorymanager.h
+    lmemorymanager.h \
+    lmeta.h
 

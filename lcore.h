@@ -26,6 +26,6 @@
 #include "lmemorymanager.h"
 #include "lpair.h"
 #include "lvariant.h"
-#include "lreflection.h"
+#include "lmeta.h"
 
 #endif // LCORE_H

@@ -7,6 +7,11 @@
 
 #if LTARGET == LTARGET_DEBUG
 
+/*!
+ * Note That Memory log only working with new and delete
+ * it does not support malloc or free and ...
+ */
+
 struct _lptrobj
 {
     void*        mAddress;//Address of memory
@@ -67,6 +72,7 @@ public:
         totalarrayptrsize+=_in.mSize;
     }
 
+    //! check is address a valid allocated space
     bool isValidPointer(void* address)
     {
         for(unsigned int i=0;i<ptrssize;i++)
@@ -78,6 +84,7 @@ public:
         return false;
     }
 
+    //! check pointer is a simple dynamically allocated  (Not Array)
     bool isSimplePointer(void* address)
     {
         for(unsigned int i=0;i<ptrssize;i++)
@@ -85,6 +92,8 @@ public:
                 return true;
         return false;
     }
+
+    // pointer is a array dynamically allocated
     bool isArrayPointer(void* address)
     {
         for(unsigned int i=0;i<arrayptrssize;i++)
@@ -170,7 +179,7 @@ private:
 
     bool               wrongjob;
 };
-
+//! default memory logger
 extern _lptrlogmanager __lptrlogmanager;
 
 void* operator new (unsigned int _size,const char* _filename,unsigned int _line);

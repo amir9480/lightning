@@ -13,6 +13,8 @@ class LVariant;
 
 class LAPI LCustomVariant
 {
+    template<typename T>
+    friend class __LVariantTypeCastHelper;
     friend class LVariant;
 public:
     LCustomVariant(){}
@@ -33,6 +35,8 @@ protected:
 template<typename T>
 class LClassVariant:public LCustomVariant
 {
+    template<typename U>
+    friend class __LVariantTypeCastHelper;
 public:
     LClassVariant(const T& _in);
     virtual ~LClassVariant();
@@ -47,6 +51,8 @@ public:
 template<typename T>
 class LClassVariantReference:public LCustomVariant
 {
+    template<typename U>
+    friend class __LVariantTypeCastHelper;
 public:
     LClassVariantReference(const T& _in);
     virtual ~LClassVariantReference();
@@ -57,7 +63,26 @@ public:
     void            setProperty(const LString& _name,const LVariant &_in)override;
     LVariant        getProperty(const LString &_name)const override;
 };
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
+template<typename T>
+struct __LVariantTypeCastHelper
+{
+    static T cast(LVariant& _in);
+};
+
+template<typename T>
+struct __LVariantTypeCastHelper<T&>
+{
+    static T& cast(LVariant& _in);
+};
+
+template<typename T>
+struct __LVariantTypeCastHelper<T*>
+{
+    static T* cast(LVariant& _in);
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*!
  * Working with vaiants
@@ -117,6 +142,8 @@ public:
 
 class LAPI LVariant
 {
+template<typename T>
+friend class __LVariantTypeCastHelper;
 public:
     enum VariantType
     {
@@ -218,6 +245,10 @@ public:
     //! if was array variant . returns size of array
     u32                             getArraySize()const;
 
+    //! check type is a supported type. if was not supported returns VariantType::TCustom . otherwise returns Variant Type
+    template<typename T>
+    static VariantType              isSupported();
+
     //! check is this a valid array
     bool                            isValidArray()const;
 
@@ -246,7 +277,7 @@ public:
     wchar_t                         toWCharT()const;
     virtual LString                 toString()const;
     template<typename T>
-    T                               to()const;
+    T                               to();
 
 
     virtual LVariant& operator=(const int& _in);
@@ -355,7 +386,6 @@ protected:
         LCustomVariant*                  mCustomClass;
     };
 };
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 lConfigCallIfExist(_lhas_fromString,void,lFromString,const LString&)
 lConfigCallIfExistConst(_lhas_toString,LString,lToString)
@@ -536,86 +566,9 @@ T* LVariant::getCustomData()
 }
 
 template<typename T>
-T LVariant::to() const
+T LVariant::to()
 {
-    //lError2(mTypeName!=lGetTypeName<T>(),LSTR("Looks like type is not correct current type:(")+mTypeName+") and what you want ("+lGetTypeName<T>()+")");
-    if( LIsSameType<typename LRemoveReference<T>::type,int>::value )
-    {
-        static int o=toInt();
-        return *((T*)&o);
-    }
-    if( LIsSameType<typename LRemoveReference<T>::type,unsigned int>::value )
-    {
-        static unsigned int o=toUInt();
-        return *((T*)&o);
-    }
-    if( LIsSameType<typename LRemoveReference<T>::type,float>::value )
-    {
-        static float o=toFloat();
-        return *((T*)&o);
-    }
-    if( LIsSameType<typename LRemoveReference<T>::type,double>::value )
-    {
-        static double o=toDouble();
-        return *((T*)&o);
-    }
-    if( LIsSameType<typename LRemoveReference<T>::type,long double>::value )
-    {
-        static long double o=toLongDouble();
-        return *((T*)&o);
-    }
-    if( LIsSameType<typename LRemoveReference<T>::type,char>::value )
-    {
-        static char o=toChar();
-        return *((T*)&o);
-    }
-    if( LIsSameType<typename LRemoveReference<T>::type,unsigned char>::value )
-    {
-        static unsigned char o=toUChar();
-        return *((T*)&o);
-    }
-    if( LIsSameType<typename LRemoveReference<T>::type,bool>::value )
-    {
-        static bool o=toBool();
-        return *((T*)&o);
-    }
-    if( LIsSameType<typename LRemoveReference<T>::type,short int>::value )
-    {
-        static short int o=toShortInt();
-        return *((T*)&o);
-    }
-    if( LIsSameType<typename LRemoveReference<T>::type,unsigned short int>::value )
-    {
-        static unsigned short int o=toUShortInt();
-        return *((T*)&o);
-    }
-    if( LIsSameType<typename LRemoveReference<T>::type,long long int>::value )
-    {
-        static long long int o=toLongLongInt();
-        return *((T*)&o);
-    }
-    if( LIsSameType<typename LRemoveReference<T>::type,unsigned long long int>::value )
-    {
-        static unsigned long long int o=toULongLongInt();
-        return *((T*)&o);
-    }
-    if( LIsSameType<typename LRemoveReference<T>::type,wchar_t>::value )
-    {
-        static wchar_t o=toWCharT();
-        return *((T*)&o);
-    }
-    if( LIsSameType<typename LRemoveReference<T>::type,LString>::value )
-    {
-        static LString o=toString();
-        return *((T*)&o);
-    }
-
-    if(mType==VariantType::TCustom)
-        return *((T*)mCustomClass->mData);
-    if(mType==VariantType::TCustomReference)
-        return *((T*)mCustomClass->mData);
-
-    return *static_cast<T*>(mCustom);
+    return __LVariantTypeCastHelper<T>::cast(*this);
 }
 
 
@@ -688,6 +641,127 @@ T LVariant::_convert() const
     }
 
     return *static_cast<T*>(mCustom);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+template<typename T>
+LVariant::VariantType LVariant::isSupported()
+{
+
+
+    return VariantType::TCustom;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+template<typename T>
+T __LVariantTypeCastHelper<T>::cast(LVariant& _in)
+{
+    if( LIsSameType<typename LRemoveReference<T>::type,int>::value )
+    {
+        static int o=_in.toInt();
+        return *((T*)&o);
+    }
+    if( LIsSameType<typename LRemoveReference<T>::type,unsigned int>::value )
+    {
+        static unsigned int o=_in.toUInt();
+        return *((T*)&o);
+    }
+    if( LIsSameType<typename LRemoveReference<T>::type,float>::value )
+    {
+        static float o=_in.toFloat();
+        return *((T*)&o);
+    }
+    if( LIsSameType<typename LRemoveReference<T>::type,double>::value )
+    {
+        static double o=_in.toDouble();
+        return *((T*)&o);
+    }
+    if( LIsSameType<typename LRemoveReference<T>::type,long double>::value )
+    {
+        static long double o=_in.toLongDouble();
+        return *((T*)&o);
+    }
+    if( LIsSameType<typename LRemoveReference<T>::type,char>::value )
+    {
+        static char o=_in.toChar();
+        return *((T*)&o);
+    }
+    if( LIsSameType<typename LRemoveReference<T>::type,unsigned char>::value )
+    {
+        static unsigned char o=_in.toUChar();
+        return *((T*)&o);
+    }
+    if( LIsSameType<typename LRemoveReference<T>::type,bool>::value )
+    {
+        static bool o=_in.toBool();
+        return *((T*)&o);
+    }
+    if( LIsSameType<typename LRemoveReference<T>::type,short int>::value )
+    {
+        static short int o=_in.toShortInt();
+        return *((T*)&o);
+    }
+    if( LIsSameType<typename LRemoveReference<T>::type,unsigned short int>::value )
+    {
+        static unsigned short int o=_in.toUShortInt();
+        return *((T*)&o);
+    }
+    if( LIsSameType<typename LRemoveReference<T>::type,long long int>::value )
+    {
+        static long long int o=_in.toLongLongInt();
+        return *((T*)&o);
+    }
+    if( LIsSameType<typename LRemoveReference<T>::type,unsigned long long int>::value )
+    {
+        static unsigned long long int o=_in.toULongLongInt();
+        return *((T*)&o);
+    }
+    if( LIsSameType<typename LRemoveReference<T>::type,wchar_t>::value )
+    {
+        static wchar_t o=_in.toWCharT();
+        return *((T*)&o);
+    }
+    if( LIsSameType<typename LRemoveReference<T>::type,LString>::value )
+    {
+        static LString o=_in.toString();
+        return *((T*)&o);
+    }
+
+    lError2( (_in.mType!=LVariant::VariantType::TCustom && _in.mType!=LVariant::VariantType::TCustomReference) || _in.mTypeName!=lGetTypeName<T>() ,"You type casting is not right");
+
+    if(_in.mType==LVariant::VariantType::TCustom)
+        return *((T*)_in.mCustomClass->mData);
+    if(_in.mType==LVariant::VariantType::TCustomReference)
+        return *((T*)_in.mCustomClass->mData);
+
+    return *static_cast<T*>(_in.mCustom);
+}
+
+
+
+template<typename T>
+T& __LVariantTypeCastHelper<T&>::cast(LVariant& _in)
+{
+    if(_in.mType==LVariant::VariantType::TCustom)
+        return *((T*)_in.mCustomClass->mData);
+    if(_in.mType==LVariant::VariantType::TCustomReference)
+        return *((T*)_in.mCustomClass->mData);
+
+    return *(T*)(_in.mCustom);
+}
+
+template<typename T>
+T* __LVariantTypeCastHelper<T*>::cast(LVariant& _in)
+{
+    if(_in.mType==LVariant::VariantType::TCustom)
+        return ((T*)_in.mCustomClass->mData);
+    if(_in.mType==LVariant::VariantType::TCustomReference)
+        return ((T*)_in.mCustomClass->mData);
+
+    return (T*)(_in.mCustom);
 }
 
 
