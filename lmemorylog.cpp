@@ -1,6 +1,5 @@
 #include "lmemorylog.h"
 
-#if LTARGET == LTARGET_DEBUG
 
 
 #undef new
@@ -49,6 +48,4 @@ void *operator new[](unsigned int _size, const char *_filename, unsigned int _li
 
 _lptrlogmanager __lptrlogmanager;
 
-
-#endif
 

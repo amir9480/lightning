@@ -107,6 +107,9 @@ public:
     linline LVector<T>&             operator<<(const T& _newitem);
     linline LVector<T>&             operator<<(T&& _newitem);
 
+    //!
+    linline LVector<T>&             operator=(const std::initializer_list<T> _vals);
+
     //! Copy Assign
     linline LVector<T>&             operator=(const LVector<T>& _other);
 
@@ -150,7 +153,8 @@ LVector<T>::LVector(const std::initializer_list<T> _vals)
     mCapacity=0;
     reserve(_vals.size());
     mSize=_vals.size();
-    lMemoryCopy(mData,_vals.begin(),_vals.size()*sizeof(T));
+    for(u32 i=0;i<mSize;i++)
+        mData[i]=(_vals.begin())[i];
 }
 
 template<typename T>
@@ -459,6 +463,17 @@ template<typename T>
 LVector<T> &LVector<T>::operator<<(T &&_newitem)
 {
     pushBack(_newitem);
+    return *this;
+}
+
+template<typename T>
+LVector<T> &LVector<T>::operator=(const std::initializer_list<T> _vals)
+{
+    clear();
+    reserve(_vals.size());
+    mSize=_vals.size();
+    for(u32 i=0;i<mSize;i++)
+        mData[i]=(_vals.begin())[i];
     return *this;
 }
 

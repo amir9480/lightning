@@ -1,5 +1,5 @@
-#ifndef LREFLECTION_H
-#define LREFLECTION_H
+#ifndef LMETA_H
+#define LMETA_H
 
 #include "ldefines.h"
 #include "llog.h"
@@ -102,7 +102,30 @@ linline LString _l_get_mfunc_name(const char* _classname,const char* fname,const
 //! please make sure your argument values ( types ) is OK and same thing
 //!
 //!
-//! how to call fucntion
+//! how to call fucntion in native way and safe way
+//! (*dynamic_cast<LFunction<void(*)(int)>*>(a))(14);
+//!
+//! how create pointer to member function?
+//!
+//! struct A
+//! {
+//!     void testfoo(int _in)
+//!     {
+//!         cout<<"Hello "<<mVal<<" "<<_in<<endl;
+//!     }
+//!     int mVal;
+//! };
+//!
+//! LFunctionPointer* a=new LMemberFunction<void(A::*)(int)>("A::testfoo(int)",&A::testfoo);
+//!
+//! how to call?
+//! A obj;
+//! obj.mVal=444;
+//! (*a)(obj,123);
+//!
+//! how call in native way and safe way?
+//! (*dynamic_cast<LMemberFunction<void(A::*)(int)>*>(a))(obj,123);
+//!
 //!
 class LAPI LFunctionPointer
 {
@@ -129,8 +152,6 @@ public:
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-#define _F_VARIANTCHECK
 
 //! create a pointer to function
 template<typename... FT>// FT = Function Type
@@ -172,8 +193,7 @@ public:
     }
     virtual void operator()(LVariant a1)
     {
-         if(((a1.getType()!=LVariant::VariantType::TCustomReference&&a1.getType()!=LVariant::VariantType::TCustom)||a1.getTypeName()==lGetTypeName<A1>()))
-             (*mPtrF)(a1.to<A1>());
+        (*mPtrF)(a1.to<A1>());
     }
 protected:
     RT(*mPtrF)(A1);
@@ -873,15 +893,229 @@ protected:
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+class LAPI LMetaEnumElement
+{
+    friend class LMetaEnum;
+    template<typename U>
+    friend class LEnum;
+public:
+    LMetaEnumElement(const LString& _name,const u64& _value,const LMap<LString,LString>& _attrs=LMap<LString,LString>()):
+        mName(_name),
+        mValue(_value),
+        mAttributes(_attrs)
+    {}
+    virtual ~LMetaEnumElement(){}
 
-class LMetaEnum
+    LString                         getName()const;
+
+    u64                             getValue()const;
+
+    const LMap<LString,LString>&    getAttributes()const;
+
+    LString                         getAttribute(const LString& _key)const;
+
+    LMetaEnumElement& operator=(const LMetaEnumElement& _other);
+protected:
+    LString mName;
+    u64 mValue;
+    LMap<LString,LString> mAttributes;
+};
+
+class LAPI LMetaEnum
 {
 public:
-    LMetaEnum();
-    virtual ~LMetaEnum();
+    LMetaEnum(const LString& _name,const LString& _typename,const LMap<LString,LString>& _attrs=LMap<LString,LString>()):
+        mName(_name),
+        mTypeName(_typename),
+        mAttributes(_attrs)
+    {
+    }
+    virtual ~LMetaEnum()
+    {
+    }
+    //! Add a new element to Meta
+    virtual void                    addElement(const LMetaEnumElement& _ni)=0;
+
+    //! Get element struct
+    virtual const LMetaEnumElement& getElement(const LString& _other)const=0;
+
+    //! Get element value by name
+    virtual u64                     getElementByName(const LString& _other)const=0;
+
+    //! Get element name by value
+    virtual LString                 getElementName(const u64& _in)const=0;
+
+    //! Type name of enum
+    const LString mName;
+    const LString mTypeName;
+protected:
+    LVector<LMetaEnumElement>   mData;
+    const LMap<LString,LString> mAttributes;
 };
+
+template<typename T>
+class LAPI LEnum:public LMetaEnum
+{
+public:
+    LEnum(const LString& _name,const LMap<LString,LString>& _attrs=LMap<LString,LString>()):
+        LMetaEnum(_name,lGetTypeName<T>(),_attrs)
+    {}
+    ~LEnum(){}
+
+    void                    addElement(const LMetaEnumElement& _ni);
+    const LMetaEnumElement& getElement(const LString& _other)const;
+    u64                     getElementByName(const LString &_in) const;
+    LString                 getElementName(const u64 &_in) const;
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+class LMetaProperty
+{
+    template<typename ClassType,typename VarType>
+    friend class LProperty;
+public:
+    LMetaProperty(const LString& _name,const LString& _type):
+        mName(_name),
+        mTypeName(_type),
+        mObj(nullptr)
+    {}
+    virtual ~LMetaProperty(){}
+
+
+
+    virtual LMetaProperty*  clone()const=0;
+
+    virtual LVariant        get()=0;
+
+    virtual LVariant        getProperty(const LString &_property_name)=0;
+
+    void                    setObject(void* _obj)
+    {
+        mObj=_obj;
+    }
+
+    virtual void            setProperty(const LString& _property_name,const LVariant& _newVal)=0;
+
+    const LString mName;
+    const LString mTypeName;
+protected:
+    void* mObj;
+};
+
+
+
+template<typename ClassType,typename VarType>
+class LProperty:public LMetaProperty
+{
+public:
+    LProperty(const LString& _name,VarType ClassType::*_data,void* _obj=nullptr):
+            LMetaProperty(_name,lGetTypeName<ClassType>()),
+            mData(_data)
+    {
+        mObj=_obj;
+    }
+    virtual ~LProperty(){}
+
+    virtual LMetaProperty*  clone()const;
+    virtual LVariant        get();
+    virtual LVariant        getProperty(const LString &_property_name);
+    virtual void            setProperty(const LString &_property_name, const LVariant &_newVal);
+
+protected:
+    VarType ClassType::*mData;
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+template<typename T>
+void LEnum<T>::addElement(const LMetaEnumElement& _ni)
+{
+    mData.pushBack(_ni);
+}
+
+template<typename T>
+const LMetaEnumElement& LEnum<T>::getElement(const LString &_in) const
+{
+    for(u32 i=0;i<mData.getSize();i++)
+        if(mData[i].mName==_in)
+            return mData[i];
+    lError2(1,LSTR("Enum Element ")+_in+" not found");
+    return mData[0];
+}
+
+template<typename T>
+u64 LEnum<T>::getElementByName(const LString &_in) const
+{
+    for(u32 i=0;i<mData.getSize();i++)
+        if(mData[i].mName==_in)
+            return mData[i].mValue;
+    return 0;
+}
+
+template<typename T>
+LString LEnum<T>::getElementName(const u64 &_in) const
+{
+    for(u32 i=0;i<mData.getSize();i++)
+        if(mData[i].mValue==_in)
+            return mData[i].mName;
+    return LString::empty;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+template<typename ClassType,typename VarType>
+LMetaProperty* LProperty<ClassType,VarType>::clone() const
+{
+    LMetaProperty* o = new LProperty<ClassType,VarType>(mName,mData);
+    o->mObj=mObj;
+    return o;
+}
+
+template<typename ClassType,typename VarType>
+LVariant LProperty<ClassType,VarType>::get()
+{
+    if(mObj)
+    {
+        ClassType* cp=(ClassType*)mObj;
+        LVariant o;
+        o=&(cp->*mData);
+        return o;
+    }
+    lError2(1,"Property has no Obj . use setObject function to set object ");
+    return LVariant();
+}
+
+template<typename ClassType,typename VarType>
+LVariant LProperty<ClassType,VarType>::getProperty(const LString &_property_name)
+{
+    if(mObj)
+    {
+        ClassType* cp=(ClassType*)mObj;
+        LVariant o;
+        o=&(cp->*mData);
+        return o.getProperty(_property_name);
+    }
+    lError2(1,"Property has no Obj . use setObject function to set object ");
+    return LVariant();
+}
+
+template<typename ClassType,typename VarType>
+void LProperty<ClassType,VarType>::setProperty(const LString &_property_name, const LVariant &_newVal)
+{
+    if(mObj)
+    {
+        ClassType* cp=(ClassType*)mObj;
+        LVariant o;
+        o=&(cp->*mData);
+        o.setProperty(_property_name,_newVal);
+    }
+    lError2(1,"Property has no Obj . use setObject function to set object ");
+}
+
 
 
 LNAMESPACE_END
 
-#endif // LREFLECTION_H
+#endif // LMETA_H

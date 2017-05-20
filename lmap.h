@@ -5,6 +5,7 @@
 #include "llog.h"
 #include "lvector.h"
 #include "lpair.h"
+#include <initializer_list>
 
 LNAMESPACE_BEGIN
 
@@ -19,6 +20,9 @@ public:
     typedef typename LVector<LPair<T1,T2>>::ConstIterator ConstIterator;
 public:
     LMap();
+    LMap(const std::initializer_list<LPair<T1,T2>> _other);
+    LMap(const LMap<T1,T2>& _other);
+    LMap(const LMap<T1,T2>&& _other);
     virtual ~LMap();
 
     //! Get Access to Map elements by index
@@ -112,6 +116,25 @@ template<typename T1,typename T2>
 LMap<T1,T2>::LMap()
 {
 
+}
+
+template<typename T1,typename T2>
+LMap<T1,T2>::LMap(const std::initializer_list<LPair<T1,T2> > _other):
+    mData(_other)
+{
+
+}
+
+template<typename T1,typename T2>
+LMap<T1,T2>::LMap(const LMap<T1,T2> &_other)
+{
+    *this = _other;
+}
+
+template<typename T1,typename T2>
+LMap<T1,T2>::LMap(const LMap<T1,T2>&& _other)
+{
+    *this = lMove(_other);
 }
 
 template<typename T1,typename T2>
@@ -342,8 +365,7 @@ const T2 LMap<T1,T2>::operator[](const T1 &_key) const
     for(u32 i=0;i<ds;i++)
         if(mData[i].first==_key)
             return mData[i].second;
-    insert(_key,T2());
-    return mData[ds].second;
+    return T2();
 }
 
 template<typename T1,typename T2>

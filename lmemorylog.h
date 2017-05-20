@@ -5,7 +5,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#if LTARGET == LTARGET_DEBUG
 
 /*!
  * Note That Memory log only working with new and delete
@@ -193,6 +192,5 @@ void operator delete[] (void* ptr)noexcept;
 #undef new
 #define new new(__FILE__,__LINE__)
 
-#endif// LTARGET == LTARGET_DEBUG
 
 #endif // LMEMORYLOG_H
