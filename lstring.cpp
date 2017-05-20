@@ -452,6 +452,12 @@ u32 LString_Base<chartype>::getCapacity() const
 template <typename chartype>
 const chartype *LString_Base<chartype>::getData() const
 {
+    if(mData==0)
+    {
+        static chartype o[1];
+        o[0]=(chartype)0;
+        return o;
+    }
     return mData;
 }
 

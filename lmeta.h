@@ -28,21 +28,26 @@ public:
     {}
     virtual ~LMetaEnumElement(){}
 
+    //! Get Name of this enum element
     LString                         getName()const;
 
+    //! Get Value of this enum element
     u64                             getValue()const;
 
+    //! Get Custom properties that attached on this meta enum element
     const LMap<LString,LString>&    getAttributes()const;
 
+    //! Get Custom property that attached on this meta enum element by name
     LString                         getAttribute(const LString& _key)const;
 
     LMetaEnumElement& operator=(const LMetaEnumElement& _other);
 protected:
     LString mName;
     u64 mValue;
-    LMap<LString,LString> mAttributes;
+    const LMap<LString,LString> mAttributes;
 };
 
+//! a class to hold Attributes about enums
 class LAPI LMetaEnum
 {
 public:
@@ -91,50 +96,59 @@ public:
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-
+//! a class to hold attributes about class fields
 class LAPI LMetaProperty
 {
     template<typename ClassType,typename VarType>
     friend class LProperty;
 public:
-    LMetaProperty(const LString& _name,const LString& _type):
+    LMetaProperty(const LString& _name,const LString& _type,const LMap<LString,LString>& _attrs=LMap<LString,LString>()):
         mName(_name),
         mTypeName(_type),
-        mObj(nullptr)
+        mObj(nullptr),
+        mAttributes(_attrs)
     {}
     virtual ~LMetaProperty(){}
 
+    //! get copy of this . \warning Dont forget delete what returns after you jub done
+    virtual LMetaProperty*          clone()const=0;
 
+    //! Get Value of this . object must be availble . use setObject to set Object !!!
+    virtual LVariant                get()=0;
 
-    virtual LMetaProperty*  clone()const=0;
+    //! Get Custom properties that attached on this meta property
+    const LMap<LString,LString>&    getAttributes()const;
 
-    virtual LVariant        get()=0;
+    //! Get Custom property that attached on this meta property by name
+    LString                         getAttribute(const LString& _key)const;
 
-    virtual LVariant        getProperty(const LString &_property_name)=0;
+    //! Get Property of this Property by name . (this will work if type also is your custom class and _NEEDED_ function was availble . see LVariant for more details)
+    virtual LVariant                getProperty(const LString &_property_name)=0;
 
-    virtual void            set(LVariant _in)=0;
+    //! Value of this property if object was availble
+    virtual void                    set(LVariant _in)=0;
 
-    void                    setObject(void* _obj)
-    {
-        mObj=_obj;
-    }
+    //! set object of this property to do jobs like set and get
+    void                            setObject(void* _obj);
 
-    virtual void            setProperty(const LString& _property_name,const LVariant& _newVal)=0;
+    //! set Property of this
+    virtual void                    setProperty(const LString& _property_name,const LVariant& _newVal)=0;
 
     const LString mName;
     const LString mTypeName;
 protected:
     void* mObj;
+    const LMap<LString,LString> mAttributes;
 };
 
 
-
+//! this using for public fields with out any setter/getter functions
 template<typename ClassType,typename VarType>
 class LAPI LProperty:public LMetaProperty
 {
 public:
-    LProperty(const LString& _name,VarType ClassType::*_data,void* _obj=nullptr):
-            LMetaProperty(_name,lGetTypeName<VarType>()),
+    LProperty(const LString& _name,VarType ClassType::*_data,void* _obj=nullptr,const LMap<LString,LString>& _attrs=LMap<LString,LString>()):
+            LMetaProperty(_name,lGetTypeName<VarType>(),_attrs),
             mData(_data)
     {
         mObj=_obj;
@@ -152,13 +166,13 @@ protected:
 };
 
 
-
+//! this using for Private properties without any setter/getter   (just holds name of field  (-_-)  )
 template<typename ClassType,typename VarType>
 class LAPI LPrivateProperty:public LMetaProperty
 {
 public:
-    LPrivateProperty(const LString& _name):
-            LMetaProperty(_name,lGetTypeName<VarType>())
+    LPrivateProperty(const LString& _name,const LMap<LString,LString>& _attrs=LMap<LString,LString>()):
+            LMetaProperty(_name,lGetTypeName<VarType>(),_attrs)
     {
     }
     virtual ~LPrivateProperty(){}
@@ -174,13 +188,13 @@ protected:
 };
 
 
-
+//! this using for (public/private) fields that only have getter function for that
 template<typename ClassType,typename VarType,typename GetterType>
 class LAPI LPropertyWithGet:public LMetaProperty
 {
 public:
-    LPropertyWithGet(const LString& _name,GetterType _getter,void* _obj=nullptr):
-            LMetaProperty(_name,lGetTypeName<VarType>()),
+    LPropertyWithGet(const LString& _name,GetterType _getter,void* _obj=nullptr,const LMap<LString,LString>& _attrs=LMap<LString,LString>()):
+            LMetaProperty(_name,lGetTypeName<VarType>(),_attrs),
             mGetter(_getter)
     {
         mObj=_obj;
@@ -201,13 +215,13 @@ protected:
 };
 
 
-
+//! this using for (public/private) fields that only have setter function for that
 template<typename ClassType,typename VarType,typename SetterType>
 class LAPI LPropertyWithSet:public LMetaProperty
 {
 public:
-    LPropertyWithSet(const LString& _name,SetterType _setter,void* _obj=nullptr):
-            LMetaProperty(_name,lGetTypeName<VarType>()),
+    LPropertyWithSet(const LString& _name,SetterType _setter,void* _obj=nullptr,const LMap<LString,LString>& _attrs=LMap<LString,LString>()):
+            LMetaProperty(_name,lGetTypeName<VarType>(),_attrs),
             mSetter(_setter)
     {
         mObj=_obj;
@@ -228,13 +242,13 @@ protected:
 };
 
 
-
+//! this using for (public/private) fields that have getter and setter function for that
 template<typename ClassType,typename VarType,typename GetterType,typename SetterType>
 class LAPI LPropertyWithGetSet:public LMetaProperty
 {
 public:
-    LPropertyWithGetSet(const LString& _name,GetterType _getter,SetterType _setter,void* _obj=nullptr):
-            LMetaProperty(_name,lGetTypeName<VarType>()),
+    LPropertyWithGetSet(const LString& _name,GetterType _getter,SetterType _setter,void* _obj=nullptr,const LMap<LString,LString>& _attrs=LMap<LString,LString>()):
+            LMetaProperty(_name,lGetTypeName<VarType>(),_attrs),
             mGetter(_getter),
             mSetter(_setter)
     {
@@ -258,7 +272,25 @@ protected:
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+class LAPI LMetaObject
+{
+public:
+    //! _name is your class unique name and create _typename with lGetTypeName
+    LMetaObject(const LString& _name,const LString& _typename);
 
+    virtual ~LMetaObject();
+
+    const LMap<LString,LString>&    getAttributes()const;
+
+    LString                         getAttribute(const LString& _key)const;
+
+
+
+    const LString mName;
+    const LString mTypeName;
+protected:
+    LMap<LString,LString> mAttributes;
+};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
