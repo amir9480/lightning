@@ -27,5 +27,6 @@
 #include "lpair.h"
 #include "lvariant.h"
 #include "lmeta.h"
+#include "lfunction.h"
 
 #endif // LCORE_H

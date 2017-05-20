@@ -5,6 +5,7 @@ LNAMESPACE_BEGIN
 LVariant::LVariant()
 {
     mType=VariantType::TNull;
+    this->mULongLongInt=0;
 }
 
 LVariant::LVariant(const std::initializer_list<int> &_in)

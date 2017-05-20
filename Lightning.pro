@@ -29,7 +29,8 @@ SOURCES += main.cpp \
     lmap.cpp \
     lvariant.cpp \
     lmemorymanager.cpp \
-    lmeta.cpp
+    lmeta.cpp \
+    lfunction.cpp
 
 
 HEADERS += \
@@ -61,5 +62,6 @@ HEADERS += \
     lmap.h \
     lvariant.h \
     lmemorymanager.h \
-    lmeta.h
+    lmeta.h \
+    lfunction.h
 
