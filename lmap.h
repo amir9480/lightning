@@ -22,7 +22,7 @@ public:
     LMap();
     LMap(const std::initializer_list<LPair<T1,T2>> _other);
     LMap(const LMap<T1,T2>& _other);
-    LMap(const LMap<T1,T2>&& _other);
+    LMap(LMap<T1,T2>&& _other);
     virtual ~LMap();
 
     //! Get Access to Map elements by index
@@ -94,7 +94,7 @@ public:
     linline LMap<T1,T2>&                    operator=(const LMap<T1,T2>& _other);
 
     //! Move Assign
-    linline LMap<T1,T2>&                    operator=(const LMap<T1,T2>&& _other);
+    linline LMap<T1,T2>&                    operator=(LMap<T1,T2>&& _other);
 
     static const u32                        nothing;
 protected:
@@ -132,7 +132,7 @@ LMap<T1,T2>::LMap(const LMap<T1,T2> &_other)
 }
 
 template<typename T1,typename T2>
-LMap<T1,T2>::LMap(const LMap<T1,T2>&& _other)
+LMap<T1,T2>::LMap(LMap<T1,T2> &&_other)
 {
     *this = lMove(_other);
 }
@@ -376,7 +376,7 @@ LMap<T1,T2> &LMap<T1,T2>::operator=(const LMap<T1,T2> &_other)
 }
 
 template<typename T1,typename T2>
-LMap<T1,T2> &LMap<T1,T2>::operator=(const LMap<T1,T2> &&_other)
+LMap<T1,T2> &LMap<T1,T2>::operator=(LMap<T1,T2> &&_other)
 {
     mData=lMove(_other.mData);
     return *this;

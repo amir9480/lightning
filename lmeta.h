@@ -9,6 +9,7 @@
 #include "lpair.h"
 #include "lvariant.h"
 #include "lmap.h"
+#include "lmemorymanager.h"
 
 LNAMESPACE_BEGIN
 
@@ -21,11 +22,13 @@ class LAPI LMetaEnumElement
     template<typename U>
     friend class LEnum;
 public:
+    LMetaEnumElement(){}
     LMetaEnumElement(const LString& _name,const u64& _value,const LMap<LString,LString>& _attrs=LMap<LString,LString>()):
         mName(_name),
         mValue(_value),
         mAttributes(_attrs)
     {}
+    LMetaProperty(const LMetaEnumElement& _other);
     virtual ~LMetaEnumElement(){}
 
     //! Get Name of this enum element
@@ -40,23 +43,27 @@ public:
     //! Get Custom property that attached on this meta enum element by name
     LString                         getAttribute(const LString& _key)const;
 
+
     LMetaEnumElement& operator=(const LMetaEnumElement& _other);
+
 protected:
     LString mName;
     u64 mValue;
-    const LMap<LString,LString> mAttributes;
+    LMap<LString,LString> mAttributes;
 };
 
 //! a class to hold Attributes about enums
 class LAPI LMetaEnum
 {
 public:
+    LMetaEnum(){}
     LMetaEnum(const LString& _name,const LString& _typename,const LMap<LString,LString>& _attrs=LMap<LString,LString>()):
         mName(_name),
         mTypeName(_typename),
         mAttributes(_attrs)
     {
     }
+    LMetaEnum(const LMetaEnum& _other);
     virtual ~LMetaEnum()
     {
     }
@@ -73,11 +80,18 @@ public:
     virtual LString                 getElementName(const u64& _in)const=0;
 
     //! Type name of enum
-    const LString mName;
-    const LString mTypeName;
+    LString                         getName() const;
+
+    //! Get TypeName of enum
+    LString                         getTypeName() const;
+
+
+    LMetaEnum&                      operator=(const LMetaEnum& _other);
 protected:
+    LString                     mName;
+    LString                     mTypeName;
     LVector<LMetaEnumElement>   mData;
-    const LMap<LString,LString> mAttributes;
+    LMap<LString,LString>       mAttributes;
 };
 
 template<typename T>
@@ -101,7 +115,15 @@ class LAPI LMetaProperty
 {
     template<typename ClassType,typename VarType>
     friend class LProperty;
+    template<typename ClassType,typename VarType,typename GetterType>
+    friend class LPropertyWithGet;
+    template<typename ClassType,typename VarType,typename SetterType>
+    friend class LPropertyWithSet;
+    template<typename ClassType,typename VarType,typename GetterType,typename SetterType>
+    friend class LPropertyWithGetSet;
+    friend class LMetaObject;
 public:
+    LMetaProperty(){}
     LMetaProperty(const LString& _name,const LString& _type,const LMap<LString,LString>& _attrs=LMap<LString,LString>()):
         mName(_name),
         mTypeName(_type),
@@ -110,7 +132,7 @@ public:
     {}
     virtual ~LMetaProperty(){}
 
-    //! get copy of this . \warning Dont forget delete what returns after you jub done
+    //! get copy of this . \warning ***** Dont forget delete what returns after you jub done *****
     virtual LMetaProperty*          clone()const=0;
 
     //! Get Value of this . object must be availble . use setObject to set Object !!!
@@ -134,11 +156,17 @@ public:
     //! set Property of this
     virtual void                    setProperty(const LString& _property_name,const LVariant& _newVal)=0;
 
-    const LString mName;
-    const LString mTypeName;
+    //! Get name of this Meta Property
+    LString                         getName() const;
+
+    //! Get typename of this meta property
+    LString                         getTypeName() const;
+
 protected:
-    void* mObj;
-    const LMap<LString,LString> mAttributes;
+    LString                 mName;
+    LString                 mTypeName;
+    void*                   mObj;
+    LMap<LString,LString>   mAttributes;
 };
 
 
@@ -275,21 +303,35 @@ protected:
 class LAPI LMetaObject
 {
 public:
+    LMetaObject(){}
     //! _name is your class unique name and create _typename with lGetTypeName
     LMetaObject(const LString& _name,const LString& _typename);
-
+    LMetaObject(const LMetaObject& _other);
     virtual ~LMetaObject();
+
+    LMetaObject&                    addProperty(LMetaProperty *_property);
 
     const LMap<LString,LString>&    getAttributes()const;
 
     LString                         getAttribute(const LString& _key)const;
 
+    LUniquePointer<LMetaProperty>   getProperty(const LString& _name,void* _obj=nullptr)const;
+
+    const LVector<LMetaProperty*>&  getProperties()const;
+
+    LString                         getName() const;
+
+    LString                         getTypeName() const;
 
 
-    const LString mName;
-    const LString mTypeName;
+    LMetaObject&                    operator=(const LMetaObject& _other);
+
 protected:
-    LMap<LString,LString> mAttributes;
+    LString mName;
+    LString mTypeName;
+    LVector<LMetaProperty*> mProperties;
+
+    LMap<LString,LString>   mAttributes;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -335,6 +377,9 @@ template<typename ClassType,typename VarType>
 LMetaProperty* LProperty<ClassType,VarType>::clone() const
 {
     LMetaProperty* o = new LProperty<ClassType,VarType>(mName,mData);
+    o->mName=mName;
+    o->mTypeName=mTypeName;
+    o->mAttributes=mAttributes;
     o->mObj=mObj;
     return o;
 }
@@ -373,10 +418,7 @@ void LProperty<ClassType,VarType>::set(LVariant _in)
     if(mObj)
     {
         ClassType* cp=(ClassType*)mObj;
-        LVariant o;
-        o=&(cp->*mData);
-        // o is reference to obj and this will set property
-        o=_in.to<VarType>();
+        (cp->*mData)=_in.to<VarType>();
         return;
     }
     lError2(1,"Property has no Obj . use setObject function to set object ");
@@ -402,6 +444,9 @@ template<typename ClassType,typename VarType,typename GetterType>
 LMetaProperty* LPropertyWithGet<ClassType,VarType,GetterType>::clone() const
 {
     LMetaProperty* o = new LPropertyWithGet<ClassType,VarType,GetterType>(mName,mGetter,mObj);
+    o->mName=mName;
+    o->mTypeName=mTypeName;
+    o->mAttributes=mAttributes;
     return o;
 }
 
@@ -460,6 +505,9 @@ template<typename ClassType,typename VarType,typename SetterType>
 LMetaProperty* LPropertyWithSet<ClassType,VarType,SetterType>::clone() const
 {
     LMetaProperty* o = new LPropertyWithSet<ClassType,VarType,SetterType>(mName,mSetter,mObj);
+    o->mName=mName;
+    o->mTypeName=mTypeName;
+    o->mAttributes=mAttributes;
     return o;
 }
 
@@ -503,6 +551,9 @@ template<typename ClassType,typename VarType,typename GetterType,typename Setter
 LMetaProperty* LPropertyWithGetSet<ClassType,VarType,GetterType,SetterType>::clone() const
 {
     LMetaProperty* o = new LPropertyWithGetSet<ClassType,VarType,GetterType,SetterType>(mName,mGetter,mSetter,mObj);
+    o->mName=mName;
+    o->mTypeName=mTypeName;
+    o->mAttributes=mAttributes;
     return o;
 }
 
@@ -566,6 +617,9 @@ template<typename ClassType,typename VarType>
 LMetaProperty* LPrivateProperty<ClassType,VarType>::clone() const
 {
     LMetaProperty* o = new LPrivateProperty<ClassType,VarType>(mName);
+    o->mName=mName;
+    o->mTypeName=mTypeName;
+    o->mAttributes=mAttributes;
     return o;
 }
 

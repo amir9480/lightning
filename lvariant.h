@@ -666,72 +666,72 @@ T __LVariantTypeCastHelper<T>::cast(LVariant& _in)
 {
     if( LIsSameType<typename LRemoveReference<T>::type,int>::value || LIsSameType<typename LRemoveReference<T>::type,const int>::value )
     {
-        static int o=_in.toInt();
+        int o=_in.toInt();
         return *((T*)&o);
     }
     if( LIsSameType<typename LRemoveReference<T>::type,unsigned int>::value || LIsSameType<typename LRemoveReference<T>::type,const unsigned int>::value )
     {
-        static unsigned int o=_in.toUInt();
+        unsigned int o=_in.toUInt();
         return *((T*)&o);
     }
     if( LIsSameType<typename LRemoveReference<T>::type,float>::value || LIsSameType<typename LRemoveReference<T>::type,const float>::value )
     {
-        static float o=_in.toFloat();
+        float o=_in.toFloat();
         return *((T*)&o);
     }
     if( LIsSameType<typename LRemoveReference<T>::type,double>::value || LIsSameType<typename LRemoveReference<T>::type,const double>::value )
     {
-        static double o=_in.toDouble();
+        double o=_in.toDouble();
         return *((T*)&o);
     }
     if( LIsSameType<typename LRemoveReference<T>::type,long double>::value || LIsSameType<typename LRemoveReference<T>::type,const long double>::value)
     {
-        static long double o=_in.toLongDouble();
+        long double o=_in.toLongDouble();
         return *((T*)&o);
     }
     if( LIsSameType<typename LRemoveReference<T>::type,char>::value || LIsSameType<typename LRemoveReference<T>::type,const char>::value)
     {
-        static char o=_in.toChar();
+        char o=_in.toChar();
         return *((T*)&o);
     }
     if( LIsSameType<typename LRemoveReference<T>::type,unsigned char>::value || LIsSameType<typename LRemoveReference<T>::type,const unsigned char>::value)
     {
-        static unsigned char o=_in.toUChar();
+        unsigned char o=_in.toUChar();
         return *((T*)&o);
     }
     if( LIsSameType<typename LRemoveReference<T>::type,bool>::value || LIsSameType<typename LRemoveReference<T>::type,const bool>::value)
     {
-        static bool o=_in.toBool();
+        bool o=_in.toBool();
         return *((T*)&o);
     }
     if( LIsSameType<typename LRemoveReference<T>::type,short int>::value || LIsSameType<typename LRemoveReference<T>::type,const short int>::value)
     {
-        static short int o=_in.toShortInt();
+        short int o=_in.toShortInt();
         return *((T*)&o);
     }
     if( LIsSameType<typename LRemoveReference<T>::type,unsigned short int>::value || LIsSameType<typename LRemoveReference<T>::type,const unsigned short int>::value)
     {
-        static unsigned short int o=_in.toUShortInt();
+        unsigned short int o=_in.toUShortInt();
         return *((T*)&o);
     }
     if( LIsSameType<typename LRemoveReference<T>::type,long long int>::value || LIsSameType<typename LRemoveReference<T>::type,const long long int>::value)
     {
-        static long long int o=_in.toLongLongInt();
+        long long int o=_in.toLongLongInt();
         return *((T*)&o);
     }
     if( LIsSameType<typename LRemoveReference<T>::type,unsigned long long int>::value || LIsSameType<typename LRemoveReference<T>::type,const unsigned long long int>::value)
     {
-        static unsigned long long int o=_in.toULongLongInt();
+        unsigned long long int o=_in.toULongLongInt();
         return *((T*)&o);
     }
     if( LIsSameType<typename LRemoveReference<T>::type,wchar_t>::value || LIsSameType<typename LRemoveReference<T>::type,const wchar_t>::value)
     {
-        static wchar_t o=_in.toWCharT();
+        wchar_t o=_in.toWCharT();
         return *((T*)&o);
     }
     if( LIsSameType<typename LRemoveReference<T>::type,LString>::value || LIsSameType<typename LRemoveReference<T>::type,const LString>::value)
     {
-        static LString o=_in.toString();
+        LString o=_in.toString();
         return *((T*)&o);
     }
 
@@ -752,72 +752,86 @@ T& __LVariantTypeCastHelper<T&>::cast(LVariant& _in)
 {
     if( LIsSameType<typename LRemoveReference<T>::type,const int>::value )
     {
-        static int o=_in.toInt();
+        static int o;
+        o=_in.toInt();
         return *((T*)&o);
     }
     if( LIsSameType<typename LRemoveReference<T>::type,const unsigned int>::value )
     {
-        static unsigned int o=_in.toUInt();
+        static unsigned int o;
+        o=_in.toUInt();
         return *((T*)&o);
     }
     if( LIsSameType<typename LRemoveReference<T>::type,const float>::value )
     {
-        static float o=_in.toFloat();
+        static float o;
+        o=_in.toFloat();
         return *((T*)&o);
     }
     if( LIsSameType<typename LRemoveReference<T>::type,const double>::value )
     {
-        static double o=_in.toDouble();
+        static double o;
+        o=_in.toDouble();
         return *((T*)&o);
     }
     if( LIsSameType<typename LRemoveReference<T>::type,const long double>::value )
     {
-        static long double o=_in.toLongDouble();
+        static long double o;
+        o=_in.toLongDouble();
         return *((T*)&o);
     }
     if( LIsSameType<typename LRemoveReference<T>::type,const char>::value )
     {
-        static char o=_in.toChar();
+        static char o;
+        o=_in.toChar();
         return *((T*)&o);
     }
     if( LIsSameType<typename LRemoveReference<T>::type,const unsigned char>::value )
     {
-        static unsigned char o=_in.toUChar();
+        static unsigned char o;
+        o=_in.toUChar();
         return *((T*)&o);
     }
     if( LIsSameType<typename LRemoveReference<T>::type,const bool>::value )
     {
-        static bool o=_in.toBool();
+        static bool o;
+        o=_in.toBool();
         return *((T*)&o);
     }
     if( LIsSameType<typename LRemoveReference<T>::type,const short int>::value )
     {
-        static short int o=_in.toShortInt();
+        static short int o;
+        o=_in.toShortInt();
         return *((T*)&o);
     }
     if( LIsSameType<typename LRemoveReference<T>::type,const unsigned short int>::value )
     {
-        static unsigned short int o=_in.toUShortInt();
+        static unsigned short int o;
+        o=_in.toUShortInt();
         return *((T*)&o);
     }
     if( LIsSameType<typename LRemoveReference<T>::type,const long long int>::value )
     {
-        static long long int o=_in.toLongLongInt();
+        static long long int o;
+        o=_in.toLongLongInt();
         return *((T*)&o);
     }
     if( LIsSameType<typename LRemoveReference<T>::type,const unsigned long long int>::value )
     {
-        static unsigned long long int o=_in.toULongLongInt();
+        static unsigned long long int o;
+        o=_in.toULongLongInt();
         return *((T*)&o);
     }
     if( LIsSameType<typename LRemoveReference<T>::type,const wchar_t>::value )
     {
-        static wchar_t o=_in.toWCharT();
+        static wchar_t o;
+        o=_in.toWCharT();
         return *((T*)&o);
     }
     if( LIsSameType<typename LRemoveReference<T>::type,const LString>::value )
     {
-        static LString o=_in.toString();
+        static LString o;
+        o=_in.toString();
         return *((T*)&o);
     }
 
