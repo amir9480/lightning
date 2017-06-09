@@ -1,6 +1,6 @@
 **/build-Lightning-Desktop_Qt_5_7_0_MinGW_32bit-Release
 **/build-Lightning-Desktop_Qt_5_7_0_MinGW_32bit-Debug
 **/docs
-**lgfx/D3D9
+**/lgfx/D3D9/Directx
 Lightning.pro.user
 main.cpp
