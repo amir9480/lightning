@@ -1,6 +1,0 @@
-#include "lvector4.h"
-
-LNAMESPACE_BEGIN
-
-
-LNAMESPACE_END

@@ -33,6 +33,13 @@
 //! where save Lightning memory logs (for memory leak detector only)?
 #define LMLOG_FILE "lightningmemlogs.txt"
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+#define LGFX_NONE 0
+#define LGFX_D3D9 1
+
+#define LGFX LGFX_D3D9
+
+
 /*!
  * \def LIGHTING_USING_NAMESPACE
  * \en

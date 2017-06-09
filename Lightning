@@ -1,9 +1,10 @@
 #ifndef LIGHTNING_H
 #define LIGHTNING_H
-#include "ldefines.h"
+#include "lcore/ldefines.h"
 
 #include "lcore.h"
-#include "lmath.h"
+#include "los.h"
+#include "lgfx.h"
 
 
 #endif // LIGHTNING_H
