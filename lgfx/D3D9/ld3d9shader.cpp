@@ -28,7 +28,16 @@ bool LD3D9Shader::compile(const LString &_content, const LString &_main_function
     ID3DXBuffer* errorsb=nullptr;
     if(mType==LGFXShader::ShaderType::pixelShader)
     {
-
+        D3DXCompileShader(cont.getData(),cont.getCapacity(),0,0,_main_function_name.toUTF8().getData(),D3DXGetPixelShaderProfile(mDevice),D3DXSHADER_DEBUG,&sb,&errorsb,&mConstantTable);
+        if(errorsb)
+        {
+            lError2(1,LSTR("Lightning DirectX Shader Error:")+((const char*)errorsb->GetBufferPointer()));
+            out=false;
+        }
+        else
+        {
+            HR(mDevice->CreatePixelShader((const DWORD*)sb->GetBufferPointer(),&mPS));
+        }
     }
     else if(mType==LGFXShader::ShaderType::vertexShader)
     {
@@ -50,7 +59,15 @@ bool LD3D9Shader::compile(const LString &_content, const LString &_main_function
 
 void LD3D9Shader::destroy()
 {
-
+    if(mType==LGFXShader::ShaderType::vertexShader)
+    {
+        SAFE_RELEASE(mVS);
+    }
+    else if(mType==LGFXShader::ShaderType::pixelShader)
+    {
+        SAFE_RELEASE(mPS);
+    }
+    SAFE_RELEASE(mConstantTable);
 }
 
 LGFXShader::ShaderType LD3D9Shader::getType() const

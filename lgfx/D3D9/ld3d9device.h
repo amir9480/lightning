@@ -38,6 +38,10 @@ public:
 
     virtual LGFXShader*             createVertexShader();
 
+    virtual LGFXShader*             createPixelShader();
+
+    virtual void                    draw();
+
     virtual void                    endScene();
 
     virtual void                    hideWindow();
@@ -54,9 +58,13 @@ public:
 
     virtual void                    setVertexDeclaration(const LGFXVertexDeclaration *_decl);
 
-    virtual void                    setVertexBuffer(u16 _streamNumber,const LGFXVertexBuffer* _buffer);
+    virtual void                    setVertexBuffer(u16 _streamNumber,LGFXVertexBuffer* _buffer);
 
-    virtual void                    setIndexBuffer(const LGFXIndexBuffer* _buffer);
+    virtual void                    setIndexBuffer(LGFXIndexBuffer *_buffer);
+
+    virtual void                    setVertexShader(LGFXShader* _shader);
+
+    virtual void                    setPixelShader(LGFXShader *_shader);
 
     virtual void                    showWindow();
 
@@ -64,6 +72,8 @@ protected:
     HWND                mWindowHandler;
     IDirect3D9*         mD3D9;
     IDirect3DDevice9*   mDevice;
+    LD3D9VertexBuffer*  mCurrentVertexBuffer;
+    LD3D9IndexBuffer*   mCurrentIndexBuffer;
 };
 
 LNAMESPACE_END

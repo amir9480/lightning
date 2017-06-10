@@ -35,7 +35,7 @@ protected:
     union
     {
         IDirect3DVertexShader9* mVS;
-        IDirect3DPixelShader9*  mPs;
+        IDirect3DPixelShader9*  mPS;
     };
     ShaderType                  mType;
     ID3DXConstantTable*         mConstantTable;

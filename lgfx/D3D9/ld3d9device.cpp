@@ -34,6 +34,8 @@ LD3D9Device::LD3D9Device()
     mWindowHandler=0;
     mD3D9=0;
     mDevice=0;
+    mCurrentIndexBuffer=0;
+    mCurrentIndexBuffer=0;
 
     mWindowHandler = CreateWindowExW( NULL, L"lightningmainwindow",
                              L"Lightning",
@@ -101,6 +103,20 @@ LGFXShader *LD3D9Device::createVertexShader()
     o->mDevice=mDevice;
     o->mType=LGFXShader::ShaderType::vertexShader;
     return o;
+}
+
+LGFXShader *LD3D9Device::createPixelShader()
+{
+    LD3D9Shader* o=new LD3D9Shader;
+    mShaders.pushBack(o);
+    o->mDevice=mDevice;
+    o->mType=LGFXShader::ShaderType::pixelShader;
+    return o;
+}
+
+void LD3D9Device::draw()
+{
+    HR(mDevice->DrawIndexedPrimitive( D3DPT_TRIANGLELIST,0,0,mCurrentVertexBuffer->getNumberOfElements(),0,mCurrentIndexBuffer->getIndicesCount()/3));
 }
 
 void LD3D9Device::endScene()
@@ -202,24 +218,51 @@ void LD3D9Device::setVertexDeclaration(const LGFXVertexDeclaration *_decl)
     HR(mDevice->SetVertexDeclaration(decl->mDecl));
 }
 
-void LD3D9Device::setVertexBuffer(u16 _streamNumber, const LGFXVertexBuffer *_buffer)
+void LD3D9Device::setVertexBuffer(u16 _streamNumber, LGFXVertexBuffer *_buffer)
 {
     if(_buffer==nullptr)
     {
         HR(mDevice->SetStreamSource(0,0,0,0));
+        mCurrentVertexBuffer=nullptr;
         return;
     }
-    HR(mDevice->SetStreamSource(_streamNumber,dynamic_cast<const LD3D9VertexBuffer*>(_buffer)->mVertexBuffer,0,_buffer->getElementSize()));
+    mCurrentVertexBuffer=dynamic_cast<LD3D9VertexBuffer*>(_buffer);
+    HR(mDevice->SetStreamSource(_streamNumber,dynamic_cast<LD3D9VertexBuffer*>(_buffer)->mVertexBuffer,0,_buffer->getElementSize()));
 }
 
-void LD3D9Device::setIndexBuffer(const LGFXIndexBuffer *_buffer)
+void LD3D9Device::setIndexBuffer(LGFXIndexBuffer *_buffer)
 {
     if(_buffer==nullptr)
     {
         HR(mDevice->SetIndices(0));
+        mCurrentVertexBuffer=nullptr;
         return;
     }
-    HR(mDevice->SetIndices(dynamic_cast<const LD3D9IndexBuffer*>(_buffer)->mIndexBuffer));
+    mCurrentIndexBuffer=dynamic_cast<LD3D9IndexBuffer*>(_buffer);
+    HR(mDevice->SetIndices(dynamic_cast<LD3D9IndexBuffer*>(_buffer)->mIndexBuffer));
+}
+
+void LD3D9Device::setVertexShader(LGFXShader *_shader)
+{
+    lError(_shader->getType()!=LGFXShader::ShaderType::vertexShader,"_shader type is not vertex shader");
+    if(_shader==nullptr)
+    {
+        HR(mDevice->SetVertexShader(0));
+        return;
+    }
+    HR(mDevice->SetVertexShader(dynamic_cast<LD3D9Shader*>(_shader)->mVS));
+}
+
+void LD3D9Device::setPixelShader(LGFXShader *_shader)
+{
+    lError(_shader->getType()!=LGFXShader::ShaderType::pixelShader,"_shader type is not pixel shader");
+    if(_shader==nullptr)
+    {
+        HR(mDevice->SetPixelShader(0));
+        return;
+    }
+    HR(mDevice->SetPixelShader(dynamic_cast<LD3D9Shader*>(_shader)->mPS));
+
 }
 
 void LD3D9Device::showWindow()
