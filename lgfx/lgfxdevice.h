@@ -11,8 +11,8 @@ LNAMESPACE_BEGIN
 class LAPI LGFXDevice
 {
 public:
-    LGFXDevice(){}
-    virtual ~LGFXDevice(){}
+    LGFXDevice();
+    virtual ~LGFXDevice();
 
     //! create a new renderable window
     static LGFXDevice*              create();

@@ -9,6 +9,7 @@ LFile::LFile()
 
 LFile::LFile(LString _fname, LFile::IOType _opentype)
 {
+    mData=0;
     open(_fname,_opentype);
 }
 
@@ -100,6 +101,22 @@ void LFile::read(void *_t, u64 _size)
     fread(_t,1,_size,(FILE*)mData);
 }
 
+LString LFile::readAll(const LString &_filename)
+{
+    LString o;
+    LFile f(_filename,IOType::IOTypeRead);
+    u64 _size=f.getSize();
+    char* _data=new char[_size+1];
+    f.read((void*)_data,_size);
+    for(u64 i=0;i<_size;i++)
+        if(_data[i]=='\0')
+            _data[i]=' ';
+    _data[_size]='\0';
+    o = LString::fromUTF8(_data);
+    delete[] _data;
+    return o;
+}
+
 bool LFile::reopen(LFile::IOType _opentype)
 {
     if(mData==0)
@@ -159,13 +176,15 @@ LFile::IOType LFile::getOpenType() const
     return mOpenType;
 }
 
-i64 LFile::getSize()
+u64 LFile::getSize()
 {
     if(mFilename.isEmpty())
         return -1;
     i32 p1=tellp();
+    seekp(0);
+    i32 _b=tellp();
     seekp(-1);
-    i32 s=tellp();
+    i32 s=tellp()-_b;
     seekp(p1);
     return s;
 }

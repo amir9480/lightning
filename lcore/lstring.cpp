@@ -128,7 +128,7 @@ typename LString_Base<chartype>::const_iterator LString_Base<chartype>::begin() 
 template <typename chartype>
 void LString_Base<chartype>::clear()
 {
-    if(mData!=0)
+    if(mData)
         delete[] mData;
     mData=0;
 }
@@ -256,7 +256,9 @@ LString_Base<chartype> LString_Base<chartype>::fromUShortInt(const unsigned shor
 template <typename chartype>
 LString_Base<chartype> LString_Base<chartype>::fromInt(const int &_in, const u32 _base)
 {
+    lMemoryLogStartIgnore();// because this string will destroyed at end of program and gives a leak detect message
     static const LString_Base<chartype> vt("0123456789ABCDEF");
+    lMemoryLogEndIgnore();
     if(_in==0)
         return LString_Base<chartype>("0");
     lError(_base<=1||_base>16," _base value is not accpetable . must be [2-16]",empty);
@@ -279,7 +281,9 @@ LString_Base<chartype> LString_Base<chartype>::fromInt(const int &_in, const u32
 template <typename chartype>
 LString_Base<chartype> LString_Base<chartype>::fromUInt(const unsigned int &_in, const u32 _base)
 {
+    lMemoryLogStartIgnore();
     static const LString_Base<chartype> vt("0123456789ABCDEF");
+    lMemoryLogEndIgnore();
     if(_in==0)
         return LString_Base<chartype>("0");
     lError(_base<=1||_base>16," _base value is not accpetable . must be [2-16]",empty);
@@ -299,7 +303,9 @@ LString_Base<chartype> LString_Base<chartype>::fromUInt(const unsigned int &_in,
 template <typename chartype>
 LString_Base<chartype> LString_Base<chartype>::fromLongLongInt(const long long int &_in, const u32 _base)
 {
+    lMemoryLogStartIgnore();
     static const LString_Base<chartype> vt("0123456789ABCDEF");
+    lMemoryLogEndIgnore();
     if(_in==0)
         return LString_Base<chartype>("0");
     lError(_base<=1||_base>16," _base value is not accpetable . must be [2-16]",empty);
@@ -322,7 +328,9 @@ LString_Base<chartype> LString_Base<chartype>::fromLongLongInt(const long long i
 template <typename chartype>
 LString_Base<chartype> LString_Base<chartype>::fromULongLongInt(const unsigned long long int &_in, const u32 _base)
 {
+    lMemoryLogStartIgnore();
     static const LString_Base<chartype> vt("0123456789ABCDEF");
+    lMemoryLogEndIgnore();
     if(_in==0)
         return LString_Base<chartype>("0");
     lError(_base<=1||_base>16,"_base value is not accpetable . must be [2-16]",empty);

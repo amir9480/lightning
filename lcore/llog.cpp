@@ -46,8 +46,10 @@ void __Log_Manager::addLog(const LString &_message, const LString &_filename, co
         if(!__lastlog.isEmpty())
             __logfile.write(LSTR(" (")+LString::fromInt(__log_repeat)+L")\n");
     }
-    LString _errormessage=L"[L] Message from "+_filename+L"["+LString::fromInt(_line)+L"] = "+_message;
+    LString _errormessage=L"[L] Log Message from "+_filename+L"["+LString::fromInt(_line)+L"] = "+_message;
+    lMemoryLogStartIgnore();
     __lastlog=_message;
+    lMemoryLogEndIgnore();
     __log_repeat=1;
     __logfile.write(_errormessage);
     __logfile.flush();
@@ -68,7 +70,9 @@ void __Log_Manager::addWarning(const LString &_message, const LString &_filename
             __logfile.write(LSTR(" (")+LString::fromInt(__log_repeat)+L")\n");
     }
     LString _errormessage=L"[W] *WARNING* in "+_filename+L"["+LString::fromInt(_line)+L"] = "+_message;
+    lMemoryLogStartIgnore();
     __lastlog=_message;
+    lMemoryLogEndIgnore();
     __log_repeat=1;
     __logfile.write(_errormessage);
     __logfile.flush();
@@ -89,7 +93,9 @@ void __Log_Manager::addError(const LString &_message, const LString &_filename, 
             __logfile.write(LSTR(" (")+LString::fromInt(__log_repeat)+L")\n");
     }
     LString errormessage=L"\n[E] !***ERROR***! in "+_filename+L"["+LString::fromInt(_line)+L"] = "+_message;
+    lMemoryLogStartIgnore();
     __lastlog=_message;
+    lMemoryLogEndIgnore();
     __log_repeat=1;
     __logfile.write(errormessage);
     __logfile.flush();
@@ -99,7 +105,9 @@ void __Log_Manager::addError(const LString &_message, const LString &_filename, 
 
 void __Log_Manager::addAssert(const LString &_message, const LString &_filename, const i32 &_line)
 {
+    lMemoryLogStartIgnore();
     __lastlog=_message;
+    lMemoryLogEndIgnore();
     LString _errormessage=L"[A] ASSERT in "+_filename+L"["+LString::fromInt(_line)+L"] = "+_message;
     __log_repeat=1;
     __logfile.write(LSTR("\n\n==================================================\n\n"));

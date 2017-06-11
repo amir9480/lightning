@@ -6,11 +6,18 @@
 #include <memory.h>
 #include <stdlib.h>
 
-#define lMainStart()\
+#define lMemoryLogStart()\
     __lmemlog_allowed=true;
 
-#define lMainEnd()\
+#define lMemoryLogEnd()\
     __lmemlog_allowed=false;
+
+#define lMemoryLogStartIgnore()\
+    __lmemlog_allowed=false;
+
+#define lMemoryLogEndIgnore()\
+    __lmemlog_allowed=true;
+
 
 /*!
  * Note That Memory log only working with new and delete

@@ -72,6 +72,7 @@ protected:
     HWND                mWindowHandler;
     IDirect3D9*         mD3D9;
     IDirect3DDevice9*   mDevice;
+
     LD3D9VertexBuffer*  mCurrentVertexBuffer;
     LD3D9IndexBuffer*   mCurrentIndexBuffer;
 };

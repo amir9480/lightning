@@ -15,7 +15,13 @@ LNAMESPACE_BEGIN
 #if LIGHTING_USING_NAMESPACE == 1
 
 //! Add a message to log . first parameter is CONDITION that if was true then message will be add.
-#define lLogMessage(CONDITION,MESSAGE) {if(CONDITION){Lightning::__Log_Manager::get.addLog((MESSAGE),__FILE__,__LINE__);}}
+#define lLogMessage(CONDITION,MESSAGE) \
+{\
+    if(CONDITION)\
+    {\
+        Lightning::__Log_Manager::get.addLog((MESSAGE),__FILE__,__LINE__);\
+    }\
+}
 
 //! Add a warning to log. first parameter is CONDITION that if was true then second parameter (message) will be add.
 #define lWarning(CONDITION,MESSAGE) {if(CONDITION){Lightning::__Log_Manager::get.addWarning((MESSAGE),__FILE__,__LINE__);}}

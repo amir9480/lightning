@@ -4,5 +4,15 @@ LNAMESPACE_BEGIN
 
 
 
+LGFXDevice::LGFXDevice()
+{
+
+}
+
+LGFXDevice::~LGFXDevice()
+{
+
+}
+
 
 LNAMESPACE_END
