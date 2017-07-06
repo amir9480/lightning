@@ -7,10 +7,10 @@
 #include <stdlib.h>
 
 #define lMemoryLogStart()\
-    __lmemlog_allowed=true;
+    __lmemlog_allowed=true;{
 
 #define lMemoryLogEnd()\
-    __lmemlog_allowed=false;
+    }__lmemlog_allowed=false;
 
 #define lMemoryLogStartIgnore()\
     __lmemlog_allowed=false;

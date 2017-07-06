@@ -12,6 +12,7 @@
 #include "ld3d9vertexbuffer.h"
 #include "ld3d9indexbuffer.h"
 #include "ld3d9shader.h"
+#include "ld3d9texture.h"
 
 LNAMESPACE_BEGIN
 
@@ -22,6 +23,10 @@ LRESULT CALLBACK lightningmainwindowproc(HWND hwnd,UINT msg,WPARAM wparam,LPARAM
 class LAPI LD3D9Device:public LGFXDevice
 {
     friend class LD3D9VertexDeclaration;
+    friend class LD3D9Shader;
+    friend class LD3D9VertexBuffer;
+    friend class LD3D9IndexBuffer;
+    friend class LD3D9Texture;
 public:
     LD3D9Device();
     virtual ~LD3D9Device();
@@ -39,6 +44,8 @@ public:
     virtual LGFXShader*             createVertexShader();
 
     virtual LGFXShader*             createPixelShader();
+
+    virtual LGFXTexture*            createTexture(u16 _width,u16 _height,u16 _mipmap_count,LImage::Format _format);
 
     virtual void                    draw();
 
@@ -65,6 +72,8 @@ public:
     virtual void                    setVertexShader(LGFXShader* _shader);
 
     virtual void                    setPixelShader(LGFXShader *_shader);
+
+    virtual void                    setTexture(u32 _sampler,LGFXTexture* _t);
 
     virtual void                    showWindow();
 

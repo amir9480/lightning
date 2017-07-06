@@ -42,7 +42,10 @@ SOURCES +=\
     lgfx/lgfxindexbuffer.cpp \
     lgfx/lgfxshader.cpp \
     lgfx/lgfxvertexbuffer.cpp \
-    lgfx/D3D9/ld3d9shader.cpp
+    lgfx/D3D9/ld3d9shader.cpp \
+    lgfx/lgfxtexture.cpp \
+    lgfx/D3D9/ld3d9texture.cpp \
+    lgfx/limage.cpp
 
 
 HEADERS +=\
@@ -85,7 +88,10 @@ HEADERS +=\
     lgfx/lgfxindexbuffer.h \
     lgfx/lgfxshader.h \
     lgfx/lgfxvertexbuffer.h \
-    lgfx/D3D9/ld3d9shader.h
+    lgfx/D3D9/ld3d9shader.h \
+    lgfx/lgfxtexture.h \
+    lgfx/D3D9/ld3d9texture.h \
+    lgfx/limage.h
 
 
 

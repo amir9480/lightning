@@ -2,6 +2,7 @@
 #define LGFXSHADER_H
 
 #include "lcore.h"
+#include "lgfxtexture.h"
 
 LNAMESPACE_BEGIN
 
@@ -43,6 +44,8 @@ public:
     virtual void                    setIntArray(const LString& _name,const int* _value,u32 _count)=0;
 
     virtual void                    setMatrix(const LString& _name,const LMatrix& _value)=0;
+
+    virtual void                    setTexture(const LString& _name,LGFXTexture *_texture)=0;
 
     virtual void                    setVector(const LString& _name,const LVector2& _value)=0;
 

@@ -5,6 +5,7 @@
 #include "lgfxvertexbuffer.h"
 #include "lgfxindexbuffer.h"
 #include "lgfxshader.h"
+#include "lgfxtexture.h"
 
 LNAMESPACE_BEGIN
 
@@ -30,6 +31,8 @@ public:
     virtual LGFXShader*             createVertexShader()=0;
 
     virtual LGFXShader*             createPixelShader()=0;
+
+    virtual LGFXTexture*            createTexture(u16 _width,u16 _height,u16 _mipmap_count,LImage::Format _format)=0;
 
     virtual void                    draw()=0;
 
@@ -58,6 +61,8 @@ public:
 
     virtual void                    setPixelShader(LGFXShader* _shader)=0;
 
+    virtual void                    setTexture(u32 _sampler,LGFXTexture* _t)=0;
+
     virtual void                    showWindow()=0;
 
 protected:
@@ -65,6 +70,7 @@ protected:
     LVector<LGFXVertexBuffer*>      mVertexBuffers;
     LVector<LGFXIndexBuffer*>       mIndexBuffers;
     LVector<LGFXShader*>            mShaders;
+    LVector<LGFXTexture*>           mTextures;
 };
 
 LNAMESPACE_END

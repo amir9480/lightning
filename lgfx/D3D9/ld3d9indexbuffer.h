@@ -12,6 +12,8 @@
 
 LNAMESPACE_BEGIN
 
+class LD3D9Device;
+
 class LAPI LD3D9IndexBuffer:public LGFXIndexBuffer
 {
     friend class LD3D9Device;
@@ -31,7 +33,7 @@ public:
 
 protected:
     IDirect3DIndexBuffer9*  mIndexBuffer;
-    IDirect3DDevice9*       mDevice;
+    LD3D9Device*            mDevice;
 };
 
 LNAMESPACE_END

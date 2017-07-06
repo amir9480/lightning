@@ -15,6 +15,7 @@ ostream& operator<<(ostream& _in,const LString& _str)
 // TODO :
 // Dont forget LAPI
 // Add Reflection Support
+// *** Make Shared Pointer Thread Safe
 
 struct MyVertex
 {
@@ -28,15 +29,19 @@ LGFXVertexDeclaration* MyVertex::Decl;
 
 MyVertex _mv[]=
 {
-    {LVector3(0.0f,0.5f,0.0f),LVector3(0.0f,1.0f,0.0f),LVector2(0,0)},
-    {LVector3(0.5f,-0.3f,0.0f),LVector3(1.0f,0.0f,0.0f),LVector2(0,0)},
-    {LVector3(-0.5f,-0.3f,0.0f),LVector3(0.0f,0.0f,1.0f),LVector2(0,0)}
+    {LVector3(-0.5f,0.5f,0.0f)  ,LVector3(0.0f,0.0f,-1.0f)  ,LVector2(0,0)},
+    {LVector3(0.5f,0.5f,0.0f)   ,LVector3(0.0f,0.0f,-1.0f)  ,LVector2(0,1)},
+    {LVector3(-0.5f,-0.5f,0.0f) ,LVector3(0.0f,0.0f,-1.0f)  ,LVector2(1,0)},
+    {LVector3(0.5f,-0.5f,0.0f)  ,LVector3(0.0f,0.0f,-1.0f)  ,LVector2(1,1)}
 };
 
 const char* myShader=
 R"(
-uniform float3 testvalue;
-uniform float4x4 WVP;
+uniform extern float3 testvalue;
+uniform extern float4x4 WVP;
+
+uniform extern sampler2D t0;
+
 struct VSInput
 {
     float3 pos:POSITION0;
@@ -48,31 +53,51 @@ struct VSOut
 {
     float4 pos:POSITION0;
     float3 vcolor:TEXCOORD0;
+    float2 uv:TEXCOORD1;
 };
+
 
 VSOut mainVS(VSInput _in)
 {
     VSOut o;
     o.pos.xyz=_in.pos;
     o.pos.w=1.0f;
-    o.pos=mul(o.pos,WVP);
+    //o.pos=mul(o.pos,WVP);
     o.vcolor=_in.normal;
+    o.uv=_in.uv;
     return o;
 }
 
 
 float4 mainPS(VSOut _in):COLOR0
 {
-    float4 o=float4(1.0f,1.0f,1.0f,1.0f);
-    o.rgb=_in.vcolor*testvalue;
+    float4 o=float4(0.0f,0.0f,0.0f,1.0f);
+    //o.rgb=_in.vcolor*testvalue;
+    o.rgb=tex2D(t0,_in.uv.xy).rgb;
+    //o.rgb+=0.1;
     return o;
 }
+
+
+
 )";
 
 
 int main()
 {
     lMemoryLogStart();
+
+
+    LImage te;
+    te.init(16,16,LImage::Format::Format_R8G8B8);
+    for(u32 i=0;i<te.getPixelsCount()*4;i+=4)
+    {
+        te.getData()[i]=0;
+        te.getData()[i+1]=i/4;
+        te.getData()[i+2]=255;
+        te.getData()[i+3]=0;
+    }
+
     LGFXDevice* a=LGFXDevice::create();
     a->initialize(0,1);
     a->setTitle("Hello Lightning");
@@ -83,19 +108,25 @@ int main()
                                                });
 
     LGFXVertexBuffer* vb=a->createVertexBuffer();
-    vb->updateBuffer((const char*)_mv,sizeof(MyVertex),3);
+    vb->updateBuffer((const char*)_mv,sizeof(MyVertex),4);
 
     LGFXIndexBuffer* ib=a->createIndexBuffer();
-    ib->updateBuffer({0,1,2,2,1,0});
+    ib->updateBuffer({0,1,2,3,2,1});
+
+    LMatrix wvp=LMatrix::createViewMatrixLH(LVector3(0.0f,0.0f,1.0f),LVector3(0.0f,0.15f,0.0f),LVector3(0.0f,1.0f,0.0f))*LMatrix::createPerspectiveProjectionLH(50.0f);
 
     LGFXShader* vs=a->createVertexShader();
     vs->compile(myShader,"mainVS");
-    LMatrix wvp=LMatrix::createViewMatrixLH(LVector3(0.0f,0.0f,1.0f),LVector3(0.0f,0.15f,0.0f),LVector3(0.0f,1.0f,0.0f))*LMatrix::createPerspectiveProjectionLH(50.0f);
     vs->setMatrix("WVP",wvp);
+
+    LGFXTexture* texture1=a->createTexture(16,16,1,LImage::Format_R8G8B8);
+    texture1->updateTexture(0,te);
 
     LGFXShader* ps=a->createPixelShader();
     ps->compile(myShader,"mainPS");
-    ps->setVector("testvalue",LVector3(3.0f,0.5f,1.0f));
+   //ps->setVector("testvalue",LVector3(1.0f,1.0f,1.0f));
+    ps->setTexture("t0",texture1);
+    //ps->setMatrix("WVP",wvp);
 
 
     a->setVertexDeclaration(MyVertex::Decl);
@@ -117,9 +148,9 @@ int main()
     delete a;
 
 
+    lMemoryLogEnd();
 
     cout<<"\n\n";
-    lMemoryLogEnd();
     return 0;
 }
 

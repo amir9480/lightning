@@ -71,7 +71,7 @@ void LD3D9Device::clear(int _r,int _g,int _b,bool _backbuffer, bool _zbuffer, bo
 LGFXVertexDeclaration *LD3D9Device::createVertexDeclaration(const LVector<LVertexElement> &_elements)
 {
     LD3D9VertexDeclaration* decl=new LD3D9VertexDeclaration(_elements);
-    decl->mDevice=mDevice;
+    decl->mDevice=this;
     HR(mDevice->CreateVertexDeclaration(getVertexDecl(_elements).getData(),&decl->mDecl));
     mVertexDecls.pushBack(decl);
     return decl;
@@ -81,7 +81,7 @@ LGFXVertexBuffer *LD3D9Device::createVertexBuffer( bool _is_dynamic, bool _has_m
 {
     LD3D9VertexBuffer* o=new LD3D9VertexBuffer;
     mVertexBuffers.pushBack(o);
-    o->mDevice=(mDevice);
+    o->mDevice=this;
     o->mHasMemoryCopy=_has_memory_copy;
     o->mIsDynamic=_is_dynamic;
     return o;
@@ -91,7 +91,7 @@ LGFXIndexBuffer *LD3D9Device::createIndexBuffer(bool _has_memory_copy)
 {
     LD3D9IndexBuffer* o=new LD3D9IndexBuffer;
     mIndexBuffers.pushBack(o);
-    o->mDevice=mDevice;
+    o->mDevice=this;
     o->mHasMemoryCopy=_has_memory_copy;
     return o;
 }
@@ -100,7 +100,7 @@ LGFXShader *LD3D9Device::createVertexShader()
 {
     LD3D9Shader* o=new LD3D9Shader;
     mShaders.pushBack(o);
-    o->mDevice=mDevice;
+    o->mDevice=this;
     o->mType=LGFXShader::ShaderType::vertexShader;
     return o;
 }
@@ -109,8 +109,24 @@ LGFXShader *LD3D9Device::createPixelShader()
 {
     LD3D9Shader* o=new LD3D9Shader;
     mShaders.pushBack(o);
-    o->mDevice=mDevice;
+    o->mDevice=this;
     o->mType=LGFXShader::ShaderType::pixelShader;
+    return o;
+}
+
+LGFXTexture *LD3D9Device::createTexture(u16 _width, u16 _height, u16 _mipmap_count, LImage::Format _format)
+{
+    LD3D9Texture* o=new LD3D9Texture;
+    mTextures.pushBack(o);
+    o->mDevice=this;
+    o->mWidth=_width;
+    o->mHeight=_height;
+    o->mMipMapCount=_mipmap_count;
+    o->mFormat = _format;
+    o->mType=LGFXTexture::TextureType_2D;
+
+    HR(mDevice->CreateTexture(_width,_height,_mipmap_count,0,lD3DTextureFormat(_format),D3DPOOL_MANAGED,(IDirect3DTexture9**)(&o->mTexture),0));
+
     return o;
 }
 
@@ -198,6 +214,11 @@ void LD3D9Device::release()
         delete mShaders[0];
         mShaders.remove(0);
     }
+    while(mTextures.getSize()>0)
+    {
+        delete mTextures[0];
+        mTextures.remove(0);
+    }
     SAFE_RELEASE(mDevice);
     SAFE_RELEASE(mD3D9);
 }
@@ -263,6 +284,11 @@ void LD3D9Device::setPixelShader(LGFXShader *_shader)
     }
     HR(mDevice->SetPixelShader(dynamic_cast<LD3D9Shader*>(_shader)->mPS));
 
+}
+
+void LD3D9Device::setTexture(u32 _sampler, LGFXTexture *_t)
+{
+    HR(mDevice->SetTexture(_sampler, dynamic_cast<LD3D9Texture*>(_t)->mTexture));
 }
 
 void LD3D9Device::showWindow()

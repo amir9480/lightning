@@ -35,7 +35,7 @@ public:
 
 protected:
     IDirect3DVertexDeclaration9* mDecl;
-    IDirect3DDevice9*            mDevice;
+    LD3D9Device*            mDevice;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -59,7 +59,7 @@ public:
     virtual void updateBuffer(const char* _data,u64 _elementSize,u64 _number_of_elements);
 private:
     IDirect3DVertexBuffer9* mVertexBuffer;
-    IDirect3DDevice9*       mDevice;
+    LD3D9Device*            mDevice;
 };
 
 LNAMESPACE_END

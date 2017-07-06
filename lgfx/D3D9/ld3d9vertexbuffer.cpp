@@ -111,7 +111,7 @@ void LD3D9VertexDeclaration::preReset()
 
 void LD3D9VertexDeclaration::postReset()
 {
-    HR(mDevice->CreateVertexDeclaration(getVertexDecl(mElements).getData(),&mDecl));
+    HR(mDevice->mDevice->CreateVertexDeclaration(getVertexDecl(mElements).getData(),&mDecl));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -148,26 +148,26 @@ void LD3D9VertexBuffer::getVertices(char *&_data)const
 
 void LD3D9VertexBuffer::preReset()
 {
-    if(!mHasMemoryCopy)
-    {
-        mTemp=new char[mBufferSize];
-        getVertices(mTemp);
-    }
-    SAFE_RELEASE(mVertexBuffer);
+//    if(!mHasMemoryCopy)
+//    {
+//        mTemp=new char[mBufferSize];
+//        getVertices(mTemp);
+//    }
+//    SAFE_RELEASE(mVertexBuffer);
 }
 
 void LD3D9VertexBuffer::postReset()
 {
-    HR(mDevice->CreateVertexBuffer(mBufferSize,((mIsDynamic)?D3DUSAGE_DYNAMIC:0),0,D3DPOOL_DEFAULT,&mVertexBuffer,0));
-    if(mHasMemoryCopy)
-    {
-        updateBuffer(mCopyData,mElementSize,mBufferSize/mElementSize);
-    }
-    else
-    {
-        updateBuffer(mTemp,mElementSize,mBufferSize/mElementSize);
-        delete[] mTemp;
-    }
+//    HR(mDevice->mDevice->CreateVertexBuffer(mBufferSize,((mIsDynamic)?D3DUSAGE_DYNAMIC:0),0,D3DPOOL_DEFAULT,&mVertexBuffer,0));
+//    if(mHasMemoryCopy)
+//    {
+//        updateBuffer(mCopyData,mElementSize,mBufferSize/mElementSize);
+//    }
+//    else
+//    {
+//        updateBuffer(mTemp,mElementSize,mBufferSize/mElementSize);
+//        delete[] mTemp;
+//    }
 }
 
 void LD3D9VertexBuffer::updateBuffer(const char *_data, u64 _elementSize, u64 _number_of_elements)
@@ -178,7 +178,7 @@ void LD3D9VertexBuffer::updateBuffer(const char *_data, u64 _elementSize, u64 _n
     if(_buffersize!=mBufferSize)
     {
         this->destroy();
-        HR(mDevice->CreateVertexBuffer(_buffersize,((mIsDynamic)?D3DUSAGE_DYNAMIC:0),0,D3DPOOL_DEFAULT,&mVertexBuffer,0));
+        HR(mDevice->mDevice->CreateVertexBuffer(_buffersize,((mIsDynamic)?D3DUSAGE_DYNAMIC:0),0,D3DPOOL_MANAGED,&mVertexBuffer,0));
         mBufferSize=_buffersize;
         if(mHasMemoryCopy)
             mCopyData=new char[_buffersize];

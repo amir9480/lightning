@@ -12,6 +12,8 @@
 
 LNAMESPACE_BEGIN
 
+class LD3D9Device;
+
 class LD3D9Shader:public LGFXShader
 {
     friend class LD3D9Device;
@@ -45,6 +47,8 @@ public:
 
     virtual void                    setMatrix(const LString &_name, const LMatrix &_value);
 
+    virtual void                    setTexture(const LString& _name, LGFXTexture *_texture);
+
     virtual void                    setVector(const LString &_name, const LVector2 &_value);
 
     virtual void                    setVector(const LString &_name, const LVector3 &_value);
@@ -54,7 +58,7 @@ public:
     virtual void                    setValue(const LString &_name, const void *_value, u32 _value_size);
 
 protected:
-    IDirect3DDevice9*           mDevice;
+    LD3D9Device*                mDevice;
     union
     {
         IDirect3DVertexShader9* mVS;

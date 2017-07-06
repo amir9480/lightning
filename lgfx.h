@@ -5,5 +5,6 @@
 #include "lgfx/lgfxvertexbuffer.h"
 #include "lgfx/lgfxindexbuffer.h"
 #include "lgfx/lgfxshader.h"
+#include "lgfx/limage.h"
 
 #endif // LGFX_H

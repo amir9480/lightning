@@ -1,4 +1,5 @@
 #include "ld3d9indexbuffer.h"
+#include "ld3d9device.h"
 
 LNAMESPACE_BEGIN
 
@@ -37,26 +38,26 @@ void LD3D9IndexBuffer::getIndices(u32 *&_data) const
 
 void LD3D9IndexBuffer::preReset()
 {
-    if(!mHasMemoryCopy)
-    {
-        mTemp=new u32[mBufferSize];
-        getIndices(mTemp);
-    }
-    SAFE_RELEASE(mIndexBuffer);
+//    if(!mHasMemoryCopy)
+//    {
+//        mTemp=new u32[mBufferSize];
+//        getIndices(mTemp);
+//    }
+//    SAFE_RELEASE(mIndexBuffer);
 }
 
 void LD3D9IndexBuffer::postReset()
 {
-    HR(mDevice->CreateIndexBuffer(mBufferSize,0,D3DFMT_INDEX32,D3DPOOL_DEFAULT,&mIndexBuffer,0));
-    if(mHasMemoryCopy)
-    {
-        updateBuffer(mCopyData,mBufferSize/4);
-    }
-    else
-    {
-        updateBuffer(mTemp,mBufferSize/4);
-        delete[] mTemp;
-    }
+//    HR(mDevice->mDevice->CreateIndexBuffer(mBufferSize,0,D3DFMT_INDEX32,D3DPOOL_DEFAULT,&mIndexBuffer,0));
+//    if(mHasMemoryCopy)
+//    {
+//        updateBuffer(mCopyData,mBufferSize/4);
+//    }
+//    else
+//    {
+//        updateBuffer(mTemp,mBufferSize/4);
+//        delete[] mTemp;
+//    }
 }
 
 void LD3D9IndexBuffer::updateBuffer(const u32 *_data, u64 _indices_count)
@@ -65,7 +66,7 @@ void LD3D9IndexBuffer::updateBuffer(const u32 *_data, u64 _indices_count)
     {
         destroy();
         mBufferSize=_indices_count*4;
-        HR(mDevice->CreateIndexBuffer(_indices_count*4,0,D3DFMT_INDEX32,D3DPOOL_DEFAULT,&mIndexBuffer,0));
+        HR(mDevice->mDevice->CreateIndexBuffer(_indices_count*4,0,D3DFMT_INDEX32,D3DPOOL_MANAGED,&mIndexBuffer,0));
         if(mHasMemoryCopy)
             mCopyData=new u32[_indices_count];
     }
