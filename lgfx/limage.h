@@ -12,19 +12,10 @@ public:
     {
         Format_null=0,
 
-        Format_R8G8B8,
+        // Remeber this channels are reserved on DX9
+        Format_X8R8G8B8,
         Format_A8R8G8B8,
 
-    };
-
-    struct Pixel_R8G8B8
-    {
-        u8 __,r,g,b;
-    };
-
-    struct Pixel_A8R8G8B8
-    {
-        u8 a,r,g,b;
     };
 
 public:

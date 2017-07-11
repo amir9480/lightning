@@ -22,7 +22,7 @@ u16 LImage::bytePerPixel(LImage::Format _type)
     {
     case Format::Format_null:
         return 0;
-    case Format::Format_R8G8B8:
+    case Format::Format_X8R8G8B8:
         return 4;
     case Format::Format_A8R8G8B8:
         return 4;

@@ -12,7 +12,8 @@
 
 LNAMESPACE_BEGIN
 
-D3DFORMAT lD3DTextureFormat(LImage::Format _f);
+D3DFORMAT               lD3DTextureFormat(LImage::Format _f);
+D3DTEXTUREFILTERTYPE    lD3DTextureFilter(LGFXTexture::TextureFilter _f);
 
 class LD3D9Device;
 
@@ -25,6 +26,8 @@ public:
 
     virtual void destroy();
 
+    virtual void generateMipMaps();
+
     virtual void preReset();
 
     virtual void postReset();
@@ -36,6 +39,7 @@ protected:
     IDirect3DTexture9*  mTexture;
 
 };
+
 
 LNAMESPACE_END
 

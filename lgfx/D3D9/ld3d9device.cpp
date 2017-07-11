@@ -125,7 +125,8 @@ LGFXTexture *LD3D9Device::createTexture(u16 _width, u16 _height, u16 _mipmap_cou
     o->mFormat = _format;
     o->mType=LGFXTexture::TextureType_2D;
 
-    HR(mDevice->CreateTexture(_width,_height,_mipmap_count,0,lD3DTextureFormat(_format),D3DPOOL_MANAGED,(IDirect3DTexture9**)(&o->mTexture),0));
+    HR(mDevice->CreateTexture(_width,_height,_mipmap_count,0,lD3DTextureFormat(_format),D3DPOOL_MANAGED,(IDirect3DTexture9**)(&(o->mTexture)),0));
+    o->generateMipMaps();
 
     return o;
 }
@@ -288,6 +289,14 @@ void LD3D9Device::setPixelShader(LGFXShader *_shader)
 
 void LD3D9Device::setTexture(u32 _sampler, LGFXTexture *_t)
 {
+    static float _mmld;
+    _mmld=_t->getMipMapBias();
+    HR(mDevice->SetSamplerState(_sampler,D3DSAMP_MINFILTER,lD3DTextureFilter(_t->getFilter())));
+    HR(mDevice->SetSamplerState(_sampler,D3DSAMP_MAGFILTER,lD3DTextureFilter(_t->getFilter())));
+    HR(mDevice->SetSamplerState(_sampler,D3DSAMP_MIPFILTER,lD3DTextureFilter(_t->getFilter())));
+    HR(mDevice->SetSamplerState(_sampler,D3DSAMP_MIPMAPLODBIAS,*((LPDWORD)(&_mmld))));
+    HR(mDevice->SetSamplerState(_sampler,D3DSAMP_MAXANISOTROPY,_t->getMaxAnisotropic()));
+    HR(mDevice->SetSamplerState(_sampler,D3DSAMP_MAXMIPLEVEL,_t->getMaxMipMapLevel()));
     HR(mDevice->SetTexture(_sampler, dynamic_cast<LD3D9Texture*>(_t)->mTexture));
 }
 

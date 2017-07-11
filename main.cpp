@@ -30,15 +30,15 @@ LGFXVertexDeclaration* MyVertex::Decl;
 MyVertex _mv[]=
 {
     {LVector3(-0.5f,0.5f,0.0f)  ,LVector3(0.0f,0.0f,-1.0f)  ,LVector2(0,0)},
-    {LVector3(0.5f,0.5f,0.0f)   ,LVector3(0.0f,0.0f,-1.0f)  ,LVector2(0,1)},
-    {LVector3(-0.5f,-0.5f,0.0f) ,LVector3(0.0f,0.0f,-1.0f)  ,LVector2(1,0)},
+    {LVector3(0.5f,0.5f,0.0f)   ,LVector3(0.0f,0.0f,-1.0f)  ,LVector2(1,0)},
+    {LVector3(-0.5f,-0.5f,0.0f) ,LVector3(0.0f,0.0f,-1.0f)  ,LVector2(0,1)},
     {LVector3(0.5f,-0.5f,0.0f)  ,LVector3(0.0f,0.0f,-1.0f)  ,LVector2(1,1)}
 };
 
 const char* myShader=
 R"(
 uniform extern float3 testvalue;
-uniform extern float4x4 WVP;
+//uniform extern float4x4 WVP;
 
 uniform extern sampler2D t0;
 
@@ -89,13 +89,14 @@ int main()
 
 
     LImage te;
-    te.init(16,16,LImage::Format::Format_R8G8B8);
-    for(u32 i=0;i<te.getPixelsCount()*4;i+=4)
+    te.init(8,8,LImage::Format::Format_A8R8G8B8);
+    cout<<"#"<<te.getPixelsCount()*te.getBytePerPixel()<<endl;
+    for(u32 i=0;i<te.getPixelsCount()*te.getBytePerPixel();i+=4)
     {
-        te.getData()[i]=0;
-        te.getData()[i+1]=i/4;
-        te.getData()[i+2]=255;
-        te.getData()[i+3]=0;
+            te.getData()[i]=255;
+            te.getData()[i+1]=i;
+            te.getData()[i+2]=0;
+            te.getData()[i+3]=0;
     }
 
     LGFXDevice* a=LGFXDevice::create();
@@ -117,14 +118,14 @@ int main()
 
     LGFXShader* vs=a->createVertexShader();
     vs->compile(myShader,"mainVS");
-    vs->setMatrix("WVP",wvp);
+    //vs->setMatrix("WVP",wvp);
 
-    LGFXTexture* texture1=a->createTexture(16,16,1,LImage::Format_R8G8B8);
+    LGFXTexture* texture1=a->createTexture(8,8,3,LImage::Format_X8R8G8B8);
     texture1->updateTexture(0,te);
 
     LGFXShader* ps=a->createPixelShader();
     ps->compile(myShader,"mainPS");
-   //ps->setVector("testvalue",LVector3(1.0f,1.0f,1.0f));
+    ps->setVector("testvalue",LVector3(1.0f,1.0f,1.0f));
     ps->setTexture("t0",texture1);
     //ps->setMatrix("WVP",wvp);
 
