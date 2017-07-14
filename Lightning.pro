@@ -93,21 +93,33 @@ HEADERS +=\
     lgfx/D3D9/ld3d9texture.h \
     lgfx/limage.h
 
+DISTFILES += \
+    .gitignore
 
 
 # D3D9
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/lgfx/D3D9/Directx/Lib/x86/ -ld3d9 -ld3dx9
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/lgfx/D3D9/Directx/Lib/x86/ -ld3d9 -ld3dx9d
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/dependencies/Directx9/Lib/x86/ -ld3d9 -ld3dx9
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/dependencies/Directx9/Lib/x86/ -ld3d9 -ld3dx9d
 
 INCLUDEPATH += $$PWD/lgfx/D3D9/Directx/Include
 DEPENDPATH += $$PWD/lgfx/D3D9/Directx/Include
 
-QMAKE_CXXFLAGS += -isystem $$PWD/lgfx/D3D9/Directx/Include #prevent form warnings
+QMAKE_CXXFLAGS += -isystem $$PWD/dependencies/Directx9/Include #prevent form warnings
 
 
 # D3D9 End
 
-DISTFILES += \
-    .gitignore
 
+#zlib
+win32: LIBS += -L$$PWD/dependencies/zlib/build/ -llibzlib.dll
+
+INCLUDEPATH += $$PWD/dependencies/zlib
+DEPENDPATH += $$PWD/dependencies/zlib
+
+
+#lib PNG
+win32: LIBS += -L$$PWD/dependencies/libpng/build/ -lpng
+
+INCLUDEPATH += $$PWD/dependencies/libpng
+DEPENDPATH += $$PWD/dependencies/libpng

@@ -6,7 +6,7 @@
 
 LNAMESPACE_BEGIN
 
-class LGFXTexture
+class LAPI LGFXTexture
 {
 public:
     enum TextureType
@@ -19,6 +19,13 @@ public:
         TextureFilter_point,
         TextureFilter_linear,
         TextureFilter_anisotropic
+    };
+    enum TextureAddress
+    {
+        TextureAddress_wrap,
+        TextureAddress_mirror,
+        TextureAddress_clamp,
+        TextureAddress_border
     };
 
 public:
@@ -40,6 +47,10 @@ public:
 
     virtual int                     getMaxMipMapLevel() const;
 
+    virtual TextureAddress          getAddressU() const;
+
+    virtual TextureAddress          getAddressV() const;
+
     virtual void                    preReset()=0;
 
     virtual void                    postReset()=0;
@@ -52,7 +63,13 @@ public:
 
     virtual void                    setMaxMipMapLevel(int maxMipMapLevel=0);
 
+    virtual void                    setAddressU(const TextureAddress &addressU);
+
+    virtual void                    setAddressV(const TextureAddress &addressV);
+
     virtual void                    updateTexture(u16 _mip_map_level,const LImage& _data)=0;
+
+
 
 protected:
     u16             mWidth;
@@ -64,6 +81,8 @@ protected:
     float           mMipMapBias;
     int             mMaxMipMapLevel;
     int             mMaxAnisotropic;
+    TextureAddress  mAddressU;
+    TextureAddress  mAddressV;
 };
 
 LNAMESPACE_END

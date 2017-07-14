@@ -14,7 +14,7 @@ LNAMESPACE_BEGIN
 
 class LD3D9Device;
 
-class LD3D9Shader:public LGFXShader
+class LAPI LD3D9Shader:public LGFXShader
 {
     friend class LD3D9Device;
 public:

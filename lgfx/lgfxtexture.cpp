@@ -6,7 +6,9 @@ LGFXTexture::LGFXTexture():
     mFilter(TextureFilter_linear),
     mMipMapBias(0),
     mMaxMipMapLevel(0),
-    mMaxAnisotropic(1)
+    mMaxAnisotropic(1),
+    mAddressU(TextureAddress_wrap),
+    mAddressV(TextureAddress_wrap)
 {
 
 }
@@ -59,6 +61,26 @@ int LGFXTexture::getMaxMipMapLevel() const
 void LGFXTexture::setMaxMipMapLevel(int maxMipMapLevel)
 {
     mMaxMipMapLevel = maxMipMapLevel;
+}
+
+LGFXTexture::TextureAddress LGFXTexture::getAddressU() const
+{
+    return mAddressU;
+}
+
+void LGFXTexture::setAddressU(const TextureAddress &addressU)
+{
+    mAddressU = addressU;
+}
+
+LGFXTexture::TextureAddress LGFXTexture::getAddressV() const
+{
+    return mAddressV;
+}
+
+void LGFXTexture::setAddressV(const TextureAddress &addressV)
+{
+    mAddressV = addressV;
 }
 
 

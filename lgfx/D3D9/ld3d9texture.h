@@ -14,10 +14,11 @@ LNAMESPACE_BEGIN
 
 D3DFORMAT               lD3DTextureFormat(LImage::Format _f);
 D3DTEXTUREFILTERTYPE    lD3DTextureFilter(LGFXTexture::TextureFilter _f);
+D3DTEXTUREADDRESS       lD3DTextureAddress(LGFXTexture::TextureAddress _a);
 
 class LD3D9Device;
 
-class LD3D9Texture:public LGFXTexture
+class LAPI LD3D9Texture:public LGFXTexture
 {
     friend class LD3D9Device;
 public:

@@ -6,7 +6,7 @@
 
 LNAMESPACE_BEGIN
 
-class LGFXShader
+class LAPI LGFXShader
 {
 public:
     enum class ShaderType

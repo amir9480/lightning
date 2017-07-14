@@ -16,6 +16,7 @@ ostream& operator<<(ostream& _in,const LString& _str)
 // Dont forget LAPI
 // Add Reflection Support
 // *** Make Shared Pointer Thread Safe
+// *** Make Image::loadFromPNG Thread Safe
 
 struct MyVertex
 {
@@ -38,7 +39,7 @@ MyVertex _mv[]=
 const char* myShader=
 R"(
 uniform extern float3 testvalue;
-//uniform extern float4x4 WVP;
+uniform extern float4x4 WVP;
 
 uniform extern sampler2D t0;
 
@@ -62,7 +63,7 @@ VSOut mainVS(VSInput _in)
     VSOut o;
     o.pos.xyz=_in.pos;
     o.pos.w=1.0f;
-    //o.pos=mul(o.pos,WVP);
+    o.pos=mul(o.pos,WVP);
     o.vcolor=_in.normal;
     o.uv=_in.uv;
     return o;
@@ -73,7 +74,7 @@ float4 mainPS(VSOut _in):COLOR0
 {
     float4 o=float4(0.0f,0.0f,0.0f,1.0f);
     //o.rgb=_in.vcolor*testvalue;
-    o.rgb=tex2D(t0,_in.uv.xy).rgb;
+    o.rgb=tex2D(t0,_in.uv.xy).rgb+testvalue;
     //o.rgb+=0.1;
     return o;
 }
@@ -118,14 +119,15 @@ int main()
 
     LGFXShader* vs=a->createVertexShader();
     vs->compile(myShader,"mainVS");
-    //vs->setMatrix("WVP",wvp);
+    vs->setMatrix("WVP",wvp);
 
     LGFXTexture* texture1=a->createTexture(8,8,3,LImage::Format_X8R8G8B8);
     texture1->updateTexture(0,te);
+    texture1->setFilter(LGFXTexture::TextureFilter_anisotropic);
 
     LGFXShader* ps=a->createPixelShader();
     ps->compile(myShader,"mainPS");
-    ps->setVector("testvalue",LVector3(1.0f,1.0f,1.0f));
+    ps->setVector("testvalue",LVector3(0.2f,0.5f,1.0f));
     ps->setTexture("t0",texture1);
     //ps->setMatrix("WVP",wvp);
 
@@ -147,6 +149,7 @@ int main()
     }
 
     delete a;
+
 
 
     lMemoryLogEnd();

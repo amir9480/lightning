@@ -30,10 +30,23 @@ D3DTEXTUREFILTERTYPE lD3DTextureFilter(LGFXTexture::TextureFilter _f)
         return D3DTEXF_LINEAR;
     case LGFXTexture::TextureFilter_anisotropic:
         return D3DTEXF_ANISOTROPIC;
-    default:
-        break;
     }
     return D3DTEXF_NONE;
+}
+
+D3DTEXTUREADDRESS lD3DTextureAddress(LGFXTexture::TextureAddress _a)
+{
+    switch (_a) {
+    case LGFXTexture::TextureAddress_wrap:
+        return D3DTADDRESS_WRAP;
+    case LGFXTexture::TextureAddress_clamp:
+        return D3DTADDRESS_CLAMP;
+    case LGFXTexture::TextureAddress_mirror:
+        return D3DTADDRESS_MIRROR;
+    case LGFXTexture::TextureAddress_border:
+        return D3DTADDRESS_BORDER;
+    }
+    return D3DTADDRESS_WRAP;
 }
 
 LD3D9Texture::LD3D9Texture():
@@ -79,6 +92,7 @@ void LD3D9Texture::updateTexture(u16 _mip_map_level, const LImage &_data)
 
     HR(mTexture->UnlockRect(_mip_map_level));
 }
+
 
 
 

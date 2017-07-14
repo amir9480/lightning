@@ -298,6 +298,8 @@ void LD3D9Device::setTexture(u32 _sampler, LGFXTexture *_t)
     HR(mDevice->SetSamplerState(_sampler,D3DSAMP_MAXANISOTROPY,_t->getMaxAnisotropic()));
     HR(mDevice->SetSamplerState(_sampler,D3DSAMP_MAXMIPLEVEL,_t->getMaxMipMapLevel()));
     HR(mDevice->SetTexture(_sampler, dynamic_cast<LD3D9Texture*>(_t)->mTexture));
+    HR(mDevice->SetSamplerState(_sampler,D3DSAMP_ADDRESSU,lD3DTextureAddress(_t->getAddressU())));
+    HR(mDevice->SetSamplerState(_sampler,D3DSAMP_ADDRESSV,lD3DTextureAddress(_t->getAddressV())));
 }
 
 void LD3D9Device::showWindow()
