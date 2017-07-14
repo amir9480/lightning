@@ -116,6 +116,7 @@ LGFXShader *LD3D9Device::createPixelShader()
 
 LGFXTexture *LD3D9Device::createTexture(u16 _width, u16 _height, u16 _mipmap_count, LImage::Format _format)
 {
+    lError(_width==0||_height==0||_mipmap_count==0||_format==LImage::Format_null,"Some thing is wrong",nullptr);
     LD3D9Texture* o=new LD3D9Texture;
     mTextures.pushBack(o);
     o->mDevice=this;

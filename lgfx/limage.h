@@ -52,7 +52,8 @@ public:
     bool            isNull()const;
 
 #if LIGHTNING_IMAGE_PNG
-    static LImage   loadFromPng(const char* _data);
+    static LImage   loadFromPng(char* _data);
+    static LImage   loadFromPngFile(const LString& _fileName);
 #endif
 
     LImage& operator=(const LImage& _other);

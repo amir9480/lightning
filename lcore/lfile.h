@@ -21,7 +21,7 @@ public:
 public:
     LFile();
 
-    LFile(LString _fname,IOType _opentype);
+    LFile(LString _fname,int _opentype);
 
     virtual ~LFile();
     //! close if file is open . returns false if something was wrong
@@ -34,7 +34,7 @@ public:
     LString         getFileName()const;
 
     //! Get open type
-    IOType          getOpenType() const;
+    int             getOpenType() const;
 
     //! Get size of file in bytes
     u64             getSize();
@@ -46,7 +46,7 @@ public:
     bool            isOpen()const;
 
     //! open a file. if some thing was wrong returns false
-    bool            open(LString _fname,IOType _opentype);
+    bool            open(LString _fname,int _opentype);
 
     //! write _size byte of _t on file
     void            read(void* _t,u64 _size);
@@ -76,7 +76,7 @@ public:
 protected:
     void*       mData;
     LString     mFilename;
-    IOType      mOpenType;
+    int         mOpenType;
 };
 
 LNAMESPACE_END

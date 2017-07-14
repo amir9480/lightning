@@ -85,6 +85,7 @@ void LD3D9Texture::postReset()
 
 void LD3D9Texture::updateTexture(u16 _mip_map_level, const LImage &_data)
 {
+    lError(_data.getWidth()==0||_data.getHeight()==0||_mip_map_level>=mMipMapCount||_data.getFormat()==LImage::Format_null,"Some thing is wrong");
     D3DLOCKED_RECT r;
     HR(mTexture->LockRect(_mip_map_level,&r,0,D3DLOCK_DISCARD));
 

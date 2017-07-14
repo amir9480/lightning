@@ -89,16 +89,15 @@ int main()
     lMemoryLogStart();
 
 
-    LImage te;
-    te.init(8,8,LImage::Format::Format_A8R8G8B8);
-    cout<<"#"<<te.getPixelsCount()*te.getBytePerPixel()<<endl;
-    for(u32 i=0;i<te.getPixelsCount()*te.getBytePerPixel();i+=4)
-    {
-            te.getData()[i]=255;
-            te.getData()[i+1]=i;
-            te.getData()[i+2]=0;
-            te.getData()[i+3]=0;
-    }
+    LImage te=LImage::loadFromPngFile("image.png");
+    //te.init(8,8,LImage::Format::Format_A8R8G8B8);
+    //for(u32 i=0;i<te.getPixelsCount()*te.getBytePerPixel();i+=4)
+    //{
+            //te.getData()[i]=255;
+            //te.getData()[i+1]=i;
+            //te.getData()[i+2]=0;
+            //te.getData()[i+3]=0;
+    //}
 
     LGFXDevice* a=LGFXDevice::create();
     a->initialize(0,1);
@@ -115,20 +114,23 @@ int main()
     LGFXIndexBuffer* ib=a->createIndexBuffer();
     ib->updateBuffer({0,1,2,3,2,1});
 
-    LMatrix wvp=LMatrix::createViewMatrixLH(LVector3(0.0f,0.0f,1.0f),LVector3(0.0f,0.15f,0.0f),LVector3(0.0f,1.0f,0.0f))*LMatrix::createPerspectiveProjectionLH(50.0f);
+    LMatrix wvp=LMatrix::createViewMatrixLH(LVector3(0.0f,0.0f,1.5f),LVector3(0.0f,0.15f,0.0f),LVector3(0.0f,1.0f,0.0f))*LMatrix::createPerspectiveProjectionLH(50.0f);
 
     LGFXShader* vs=a->createVertexShader();
     vs->compile(myShader,"mainVS");
     vs->setMatrix("WVP",wvp);
 
-    LGFXTexture* texture1=a->createTexture(8,8,3,LImage::Format_X8R8G8B8);
-    texture1->updateTexture(0,te);
-    texture1->setFilter(LGFXTexture::TextureFilter_anisotropic);
+    cout<<"###"<<te.getWidth()<<" "<<te.getHeight()<<endl;
+
+    LGFXTexture* texture1=a->createTexture(te.getWidth(),te.getHeight(),1,LImage::Format_X8R8G8B8);
+    if(texture1!=nullptr)
+        texture1->updateTexture(0,te);
 
     LGFXShader* ps=a->createPixelShader();
     ps->compile(myShader,"mainPS");
-    ps->setVector("testvalue",LVector3(0.2f,0.5f,1.0f));
-    ps->setTexture("t0",texture1);
+    ps->setVector("testvalue",LVector3(0.0f,0.0f,0.0f));
+    if(texture1!=nullptr)
+        ps->setTexture("t0",texture1);
     //ps->setMatrix("WVP",wvp);
 
 
@@ -157,6 +159,7 @@ int main()
     cout<<"\n\n";
     return 0;
 }
+
 
 
 

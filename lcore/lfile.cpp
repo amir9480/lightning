@@ -7,7 +7,7 @@ LFile::LFile()
     mData=0;
 }
 
-LFile::LFile(LString _fname, LFile::IOType _opentype)
+LFile::LFile(LString _fname, int _opentype)
 {
     mData=0;
     open(_fname,_opentype);
@@ -48,7 +48,7 @@ bool LFile::isOpen() const
     return (mData!=0);
 }
 
-bool LFile::open(LString _fname, LFile::IOType _opentype)
+bool LFile::open(LString _fname, int _opentype)
 {
     if(mData)
         return false;
@@ -171,7 +171,7 @@ void LFile::write(const LString32 &_in)
     write(_in.toUTF8());
 }
 
-LFile::IOType LFile::getOpenType() const
+int LFile::getOpenType() const
 {
     return mOpenType;
 }
