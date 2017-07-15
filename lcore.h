@@ -26,6 +26,7 @@
 #include "lcore/lmemory.h"
 #include "lcore/lmemorymanager.h"
 #include "lcore/lpair.h"
+#include "lcore/lmemorystream.h"
 
 
 #endif // LCORE_H

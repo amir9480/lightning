@@ -17,6 +17,11 @@ ostream& operator<<(ostream& _in,const LString& _str)
 // Add Reflection Support
 // *** Make Shared Pointer Thread Safe
 // *** Make Image::loadFromPNG Thread Safe
+//
+///////////////////////////////////////
+//
+// add vector/list append
+//
 
 struct MyVertex
 {
@@ -122,7 +127,7 @@ int main()
 
     cout<<"###"<<te.getWidth()<<" "<<te.getHeight()<<endl;
 
-    LGFXTexture* texture1=a->createTexture(te.getWidth(),te.getHeight(),1,LImage::Format_X8R8G8B8);
+    LGFXTexture* texture1=a->createTexture(te.getWidth(),te.getHeight(),1,te.getFormat());
     if(texture1!=nullptr)
         texture1->updateTexture(0,te);
 
@@ -144,7 +149,7 @@ int main()
     while (a->processOSMessage()!=2)
     {
         a->beginScene();
-        a->clear();
+        a->clear(20,20,20);
         a->draw();
         a->endScene();
         a->render();

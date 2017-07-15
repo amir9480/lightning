@@ -11,9 +11,9 @@ D3DFORMAT lD3DTextureFormat(LImage::Format _f)
     switch (_f) {
     case LImage::Format_null:
         return D3DFMT_UNKNOWN;
-    case LImage::Format_A8R8G8B8:
+    case LImage::Format_R8G8B8A8:
         return D3DFMT_A8R8G8B8;
-    case LImage::Format_X8R8G8B8:
+    case LImage::Format_R8G8B8:
         return D3DFMT_X8R8G8B8;
     }
     return D3DFMT_UNKNOWN;
@@ -89,7 +89,31 @@ void LD3D9Texture::updateTexture(u16 _mip_map_level, const LImage &_data)
     D3DLOCKED_RECT r;
     HR(mTexture->LockRect(_mip_map_level,&r,0,D3DLOCK_DISCARD));
 
-    lMemoryCopy(r.pBits,_data.getData(),_data.getPixelsCount()*_data.getBytePerPixel());
+    switch (_data.getFormat())
+    {
+    case LImage::Format_R8G8B8:
+        for(u32 i=0;i<_data.getPixelsCount();i++)
+        {
+            ((char*)r.pBits)[i*4+0]=_data.getData()[i*3+2];
+            ((char*)r.pBits)[i*4+1]=_data.getData()[i*3+1];
+            ((char*)r.pBits)[i*4+2]=_data.getData()[i*3+0];
+            ((char*)r.pBits)[i*4+3]=0;
+        }
+        break;
+    case LImage::Format_R8G8B8A8:
+        for(u32 i=0;i<_data.getPixelsCount();i++)
+        {
+            ((char*)r.pBits)[i*4+0]=_data.getData()[i*4+2];
+            ((char*)r.pBits)[i*4+1]=_data.getData()[i*4+1];
+            ((char*)r.pBits)[i*4+2]=_data.getData()[i*4+0];
+            ((char*)r.pBits)[i*4+3]=_data.getData()[i*4+3];
+        }
+        break;
+    default:
+        break;
+    }
+
+    //lMemoryCopy(r.pBits,_data.getData(),_data.getPixelsCount()*_data.getBytePerPixel());
 
     HR(mTexture->UnlockRect(_mip_map_level));
 }

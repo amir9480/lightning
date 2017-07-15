@@ -34,9 +34,9 @@ u16 LImage::bytePerPixel(LImage::Format _type)
     {
     case Format::Format_null:
         return 0;
-    case Format::Format_X8R8G8B8:
-        return 4;
-    case Format::Format_A8R8G8B8:
+    case Format::Format_R8G8B8:
+        return 3;
+    case Format::Format_R8G8B8A8:
         return 4;
     }
 
@@ -156,22 +156,43 @@ LImage LImage::loadFromPng(char *_data)
     u32 _width=png_get_image_width(png_ptr,info_ptr);
     u32 _height=png_get_image_height(png_ptr,info_ptr);
    // int _depth=png_get_bit_depth(png_ptr,info_ptr);
-    //int _color_type=png_get_color_type(png_ptr,info_ptr);
+    int _color_type=png_get_color_type(png_ptr,info_ptr);
 
     const u32 _bytes_per_row = png_get_rowbytes(png_ptr,info_ptr);
     u8* _rowData=new u8[_bytes_per_row];
 
-    o.init(_width,_height,LImage::Format_X8R8G8B8);
-    for(u32 i=0;i<_height;i++)
-    {
-        png_read_row(png_ptr,(png_bytep)_rowData,0);
-        for(u32 j=0;j<_width;j++)
+
+    switch (_color_type) {
+    case PNG_COLOR_TYPE_RGB:
+        o.init(_width,_height,LImage::Format_R8G8B8);
+        for(u32 i=0;i<_height;i++)
         {
-            o.mData[(i*_width*o.mBytePerPixel)+(j*4)+0]=_rowData[j*4+2];
-            o.mData[(i*_width*o.mBytePerPixel)+(j*4)+1]=_rowData[j*4+1];
-            o.mData[(i*_width*o.mBytePerPixel)+(j*4)+2]=_rowData[j*4+0];
-            o.mData[(i*_width*o.mBytePerPixel)+(j*4)+3]=0;
+            png_read_row(png_ptr,(png_bytep)_rowData,0);
+            for(u32 j=0;j<_width;j++)
+            {
+                o.mData[(i*_width*o.mBytePerPixel)+(j*3)+0]=_rowData[j*3+0];
+                o.mData[(i*_width*o.mBytePerPixel)+(j*3)+1]=_rowData[j*3+1];
+                o.mData[(i*_width*o.mBytePerPixel)+(j*3)+2]=_rowData[j*3+2];
+                o.mData[(i*_width*o.mBytePerPixel)+(j*3)+3]=_rowData[j*3+3];
+            }
         }
+        break;
+    case PNG_COLOR_TYPE_RGBA:
+        o.init(_width,_height,LImage::Format_R8G8B8A8);
+        for(u32 i=0;i<_height;i++)
+        {
+            png_read_row(png_ptr,(png_bytep)_rowData,0);
+            for(u32 j=0;j<_width;j++)
+            {
+                o.mData[(i*_width*o.mBytePerPixel)+(j*4)+0]=_rowData[j*4+0];
+                o.mData[(i*_width*o.mBytePerPixel)+(j*4)+1]=_rowData[j*4+1];
+                o.mData[(i*_width*o.mBytePerPixel)+(j*4)+2]=_rowData[j*4+2];
+                o.mData[(i*_width*o.mBytePerPixel)+(j*4)+3]=_rowData[j*4+3];
+            }
+        }
+        break;
+    default:
+        break;
     }
     delete[] _rowData;
 

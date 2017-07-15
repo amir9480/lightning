@@ -102,14 +102,12 @@ void LString_Base<chartype>::append(LString_Base<chartype> _other)
 template <typename chartype>
 chartype &LString_Base<chartype>::at(u32 i)
 {
-    lError(i>=getCapacity(),"chartype &LString_Base<chartype>::at(u32 i): big value for i",mData[0]);
     return mData[i];
 }
 
 template <typename chartype>
 chartype LString_Base<chartype>::at(u32 i) const
 {
-    lError(i>=getCapacity(),"chartype &LString_Base<chartype>::at(u32 i)const: big value for i",mData[0]);
     return mData[i];
 }
 
@@ -256,13 +254,14 @@ LString_Base<chartype> LString_Base<chartype>::fromUShortInt(const unsigned shor
 template <typename chartype>
 LString_Base<chartype> LString_Base<chartype>::fromInt(const int &_in, const u32 _base)
 {
+    LString_Base<chartype> o;
     lMemoryLogStartIgnore();// because this string will destroyed at end of program and gives a leak detect message
     static const LString_Base<chartype> vt("0123456789ABCDEF");
     lMemoryLogEndIgnore();
     if(_in==0)
         return LString_Base<chartype>("0");
     lError(_base<=1||_base>16," _base value is not accpetable . must be [2-16]",empty);
-    LString_Base<chartype> o;
+
     o.resize(33);// maximum space requied (for _base = 2)
     int v=(_in>0)?_in:-_in;
 

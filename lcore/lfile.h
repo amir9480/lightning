@@ -71,8 +71,6 @@ public:
     void            write(const LString& _in);
     void            write(const LString32& _in);
 
-    void            write(const void* _t,u32 _size);
-
 protected:
     void*       mData;
     LString     mFilename;
