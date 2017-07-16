@@ -20,6 +20,10 @@ void LApplication::exec()
 
 }
 
+void lShowMessageBox(const LString& _title,const LString& _content)
+{
+    MessageBoxW((HWND)NULL,_content.getData(),_title.getData(),MB_OK);
+}
 
 LRESULT CALLBACK lightningmainwindowproc(HWND hwnd,UINT msg,WPARAM wparam,LPARAM lparam)
 {

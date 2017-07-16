@@ -29,11 +29,16 @@ enum LVertexElementUsage
     LVertexElementUsage_TextureCoordinate
 };
 
+//! holds one vertex element type
 struct LAPI LVertexElement
 {
+    //! number of stream
     u16                 mStreamNumber;
+    //! vertex type
     LVertexElementType  mType;
+    //! usage of vertex
     LVertexElementUsage mUsage;
+    //! usage index
     u8                  mUsageIndex;
 };
 

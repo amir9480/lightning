@@ -37,11 +37,11 @@ LD3D9Device::LD3D9Device()
     mCurrentIndexBuffer=0;
     mCurrentIndexBuffer=0;
 
-    mWindowHandler = CreateWindowExW( NULL, L"lightningmainwindow",
+    mWindowHandler = CreateWindowExW( (DWORD)NULL, L"lightningmainwindow",
                              L"Lightning",
                              /*WS_OVERLAPPEDWINDOW | WS_VISIBLE,*/
                              WS_SYSMENU|WS_CAPTION|WS_MINIMIZEBOX|WS_VISIBLE,
-                             0, 0, 640, 480, NULL, NULL, GetModuleHandleA(0), NULL );
+                             0, 0, 640, 480, (HWND)NULL,(HMENU)NULL, GetModuleHandleA(0),(LPVOID)NULL );
 }
 
 LD3D9Device::~LD3D9Device()

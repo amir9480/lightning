@@ -171,6 +171,17 @@ public:
     //! Move Assign
     linline LList<T>&               operator=(LList<T>&& _other);
 
+    //! Append a new Item at end of vector
+    linline LList<T>&               operator+=(const T& _newitem);
+    linline LList<T>&               operator+=(T&& _newitem);
+    //! Append new items at end of vector
+    linline LList<T>&               operator+=(const std::initializer_list<T> _items);
+    linline LList<T>&               operator+=(const LList<T>& _other);
+
+    //! Append new items at end of vector
+    linline LList<T>                operator+(const std::initializer_list<T> _items);
+    linline LList<T>                operator+(const LList<T>& _other);
+
     static const u32                nothing;
 protected:
     template<typename _T,typename _T2,const bool _have_operator>
@@ -962,6 +973,52 @@ LList<T> &LList<T>::operator=(LList<T>&& _other)
     return *this;
 }
 
+template<typename T>
+LList<T> &LList<T>::operator+=(const T &_newitem)
+{
+    pushBack(_newitem);
+    return *this;
+}
+
+template<typename T>
+LList<T> &LList<T>::operator+=(T &&_newitem)
+{
+    pushBack(_newitem);
+    return *this;
+}
+
+template<typename T>
+LList<T> &LList<T>::operator+=(const std::initializer_list<T> _items)
+{
+    pushBack(_items);
+    return *this;
+}
+
+template<typename T>
+LList<T> &LList<T>::operator+=(const LList<T> &_other)
+{
+    pushBack(_other);
+    return *this;
+}
+
+template<typename T>
+LList<T> LList<T>::operator+(const std::initializer_list<T> _items)
+{
+    LList<T> o;
+    o.pushBack(*this);
+    o.pushBack(_items);
+    return o;
+}
+
+template<typename T>
+LList<T> LList<T>::operator+(const LList<T> &_other)
+{
+    LList<T> o;
+    o.pushBack(*this);
+    o.pushBack(_other);
+    return o;
+}
+
 template<typename T> template<typename _T,typename _T2,bool _have_operator>
 u32 LList<T>::_LList_Search<_T,_T2,_have_operator>::__find(_T _data, u32 _size, const _T2 &_what,u32 _from)
 {
@@ -977,7 +1034,7 @@ u32 LList<T>::_LList_Search<_T,_T2,false>::__find(_T _data, u32 _size, const _T2
     LUNUSED(_data);
     LUNUSED(_size);
     LUNUSED(_what);
-    LString _error_message=LSTR("LVector:searching for this type is not available typeid= \"")+lGetTypeName<_T>()+" and "+lGetTypeName<_T2>()+"\" you need to define bool operator== for this type to support seraching";
+    LString _error_message=LSTR("LList:searching for this type is not available typeid= \"")+lGetTypeName<_T>()+" and "+lGetTypeName<_T2>()+"\" you need to define bool operator== for this type to support seraching";
     lError(1,_error_message,nothing);
     return nothing;
 }
@@ -998,7 +1055,7 @@ u32 LList<T>::_LList_Search<_T,_T2,false>::__rfind(_T _data, u32 _size, const _T
     LUNUSED(_data);
     LUNUSED(_size);
     LUNUSED(_what);
-    LString _error_message=LSTR("LVector:searching for this type is not available typeid= \"")+lGetTypeName<_T>()+" and "+lGetTypeName<_T2>()+"\" you need to define bool operator== for this type to support seraching";
+    LString _error_message=LSTR("LList:searching for this type is not available typeid= \"")+lGetTypeName<_T>()+" and "+lGetTypeName<_T2>()+"\" you need to define bool operator== for this type to support seraching";
     lError(1,_error_message,nothing);
     return nothing;
 }
@@ -1016,7 +1073,7 @@ void LList<T>::_LList_Sort<_T,false>::_sort(_T _data, u32 _size,LSortType _type)
     LUNUSED(_data);
     LUNUSED(_size);
     LUNUSED(_type);
-    LString _error_message=LSTR("LVector:sorting for this type is not available typeid= \"")+lGetTypeName<_T>()+"\" you need to define bool operator> and bool operator< for this type to support sorting";
+    LString _error_message=LSTR("LList:sorting for this type is not available typeid= \"")+lGetTypeName<_T>()+"\" you need to define bool operator> and bool operator< for this type to support sorting";
     lError(1,_error_message);
 }
 

@@ -46,7 +46,8 @@ SOURCES +=\
     lgfx/lgfxtexture.cpp \
     lgfx/D3D9/ld3d9texture.cpp \
     lgfx/limage.cpp \
-    lcore/lmemorystream.cpp
+    lcore/lmemorystream.cpp \
+    los/linput.cpp
 
 
 HEADERS +=\
@@ -93,7 +94,8 @@ HEADERS +=\
     lgfx/lgfxtexture.h \
     lgfx/D3D9/ld3d9texture.h \
     lgfx/limage.h \
-    lcore/lmemorystream.h
+    lcore/lmemorystream.h \
+    los/linput.h
 
 DISTFILES += \
     .gitignore

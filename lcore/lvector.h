@@ -128,6 +128,18 @@ public:
     //! Move Assign
     linline LVector<T>&             operator=(LVector<T>&& _other);
 
+    //! Append a new Item at end of vector
+    linline LVector<T>&             operator+=(const T& _newitem);
+    linline LVector<T>&             operator+=(T&& _newitem);
+    //! Append new items at end of vector
+    linline LVector<T>&             operator+=(const std::initializer_list<T> _items);
+    linline LVector<T>&             operator+=(const LVector<T>& _other);
+
+    //! Append new items at end of vector
+    linline LVector<T>              operator+(const std::initializer_list<T> _items);
+    linline LVector<T>              operator+(const LVector<T>& _other);
+
+
     static const u32                nothing;
 protected:
     template<typename _T,typename _T2,const bool _have_operator>
@@ -580,6 +592,52 @@ LVector<T> &LVector<T>::operator=(LVector<T> &&_other)
     _other.mSize=_other.mCapacity=0;
     _other.mData=nullptr;
     return *this;
+}
+
+template<typename T>
+LVector<T> &LVector<T>::operator+=(const T &_newitem)
+{
+    pushBack(_newitem);
+    return *this;
+}
+
+template<typename T>
+LVector<T> &LVector<T>::operator+=(T &&_newitem)
+{
+    pushBack(_newitem);
+    return *this;
+}
+
+template<typename T>
+LVector<T> &LVector<T>::operator+=(const std::initializer_list<T> _items)
+{
+    pushBack(_items);
+    return *this;
+}
+
+template<typename T>
+LVector<T> &LVector<T>::operator+=(const LVector<T> &_other)
+{
+    pushBack(_other);
+    return *this;
+}
+
+template<typename T>
+LVector<T> LVector<T>::operator+(const std::initializer_list<T> _items)
+{
+    LVector<T> o;
+    o.pushBack(*this);
+    o.pushBack(_items);
+    return o;
+}
+
+template<typename T>
+LVector<T> LVector<T>::operator+(const LVector<T> &_other)
+{
+    LVector<T> o;
+    o.pushBack(*this);
+    o.pushBack(_other);
+    return o;
 }
 
 template<typename T> template<typename _T,typename _T2,bool _have_operator>
