@@ -53,7 +53,7 @@ void LMemoryStream::resize(u64 _new_size)
         return destroy();
     if(mData)
     {
-        char* _prev_data;
+        char* _prev_data=mData;
         mData=new char[_new_size];
         lMemoryCopy(mData,_prev_data,lMin(mSize,_new_size)*sizeof(*mData));
         delete[] _prev_data;
@@ -128,7 +128,7 @@ LMemoryStream &LMemoryStream::operator=(const LMemoryStream &_other)
     return *this;
 }
 
-LMemoryStream &&LMemoryStream::operator=(LMemoryStream &&_other)
+LMemoryStream& LMemoryStream::operator=(LMemoryStream &&_other)
 {
     destroy();
     mData=_other.mData;
@@ -137,7 +137,7 @@ LMemoryStream &&LMemoryStream::operator=(LMemoryStream &&_other)
     _other.mData=nullptr;
     _other.mSize=0;
     _other.mPointer=0;
-    return lMove(*this);
+    return (*this);
 }
 
 LNAMESPACE_END

@@ -63,9 +63,17 @@ public:
     linline void                    insert(const u32 _i,const T& _newitem);
     linline void                    insert(const u32 _i,T&& _newitem);
 
+    //! insert new items at middle of vector
+    linline void                    insert(const u32 _i,const std::initializer_list<T> _items);
+    linline void                    insert(const u32 _i,const LVector<T>& _other);
+
     //! Append a new Item at end of vector
     linline void                    pushBack(const T& _newitem);
     linline void                    pushBack(T&& _newitem);
+
+    //! Append new items at end of vector
+    linline void                    pushBack(const std::initializer_list<T> _items);
+    linline void                    pushBack(const LVector<T>& _other);
 
     //! delete a item from end and returns it's value
     linline T                       popBack();
@@ -73,6 +81,10 @@ public:
     //! Append a new Item at begin of vector
     linline void                    pushFront(const T& _newitem);
     linline void                    pushFront(T&& _newitem);
+
+    //! Append new items at begin of vector
+    linline void                    pushFront(const std::initializer_list<T> _items);
+    linline void                    pushFront(const LVector<T>& _other);
 
     //! delete a item from begin and returns it's value
     linline T                       popFront();
@@ -292,6 +304,32 @@ void LVector<T>::insert(const u32 _i,T &&_newitem)
 }
 
 template<typename T>
+void LVector<T>::insert(const u32 _i,const std::initializer_list<T> _items)
+{
+    lError(_i>=mSize+1,"LVector<T>::insert(const std::initializer_list<T> _items): _i is not acceptable");
+    if(mSize+_items.size()>=mCapacity)
+        reserve(mCapacity+ (_items.size()/16)*16 +16 );
+    for(u32 i=mSize;i>_i;i--)
+        mData[i+_items.size()-1]=lMove(mData[i-1]);
+    for(u32 i=_i;i<_i+_items.size();i++)
+        mData[i]=(_items.begin())[i-_i];
+    mSize+=_items.size();
+}
+
+template<typename T>
+void LVector<T>::insert(const u32 _i,const LVector<T> &_other)
+{
+    lError(_i>=mSize+1,"LVector<T>::insert(const u32 _i,const LVector<T> &_other): _i is not acceptable");
+    if(mSize+_other.mSize>=mCapacity)
+        reserve(mCapacity+ (_other.mSize/16)*16 +16 );
+    for(u32 i=mSize;i>_i;i--)
+        mData[i+_other.mSize-1]=lMove(mData[i-1]);
+    for(u32 i=_i;i<_i+_other.mSize;i++)
+        mData[i]=(_other)[i-_i];
+    mSize+=_other.mSize;
+}
+
+template<typename T>
 void LVector<T>::insert(const u32 _i,const T &_newitem)
 {
     lError(_i>=mSize+1,"void LVector<T>::insert(u32 _i,const T &_newitem): _i is not acceptable");
@@ -310,6 +348,26 @@ void LVector<T>::pushBack(T &&_newitem)
         reserve(mCapacity+ 16 );
     mData[mSize]=lMove(_newitem);
     mSize++;
+}
+
+template<typename T>
+void LVector<T>::pushBack(const std::initializer_list<T> _items)
+{
+    if(mSize+_items.size()>=mCapacity)
+        reserve(mCapacity+ (_items.size()/16)*16 +16 );
+    for(u32 i=mSize;i<mSize+_items.size();i++)
+        mData[i]=(_items.begin())[i-mSize];
+    mSize+=_items.size();
+}
+
+template<typename T>
+void LVector<T>::pushBack(const LVector<T> &_other)
+{
+    if(mSize+_other.mSize>=mCapacity)
+        reserve(mCapacity+ (_other.mSize/16)*16 +16 );
+    for(u32 i=mSize;i<mSize+_other.mSize;i++)
+        mData[i]=(_other)[i-mSize];
+    mSize+=_other.mSize;
 }
 
 template<typename T>
@@ -349,6 +407,30 @@ void LVector<T>::pushFront(const T &_newitem)
         mData[i]=lMove(mData[i-1]);
     mData[0]=_newitem;
     mSize++;
+}
+
+template<typename T>
+void LVector<T>::pushFront(const std::initializer_list<T> _items)
+{
+    if(mSize+_items.size()>=mCapacity)
+        reserve(mCapacity+ (_items.size()/16)*16 +16 );
+    for(u32 i = mSize;i>0;i--)
+        mData[i+_items.size()-1]=lMove(mData[i-1]);
+    for(u32 i=0;i<_items.size();i++)
+        mData[i]=(_items.begin())[i];
+    mSize+=_items.size();
+}
+
+template<typename T>
+void LVector<T>::pushFront(const LVector<T> &_other)
+{
+    if(mSize+_other.mSize>=mCapacity)
+        reserve(mCapacity+ (_other.mSize/16)*16 +16 );
+    for(u32 i = mSize;i>0;i--)
+        mData[i+_other.mSize-1]=lMove(mData[i-1]);
+    for(u32 i=0;i<_other.mSize;i++)
+        mData[i]=(_other)[i];
+    mSize+=_other.mSize;
 }
 
 template<typename T>

@@ -29,7 +29,7 @@ enum LVertexElementUsage
     LVertexElementUsage_TextureCoordinate
 };
 
-struct LVertexElement
+struct LAPI LVertexElement
 {
     u16                 mStreamNumber;
     LVertexElementType  mType;
@@ -68,6 +68,7 @@ public:
     LGFXVertexBuffer();
     virtual ~LGFXVertexBuffer();
 
+    //! destroy
     virtual void                    destroy()=0;
 
     //! note that prepare _Data memory before call this function
@@ -78,20 +79,28 @@ public:
     //! this recommended for frequency reading buffer
     char*                           getMemoryVertices() const;
 
+    //! get one element size in Bytes
     u64                             getElementSize() const;
 
+    //! check has memory copy
     bool                            hasMemoryCopy() const;
 
+    //! get all elements size in Byte
     u64                             getBufferSize() const;
 
+    //! get Count of elements
     u64                             getNumberOfElements()const;
 
+    //! check is dynamic
     bool                            isDynamic() const;
 
+    //! before device reset
     virtual void                    preReset()=0;
 
+    //! after device reset
     virtual void                    postReset()=0;
 
+    //! update vertex buffer content
     void                            updateBuffer(const char* _data);
 
     //! to update vertex buffer content . it's recommended to _element size be getElementSize() and _number_of_elements be getNumberOfElements() . if was not then new buffer will created

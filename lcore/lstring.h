@@ -188,23 +188,23 @@ public:
     LString8                        toUTF8()const;
 
     //! Asign Copy operators
-    LString_Base&                   operator=(const char* _other);
-    LString_Base&                   operator=(const wchar_t* _other);
-    LString_Base&                   operator=(const char32_t* _other);
-    LString_Base&                   operator=(const LString_Base<char>& _other);
-    LString_Base&                   operator=(const LString_Base<wchar_t>& _other);
-    LString_Base&                   operator=(const LString_Base<char32_t>& _other);
-    LString_Base&                   operator=(LString_Base<chartype>&& _other);
+    LString_Base<chartype>&         operator=(const char* _other);
+    LString_Base<chartype>&         operator=(const wchar_t* _other);
+    LString_Base<chartype>&         operator=(const char32_t* _other);
+    LString_Base<chartype>&         operator=(const LString_Base<char>& _other);
+    LString_Base<chartype>&         operator=(const LString_Base<wchar_t>& _other);
+    LString_Base<chartype>&         operator=(const LString_Base<char32_t>& _other);
+    LString_Base<chartype>&         operator=(LString_Base<chartype>&& _other);
 
     //! returns this string that other appended
-    LString_Base                    operator+(const chartype _other)const;
-    LString_Base                    operator+(const chartype* _other)const;
-    LString_Base                    operator+(const LString_Base<chartype>& _other)const;
+    LString_Base<chartype>          operator+(const chartype _other)const;
+    LString_Base<chartype>          operator+(const chartype* _other)const;
+    LString_Base<chartype>          operator+(const LString_Base<chartype>& _other)const;
 
     //! just like append
-    LString_Base&                   operator+=(const chartype _other);
-    LString_Base&                   operator+=(const chartype* _other);
-    LString_Base&                   operator+=(const LString_Base<chartype>& _other);
+    LString_Base<chartype>&         operator+=(const chartype _other);
+    LString_Base<chartype>&         operator+=(const chartype* _other);
+    LString_Base<chartype>&         operator+=(const LString_Base<chartype>& _other);
 
     //! Compare functions
     bool                            operator==(const char* _other)const;

@@ -158,7 +158,6 @@ int main()
     delete a;
 
 
-
     lMemoryLogEnd();
 
     cout<<"\n\n";

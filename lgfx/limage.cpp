@@ -231,7 +231,7 @@ LImage &LImage::operator=(const LImage &_other)
     return *this;
 }
 
-LImage &&LImage::operator=(LImage &&_other)
+LImage& LImage::operator=(LImage &&_other)
 {
     destroy();
     mWidth=_other.mWidth;
@@ -244,7 +244,7 @@ LImage &&LImage::operator=(LImage &&_other)
     _other.mBytePerPixel=0;
     _other.mFormat=Format_null;
     _other.mData=nullptr;
-    return lMove(*this);
+    return (*this);
 }
 
 LNAMESPACE_END

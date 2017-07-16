@@ -6,7 +6,7 @@
 #include "d3d9.h"
 #include "d3dx9.h"
 
-
+// check HRESULT returns
 #define HR(X)\
 {\
     HRESULT __hr=X;\
@@ -17,6 +17,7 @@
     }\
 }
 
+//! check some thing is  NotZero (NZ)
 #define NZ(X)\
 {\
 if(NULL==(X))\
@@ -31,6 +32,7 @@ if(NULL==(X))\
 }\
 }
 
+//! SAFE Release D3D Obejcts
 #define SAFE_RELEASE(X)\
 {\
     if(X)\

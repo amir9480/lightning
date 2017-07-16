@@ -50,7 +50,7 @@ public:
     char  operator[](u64 _i)const;
 
     LMemoryStream& operator=(const LMemoryStream& _other);
-    LMemoryStream&& operator=(LMemoryStream&& _other);
+    LMemoryStream& operator=(LMemoryStream&& _other);
 private:
     char*   mData;
     u64     mSize;

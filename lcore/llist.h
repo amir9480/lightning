@@ -15,7 +15,8 @@ public:
     struct ListNode
     {
         friend class LList;
-        friend class ListIterator;
+        friend class Iterator;
+        friend class ConstIterator;
     private:
         linline ListNode();
     private:
@@ -112,9 +113,17 @@ public:
     linline void                    insert(const u32 _i,const T& _newitem);
     linline void                    insert(const u32 _i,T&& _newitem);
 
+    //! insert new items at middle of list
+    linline void                    insert(const u32 _i,const std::initializer_list<T> _items);
+    linline void                    insert(const u32 _i,const LList<T>& _other);
+
     //! Append a new Item at end of list
     linline void                    pushBack(const T& _newitem);
     linline void                    pushBack(T&& _newitem);
+
+    //! Append new items at end of list
+    linline void                    pushBack(const std::initializer_list<T> _items);
+    linline void                    pushBack(const LList<T>& _other);
 
     //! delete a item from end and returns it's value
     linline T                       popBack();
@@ -122,6 +131,10 @@ public:
     //! Append a new Item at begin of list
     linline void                    pushFront(const T& _newitem);
     linline void                    pushFront(T&& _newitem);
+
+    //! Append new items at begin of list
+    linline void                    pushFront(const std::initializer_list<T> _items);
+    linline void                    pushFront(const LList<T>& _other);
 
     //! delete a item from begin and returns it's value
     linline T                       popFront();
@@ -700,6 +713,20 @@ void LList<T>::insert(const u32 _i,const T &_newitem)
 }
 
 template<typename T>
+void LList<T>::insert(const u32 _i, const std::initializer_list<T> _items)
+{
+    for(u32 i=_items.size();i>0;i--)
+        insert(_i,(_items.begin())[i-1]);
+}
+
+template<typename T>
+void LList<T>::insert(const u32 _i, const LList<T> &_other)
+{
+    for(u32 i=_other.mSize;i>0;i--)
+        insert(_i,(_other)[i-1]);
+}
+
+template<typename T>
 void LList<T>::pushBack(const T &_newitem)
 {
     mSize++;
@@ -733,6 +760,20 @@ void LList<T>::pushBack(T &&_newitem)
         mLast->mNext->mPrev=mLast;
         mLast=mLast->mNext;
     }
+}
+
+template<typename T>
+void LList<T>::pushBack(const std::initializer_list<T> _items)
+{
+    for(u32 i=0;i<_items.size();i++)
+        pushBack((_items.begin())[i]);
+}
+
+template<typename T>
+void LList<T>::pushBack(const LList<T> &_other)
+{
+    for(u32 i=0;i<_other.mSize;i++)
+        pushBack((_other)[i]);
 }
 
 template<typename T>
@@ -780,6 +821,20 @@ void LList<T>::pushFront(T &&_newitem)
         mFirst->mNext=fnext;
         fnext->mPrev=mFirst;
     }
+}
+
+template<typename T>
+void LList<T>::pushFront(const std::initializer_list<T> _items)
+{
+    for(u32 i=_items.size();i>0;i--)
+        pushFront((_items.begin())[i-1]);
+}
+
+template<typename T>
+void LList<T>::pushFront(const LList<T> &_other)
+{
+    for(u32 i=_other.mSize;i>0;i--)
+        pushFront((_other)[i-1]);
 }
 
 template<typename T>

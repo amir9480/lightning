@@ -4,11 +4,14 @@
 #include "lcore.h"
 
 #if LIGHTNING_IMAGE_PNG
-#include <png.h>
+    #include <png.h>
 #endif
+
+
 
 LNAMESPACE_BEGIN
 
+//! hold image contents
 class LAPI LImage
 {
 public:
@@ -16,7 +19,6 @@ public:
     {
         Format_null=0,
 
-        // Remeber this channels are reserved on DX9
         Format_R8G8B8,
         Format_R8G8B8A8,
 
@@ -29,36 +31,49 @@ public:
     virtual ~LImage();
 
 
+    //! get one pixel size in bytes from Format
     static u16      bytePerPixel(Format _type);
 
+    //! destroy
     void            destroy();
 
+    //! get Data directly
     char*           getData();
 
+    //! get Data Directly
     const char*     getData()const;
 
+    //! get Image width
     u16             getWidth() const;
 
+    //! get Image height
     u16             getHeight() const;
 
+    //! get this image one pixel size in bytes
     u16             getBytePerPixel() const;
 
+    //! get number of pixels
     u64             getPixelsCount()const;
 
+    //! get image format
     Format          getFormat() const;
 
+    //! init a new image
     void            init(u16 _width,u16 _height,Format _type);
 
+    //! check this texture is nothing
     bool            isNull()const;
 
 #if LIGHTNING_IMAGE_PNG
+    //! load from PNG format
     static LImage   loadFromPng(char* _data);
     static LImage   loadFromPngFile(const LString& _fileName);
 #endif
 
-    LImage& operator=(const LImage& _other);
 
-    LImage&& operator=(LImage&& _other);
+
+    LImage& operator=(const LImage& _other);
+    LImage& operator=(LImage&& _other);
 
 protected:
     char*   mData;
