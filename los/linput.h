@@ -7,6 +7,10 @@ LNAMESPACE_BEGIN
 
 class LAPI LInput
 {
+    LInput(const LInput&);
+    LInput(LInput&&);
+    LInput& operator=(const LInput&);
+    LInput& operator=(LInput&&);
 public:
     //! list of key codes availble
     enum KeyCode
@@ -74,6 +78,7 @@ public:
         KeyCode_Select,
         KeyCode_Separator,
         KeyCode_Space,
+        KeyCode_Multiply,
         KeyCode_Subtract,
         KeyCode_Tab,
         KeyCode_CapsLock,
@@ -101,14 +106,36 @@ public:
         KeyCode_Print,
         KeyCode_PrintScreen,
         KeyCode_VolumeUp,
-        KeyCode_VolumeDown
+        KeyCode_VolumeDown,
+        KeyCode_VolumeMute,
+        KeyCode_ScrollLock
     };
 
+    //! check key push down right last frame
+    static bool isKeyDown(KeyCode _code);
 
+    //! check key push up right last frame
+    static bool isKeyUp(KeyCode _code);
+
+    //! check key still is down
+    static bool isKeyPressed(KeyCode _code);
+
+
+    //! do reset ( must be called end of every frame )
+    static void resetInputs();
 
 protected:
+    static bool mKeyDowns[255];
+    static bool mKeyUps[255];
+    static bool mKeyPresses[255];
 
 
+    friend void __linput_set_keyDown(LInput::KeyCode,bool);
+    friend void __linput_set_keyUp(LInput::KeyCode,bool);
+    friend void __linput_set_keyPress(LInput::KeyCode,bool);
+    friend bool __linput_get_keyDown(LInput::KeyCode _code);
+    friend bool __linput_get_keyUp(LInput::KeyCode _code);
+    friend bool __linput_get_keyPress(LInput::KeyCode _code);
 };
 
 LNAMESPACE_END

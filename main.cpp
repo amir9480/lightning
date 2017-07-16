@@ -117,7 +117,7 @@ int main()
     vb->updateBuffer((const char*)_mv,sizeof(MyVertex),4);
 
     LGFXIndexBuffer* ib=a->createIndexBuffer();
-    ib->updateBuffer({0,1,2,3,2,1});
+    ib->updateBuffer({3,2,1,0,1,2});
 
     LMatrix wvp=LMatrix::createViewMatrixLH(LVector3(0.0f,0.0f,1.5f),LVector3(0.0f,0.15f,0.0f),LVector3(0.0f,1.0f,0.0f))*LMatrix::createPerspectiveProjectionLH(50.0f);
 
@@ -125,9 +125,9 @@ int main()
     vs->compile(myShader,"mainVS");
     vs->setMatrix("WVP",wvp);
 
-    cout<<"###"<<te.getWidth()<<" "<<te.getHeight()<<endl;
 
     LGFXTexture* texture1=a->createTexture(te.getWidth(),te.getHeight(),1,te.getFormat());
+    texture1->setFilter(LGFXTexture::TextureFilter_anisotropic);
     if(texture1!=nullptr)
         texture1->updateTexture(0,te);
 
@@ -145,14 +145,30 @@ int main()
     a->setVertexShader(vs);
     a->setPixelShader(ps);
 
+    float _z_show=-1.5f;
+    float _x_show=0.0f;
 
     while (a->processOSMessage()!=2)
     {
+        if(LInput::isKeyPressed(LInput::KeyCode_ArrowUp))
+            _z_show+=0.05f;
+        else if(LInput::isKeyPressed(LInput::KeyCode_ArrowDown))
+            _z_show-=0.05f;
+        if(LInput::isKeyPressed(LInput::KeyCode_D))
+            _x_show+=0.05f;
+        else if(LInput::isKeyPressed(LInput::KeyCode_A))
+            _x_show-=0.05f;
+
+        wvp=LMatrix::createViewMatrixLH(LVector3(_x_show,0.0f,_z_show),LVector3(0.0f,0.0f,1.0f),LVector3(0.0f,1.0f,0.0f))*LMatrix::createPerspectiveProjectionLH(50.0f);
+        vs->setMatrix("WVP",wvp);
+
+
         a->beginScene();
         a->clear(20,20,20);
         a->draw();
         a->endScene();
         a->render();
+        LInput::resetInputs();
     }
 
     delete a;
