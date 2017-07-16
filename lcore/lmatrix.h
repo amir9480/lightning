@@ -101,10 +101,10 @@ public:
     static LMatrix          createViewMatrix(const LVector3& _camerapos,const LVector3& axis_x, const LVector3& axis_y, const LVector3& axis_z);
 
     //! Create a View Matrix Left Handed
-    static LMatrix          createViewMatrixLH(const LVector3& _camerapos, const LVector3& _lookat, const LVector3& _up);
+    static LMatrix          createViewMatrixLH(const LVector3& _camerapos, const LVector3& _forward, const LVector3& _up);
 
     //! Create a View Matrix Right Handed
-    static LMatrix          createViewMatrixRH(const LVector3& _camerapos, const LVector3& _lookat, const LVector3& _up);
+    static LMatrix          createViewMatrixRH(const LVector3& _camerapos, const LVector3& _forward, const LVector3& _up);
 
     //! Get determinant of matrix
     linline f32             getDeterminant()const;

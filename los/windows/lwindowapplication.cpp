@@ -75,7 +75,23 @@ LRESULT CALLBACK lightningmainwindowproc(HWND hwnd,UINT msg,WPARAM wparam,LPARAM
 ////////////////////////////////////////////////////////////////////////////////////////////////////
     case WM_KEYDOWN:case WM_KEYUP:
     {
+        WPARAM _wparam = wparam;
+        //! check Shift/Alt/Ctrl is right or left
         switch (wparam)
+        {
+        case VK_SHIFT:
+            _wparam=MapVirtualKey((lparam & 0x00ff0000) >> 16, MAPVK_VSC_TO_VK_EX);
+            break;
+        case VK_CONTROL:
+            _wparam=MapVirtualKey((lparam & 0x00ff0000) >> 16, MAPVK_VSC_TO_VK_EX);
+            break;
+        case VK_MENU:
+            _wparam=MapVirtualKey((lparam & 0x00ff0000) >> 16, MAPVK_VSC_TO_VK_EX);
+            break;
+        default:
+            break;
+        }
+        switch (_wparam)
         {
         __LIGHTNING_KEY_UPDATE('0',LInput::KeyCode_0);
         __LIGHTNING_KEY_UPDATE('1',LInput::KeyCode_1);
@@ -87,6 +103,17 @@ LRESULT CALLBACK lightningmainwindowproc(HWND hwnd,UINT msg,WPARAM wparam,LPARAM
         __LIGHTNING_KEY_UPDATE('7',LInput::KeyCode_7);
         __LIGHTNING_KEY_UPDATE('8',LInput::KeyCode_8);
         __LIGHTNING_KEY_UPDATE('9',LInput::KeyCode_9);
+
+        __LIGHTNING_KEY_UPDATE(VK_NUMPAD0,LInput::KeyCode_0);
+        __LIGHTNING_KEY_UPDATE(VK_NUMPAD1,LInput::KeyCode_1);
+        __LIGHTNING_KEY_UPDATE(VK_NUMPAD2,LInput::KeyCode_2);
+        __LIGHTNING_KEY_UPDATE(VK_NUMPAD3,LInput::KeyCode_3);
+        __LIGHTNING_KEY_UPDATE(VK_NUMPAD4,LInput::KeyCode_4);
+        __LIGHTNING_KEY_UPDATE(VK_NUMPAD5,LInput::KeyCode_5);
+        __LIGHTNING_KEY_UPDATE(VK_NUMPAD6,LInput::KeyCode_6);
+        __LIGHTNING_KEY_UPDATE(VK_NUMPAD7,LInput::KeyCode_7);
+        __LIGHTNING_KEY_UPDATE(VK_NUMPAD8,LInput::KeyCode_8);
+        __LIGHTNING_KEY_UPDATE(VK_NUMPAD9,LInput::KeyCode_9);
 
         __LIGHTNING_KEY_UPDATE('A',LInput::KeyCode_A);
         __LIGHTNING_KEY_UPDATE('B',LInput::KeyCode_B);

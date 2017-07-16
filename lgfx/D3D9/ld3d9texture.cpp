@@ -63,7 +63,9 @@ LD3D9Texture::~LD3D9Texture()
 
 void LD3D9Texture::generateMipMaps()
 {
-    mTexture->GenerateMipSubLevels();
+//    if(mMipMapCount<=1)
+//        return;
+//    mTexture->GenerateMipSubLevels();
 }
 
 void LD3D9Texture::destroy()
@@ -116,6 +118,7 @@ void LD3D9Texture::updateTexture(u16 _mip_map_level, const LImage &_data)
     //lMemoryCopy(r.pBits,_data.getData(),_data.getPixelsCount()*_data.getBytePerPixel());
 
     HR(mTexture->UnlockRect(_mip_map_level));
+    generateMipMaps();
 }
 
 

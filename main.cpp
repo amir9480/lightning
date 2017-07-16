@@ -117,9 +117,9 @@ int main()
     vb->updateBuffer((const char*)_mv,sizeof(MyVertex),4);
 
     LGFXIndexBuffer* ib=a->createIndexBuffer();
-    ib->updateBuffer({3,2,1,0,1,2});
+    ib->updateBuffer({2,1,3,0,1,2});
 
-    LMatrix wvp=LMatrix::createViewMatrixLH(LVector3(0.0f,0.0f,1.5f),LVector3(0.0f,0.15f,0.0f),LVector3(0.0f,1.0f,0.0f))*LMatrix::createPerspectiveProjectionLH(50.0f);
+    LMatrix wvp;
 
     LGFXShader* vs=a->createVertexShader();
     vs->compile(myShader,"mainVS");
@@ -145,21 +145,34 @@ int main()
     a->setVertexShader(vs);
     a->setPixelShader(ps);
 
-    float _z_show=-1.5f;
+    float _z_show=-1.0f;
     float _x_show=0.0f;
+    float _y_show=0.0f;
+    float m=1.0f;
 
     while (a->processOSMessage()!=2)
     {
-        if(LInput::isKeyPressed(LInput::KeyCode_ArrowUp))
-            _z_show+=0.05f;
-        else if(LInput::isKeyPressed(LInput::KeyCode_ArrowDown))
-            _z_show-=0.05f;
-        if(LInput::isKeyPressed(LInput::KeyCode_D))
-            _x_show+=0.05f;
-        else if(LInput::isKeyPressed(LInput::KeyCode_A))
-            _x_show-=0.05f;
+        if(LInput::isKeyDown(LInput::KeyCode_Escape))
+            break;
+        if(LInput::isKeyPressed(LInput::KeyCode_LeftShift))
+            m=2.0f;
+        else
+            m=1.0f;
 
-        wvp=LMatrix::createViewMatrixLH(LVector3(_x_show,0.0f,_z_show),LVector3(0.0f,0.0f,1.0f),LVector3(0.0f,1.0f,0.0f))*LMatrix::createPerspectiveProjectionLH(50.0f);
+        if(LInput::isKeyPressed(LInput::KeyCode_W))
+            _z_show+=0.05f*m;
+        else if(LInput::isKeyPressed(LInput::KeyCode_S))
+            _z_show-=0.05f*m;
+        if(LInput::isKeyPressed(LInput::KeyCode_A))
+            _x_show-=0.05f*m;
+        else if(LInput::isKeyPressed(LInput::KeyCode_D))
+            _x_show+=0.05f*m;
+        if(LInput::isKeyPressed(LInput::KeyCode_E))
+            _y_show+=0.05f*m;
+        else if(LInput::isKeyPressed(LInput::KeyCode_Q))
+            _y_show-=0.05f*m;
+
+        wvp=LMatrix::createViewMatrixLH(LVector3(_x_show,_y_show,_z_show),LVector3(0.0f,0.0f,1.0f),LVector3(0.0f,1.0f,0.0f))*LMatrix::createPerspectiveProjectionLH(50.0f);
         vs->setMatrix("WVP",wvp);
 
 

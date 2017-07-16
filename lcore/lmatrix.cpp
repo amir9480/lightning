@@ -126,11 +126,11 @@ LMatrix LMatrix::createViewMatrix(const LVector3 &_camerapos,const LVector3 &axi
  * \param _up up axis of camera
  * \enden
  */
-LMatrix LMatrix::createViewMatrixLH(const LVector3 &_camerapos, const LVector3 &_lookat, const LVector3 &_up)
+LMatrix LMatrix::createViewMatrixLH(const LVector3 &_camerapos, const LVector3 &_forward, const LVector3 &_up)
 {
     // Adapted from DirectX documents
-    LVector3 axis_z=(_lookat-_camerapos).getNormalized();
-    LVector3 axis_x=LVector3::crossProduct(axis_z,_up).getNormalized();
+    LVector3 axis_z=(_forward).getNormalized();
+    LVector3 axis_x=LVector3::crossProduct(_up,axis_z).getNormalized();
     LVector3 axis_y=LVector3::crossProduct(axis_z,axis_x);
     return createViewMatrix(_camerapos,axis_x,axis_y,axis_z);
 }
@@ -143,11 +143,11 @@ LMatrix LMatrix::createViewMatrixLH(const LVector3 &_camerapos, const LVector3 &
  * \param _up up axis of camera
  * \enden
  */
-LMatrix LMatrix::createViewMatrixRH(const LVector3 &_camerapos, const LVector3 &_lookat, const LVector3 &_up)
+LMatrix LMatrix::createViewMatrixRH(const LVector3 &_camerapos, const LVector3 &_forward, const LVector3 &_up)
 {
     // Adapted from DirectX documents
-    LVector3 axis_z=(_camerapos-_lookat).getNormalized();
-    LVector3 axis_x=LVector3::crossProduct(axis_z,_up).getNormalized();
+    LVector3 axis_z=(-_forward).getNormalized();
+    LVector3 axis_x=LVector3::crossProduct(_up,axis_z).getNormalized();
     LVector3 axis_y=LVector3::crossProduct(axis_z,axis_x);
     return createViewMatrix(_camerapos,axis_x,axis_y,axis_z);
 }
