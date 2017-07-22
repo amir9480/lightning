@@ -13,6 +13,15 @@ bool __linput_get_keyDown(LInput::KeyCode _code);
 bool __linput_get_keyUp(LInput::KeyCode _code);
 bool __linput_get_keyPress(LInput::KeyCode _code);
 
+void __linput_set_mouseDown(LInput::MouseCode,bool);
+void __linput_set_mouseUp(LInput::MouseCode,bool);
+void __linput_set_mousePress(LInput::MouseCode,bool);
+bool __linput_get_mouseDown(LInput::MouseCode _code);
+bool __linput_get_mouseUp(LInput::MouseCode _code);
+bool __linput_get_mousePress(LInput::MouseCode _code);
+
+void __linput_set_mouse_pos(int _x,int _y);
+
 
 LApplication::LApplication()
 {
@@ -37,6 +46,10 @@ LRESULT CALLBACK lightningmainwindowproc(HWND hwnd,UINT msg,WPARAM wparam,LPARAM
 {
     switch(msg)
     {
+    case WM_CREATE:
+    {
+        break;
+    }
     case WM_ERASEBKGND:
         return 0;
         break;
@@ -202,12 +215,45 @@ LRESULT CALLBACK lightningmainwindowproc(HWND hwnd,UINT msg,WPARAM wparam,LPARAM
         __LIGHTNING_KEY_UPDATE(VK_VOLUME_UP,LInput::KeyCode_VolumeUp);
         __LIGHTNING_KEY_UPDATE(VK_VOLUME_MUTE,LInput::KeyCode_VolumeMute);
 
-
         default:
             break;
         }
-    }
         break;
+    }
+
+    case WM_MOUSEMOVE:
+    {
+        POINT _p;
+        GetCursorPos(&_p);
+        __linput_set_mouse_pos(_p.x,_p.y);
+        break;
+    }
+////////////////////////////////////////////////////////////////////////////////////////////////////
+#define __LIGHTNING_MOUSE_KEY_UPDATE(_WIN_CODE_DOWN,_WIN_CODE_UP,_LIGHTNING_CODE)\
+    case _WIN_CODE_DOWN:\
+    {\
+        if(__linput_get_mousePress(_LIGHTNING_CODE)==false)\
+        {\
+            __linput_set_mouseDown(_LIGHTNING_CODE,true);\
+            __linput_set_mousePress(_LIGHTNING_CODE,true);\
+        }\
+        break;\
+    }\
+    case _WIN_CODE_UP:\
+    {\
+        if(__linput_get_mousePress(_LIGHTNING_CODE)==true)\
+        {\
+            __linput_set_mouseUp(_LIGHTNING_CODE,true);\
+            __linput_set_mousePress(_LIGHTNING_CODE,false);\
+        }\
+        break;\
+    }
+
+    __LIGHTNING_MOUSE_KEY_UPDATE(WM_LBUTTONDOWN,WM_LBUTTONUP,LInput::MouseCode_left)
+    __LIGHTNING_MOUSE_KEY_UPDATE(WM_RBUTTONDOWN,WM_RBUTTONUP,LInput::MouseCode_right)
+    __LIGHTNING_MOUSE_KEY_UPDATE(WM_MBUTTONDOWN,WM_MBUTTONUP,LInput::MouseCode_middle)
+
+
     }
     return DefWindowProcW(hwnd,msg,wparam,lparam);
 }

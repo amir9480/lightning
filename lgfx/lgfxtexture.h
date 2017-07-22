@@ -60,6 +60,9 @@ public:
     //! get UV addressing for UV.v
     virtual TextureAddress          getAddressV() const;
 
+    //! check texture has nothing
+    virtual bool                    isNull()const;
+
     //! before device reset
     virtual void                    preReset()=0;
 

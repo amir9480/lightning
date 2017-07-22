@@ -16,7 +16,6 @@ ostream& operator<<(ostream& _in,const LString& _str)
 // Dont forget LAPI
 // Add Reflection Support
 // *** Make Shared Pointer Thread Safe
-// *** Make Image::loadFromPNG Thread Safe
 //
 ///////////////////////////////////////
 //
@@ -95,14 +94,6 @@ int main()
 
 
     LImage te=LImage::loadFromPngFile("image.png");
-    //te.init(8,8,LImage::Format::Format_A8R8G8B8);
-    //for(u32 i=0;i<te.getPixelsCount()*te.getBytePerPixel();i+=4)
-    //{
-            //te.getData()[i]=255;
-            //te.getData()[i+1]=i;
-            //te.getData()[i+2]=0;
-            //te.getData()[i+3]=0;
-    //}
 
     LGFXDevice* a=LGFXDevice::create();
     a->initialize(0,1);
@@ -126,18 +117,17 @@ int main()
     vs->setMatrix("WVP",wvp);
 
 
-    LGFXTexture* texture1=a->createTexture(te.getWidth(),te.getHeight(),1,te.getFormat());
-    texture1->setFilter(LGFXTexture::TextureFilter_anisotropic);
+    LGFXTexture* texture1=a->createTexture(512,512,1,te.getFormat());
     if(texture1!=nullptr)
+    {
         texture1->updateTexture(0,te);
+    }
 
     LGFXShader* ps=a->createPixelShader();
     ps->compile(myShader,"mainPS");
     ps->setVector("testvalue",LVector3(0.0f,0.0f,0.0f));
     if(texture1!=nullptr)
         ps->setTexture("t0",texture1);
-    //ps->setMatrix("WVP",wvp);
-
 
     a->setVertexDeclaration(MyVertex::Decl);
     a->setVertexBuffer(0,vb);
@@ -145,34 +135,38 @@ int main()
     a->setVertexShader(vs);
     a->setPixelShader(ps);
 
-    float _z_show=-1.0f;
-    float _x_show=0.0f;
-    float _y_show=0.0f;
+    LVector3 camPos(0,0,-1);
+    LQuaternion camRot;
     float m=1.0f;
 
-    while (a->processOSMessage()!=2)
+    while (a->processOSMessage())
     {
         if(LInput::isKeyDown(LInput::KeyCode_Escape))
             break;
         if(LInput::isKeyPressed(LInput::KeyCode_LeftShift))
-            m=2.0f;
+            m=0.1f;
         else
-            m=1.0f;
+            m=0.05f;
 
         if(LInput::isKeyPressed(LInput::KeyCode_W))
-            _z_show+=0.05f*m;
+            camPos+=camRot.getForward()*m;
         else if(LInput::isKeyPressed(LInput::KeyCode_S))
-            _z_show-=0.05f*m;
+            camPos-=camRot.getForward()*m;
         if(LInput::isKeyPressed(LInput::KeyCode_A))
-            _x_show-=0.05f*m;
+            camPos-=camRot.getRight()*m;
         else if(LInput::isKeyPressed(LInput::KeyCode_D))
-            _x_show+=0.05f*m;
+            camPos+=camRot.getRight()*m;
         if(LInput::isKeyPressed(LInput::KeyCode_E))
-            _y_show+=0.05f*m;
+            camPos+=camRot.getUp()*m;
         else if(LInput::isKeyPressed(LInput::KeyCode_Q))
-            _y_show-=0.05f*m;
+            camPos-=camRot.getUp()*m;
+        if(LInput::isMousePressed(LInput::MouseCode_left))
+        {
+            camRot*=LQuaternion(camRot.getRight(),-LInput::getMouseDeltaPos().y/4);
+            camRot*=LQuaternion(LVector3::up,-LInput::getMouseDeltaPos().x/4);
+        }
 
-        wvp=LMatrix::createViewMatrixLH(LVector3(_x_show,_y_show,_z_show),LVector3(0.0f,0.0f,1.0f),LVector3(0.0f,1.0f,0.0f))*LMatrix::createPerspectiveProjectionLH(50.0f);
+        wvp=LMatrix::createViewMatrixLH(camPos,camRot.getForward(),camRot.getUp())*LMatrix::createPerspectiveProjectionLH(50.0f);
         vs->setMatrix("WVP",wvp);
 
 

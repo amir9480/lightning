@@ -58,6 +58,12 @@ public:
     //! get image format
     Format          getFormat() const;
 
+    //! get resized copy of this
+    LImage          getResized(u16 _width,u16 _height)const;
+
+    //! get cropped copy of this
+    LImage          getCropped(u16 _x,u16 _y,u16 _width,u16 _height)const;
+
     //! init a new image
     void            init(u16 _width,u16 _height,Format _type);
 

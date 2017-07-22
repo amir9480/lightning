@@ -55,7 +55,7 @@ public:
 
     virtual void                    initialize(bool _fullscreen,bool _vsync);
 
-    virtual u8                      processOSMessage();
+    virtual bool                    processOSMessage();
 
     virtual void                    render();
 
@@ -66,6 +66,8 @@ public:
     virtual void                    setVertexDeclaration(const LGFXVertexDeclaration *_decl);
 
     virtual void                    setVertexBuffer(u16 _streamNumber,LGFXVertexBuffer* _buffer);
+
+    virtual void                    setVertexBufferFrequency(u16 _streamNumber,u32 _count);
 
     virtual void                    setIndexBuffer(LGFXIndexBuffer *_buffer);
 

@@ -78,6 +78,13 @@ LGFXTexture::TextureAddress LGFXTexture::getAddressV() const
     return mAddressV;
 }
 
+bool LGFXTexture::isNull() const
+{
+    if(mWidth==0||mHeight==0||mMipMapCount==0||mFormat==LImage::Format_null)
+        return true;
+    return false;
+}
+
 void LGFXTexture::setAddressV(const TextureAddress &addressV)
 {
     mAddressV = addressV;

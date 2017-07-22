@@ -111,23 +111,55 @@ public:
         KeyCode_ScrollLock
     };
 
+    enum MouseCode
+    {
+        MouseCode_left=1,
+        MouseCode_right,
+        MouseCode_middle,
+
+    };
+
     //! check key push down right last frame
-    static bool isKeyDown(KeyCode _code);
+    static bool         isKeyDown(KeyCode _code);
 
     //! check key push up right last frame
-    static bool isKeyUp(KeyCode _code);
+    static bool         isKeyUp(KeyCode _code);
 
     //! check key still is down
-    static bool isKeyPressed(KeyCode _code);
+    static bool         isKeyPressed(KeyCode _code);
 
+    //! check mouse key push down right last frame
+    static bool         isMouseDown(MouseCode _code);
+
+    //! check mouse key push up right last frame
+    static bool         isMouseUp(MouseCode _code);
+
+    //! check mouse key still is down
+    static bool         isMousePressed(MouseCode _code);
+
+    //! get current mouse pos
+    static LVector2     getMousePos();
+
+    //! get previous frame mouse pos
+    static LVector2     getPreviousMousePos();
+
+    //! get mouse delta from last frame
+    static LVector2     getMouseDeltaPos();
 
     //! do reset ( must be called end of every frame )
-    static void resetInputs();
+    static void         resetInputs();
 
 protected:
     static bool mKeyDowns[255];
     static bool mKeyUps[255];
     static bool mKeyPresses[255];
+    static bool mMouseDowns[32];
+    static bool mMouseUps[32];
+    static bool mMousePresses[32];
+    static int  mMouse_x;
+    static int  mMouse_y;
+    static int  mMouseLast_x;
+    static int  mMouseLast_y;
 
 
     friend void __linput_set_keyDown(LInput::KeyCode,bool);
@@ -136,6 +168,15 @@ protected:
     friend bool __linput_get_keyDown(LInput::KeyCode _code);
     friend bool __linput_get_keyUp(LInput::KeyCode _code);
     friend bool __linput_get_keyPress(LInput::KeyCode _code);
+
+    friend void __linput_set_mouseDown(LInput::MouseCode,bool);
+    friend void __linput_set_mouseUp(LInput::MouseCode,bool);
+    friend void __linput_set_mousePress(LInput::MouseCode,bool);
+    friend bool __linput_get_mouseDown(LInput::MouseCode _code);
+    friend bool __linput_get_mouseUp(LInput::MouseCode _code);
+    friend bool __linput_get_mousePress(LInput::MouseCode _code);
+
+    friend void __linput_set_mouse_pos(int _x,int _y);
 };
 
 LNAMESPACE_END

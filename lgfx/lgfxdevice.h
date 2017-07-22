@@ -56,7 +56,7 @@ public:
     virtual void                    initialize(bool _fullscreen,bool _vsync)=0;
 
     //! if process done returns 1 and if request was Quit returns 2
-    virtual u8                      processOSMessage()=0;
+    virtual bool                    processOSMessage()=0;
 
     //! render on screen
     virtual void                    render()=0;
@@ -72,6 +72,9 @@ public:
 
     //! set current vertex buffer
     virtual void                    setVertexBuffer(u16 _streamNumber,LGFXVertexBuffer *_buffer)=0;
+
+    //! set vertex buffer frequency (use 0 to disable)
+    virtual void                    setVertexBufferFrequency(u16 _streamNumber,u32 _count)=0;
 
     //! set current index buffer
     virtual void                    setIndexBuffer(LGFXIndexBuffer* _buffer)=0;

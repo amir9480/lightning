@@ -5,6 +5,7 @@
 
 #if (LOS == LOS_WINDOWS)
 #include "windows.h"
+#include "windowsx.h"
 
 LNAMESPACE_BEGIN
 

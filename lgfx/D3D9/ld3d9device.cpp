@@ -175,18 +175,18 @@ void LD3D9Device::initialize(bool _fullscreen, bool _vsync)
     lLogMessage(1,"Direct3D9 Graphic Device Initialized Successfully");
 }
 
-u8 LD3D9Device::processOSMessage()
+bool LD3D9Device::processOSMessage()
 {
     MSG msg;
     if(PeekMessageW(&msg,0,0,0,PM_REMOVE))
     {
         if(msg.message==WM_QUIT)
-            return 2;
+            return false;
         TranslateMessage(&msg);
         DispatchMessageW(&msg);
-        return 1;
+        return processOSMessage();
     }
-    return 0;
+    return true;
 }
 
 void LD3D9Device::render()
@@ -253,6 +253,22 @@ void LD3D9Device::setVertexBuffer(u16 _streamNumber, LGFXVertexBuffer *_buffer)
     HR(mDevice->SetStreamSource(_streamNumber,dynamic_cast<LD3D9VertexBuffer*>(_buffer)->mVertexBuffer,0,_buffer->getElementSize()));
 }
 
+void LD3D9Device::setVertexBufferFrequency(u16 _streamNumber, u32 _count)
+{
+    if(_count==0)
+    {
+        HR(mDevice->SetStreamSourceFreq(_streamNumber,1));
+    }
+    else if(_count==1)
+    {
+        HR(mDevice->SetStreamSourceFreq(_streamNumber,D3DSTREAMSOURCE_INSTANCEDATA|1));
+    }
+    else
+    {
+        HR(mDevice->SetStreamSourceFreq(_streamNumber,D3DSTREAMSOURCE_INDEXEDDATA|_count));
+    }
+}
+
 void LD3D9Device::setIndexBuffer(LGFXIndexBuffer *_buffer)
 {
     if(_buffer==nullptr)
@@ -290,15 +306,20 @@ void LD3D9Device::setPixelShader(LGFXShader *_shader)
 
 void LD3D9Device::setTexture(u32 _sampler, LGFXTexture *_t)
 {
+    if(_t==nullptr || _t->isNull())
+    {
+        HR(mDevice->SetTexture(_sampler,nullptr));
+        return;
+    }
     static float _mmld;
     _mmld=_t->getMipMapBias();
+    HR(mDevice->SetTexture(_sampler, dynamic_cast<LD3D9Texture*>(_t)->mTexture));
     HR(mDevice->SetSamplerState(_sampler,D3DSAMP_MINFILTER,lD3DTextureFilter(_t->getFilter())));
     HR(mDevice->SetSamplerState(_sampler,D3DSAMP_MAGFILTER,lD3DTextureFilter(_t->getFilter())));
     HR(mDevice->SetSamplerState(_sampler,D3DSAMP_MIPFILTER,lD3DTextureFilter(_t->getFilter())));
     HR(mDevice->SetSamplerState(_sampler,D3DSAMP_MIPMAPLODBIAS,*((LPDWORD)(&_mmld))));
     HR(mDevice->SetSamplerState(_sampler,D3DSAMP_MAXANISOTROPY,_t->getMaxAnisotropic()));
     HR(mDevice->SetSamplerState(_sampler,D3DSAMP_MAXMIPLEVEL,_t->getMaxMipMapLevel()));
-    HR(mDevice->SetTexture(_sampler, dynamic_cast<LD3D9Texture*>(_t)->mTexture));
     HR(mDevice->SetSamplerState(_sampler,D3DSAMP_ADDRESSU,lD3DTextureAddress(_t->getAddressU())));
     HR(mDevice->SetSamplerState(_sampler,D3DSAMP_ADDRESSV,lD3DTextureAddress(_t->getAddressV())));
 }

@@ -88,6 +88,86 @@ LImage::Format LImage::getFormat() const
     return mFormat;
 }
 
+LImage LImage::getResized(u16 _width, u16 _height) const
+{
+    LImage o;
+    o.init(_width,_height,mFormat);
+    f32 _w=((float)mWidth)/_width;
+    f32 _h=((float)mHeight)/_height;
+    switch (mFormat)
+    {
+    case Format_R8G8B8:
+    {
+        for(u32 i=0;i<_height;i++)
+        {
+            for(u32 j=0;j<_width;j++)
+            {
+                o.mData[(i*_width*o.mBytePerPixel)+(j*3)+0]=mData[(int)(((i*mWidth*_w*o.mBytePerPixel)+(j*_h*3)+0))];
+                o.mData[(i*_width*o.mBytePerPixel)+(j*3)+1]=mData[(int)(((i*mWidth*_w*o.mBytePerPixel)+(j*_h*3)+1))];
+                o.mData[(i*_width*o.mBytePerPixel)+(j*3)+2]=mData[(int)(((i*mWidth*_w*o.mBytePerPixel)+(j*_h*3)+2))];
+            }
+        }
+        break;
+    }
+    case Format_R8G8B8A8:
+    {
+        for(u32 i=0;i<_height;i++)
+        {
+            for(u32 j=0;j<_width;j++)
+            {
+                o.mData[(i*_width*o.mBytePerPixel)+(j*4)+0]=mData[(int)(((i*mWidth*_w*o.mBytePerPixel)+(j*_h*4)+0))];
+                o.mData[(i*_width*o.mBytePerPixel)+(j*4)+1]=mData[(int)(((i*mWidth*_w*o.mBytePerPixel)+(j*_h*4)+1))];
+                o.mData[(i*_width*o.mBytePerPixel)+(j*4)+2]=mData[(int)(((i*mWidth*_w*o.mBytePerPixel)+(j*_h*4)+2))];
+                o.mData[(i*_width*o.mBytePerPixel)+(j*4)+3]=mData[(int)(((i*mWidth*_w*o.mBytePerPixel)+(j*_h*4)+3))];
+            }
+        }
+        break;
+    }
+    case Format_null:
+        break;
+    }
+    return o;
+}
+
+LImage LImage::getCropped(u16 _x, u16 _y, u16 _width, u16 _height) const
+{
+    LImage o;
+    o.init(_width,_height,mFormat);
+    switch (mFormat)
+    {
+    case Format_R8G8B8:
+    {
+        for(u32 i=0;i<_height;i++)
+        {
+            for(u32 j=0;j<_width;j++)
+            {
+                o.mData[(i*_width*o.mBytePerPixel)+(j*3)+0]=mData[(int)(((_y*mWidth*o.mBytePerPixel)+(i*mWidth*o.mBytePerPixel)+(_x*3)+(j*3)+0))];
+                o.mData[(i*_width*o.mBytePerPixel)+(j*3)+1]=mData[(int)(((_y*mWidth*o.mBytePerPixel)+(i*mWidth*o.mBytePerPixel)+(_x*3)+(j*3)+1))];
+                o.mData[(i*_width*o.mBytePerPixel)+(j*3)+2]=mData[(int)(((_y*mWidth*o.mBytePerPixel)+(i*mWidth*o.mBytePerPixel)+(_x*3)+(j*3)+2))];
+            }
+        }
+        break;
+    }
+    case Format_R8G8B8A8:
+    {
+        for(u32 i=0;i<_height;i++)
+        {
+            for(u32 j=0;j<_width;j++)
+            {
+                o.mData[(i*_width*o.mBytePerPixel)+(j*4)+0]=mData[(int)(((_y*mWidth*o.mBytePerPixel)+(i*mWidth*o.mBytePerPixel)+(_x*4)+(j*4)+0))];
+                o.mData[(i*_width*o.mBytePerPixel)+(j*4)+1]=mData[(int)(((_y*mWidth*o.mBytePerPixel)+(i*mWidth*o.mBytePerPixel)+(_x*4)+(j*4)+1))];
+                o.mData[(i*_width*o.mBytePerPixel)+(j*4)+2]=mData[(int)(((_y*mWidth*o.mBytePerPixel)+(i*mWidth*o.mBytePerPixel)+(_x*4)+(j*4)+2))];
+                o.mData[(i*_width*o.mBytePerPixel)+(j*4)+3]=mData[(int)(((_y*mWidth*o.mBytePerPixel)+(i*mWidth*o.mBytePerPixel)+(_x*4)+(j*4)+3))];
+            }
+        }
+        break;
+    }
+    case Format_null:
+        break;
+    }
+    return o;
+}
+
 void LImage::init(u16 _width, u16 _height, Format _type)
 {
     destroy();
@@ -96,7 +176,8 @@ void LImage::init(u16 _width, u16 _height, Format _type)
     mFormat=_type;
     mBytePerPixel=bytePerPixel(_type);
 
-    mData=new char[mWidth*mHeight*mBytePerPixel];
+    if(mWidth!=0&&mHeight!=0&&mBytePerPixel!=0)
+        mData=new char[mWidth*mHeight*mBytePerPixel];
 
 }
 
@@ -173,7 +254,6 @@ LImage LImage::loadFromPng(char *_data)
                 o.mData[(i*_width*o.mBytePerPixel)+(j*3)+0]=_rowData[j*3+0];
                 o.mData[(i*_width*o.mBytePerPixel)+(j*3)+1]=_rowData[j*3+1];
                 o.mData[(i*_width*o.mBytePerPixel)+(j*3)+2]=_rowData[j*3+2];
-                o.mData[(i*_width*o.mBytePerPixel)+(j*3)+3]=_rowData[j*3+3];
             }
         }
         break;
@@ -203,15 +283,20 @@ LImage LImage::loadFromPng(char *_data)
 
 LImage LImage::loadFromPngFile(const LString &_fileName)
 {
+    LImage o;
+    o.init(1,1,LImage::Format_R8G8B8);
+    o.getData()[0]=150;
+    o.getData()[1]=0;
+    o.getData()[2]=150;
     LFile f(_fileName,LFile::IOTypeRead|LFile::IOTypeBinary);
     if(f.isOpen()==false)
     {
-        lError(1,"LImage::loadFromPngFile(const LString &_fileName): file not found",LImage());
+        lError(1,"LImage::loadFromPngFile(const LString &_fileName): file not found",o);
     }
     u64 _fs=f.getSize();
     char* _data = new char[_fs];
     f.read((void*)_data,_fs);
-    LImage o = loadFromPng(_data);
+    o = loadFromPng(_data);
     delete[] _data;
     return o;
 }

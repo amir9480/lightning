@@ -131,7 +131,7 @@ LMatrix LMatrix::createViewMatrixLH(const LVector3 &_camerapos, const LVector3 &
     // Adapted from DirectX documents
     LVector3 axis_z=(_forward).getNormalized();
     LVector3 axis_x=LVector3::crossProduct(_up,axis_z).getNormalized();
-    LVector3 axis_y=LVector3::crossProduct(axis_z,axis_x);
+    LVector3 axis_y=LVector3::crossProduct(axis_z,axis_x).getNormalized();
     return createViewMatrix(_camerapos,axis_x,axis_y,axis_z);
 }
 

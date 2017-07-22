@@ -264,9 +264,9 @@ f32 LVector3::getAngelFrom(const LVector3 &_other) const
 
 LVector3 LVector3::getCrossProduct(const LVector3 &_other) const
 {
-    return LVector3(lRound(y*_other.z-z*_other.y),
-                    -lRound(x*_other.z-z*_other.x),
-                    lRound(x*_other.y-y*_other.x));
+    return LVector3((y*_other.z-z*_other.y),
+                    -(x*_other.z-z*_other.x),
+                    (x*_other.y-y*_other.x));
 }
 
 f32 LVector3::getDistanceFrom(const LVector3 &_other) const

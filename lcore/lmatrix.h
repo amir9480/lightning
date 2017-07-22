@@ -56,10 +56,10 @@ public:
     linline f32             at(u32 i,u32 j)const;
 
     //! Creates an orthgraphic projection Left Handed by screen values
-    linline static LMatrix  createOrthgraphicProjectionLH(const f32& _left=0.0f,const f32& _right=800.0f,const f32& _top=0.0f,const f32& _bottom=600.0f,const f32& _znear=0.1f,const f32& _zfar=1000.0f);
+    linline static LMatrix  createOrthgraphicProjectionLH(const f32& _left,const f32& _right,const f32& _top,const f32& _bottom,const f32& _znear,const f32& _zfar);
 
     //! Creates an orthgraphic Projection Right Handed by screen values
-    linline static LMatrix  createOrthgraphicProjectionRH(const f32& _left=0.0f,const f32& _right=800.0f,const f32& _top=0.0f,const f32& _bottom=600.0f,const f32& _znear=0.1f,const f32& _zfar=1000.0f);
+    linline static LMatrix  createOrthgraphicProjectionRH(const f32& _left,const f32& _right,const f32& _top,const f32& _bottom,const f32& _znear,const f32& _zfar);
 
     //! Creates an orthgraphic Projection Left Handed
     linline static LMatrix  createOrthgraphicProjectionLH(const f32& _width=800.0f,const f32& _height=600.0f,const f32& _znear=0.1f,const f32& _zfar=1000.0f);
