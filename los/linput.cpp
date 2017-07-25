@@ -121,7 +121,7 @@ LVector2 LInput::getPreviousMousePos()
     return LVector2(mMouseLast_x,mMouseLast_y);
 }
 
-LVector2 LInput::getMouseDeltaPos()
+LVector2 LInput::getMouseDelta()
 {
     return LVector2(mMouse_x-mMouseLast_x,mMouse_y-mMouseLast_y);
 }

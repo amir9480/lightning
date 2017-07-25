@@ -56,6 +56,8 @@ public:
 
     virtual const LVector<LVertexElement>&  getElements()=0;
 
+    virtual u32                             getElementsSize()=0;
+
     virtual void                            preReset()=0;
 
     virtual void                            postReset()=0;

@@ -144,7 +144,7 @@ public:
     static LVector2     getPreviousMousePos();
 
     //! get mouse delta from last frame
-    static LVector2     getMouseDeltaPos();
+    static LVector2     getMouseDelta();
 
     //! do reset ( must be called end of every frame )
     static void         resetInputs();

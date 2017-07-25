@@ -9,6 +9,32 @@
 
 LNAMESPACE_BEGIN
 
+enum LGFXFillMode
+{
+    LGFXFillMode_Point,
+    LGFXFillMode_Wireframe,
+    LGFXFillMode_Solid
+};
+
+enum LGFXCullMode
+{
+    LGFXCullMode_None,
+    LGFXCullMode_Clockwise,
+    LGFXCullMode_CounterClockwise
+};
+
+enum LGFXCompareFunction
+{
+    LGFXCompareFunction_Never,
+    LGFXCompareFunction_Less,
+    LGFXCompareFunction_Equal,
+    LGFXCompareFunction_LessEqual,
+    LGFXCompareFunction_Greater,
+    LGFXCompareFunction_NotEqual,
+    LGFXCompareFunction_GreaterEqual,
+    LGFXCompareFunction_Always
+};
+
 //! To create a Graphic Device . ( use LGFXDevice::create )
 class LAPI LGFXDevice
 {
@@ -16,8 +42,8 @@ public:
     LGFXDevice();
     virtual ~LGFXDevice();
 
-    //! create a new renderable window
-    static LGFXDevice*              create();
+    //! create a new renderable window and initialize device
+    static LGFXDevice*              create(bool _fullscreen,bool _vsync);
 
     //! to start rendering
     virtual void                    beginScene()=0;
@@ -64,6 +90,9 @@ public:
     //! release
     virtual void                    release()=0;
 
+    //! reset parameters to default
+    virtual void                    resetParameters();
+
     //! set rendering window title
     virtual void                    setTitle(const LString& _newname)=0;
 
@@ -88,6 +117,21 @@ public:
     //! set current texture
     virtual void                    setTexture(u32 _sampler,LGFXTexture* _t)=0;
 
+    //! set depth check is enable or not
+    virtual void                    setDepthCheckEnable(bool _value=true)=0;
+
+    //! set write to depth buffer is enabled or not
+    virtual void                    setDepthWriteEnable(bool _value=true)=0;
+
+    //! set depth check function
+    virtual void                    setDepthCheckFunction(LGFXCompareFunction _val=LGFXCompareFunction_LessEqual)=0;
+
+    //! set fill mode
+    virtual void                    setFillMode(LGFXFillMode _type=LGFXFillMode_Solid)=0;
+
+    //! set cull mode
+    virtual void                    setCullMode(LGFXCullMode _mode=LGFXCullMode_CounterClockwise)=0;
+
     //! show rendering window
     virtual void                    showWindow()=0;
 
@@ -97,6 +141,10 @@ protected:
     LVector<LGFXIndexBuffer*>       mIndexBuffers;
     LVector<LGFXShader*>            mShaders;
     LVector<LGFXTexture*>           mTextures;
+
+    u32                             mMaxSampler;
+    u16                             mMaxVertexBuffer;
+
 };
 
 LNAMESPACE_END

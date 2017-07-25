@@ -4,6 +4,27 @@
 
 LNAMESPACE_BEGIN
 
+LENUM_CONVERTOR(LGFXCullMode,D3DCULL,
+                LGFXCullMode_None,D3DCULL_NONE,
+                LGFXCullMode_Clockwise,D3DCULL_CW,
+                LGFXCullMode_CounterClockwise,D3DCULL_CCW)
+
+LENUM_CONVERTOR(LGFXFillMode,D3DFILLMODE,
+                LGFXFillMode_Point,D3DFILL_POINT,
+                LGFXFillMode_Wireframe,D3DFILL_WIREFRAME,
+                LGFXFillMode_Solid,D3DFILL_SOLID)
+
+LENUM_CONVERTOR(LGFXCompareFunction,D3DCMPFUNC,
+                LGFXCompareFunction_Never,D3DCMP_NEVER,
+                LGFXCompareFunction_Less,D3DCMP_LESS,
+                LGFXCompareFunction_Equal,D3DCMP_EQUAL,
+                LGFXCompareFunction_LessEqual,D3DCMP_LESSEQUAL,
+                LGFXCompareFunction_Greater,D3DCMP_GREATER,
+                LGFXCompareFunction_NotEqual,D3DCMP_NOTEQUAL,
+                LGFXCompareFunction_GreaterEqual,D3DCMP_GREATEREQUAL,
+                LGFXCompareFunction_Always,D3DCMP_ALWAYS)
+
+
 void lCallOnStart()
 {
     WNDCLASSW mywndclass;
@@ -22,9 +43,10 @@ void lCallOnEnd()
     UnregisterClassW(L"lightningmainwindow",GetModuleHandleW(0));
 }
 
-LGFXDevice* LGFXDevice::create()
+LGFXDevice* LGFXDevice::create(bool _fullscreen, bool _vsync)
 {
     LGFXDevice* o =new LD3D9Device();
+    o->initialize(_fullscreen,_vsync);
     return o;
 }
 
@@ -38,10 +60,10 @@ LD3D9Device::LD3D9Device()
     mCurrentIndexBuffer=0;
 
     mWindowHandler = CreateWindowExW( (DWORD)NULL, L"lightningmainwindow",
-                             L"Lightning",
+                             (LSTR(LIGHTNING)+" "+LIGHTNING_VERSION).getData(),
                              /*WS_OVERLAPPEDWINDOW | WS_VISIBLE,*/
                              WS_SYSMENU|WS_CAPTION|WS_MINIMIZEBOX|WS_VISIBLE,
-                             0, 0, 640, 480, (HWND)NULL,(HMENU)NULL, GetModuleHandleA(0),(LPVOID)NULL );
+                             0, 0, 800, 600, (HWND)NULL,(HMENU)NULL, GetModuleHandleA(0),(LPVOID)NULL );
 }
 
 LD3D9Device::~LD3D9Device()
@@ -283,23 +305,23 @@ void LD3D9Device::setIndexBuffer(LGFXIndexBuffer *_buffer)
 
 void LD3D9Device::setVertexShader(LGFXShader *_shader)
 {
-    lError(_shader->getType()!=LGFXShader::ShaderType::vertexShader,"_shader type is not vertex shader");
     if(_shader==nullptr)
     {
         HR(mDevice->SetVertexShader(0));
         return;
     }
+    lError(_shader->getType()!=LGFXShader::ShaderType::vertexShader,"_shader type is not vertex shader");
     HR(mDevice->SetVertexShader(dynamic_cast<LD3D9Shader*>(_shader)->mVS));
 }
 
 void LD3D9Device::setPixelShader(LGFXShader *_shader)
 {
-    lError(_shader->getType()!=LGFXShader::ShaderType::pixelShader,"_shader type is not pixel shader");
     if(_shader==nullptr)
     {
         HR(mDevice->SetPixelShader(0));
         return;
     }
+    lError(_shader->getType()!=LGFXShader::ShaderType::pixelShader,"_shader type is not pixel shader");
     HR(mDevice->SetPixelShader(dynamic_cast<LD3D9Shader*>(_shader)->mPS));
 
 }
@@ -322,6 +344,38 @@ void LD3D9Device::setTexture(u32 _sampler, LGFXTexture *_t)
     HR(mDevice->SetSamplerState(_sampler,D3DSAMP_MAXMIPLEVEL,_t->getMaxMipMapLevel()));
     HR(mDevice->SetSamplerState(_sampler,D3DSAMP_ADDRESSU,lD3DTextureAddress(_t->getAddressU())));
     HR(mDevice->SetSamplerState(_sampler,D3DSAMP_ADDRESSV,lD3DTextureAddress(_t->getAddressV())));
+}
+
+void LD3D9Device::setDepthCheckEnable(bool _value)
+{
+    if(_value)
+    {
+        HR(mDevice->SetRenderState(D3DRS_ZENABLE,D3DZB_TRUE));
+    }
+    else
+    {
+        HR(mDevice->SetRenderState(D3DRS_ZENABLE,D3DZB_FALSE));
+    }
+}
+
+void LD3D9Device::setDepthCheckFunction(LGFXCompareFunction _val)
+{
+    HR(mDevice->SetRenderState(D3DRS_ZFUNC,fromLGFXCompareFunctionToD3DCMPFUNC(_val)));
+}
+
+void LD3D9Device::setDepthWriteEnable(bool _value)
+{
+    HR(mDevice->SetRenderState(D3DRS_ZWRITEENABLE,_value));
+}
+
+void LD3D9Device::setFillMode(LGFXFillMode _type)
+{
+    HR(mDevice->SetRenderState(D3DRS_FILLMODE,fromLGFXFillModeToD3DFILLMODE(_type)));
+}
+
+void LD3D9Device::setCullMode(LGFXCullMode _mode)
+{
+    HR(mDevice->SetRenderState(D3DRS_CULLMODE,fromLGFXCullModeToD3DCULL(_mode)));
 }
 
 void LD3D9Device::showWindow()

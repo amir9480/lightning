@@ -77,6 +77,16 @@ public:
 
     virtual void                    setTexture(u32 _sampler,LGFXTexture* _t);
 
+    virtual void                    setDepthCheckEnable(bool _value);
+
+    virtual void                    setDepthCheckFunction(LGFXCompareFunction _val=LGFXCompareFunction_LessEqual);
+
+    virtual void                    setDepthWriteEnable(bool _value);
+
+    virtual void                    setFillMode(LGFXFillMode _type);
+
+    virtual void                    setCullMode(LGFXCullMode _mode);
+
     virtual void                    showWindow();
 
 protected:

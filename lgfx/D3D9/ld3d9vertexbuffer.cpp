@@ -104,6 +104,39 @@ const LVector<LVertexElement> &LD3D9VertexDeclaration::getElements()
     return mElements;
 }
 
+u32 LD3D9VertexDeclaration::getElementsSize()
+{
+    u32 o=0;
+    for(u32 i=0;i<mElements.getSize();i++)
+    {
+        switch (mElements[i].mType )
+        {
+        case LVertexElementType_Float1:
+            o+=4;
+            break;
+        case LVertexElementType_Float2:
+            o+=8;
+            break;
+        case LVertexElementType_Float3:
+            o+=12;
+            break;
+        case LVertexElementType_Float4:
+            o+=16;
+            break;
+        case LVertexElementType_UByte4:
+            o+=4;
+            break;
+        case LVertexElementType_Short2:
+            o+=2;
+            break;
+        case LVertexElementType_Short4:
+            o+=4;
+            break;
+        }
+    }
+    return o;
+}
+
 void LD3D9VertexDeclaration::preReset()
 {
     SAFE_RELEASE(mDecl);
