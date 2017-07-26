@@ -4,6 +4,58 @@
 
 LNAMESPACE_BEGIN
 
+LGFXVertexDeclaration* D3D9QuadVertex::decl=nullptr;
+LVector<LVertexElement> _d3d9quad_decl={
+    {0,LVertexElementType_Float3,LVertexElementUsage_Position,0},
+    {0,LVertexElementType_Float2,LVertexElementUsage_TextureCoordinate,0},
+};
+
+D3D9QuadVertex _d3d9quad_vertex[]=
+{
+    {LVector3(-1,1,0.2f),LVector2(0,0)},
+    {LVector3(1,1,0.2f),LVector2(1,0)},
+    {LVector3(-1,-1,0.2f),LVector2(0,1)},
+    {LVector3(1,-1,0.2f),LVector2(1,1)}
+};
+LVector<u32> _d3d9quad_index={1,2,0 , 1,3,2};
+const char* _d3d9quadshader=
+R"(
+uniform extern sampler2D t0;
+
+struct VSInput
+{
+    float3 pos:POSITION0;
+    float2 uv:TEXCOORD0;
+};
+
+struct VSOut
+{
+    float4 pos:POSITION0;
+    float2 uv:TEXCOORD0;
+};
+
+
+VSOut mainVS(VSInput _in)
+{
+    VSOut o;
+    o.pos.xyz=_in.pos;
+    o.pos.w=1.0f;
+    o.uv=_in.uv;
+    return o;
+}
+
+
+float4 mainPS(VSOut _in):COLOR0
+{
+    float4 o=float4(0.0f,0.0f,0.0f,1.0f);
+    o.rgb=tex2D(t0,_in.uv.xy).rgb;
+    return o;
+}
+
+
+
+)";
+
 LENUM_CONVERTOR_CUSTOM( LAPI,LGFXCullMode               ,D3DCULL,
                         LGFXCullMode_None               ,D3DCULL_NONE,
                         LGFXCullMode_Clockwise          ,D3DCULL_CW,
@@ -66,6 +118,12 @@ LD3D9Device::LD3D9Device()
     mCurrentIndexBuffer=0;
     mCurrentIndexBuffer=0;
     mNativeBackBuffer=0;
+    mMainBackBuffer=0;
+    mQuadVertexBuffer=0;
+    mQuadIndexBuffer=0;
+    mCurrentVertexDecl=0;
+    mCurrentVertexShader=0;
+    mCurrentPixelShader=0;
 
     mWindowHandler = CreateWindowExW( (DWORD)NULL, L"lightningmainwindow",
                              (LSTR(LIGHTNING)+" "+LIGHTNING_VERSION).getData(),
@@ -78,6 +136,60 @@ LD3D9Device::~LD3D9Device()
 {
     release();
     lLogMessage(1,"Direct3D9 Graphic Device Destroyed");
+}
+
+void LD3D9Device::initialize(bool _fullscreen, bool _vsync)
+{
+    release();
+    NZ(mD3D9=Direct3DCreate9(D3D_SDK_VERSION));
+    static D3DPRESENT_PARAMETERS dpp;
+    lMemorySet(&dpp,sizeof(dpp),0);
+    dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
+    dpp.Windowed= !_fullscreen;
+    dpp.BackBufferCount=1;
+    dpp.BackBufferWidth=2048;//GetSystemMetrics(SM_CXSCREEN);
+    dpp.BackBufferHeight=2048;//GetSystemMetrics(SM_CYSCREEN);
+    if(_fullscreen)
+        dpp.BackBufferFormat = D3DFMT_X8R8G8B8;
+    else
+        dpp.BackBufferFormat = D3DFMT_UNKNOWN;
+    dpp.EnableAutoDepthStencil = true;
+    dpp.AutoDepthStencilFormat = D3DFMT_D24S8;
+    dpp.hDeviceWindow = mWindowHandler;
+    dpp.FullScreen_RefreshRateInHz = D3DPRESENT_RATE_DEFAULT;
+    if(!_vsync)
+        dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
+    else
+        dpp.PresentationInterval = D3DPRESENT_INTERVAL_ONE;
+    HR(mD3D9->CreateDevice(D3DADAPTER_DEFAULT,D3DDEVTYPE::D3DDEVTYPE_HAL,mWindowHandler,
+                           D3DCREATE_HARDWARE_VERTEXPROCESSING,&dpp,&mDevice));
+    lLogMessage(1,"Direct3D9 Graphic Device Initialized Successfully");
+
+    HR(mDevice->GetBackBuffer(0,0,D3DBACKBUFFER_TYPE_MONO,&mNativeBackBuffer));
+
+    mMainBackBuffer = new LD3D9Texture;
+    mMainBackBuffer->mWidth=800;
+    mMainBackBuffer->mHeight=600;
+    mMainBackBuffer->mFormat=LImage::Format_R8G8B8;
+    mMainBackBuffer->mIsRenderTarget=true;
+    mMainBackBuffer->mAddressU=LGFXTexture::TextureAddress_border;
+    mMainBackBuffer->mAddressV=LGFXTexture::TextureAddress_border;
+    mMainBackBuffer->mDevice=this;
+    mMainBackBuffer->mFilter=LGFXTexture::TextureFilter_anisotropic;
+    mMainBackBuffer->mMipMapCount=1;
+    mMainBackBuffer->mType = LGFXTexture::TextureType_RenderTarget;
+    HR(mDevice->CreateTexture(mMainBackBuffer->mWidth,mMainBackBuffer->mHeight,1,D3DUSAGE_RENDERTARGET,lD3DTextureFormat(mMainBackBuffer->mFormat),D3DPOOL_DEFAULT,(IDirect3DTexture9**)(&(mMainBackBuffer->mTexture)),0));
+
+    D3D9QuadVertex::decl=createVertexDeclaration(_d3d9quad_decl);
+    mQuadVertexBuffer=dynamic_cast<LD3D9VertexBuffer*>(createVertexBuffer(0,0));
+    mQuadVertexBuffer->updateBuffer((char*)_d3d9quad_vertex,sizeof(_d3d9quad_vertex[0]),4);
+    mQuadIndexBuffer=dynamic_cast<LD3D9IndexBuffer*>(createIndexBuffer(0));
+    mQuadIndexBuffer->updateBuffer(_d3d9quad_index.getData(),_d3d9quad_index.getSize());
+    mQuadVertexShader=dynamic_cast<LD3D9Shader*>(createVertexShader());
+    mQuadVertexShader->compile(_d3d9quadshader,"mainVS");
+    mQuadPixelShader=dynamic_cast<LD3D9Shader*>(createPixelShader());
+    mQuadPixelShader->compile(_d3d9quadshader,"mainPS");
+
 }
 
 void LD3D9Device::beginScene()
@@ -182,6 +294,25 @@ void LD3D9Device::draw()
     HR(mDevice->DrawIndexedPrimitive( D3DPT_TRIANGLELIST,0,0,mCurrentVertexBuffer->getNumberOfElements(),0,mCurrentIndexBuffer->getIndicesCount()/3));
 }
 
+void LD3D9Device::drawQuad(LGFXTexture *_tex)
+{
+    resetParameters();
+    setVertexDeclaration(D3D9QuadVertex::decl);
+    setVertexBuffer(0,mQuadVertexBuffer);
+    setIndexBuffer(mQuadIndexBuffer);
+    setDepthWriteEnable(false);
+    setDepthCheckEnable(false);
+    setVertexShader(mQuadVertexShader);
+    if(mCurrentPixelShader==nullptr)
+    {
+        setPixelShader(mQuadPixelShader);
+        mQuadPixelShader->setTexture("t0",_tex);
+    }
+
+    draw();
+    resetParameters();
+}
+
 void LD3D9Device::endScene()
 {
     mDevice->EndScene();
@@ -190,36 +321,6 @@ void LD3D9Device::endScene()
 void LD3D9Device::hideWindow()
 {
     ShowWindow(mWindowHandler,SW_HIDE);
-}
-
-void LD3D9Device::initialize(bool _fullscreen, bool _vsync)
-{
-    release();
-    NZ(mD3D9=Direct3DCreate9(D3D_SDK_VERSION));
-    static D3DPRESENT_PARAMETERS dpp;
-    lMemorySet(&dpp,sizeof(dpp),0);
-    dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
-    dpp.Windowed= !_fullscreen;
-    dpp.BackBufferCount=1;
-    dpp.BackBufferWidth=GetSystemMetrics(SM_CXSCREEN);
-    dpp.BackBufferHeight=GetSystemMetrics(SM_CYSCREEN);
-    if(_fullscreen)
-        dpp.BackBufferFormat = D3DFMT_X8R8G8B8;
-    else
-        dpp.BackBufferFormat = D3DFMT_UNKNOWN;
-    dpp.EnableAutoDepthStencil = true;
-    dpp.AutoDepthStencilFormat = D3DFMT_D24S8;
-    dpp.hDeviceWindow = mWindowHandler;
-    dpp.FullScreen_RefreshRateInHz = D3DPRESENT_RATE_DEFAULT;
-    if(!_vsync)
-        dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
-    else
-        dpp.PresentationInterval = D3DPRESENT_INTERVAL_ONE;
-    HR(mD3D9->CreateDevice(D3DADAPTER_DEFAULT,D3DDEVTYPE::D3DDEVTYPE_HAL,mWindowHandler,
-                           D3DCREATE_HARDWARE_VERTEXPROCESSING,&dpp,&mDevice));
-    lLogMessage(1,"Direct3D9 Graphic Device Initialized Successfully");
-
-    HR(mDevice->GetBackBuffer(0,0,D3DBACKBUFFER_TYPE_MONO,&mNativeBackBuffer));
 }
 
 bool LD3D9Device::processOSMessage()
@@ -268,6 +369,14 @@ void LD3D9Device::release()
         delete mTextures[0];
         mTextures.remove(0);
     }
+
+    delete mMainBackBuffer;
+    mCurrentIndexBuffer=0;
+    mCurrentPixelShader=0;
+    mCurrentVertexBuffer=0;
+    mCurrentVertexDecl=0;
+    mCurrentVertexShader=0;
+
     SAFE_RELEASE(mDevice);
     SAFE_RELEASE(mD3D9);
 }
@@ -277,15 +386,16 @@ void LD3D9Device::setTitle(const LString &_newname)
     SetWindowTextW(mWindowHandler,_newname.getData());
 }
 
-void LD3D9Device::setVertexDeclaration(const LGFXVertexDeclaration *_decl)
+void LD3D9Device::setVertexDeclaration(LGFXVertexDeclaration *_decl)
 {
     if(_decl==nullptr)
     {
+        mCurrentVertexDecl=nullptr;
         HR(mDevice->SetVertexDeclaration(0));
         return;
     }
-    const LD3D9VertexDeclaration* decl=dynamic_cast<const LD3D9VertexDeclaration*>(_decl);
-    HR(mDevice->SetVertexDeclaration(decl->mDecl));
+    mCurrentVertexDecl=dynamic_cast<LD3D9VertexDeclaration*>(_decl);
+    HR(mDevice->SetVertexDeclaration(mCurrentVertexDecl->mDecl));
 }
 
 void LD3D9Device::setVertexBuffer(u16 _streamNumber, LGFXVertexBuffer *_buffer)
@@ -333,10 +443,12 @@ void LD3D9Device::setVertexShader(LGFXShader *_shader)
 {
     if(_shader==nullptr)
     {
+        mCurrentVertexShader=nullptr;
         HR(mDevice->SetVertexShader(0));
         return;
     }
     lError(_shader->getType()!=LGFXShader::ShaderType::vertexShader,"_shader type is not vertex shader");
+    mCurrentVertexShader=dynamic_cast<LD3D9Shader*>(_shader);
     HR(mDevice->SetVertexShader(dynamic_cast<LD3D9Shader*>(_shader)->mVS));
 }
 
@@ -344,10 +456,12 @@ void LD3D9Device::setPixelShader(LGFXShader *_shader)
 {
     if(_shader==nullptr)
     {
+        mCurrentPixelShader=nullptr;
         HR(mDevice->SetPixelShader(0));
         return;
     }
     lError(_shader->getType()!=LGFXShader::ShaderType::pixelShader,"_shader type is not pixel shader");
+    mCurrentPixelShader=dynamic_cast<LD3D9Shader*>(_shader);
     HR(mDevice->SetPixelShader(dynamic_cast<LD3D9Shader*>(_shader)->mPS));
 
 }

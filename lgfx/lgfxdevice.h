@@ -86,6 +86,9 @@ public:
     //! draw stage
     virtual void                    draw()=0;
 
+    //! draw a texture on screen . note if you are not using custom pixel shader then set texture from here . otherwise set from you pixel shader
+    virtual void                    drawQuad(LGFXTexture* _tex=0)=0;
+
     //! to end scene before render on screen
     virtual void                    endScene()=0;
 
@@ -111,7 +114,7 @@ public:
     virtual void                    setTitle(const LString& _newname)=0;
 
     //! set current vertex declration
-    virtual void                    setVertexDeclaration(const LGFXVertexDeclaration* _decl)=0;
+    virtual void                    setVertexDeclaration(LGFXVertexDeclaration* _decl)=0;
 
     //! set current vertex buffer
     virtual void                    setVertexBuffer(u16 _streamNumber,LGFXVertexBuffer *_buffer)=0;

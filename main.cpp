@@ -189,7 +189,7 @@ int main()
     texture02->updateTexture(3,image02.getResized(image02.getWidth()/8,image02.getHeight()/8));
     texture02->updateTexture(4,image02.getResized(image02.getWidth()/16,image02.getHeight()/16));
 
-    LGFXTexture* myrendertarget01 = dev->createRenderTarget(512,512,LImage::Format_R8G8B8);
+    LGFXTexture* myrendertarget01 = dev->createRenderTarget(800,600,LImage::Format_R8G8B8);
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     LGFXShader* shadervs01=dev->createVertexShader();
@@ -293,35 +293,36 @@ int main()
 
         dev->clear(50,50,50);
         dev->beginScene();
-        dev->resetParameters();
-        {
-            world=boxRot.toRotationMatrix()*boxPos.toTranslationMatrix();
-            WVP=world*viewprojection;
-            shaderps01->setTexture("t0",myrendertarget01);
-            shadervs01->setMatrix("WVP",WVP);
-            dev->setVertexDeclaration(myVertex1Decl);
-            dev->setVertexBuffer(0,vbbox);
-            dev->setIndexBuffer(ibbox);
-            dev->setPixelShader(shaderps01);
-            dev->setVertexShader(shadervs01);
+        dev->drawQuad(myrendertarget01);
+//        dev->resetParameters();
+//        {
+//            world=boxRot.toRotationMatrix()*boxPos.toTranslationMatrix();
+//            WVP=world*viewprojection;
+//            shaderps01->setTexture("t0",myrendertarget01);
+//            shadervs01->setMatrix("WVP",WVP);
+//            dev->setVertexDeclaration(myVertex1Decl);
+//            dev->setVertexBuffer(0,vbbox);
+//            dev->setIndexBuffer(ibbox);
+//            dev->setPixelShader(shaderps01);
+//            dev->setVertexShader(shadervs01);
 
-            dev->draw();
-        }
-        dev->resetParameters();
-        {
-            dev->setCullMode(LGFXCullMode_None);
-            world=LMatrix::createScaleMatrix({6,6,6});
-            WVP=world*viewprojection;
-            shaderps01->setTexture("t0",texture01);
-            shadervs01->setMatrix("WVP",WVP);
-            dev->setVertexDeclaration(myVertex1Decl);
-            dev->setVertexBuffer(0,vbplane);
-            dev->setIndexBuffer(ibplane);
-            dev->setPixelShader(shaderps01);
-            dev->setVertexShader(shadervs01);
+//            dev->draw();
+//        }
+//        dev->resetParameters();
+//        {
+//            dev->setCullMode(LGFXCullMode_None);
+//            world=LMatrix::createScaleMatrix({6,6,6});
+//            WVP=world*viewprojection;
+//            shaderps01->setTexture("t0",texture01);
+//            shadervs01->setMatrix("WVP",WVP);
+//            dev->setVertexDeclaration(myVertex1Decl);
+//            dev->setVertexBuffer(0,vbplane);
+//            dev->setIndexBuffer(ibplane);
+//            dev->setPixelShader(shaderps01);
+//            dev->setVertexShader(shadervs01);
 
-            dev->draw();
-        }
+//            dev->draw();
+//        }
 
         dev->endScene();
         dev->render();

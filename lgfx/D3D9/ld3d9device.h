@@ -16,7 +16,18 @@
 
 LNAMESPACE_BEGIN
 
+struct D3D9QuadVertex
+{
+    LVector3 pos;
+    LVector2 uv;
+    static LGFXVertexDeclaration* decl;
+};
+extern LVector<LVertexElement> _d3d9quad_decl;
 
+extern D3D9QuadVertex _d3d9quad_vertex[];
+extern LVector<u32> _d3d9quad_index;
+
+extern const char* _d3d9quadshader;
 
 LRESULT CALLBACK lightningmainwindowproc(HWND hwnd,UINT msg,WPARAM wparam,LPARAM lparam);
 
@@ -51,6 +62,8 @@ public:
 
     virtual void                    draw();
 
+    virtual void                    drawQuad(LGFXTexture *_tex);
+
     virtual void                    endScene();
 
     virtual void                    hideWindow();
@@ -65,7 +78,7 @@ public:
 
     virtual void                    setTitle(const LString& _newname);
 
-    virtual void                    setVertexDeclaration(const LGFXVertexDeclaration *_decl);
+    virtual void                    setVertexDeclaration(LGFXVertexDeclaration *_decl);
 
     virtual void                    setVertexBuffer(u16 _streamNumber,LGFXVertexBuffer* _buffer);
 
@@ -112,13 +125,23 @@ public:
     virtual void                    showWindow();
 
 protected:
-    HWND                mWindowHandler;
-    IDirect3D9*         mD3D9;
-    IDirect3DDevice9*   mDevice;
+    HWND                        mWindowHandler;
+    IDirect3D9*                 mD3D9;
+    IDirect3DDevice9*           mDevice;
 
-    LD3D9VertexBuffer*  mCurrentVertexBuffer;
-    LD3D9IndexBuffer*   mCurrentIndexBuffer;
-    IDirect3DSurface9*  mNativeBackBuffer;
+    LD3D9VertexBuffer*          mCurrentVertexBuffer;
+    LD3D9IndexBuffer*           mCurrentIndexBuffer;
+    LD3D9VertexDeclaration*     mCurrentVertexDecl;
+    LD3D9Shader*                mCurrentVertexShader;
+    LD3D9Shader*                mCurrentPixelShader;
+
+
+    IDirect3DSurface9*          mNativeBackBuffer;
+    LD3D9Texture*               mMainBackBuffer;
+    LD3D9VertexBuffer*          mQuadVertexBuffer;
+    LD3D9IndexBuffer*           mQuadIndexBuffer;
+    LD3D9Shader*                mQuadVertexShader;
+    LD3D9Shader*                mQuadPixelShader;
 };
 
 LNAMESPACE_END
