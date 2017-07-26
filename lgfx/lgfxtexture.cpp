@@ -8,7 +8,8 @@ LGFXTexture::LGFXTexture():
     mMaxMipMapLevel(0),
     mMaxAnisotropic(1),
     mAddressU(TextureAddress_wrap),
-    mAddressV(TextureAddress_wrap)
+    mAddressV(TextureAddress_wrap),
+    mIsRenderTarget(false)
 {
 
 }

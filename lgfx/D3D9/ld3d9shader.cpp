@@ -33,6 +33,7 @@ bool LD3D9Shader::compile(const LString &_content, const LString &_main_function
         if(errorsb)
         {
             lError2(1,LSTR("Lightning DirectX Shader Error:")+((const char*)errorsb->GetBufferPointer()));
+            mPS=nullptr;
             out=false;
         }
         else
@@ -46,6 +47,7 @@ bool LD3D9Shader::compile(const LString &_content, const LString &_main_function
         if(errorsb)
         {
             lError2(1,LSTR("Lightning DirectX Shader Error:")+((const char*)errorsb->GetBufferPointer()));
+            mVS=nullptr;
             out=false;
         }
         else
@@ -102,7 +104,8 @@ void LD3D9Shader::postReset()
 
 void LD3D9Shader::setBool(const LString &_name, bool _value)
 {
-    mConstantTable->SetBool(mDevice->mDevice,getConstantHandle(_name),_value);
+    if(mConstantTable)
+        mConstantTable->SetBool(mDevice->mDevice,getConstantHandle(_name),_value);
 }
 
 void LD3D9Shader::setBoolArray(const LString &_name, const bool *_value, u32 _count)
@@ -110,28 +113,33 @@ void LD3D9Shader::setBoolArray(const LString &_name, const bool *_value, u32 _co
     WINBOOL* _v=new WINBOOL[_count];
     for(u32 i=0;i<_count;i++)
         _v[i]=(WINBOOL)_value[i];
-    mConstantTable->SetBoolArray(mDevice->mDevice,getConstantHandle(_name),_v,_count);
+    if(mConstantTable)
+        mConstantTable->SetBoolArray(mDevice->mDevice,getConstantHandle(_name),_v,_count);
     delete[] _v;
 }
 
 void LD3D9Shader::setFloat(const LString &_name, float _value)
 {
-    mConstantTable->SetFloat(mDevice->mDevice,getConstantHandle(_name),_value);
+    if(mConstantTable)
+        mConstantTable->SetFloat(mDevice->mDevice,getConstantHandle(_name),_value);
 }
 
 void LD3D9Shader::setFloatArray(const LString &_name, const float *_value, u32 _count)
 {
-    mConstantTable->SetFloatArray(mDevice->mDevice,getConstantHandle(_name),_value,_count);
+    if(mConstantTable)
+        mConstantTable->SetFloatArray(mDevice->mDevice,getConstantHandle(_name),_value,_count);
 }
 
 void LD3D9Shader::setInt(const LString &_name, int _value)
 {
-    mConstantTable->SetInt(mDevice->mDevice,getConstantHandle(_name),_value);
+    if(mConstantTable)
+        mConstantTable->SetInt(mDevice->mDevice,getConstantHandle(_name),_value);
 }
 
 void LD3D9Shader::setIntArray(const LString &_name, const int *_value, u32 _count)
 {
-    mConstantTable->SetIntArray(mDevice->mDevice,getConstantHandle(_name),_value,_count);
+    if(mConstantTable)
+        mConstantTable->SetIntArray(mDevice->mDevice,getConstantHandle(_name),_value,_count);
 }
 
 void LD3D9Shader::setMatrix(const LString &_name, const LMatrix &_value)
@@ -140,33 +148,41 @@ void LD3D9Shader::setMatrix(const LString &_name, const LMatrix &_value)
                   _value.m21,_value.m22,_value.m23,_value.m24,
                   _value.m31,_value.m32,_value.m33,_value.m34,
                   _value.m41,_value.m42,_value.m43,_value.m44);
-    mConstantTable->SetMatrix(mDevice->mDevice,getConstantHandle(_name),&_m);
+    if(mConstantTable)
+        mConstantTable->SetMatrix(mDevice->mDevice,getConstantHandle(_name),&_m);
 }
 
 void LD3D9Shader::setTexture(const LString &_name,LGFXTexture* _texture)
 {
-    u32 si=mConstantTable->GetSamplerIndex(getConstantHandle(_name));
-    mDevice->setTexture(si,_texture);
+    if(mConstantTable)
+    {
+        u32 si=mConstantTable->GetSamplerIndex(getConstantHandle(_name));
+        mDevice->setTexture(si,_texture);
+    }
 }
 
 void LD3D9Shader::setVector(const LString &_name, const LVector2 &_value)
 {
-    mConstantTable->SetValue(mDevice->mDevice,getConstantHandle(_name),(void*)&_value,sizeof(_value));
+    if(mConstantTable)
+        mConstantTable->SetValue(mDevice->mDevice,getConstantHandle(_name),(void*)&_value,sizeof(_value));
 }
 
 void LD3D9Shader::setVector(const LString &_name, const LVector3 &_value)
 {
-    mConstantTable->SetValue(mDevice->mDevice,getConstantHandle(_name),(void*)&_value,sizeof(_value));
+    if(mConstantTable)
+        mConstantTable->SetValue(mDevice->mDevice,getConstantHandle(_name),(void*)&_value,sizeof(_value));
 }
 
 void LD3D9Shader::setVector(const LString &_name, const LVector4 &_value)
 {
-    mConstantTable->SetValue(mDevice->mDevice,getConstantHandle(_name),(void*)&_value,sizeof(_value));
+    if(mConstantTable)
+        mConstantTable->SetValue(mDevice->mDevice,getConstantHandle(_name),(void*)&_value,sizeof(_value));
 }
 
 void LD3D9Shader::setValue(const LString &_name, const void *_value, u32 _value_size)
 {
-    mConstantTable->SetValue(mDevice->mDevice,getConstantHandle(_name),_value,_value_size);
+    if(mConstantTable)
+        mConstantTable->SetValue(mDevice->mDevice,getConstantHandle(_name),_value,_value_size);
 }
 
 

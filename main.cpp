@@ -179,7 +179,7 @@ int main()
     texture01->updateTexture(2,image01.getResized(image01.getWidth()/4,image01.getHeight()/4));
     texture01->updateTexture(3,image01.getResized(image01.getWidth()/8,image01.getHeight()/8));
     texture01->updateTexture(4,image01.getResized(image01.getWidth()/16,image01.getHeight()/16));
-    texture01->setMipMapBias(1.0f);
+    texture01->setMipMapBias(-1.5f);
 
 
     LGFXTexture* texture02 = dev->createTexture(image02.getWidth(),image02.getHeight(),5,image02.getFormat());
@@ -188,6 +188,9 @@ int main()
     texture02->updateTexture(2,image02.getResized(image02.getWidth()/4,image02.getHeight()/4));
     texture02->updateTexture(3,image02.getResized(image02.getWidth()/8,image02.getHeight()/8));
     texture02->updateTexture(4,image02.getResized(image02.getWidth()/16,image02.getHeight()/16));
+
+    LGFXTexture* myrendertarget01 = dev->createRenderTarget(512,512,LImage::Format_R8G8B8);
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     LGFXShader* shadervs01=dev->createVertexShader();
     shadervs01->compile(myShader,"mainVS");
@@ -263,27 +266,44 @@ int main()
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+        // render target
+        dev->resetParameters();
+        dev->setRenderTarget(0,myrendertarget01);
+        dev->clear(0,150,255);
+        dev->beginScene();
+        {
+            dev->setCullMode(LGFXCullMode_None);
+            world=LMatrix::createScaleMatrix({6,6,6});
+            WVP=world*viewprojection;
+            shaderps01->setTexture("t0",texture02);
+            shadervs01->setMatrix("WVP",WVP);
+            dev->setVertexDeclaration(myVertex1Decl);
+            dev->setVertexBuffer(0,vbplane);
+            dev->setIndexBuffer(ibplane);
+            dev->setPixelShader(shaderps01);
+            dev->setVertexShader(shadervs01);
+
+            dev->draw();
+        }
+        dev->setRenderTarget(0,nullptr);
+        // render target end
+        dev->endScene();
+
+
         dev->clear(50,50,50);
         dev->beginScene();
-
-
         dev->resetParameters();
         {
             world=boxRot.toRotationMatrix()*boxPos.toTranslationMatrix();
             WVP=world*viewprojection;
-            shaderps01->setTexture("t0",texture02);
+            shaderps01->setTexture("t0",myrendertarget01);
             shadervs01->setMatrix("WVP",WVP);
             dev->setVertexDeclaration(myVertex1Decl);
             dev->setVertexBuffer(0,vbbox);
             dev->setIndexBuffer(ibbox);
             dev->setPixelShader(shaderps01);
             dev->setVertexShader(shadervs01);
-
-            dev->setBackBufferWriteEnable(false);
-            dev->setStencilEnable(true);
-            dev->setStencilValue(0x1);
-            dev->setStencilCheckFunction(LGFXCompareFunction_Always);
-            dev->setStencilPassOperation(LGFXStencilOperation_SetValue);
 
             dev->draw();
         }
@@ -299,13 +319,6 @@ int main()
             dev->setIndexBuffer(ibplane);
             dev->setPixelShader(shaderps01);
             dev->setVertexShader(shadervs01);
-
-
-            dev->setStencilEnable(true);
-            dev->setStencilValue(0x1);
-            dev->setStencilCheckFunction(LGFXCompareFunction_NotEqual);
-            dev->setStencilPassOperation(LGFXStencilOperation_Keep);
-            dev->setStencilDepthFailOperation(LGFXStencilOperation_Keep);
 
             dev->draw();
         }

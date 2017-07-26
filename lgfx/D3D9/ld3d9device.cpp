@@ -65,6 +65,7 @@ LD3D9Device::LD3D9Device()
     mDevice=0;
     mCurrentIndexBuffer=0;
     mCurrentIndexBuffer=0;
+    mNativeBackBuffer=0;
 
     mWindowHandler = CreateWindowExW( (DWORD)NULL, L"lightningmainwindow",
                              (LSTR(LIGHTNING)+" "+LIGHTNING_VERSION).getData(),
@@ -156,8 +157,23 @@ LGFXTexture *LD3D9Device::createTexture(u16 _width, u16 _height, u16 _mipmap_cou
     o->mType=LGFXTexture::TextureType_2D;
 
     HR(mDevice->CreateTexture(_width,_height,_mipmap_count,0,lD3DTextureFormat(_format),D3DPOOL_MANAGED,(IDirect3DTexture9**)(&(o->mTexture)),0));
-    o->generateMipMaps();
 
+    return o;
+}
+
+LGFXTexture *LD3D9Device::createRenderTarget(u16 _width, u16 _height, LImage::Format _renderable_format)
+{
+    lError(_width==0||_height==0||_renderable_format==LImage::Format_null,"Some thing is wrong",nullptr);
+    LD3D9Texture* o =new LD3D9Texture;
+    mTextures.pushBack(o);
+    o->mDevice=this;
+    o->mWidth=_width;
+    o->mHeight=_height;
+    o->mMipMapCount=1;
+    o->mFormat=_renderable_format;
+    o->mIsRenderTarget=true;
+    o->mType = LGFXTexture::TextureType_RenderTarget;
+    HR(mDevice->CreateTexture(_width,_height,1,D3DUSAGE_RENDERTARGET,lD3DTextureFormat(_renderable_format),D3DPOOL_DEFAULT,(IDirect3DTexture9**)(&(o->mTexture)),0));
     return o;
 }
 
@@ -202,6 +218,8 @@ void LD3D9Device::initialize(bool _fullscreen, bool _vsync)
     HR(mD3D9->CreateDevice(D3DADAPTER_DEFAULT,D3DDEVTYPE::D3DDEVTYPE_HAL,mWindowHandler,
                            D3DCREATE_HARDWARE_VERTEXPROCESSING,&dpp,&mDevice));
     lLogMessage(1,"Direct3D9 Graphic Device Initialized Successfully");
+
+    HR(mDevice->GetBackBuffer(0,0,D3DBACKBUFFER_TYPE_MONO,&mNativeBackBuffer));
 }
 
 bool LD3D9Device::processOSMessage()
@@ -280,6 +298,7 @@ void LD3D9Device::setVertexBuffer(u16 _streamNumber, LGFXVertexBuffer *_buffer)
     }
     mCurrentVertexBuffer=dynamic_cast<LD3D9VertexBuffer*>(_buffer);
     HR(mDevice->SetStreamSource(_streamNumber,dynamic_cast<LD3D9VertexBuffer*>(_buffer)->mVertexBuffer,0,_buffer->getElementSize()));
+    mMaxVertexBuffer = lMax(_streamNumber,mMaxVertexBuffer);
 }
 
 void LD3D9Device::setVertexBufferFrequency(u16 _streamNumber, u32 _count)
@@ -351,6 +370,28 @@ void LD3D9Device::setTexture(u32 _sampler, LGFXTexture *_t)
     HR(mDevice->SetSamplerState(_sampler,D3DSAMP_MAXMIPLEVEL,_t->getMaxMipMapLevel()));
     HR(mDevice->SetSamplerState(_sampler,D3DSAMP_ADDRESSU,lD3DTextureAddress(_t->getAddressU())));
     HR(mDevice->SetSamplerState(_sampler,D3DSAMP_ADDRESSV,lD3DTextureAddress(_t->getAddressV())));
+    mMaxSampler = lMax(mMaxSampler,_sampler);
+}
+
+void LD3D9Device::setRenderTarget(u32 _index, LGFXTexture *_rt)
+{
+    if(_rt==nullptr || _rt->isNull())
+    {
+        if(_index!=0)
+        {
+            HR(mDevice->SetRenderTarget(_index,nullptr));
+        }
+        else
+        {
+            HR(mDevice->SetRenderTarget(_index,mNativeBackBuffer));
+        }
+        return;
+    }
+    LD3D9Texture* d3drt=dynamic_cast<LD3D9Texture*>(_rt);
+    IDirect3DSurface9* _rs=nullptr;
+    d3drt->mTexture->GetSurfaceLevel(0,&_rs);
+    HR(mDevice->SetRenderTarget(_index,_rs));
+    mMaxRenderTarget=lMax(mMaxRenderTarget,_index);
 }
 
 void LD3D9Device::setDepthCheckEnable(bool _value)

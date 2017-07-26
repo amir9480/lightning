@@ -47,6 +47,8 @@ public:
 
     virtual LGFXTexture*            createTexture(u16 _width,u16 _height,u16 _mipmap_count,LImage::Format _format);
 
+    virtual LGFXTexture*            createRenderTarget(u16 _width,u16 _height,LImage::Format _renderable_format);
+
     virtual void                    draw();
 
     virtual void                    endScene();
@@ -76,6 +78,8 @@ public:
     virtual void                    setPixelShader(LGFXShader *_shader);
 
     virtual void                    setTexture(u32 _sampler,LGFXTexture* _t);
+
+    virtual void                    setRenderTarget(u32 _index,LGFXTexture* _rt);
 
     virtual void                    setDepthCheckEnable(bool _value);
 
@@ -114,6 +118,7 @@ protected:
 
     LD3D9VertexBuffer*  mCurrentVertexBuffer;
     LD3D9IndexBuffer*   mCurrentIndexBuffer;
+    IDirect3DSurface9*  mNativeBackBuffer;
 };
 
 LNAMESPACE_END

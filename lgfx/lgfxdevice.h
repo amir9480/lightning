@@ -80,6 +80,9 @@ public:
     //! create a texture . _mipmap_count : Count of mip maps
     virtual LGFXTexture*            createTexture(u16 _width,u16 _height,u16 _mipmap_count,LImage::Format _format)=0;
 
+    //! create a renderable texture
+    virtual LGFXTexture*            createRenderTarget(u16 _width,u16 _height,LImage::Format _renderable_format)=0;
+
     //! draw stage
     virtual void                    draw()=0;
 
@@ -127,6 +130,9 @@ public:
 
     //! set current texture
     virtual void                    setTexture(u32 _sampler,LGFXTexture* _t)=0;
+
+    //! set Render Target
+    virtual void                    setRenderTarget(u32 _index,LGFXTexture* _rt)=0;
 
     //! set depth check is enable or not
     virtual void                    setDepthCheckEnable(bool _value=true)=0;
@@ -182,6 +188,7 @@ protected:
 
     u32                             mMaxSampler;
     u16                             mMaxVertexBuffer;
+    u32                             mMaxRenderTarget;
 
 };
 

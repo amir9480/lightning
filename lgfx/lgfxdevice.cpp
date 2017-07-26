@@ -6,7 +6,8 @@ LNAMESPACE_BEGIN
 
 LGFXDevice::LGFXDevice():
     mMaxSampler(0),
-    mMaxVertexBuffer(0)
+    mMaxVertexBuffer(0),
+    mMaxRenderTarget(0)
 {
 
 }
@@ -22,8 +23,16 @@ void LGFXDevice::resetParameters()
     for(u32 i=0;i<mMaxSampler;i++)
         setTexture(i,nullptr);
     mMaxSampler=0;
+
     for(u16 i=0;i<mMaxVertexBuffer;i++)
         setVertexBuffer(i,nullptr);
+    mMaxVertexBuffer=0;
+
+    for(u32 i=0;i<mMaxRenderTarget;i++)
+        setRenderTarget(i,nullptr);
+    mMaxSampler=0;
+
+
     setVertexDeclaration(nullptr);
     setIndexBuffer(nullptr);
     setVertexShader(nullptr);

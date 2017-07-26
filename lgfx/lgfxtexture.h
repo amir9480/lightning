@@ -12,7 +12,8 @@ class LAPI LGFXTexture
 public:
     enum TextureType
     {
-        TextureType_2D
+        TextureType_2D,
+        TextureType_RenderTarget
     };
     enum TextureFilter
     {
@@ -104,6 +105,7 @@ protected:
     int             mMaxAnisotropic;
     TextureAddress  mAddressU;
     TextureAddress  mAddressV;
+    bool            mIsRenderTarget;
 };
 
 LNAMESPACE_END
