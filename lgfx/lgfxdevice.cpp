@@ -33,6 +33,15 @@ void LGFXDevice::resetParameters()
     setFillMode();
     setCullMode();
     setDepthWriteEnable();
+    setDepthBias();
+    setAlphaBlending();
+    setStencilEnable();
+    setStencilValue();
+    setStencilCheckFunction();
+    setStencilFailOperation();
+    setStencilDepthFailOperation();
+    setStencilPassOperation();
+    setBackBufferWriteEnable();
 }
 
 LNAMESPACE_END

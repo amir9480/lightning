@@ -192,10 +192,25 @@ private:
 //! cout<<AtoB(TypeA_3)<<" "<<BtoA(TypeB_3)<<endl;
 //!
 
+//! to prepend custom things like LAPI , inline , ...
+#define LENUM_CONVERTOR_CUSTOM2(_PREPEND_,_TYPEA,_TYPEB,_TYPE_A_TO_B,_TYPE_B_TO_A,_A,_B,...)\
+_TYPEB _PREPEND_ _TYPE_A_TO_B(_TYPEA _val){\
+    switch(_val){\
+       __LENUM_CONVERTOR_HELPER(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B, __VA_ARGS__ )\
+       default:break;\
+    }\
+        return _A;\
+    }
+
+#define __NT__  // means No Thing
+
+#define LENUM_CONVERTOR_CUSTOM(_PREPEND_,_TYPEA,_TYPEB,...)\
+    LENUM_CONVERTOR_CUSTOM2(_PREPEND_,_TYPEA,_TYPEB,LCAT(from,_TYPEA,To,_TYPEB),LCAT(from,_TYPEB,To,_TYPEA),__VA_ARGS__)
+
 #define LENUM_CONVERTOR2(_TYPEA,_TYPEB,_TYPE_A_TO_B,_TYPE_B_TO_A,_A,_B,...)\
 _TYPEB _TYPE_A_TO_B(_TYPEA _val){\
     switch(_val){\
-       __LENUM_CONVERTOR_HELPER(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B, __VA_ARGS__ )\
+       __LENUM_CONVERTOR_HELPER(__NT__,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B, __VA_ARGS__ )\
        default:break;\
     }\
         return _A;\
@@ -207,1749 +222,514 @@ _TYPEB _TYPE_A_TO_B(_TYPEA _val){\
 
 #define __LENUM_CONVERTOR_HELPER(...) LOVERLOADED_MACRO(___LENUM_CONVERTOR_HELPER,__VA_ARGS__)
 
-#define ___LENUM_CONVERTOR_HELPER5(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B)\
+
+#define ___LENUM_CONVERTOR_HELPER6(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B)\
     case _A:\
         return _B;\
     default:break;\
     }\
         return _B;\
     }\
-    _TYPEA _TYPE_B_TO_A(_TYPEB _val){\
+    _TYPEA _PREPEND_ _TYPE_B_TO_A(_TYPEB _val){\
     switch(_val){\
     case _B:\
         return _A;
 
-#define ___LENUM_CONVERTOR_HELPER7(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER5(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER9(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER7(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER11(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER9(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER13(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER11(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER15(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER13(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER17(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER15(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER19(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER17(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER21(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER19(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER23(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER21(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER25(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER23(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER27(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER25(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER29(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER27(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER31(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER29(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER33(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER31(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER35(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER33(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER37(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER35(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER39(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER37(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER41(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER39(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER43(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER41(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER45(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER43(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER47(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER45(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER49(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER47(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER51(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER49(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER53(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER51(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER55(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER53(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER57(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER55(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER59(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER57(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER61(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER59(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER63(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER61(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER65(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER63(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER67(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER65(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER69(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER67(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER71(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER69(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER73(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER71(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER75(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER73(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER77(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER75(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER79(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER77(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER81(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER79(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER83(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER81(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER85(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER83(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER87(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER85(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER89(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER87(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER91(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER89(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER93(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER91(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER95(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER93(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER97(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER95(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER99(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER97(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER101(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER99(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER103(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER101(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER105(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER103(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER107(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER105(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER109(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER107(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER111(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER109(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-
-#define ___LENUM_CONVERTOR_HELPER113(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER111(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER115(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER113(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER117(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER115(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER119(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER117(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER121(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER119(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER123(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER121(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER125(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER123(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER127(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER125(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER129(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER127(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER131(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER129(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER133(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER131(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER135(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER133(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER137(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER135(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER139(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER137(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER141(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER139(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER143(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER141(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER145(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER143(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER147(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER145(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER149(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER147(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER151(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER149(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER153(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER151(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER155(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER153(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER157(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER155(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER159(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER157(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER161(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER159(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER163(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER161(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER165(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER163(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER167(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER165(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER169(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER167(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER171(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER169(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER173(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER171(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER175(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER173(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER177(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER175(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER179(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER177(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER181(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER179(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER183(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER181(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER185(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER183(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER187(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER185(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER189(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER187(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER191(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER189(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER193(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER191(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER195(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER193(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER197(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER195(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER199(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER197(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-
-#define ___LENUM_CONVERTOR_HELPER201(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER99(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER203(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER201(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER205(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER203(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER207(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER205(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER209(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER207(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER211(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER209(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-
-#define ___LENUM_CONVERTOR_HELPER213(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER211(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER215(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER213(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER217(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER215(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER219(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER217(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER221(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER219(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER223(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER221(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER225(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER223(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER227(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER225(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER229(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER227(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER231(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER229(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER233(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER231(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER235(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER233(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER237(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER235(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER239(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER237(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER241(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER239(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER243(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER241(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER245(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER243(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER247(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER245(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER249(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER247(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER251(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER249(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER253(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER251(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER255(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER253(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER257(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER255(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER259(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER257(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER261(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER259(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER263(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER261(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER265(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER263(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER267(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER265(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER269(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER267(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER271(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER269(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER273(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER271(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER275(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER273(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER277(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER275(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER279(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER277(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER281(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER279(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER283(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER281(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER285(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER283(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER287(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER285(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER289(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER287(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER291(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER289(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER293(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER291(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER295(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER293(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER297(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER295(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER299(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-    case _A:\
-        return _B;\
-    ___LENUM_CONVERTOR_HELPER297(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-    case _B:\
-        return _A;\
-
-#define ___LENUM_CONVERTOR_HELPER301(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER299(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER303(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER301(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER305(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER303(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER307(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER305(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER309(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER307(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER311(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER309(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER313(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER311(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER315(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER313(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER317(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER315(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER319(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER317(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER321(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER319(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER323(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER321(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER325(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER323(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER327(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER325(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER329(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER327(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER331(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER329(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER333(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER331(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER335(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER333(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER337(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER335(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER339(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER337(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER341(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER339(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER343(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER341(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER345(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER343(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER347(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER345(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER349(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER347(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER351(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER349(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER353(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER351(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER355(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER353(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER357(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER355(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER359(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER357(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER361(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER359(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER363(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER361(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER365(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER363(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER367(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER365(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER369(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER367(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER371(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER369(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER373(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER371(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER375(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER373(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER377(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER375(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER379(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER377(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER381(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER379(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER383(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER381(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER385(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER383(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER387(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER385(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER389(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER387(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER391(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER389(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER393(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER391(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER395(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER393(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER397(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER395(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER399(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER397(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER401(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER399(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER403(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER401(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER405(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER403(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER407(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER405(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER409(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER407(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER411(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER409(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER413(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER411(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER415(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER413(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER417(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER415(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER419(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER417(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER421(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER419(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER423(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER421(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER425(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER423(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER427(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER425(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER429(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER427(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER431(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER429(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER433(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER431(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER435(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER433(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER437(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER435(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER439(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER437(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER441(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER439(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER443(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER441(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER445(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER443(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER447(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER445(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER449(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER447(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER451(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER449(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER453(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER451(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER455(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER453(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER457(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER455(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER459(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER457(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER461(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER459(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER463(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER461(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER465(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER463(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER467(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER465(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER469(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER467(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER471(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER469(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER473(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER471(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER475(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER473(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER477(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER475(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER479(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER477(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER481(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER479(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER483(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER481(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER485(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER483(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER487(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER485(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER489(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER487(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER491(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER489(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER493(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER491(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER495(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER493(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER497(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER495(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
-
-#define ___LENUM_CONVERTOR_HELPER499(_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)\
-case _A:\
-return _B;\
-___LENUM_CONVERTOR_HELPER497(_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)\
-case _B:\
-return _A;
+#define ___LENUM_CONVERTOR_HELPER8(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER6(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER10(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER8(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER12(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER10(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER14(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER12(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER16(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER14(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER18(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER16(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER20(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER18(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER22(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER20(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER24(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER22(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER26(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER24(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER28(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER26(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER30(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER28(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER32(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER30(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER34(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER32(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER36(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER34(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER38(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER36(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER40(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER38(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER42(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER40(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER44(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER42(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER46(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER44(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER48(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER46(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER50(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER48(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER52(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER50(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER54(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER52(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER56(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER54(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER58(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER56(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER60(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER58(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER62(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER60(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER64(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER62(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER66(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER64(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER68(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER66(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER70(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER68(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER72(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER70(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER74(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER72(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER76(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER74(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER78(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER76(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER80(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER78(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER82(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER80(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER84(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER82(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER86(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER84(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER88(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER86(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER90(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER88(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER92(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER90(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER94(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER92(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER96(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER94(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER98(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER96(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER100(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER98(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER102(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER100(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER104(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER102(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER106(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER104(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER108(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER106(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER110(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER108(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER112(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER110(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER114(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER112(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER116(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER114(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER118(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER116(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER120(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER118(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER122(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER120(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER124(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER122(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER126(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER124(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER128(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER126(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER130(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER128(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER132(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER130(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER134(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER132(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER136(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER134(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER138(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER136(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER140(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER138(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER142(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER140(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER144(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER142(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER146(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER144(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER148(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER146(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER150(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER148(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER152(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER150(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER154(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER152(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER156(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER154(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER158(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER156(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER160(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER158(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER162(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER160(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER164(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER162(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER166(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER164(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER168(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER166(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER170(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER168(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER172(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER170(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER174(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER172(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER176(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER174(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER178(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER176(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER180(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER178(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER182(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER180(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER184(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER182(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER186(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER184(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER188(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER186(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER190(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER188(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER192(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER190(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER194(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER192(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER196(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER194(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER198(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER196(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER200(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER198(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER202(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER200(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER204(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER202(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER206(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER204(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER208(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER206(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER210(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER208(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER212(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER210(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER214(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER212(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER216(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER214(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER218(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER216(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER220(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER218(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER222(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER220(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER224(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER222(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER226(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER224(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER228(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER226(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER230(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER228(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER232(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER230(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER234(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER232(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER236(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER234(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER238(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER236(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER240(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER238(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER242(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER240(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER244(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER242(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER246(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER244(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER248(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER246(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER250(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER248(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER252(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER250(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER254(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER252(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER256(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER254(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER258(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER256(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER260(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER258(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER262(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER260(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER264(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER262(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER266(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER264(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER268(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER266(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER270(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER268(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER272(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER270(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER274(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER272(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER276(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER274(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER278(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER276(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER280(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER278(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER282(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER280(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER284(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER282(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER286(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER284(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER288(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER286(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER290(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER288(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER292(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER290(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER294(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER292(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER296(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER294(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER298(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER296(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER300(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER298(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER302(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER300(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER304(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER302(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER306(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER304(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER308(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER306(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER310(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER308(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER312(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER310(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER314(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER312(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER316(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER314(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER318(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER316(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER320(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER318(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER322(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER320(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER324(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER322(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER326(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER324(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER328(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER326(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER330(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER328(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER332(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER330(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER334(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER332(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER336(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER334(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER338(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER336(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER340(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER338(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER342(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER340(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER344(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER342(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER346(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER344(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER348(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER346(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER350(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER348(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER352(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER350(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER354(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER352(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER356(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER354(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER358(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER356(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER360(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER358(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER362(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER360(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER364(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER362(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER366(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER364(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER368(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER366(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER370(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER368(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER372(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER370(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER374(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER372(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER376(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER374(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER378(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER376(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER380(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER378(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER382(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER380(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER384(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER382(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER386(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER384(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER388(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER386(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER390(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER388(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER392(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER390(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER394(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER392(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER396(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER394(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER398(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER396(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER400(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER398(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER402(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER400(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER404(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER402(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER406(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER404(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER408(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER406(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER410(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER408(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER412(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER410(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER414(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER412(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER416(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER414(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER418(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER416(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER420(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER418(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER422(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER420(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER424(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER422(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER426(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER424(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER428(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER426(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER430(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER428(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER432(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER430(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER434(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER432(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER436(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER434(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER438(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER436(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER440(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER438(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER442(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER440(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER444(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER442(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER446(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER444(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER448(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER446(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER450(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER448(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER452(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER450(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER454(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER452(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER456(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER454(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER458(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER456(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER460(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER458(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER462(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER460(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER464(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER462(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER466(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER464(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER468(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER466(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER470(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER468(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER472(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER470(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER474(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER472(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER476(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER474(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER478(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER476(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER480(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER478(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER482(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER480(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER484(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER482(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER486(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER484(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER488(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER486(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER490(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER488(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER492(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER490(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER494(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER492(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER496(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER494(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER498(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER496(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER500(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER498(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER502(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER500(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER504(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER502(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER506(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER504(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER508(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER506(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER510(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER508(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER512(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER510(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER514(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER512(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER516(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER514(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER518(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER516(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER520(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER518(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER522(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER520(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER524(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER522(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER526(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER524(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER528(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER526(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER530(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER528(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER532(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER530(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER534(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER532(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER536(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER534(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER538(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER536(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER540(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER538(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER542(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER540(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER544(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER542(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER546(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER544(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER548(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER546(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER550(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER548(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER552(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER550(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER554(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER552(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER556(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER554(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER558(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER556(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER560(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER558(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER562(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER560(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER564(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER562(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER566(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER564(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER568(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER566(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER570(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER568(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER572(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER570(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER574(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER572(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER576(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER574(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER578(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER576(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER580(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER578(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER582(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER580(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER584(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER582(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER586(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER584(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER588(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER586(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER590(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER588(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER592(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER590(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER594(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER592(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER596(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER594(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER598(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER596(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER600(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER598(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER602(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER600(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER604(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER602(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER606(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER604(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER608(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER606(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER610(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER608(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER612(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER610(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER614(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER612(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER616(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER614(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER618(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER616(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER620(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER618(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER622(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER620(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER624(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER622(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER626(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER624(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER628(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER626(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER630(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER628(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER632(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER630(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER634(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER632(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER636(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER634(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER638(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER636(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER640(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER638(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER642(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER640(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER644(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER642(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER646(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER644(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER648(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER646(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER650(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER648(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER652(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER650(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER654(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER652(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER656(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER654(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER658(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER656(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER660(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER658(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER662(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER660(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER664(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER662(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER666(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER664(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER668(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER666(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER670(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER668(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER672(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER670(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER674(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER672(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER676(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER674(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER678(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER676(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER680(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER678(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER682(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER680(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER684(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER682(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER686(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER684(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER688(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER686(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER690(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER688(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER692(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER690(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER694(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER692(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER696(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER694(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER698(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER696(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER700(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER698(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER702(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER700(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER704(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER702(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER706(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER704(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER708(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER706(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER710(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER708(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER712(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER710(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER714(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER712(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER716(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER714(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER718(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER716(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER720(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER718(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER722(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER720(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER724(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER722(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER726(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER724(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER728(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER726(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER730(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER728(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER732(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER730(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER734(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER732(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER736(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER734(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER738(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER736(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER740(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER738(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER742(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER740(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER744(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER742(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER746(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER744(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER748(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER746(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER750(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER748(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER752(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER750(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER754(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER752(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER756(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER754(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER758(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER756(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER760(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER758(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER762(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER760(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER764(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER762(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER766(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER764(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER768(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER766(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER770(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER768(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER772(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER770(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER774(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER772(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER776(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER774(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER778(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER776(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER780(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER778(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER782(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER780(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER784(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER782(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER786(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER784(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER788(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER786(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER790(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER788(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER792(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER790(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER794(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER792(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER796(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER794(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER798(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER796(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER800(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER798(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER802(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER800(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER804(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER802(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER806(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER804(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER808(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER806(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER810(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER808(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER812(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER810(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER814(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER812(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER816(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER814(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER818(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER816(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER820(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER818(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER822(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER820(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER824(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER822(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER826(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER824(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER828(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER826(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER830(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER828(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER832(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER830(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER834(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER832(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER836(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER834(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER838(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER836(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER840(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER838(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER842(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER840(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER844(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER842(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER846(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER844(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER848(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER846(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER850(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER848(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER852(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER850(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER854(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER852(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER856(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER854(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER858(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER856(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER860(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER858(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER862(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER860(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER864(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER862(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER866(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER864(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER868(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER866(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER870(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER868(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER872(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER870(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER874(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER872(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER876(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER874(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER878(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER876(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER880(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER878(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER882(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER880(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER884(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER882(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER886(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER884(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER888(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER886(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER890(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER888(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER892(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER890(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER894(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER892(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER896(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER894(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER898(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER896(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER900(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER898(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER902(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER900(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER904(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER902(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER906(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER904(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER908(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER906(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER910(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER908(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER912(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER910(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER914(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER912(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER916(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER914(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER918(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER916(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER920(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER918(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER922(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER920(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER924(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER922(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER926(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER924(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER928(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER926(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER930(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER928(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER932(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER930(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER934(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER932(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER936(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER934(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER938(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER936(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER940(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER938(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER942(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER940(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER944(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER942(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER946(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER944(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER948(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER946(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER950(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER948(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER952(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER950(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER954(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER952(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER956(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER954(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER958(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER956(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER960(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER958(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER962(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER960(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER964(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER962(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER966(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER964(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER968(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER966(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER970(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER968(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER972(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER970(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER974(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER972(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER976(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER974(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER978(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER976(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER980(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER978(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER982(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER980(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER984(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER982(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER986(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER984(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER988(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER986(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER990(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER988(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER992(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER990(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER994(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER992(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
+#define ___LENUM_CONVERTOR_HELPER996(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,_A,_B,...)case _A:return _B;___LENUM_CONVERTOR_HELPER994(_PREPEND_,_TYPEA,_TYPEB,_TYPE_B_TO_A,__VA_ARGS__)case _B:return _A;
 
 
 

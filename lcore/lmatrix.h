@@ -62,10 +62,10 @@ public:
     linline static LMatrix  createOrthgraphicProjectionRH(const f32& _left,const f32& _right,const f32& _top,const f32& _bottom,const f32& _znear,const f32& _zfar);
 
     //! Creates an orthgraphic Projection Left Handed
-    linline static LMatrix  createOrthgraphicProjectionLH(const f32& _width=800.0f,const f32& _height=600.0f,const f32& _znear=0.1f,const f32& _zfar=1000.0f);
+    linline static LMatrix  createOrthgraphicProjectionLH(const f32& _width=4.0f,const f32& _height=3.0f,const f32& _znear=0.1f,const f32& _zfar=1000.0f);
 
     //! Creates an orthgraphic Projection Right Handed
-    linline static LMatrix  createOrthgraphicProjectionRH(const f32& _width=800.0f,const f32& _height=600.0f,const f32& _znear=0.1f,const f32& _zfar=1000.0f);
+    linline static LMatrix  createOrthgraphicProjectionRH(const f32& _width=4.0f,const f32& _height=3.0f,const f32& _znear=0.1f,const f32& _zfar=1000.0f);
 
     //! Creates a Perspective Projection Left Handed
     linline static LMatrix  createPerspectiveProjectionLH(const f32& _fov=45.0f,const f32& _aspectratio=4.0f/3.0f,const f32& _znear=0.1f,const f32& _zfar=1000.0f);

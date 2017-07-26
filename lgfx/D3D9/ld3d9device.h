@@ -83,9 +83,27 @@ public:
 
     virtual void                    setDepthWriteEnable(bool _value);
 
+    virtual void                    setDepthBias(f32 _val);
+
+    virtual void                    setBackBufferWriteEnable(bool _val);
+
     virtual void                    setFillMode(LGFXFillMode _type);
 
     virtual void                    setCullMode(LGFXCullMode _mode);
+
+    virtual void                    setAlphaBlending(bool _value);
+
+    virtual void                    setStencilEnable(bool _value);
+
+    virtual void                    setStencilValue (i32 _value);
+
+    virtual void                    setStencilCheckFunction(LGFXCompareFunction _f);
+
+    virtual void                    setStencilFailOperation(LGFXStencilOperation _o);
+
+    virtual void                    setStencilDepthFailOperation(LGFXStencilOperation _o);
+
+    virtual void                    setStencilPassOperation(LGFXStencilOperation _o);
 
     virtual void                    showWindow();
 

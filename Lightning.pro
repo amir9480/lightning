@@ -33,21 +33,21 @@ SOURCES +=\
     lcore/lvector2.cpp \
     lcore/lvector3.cpp \
     lcore/lvector4.cpp \
-    lgfx/D3D9/ld3d9device.cpp \
-    lgfx/D3D9/ld3d9indexbuffer.cpp \
-    lgfx/D3D9/ld3d9vertexbuffer.cpp \
     los/windows/lwindowapplication.cpp \
     los/lapplication.cpp \
     lgfx/lgfxdevice.cpp \
     lgfx/lgfxindexbuffer.cpp \
     lgfx/lgfxshader.cpp \
     lgfx/lgfxvertexbuffer.cpp \
-    lgfx/D3D9/ld3d9shader.cpp \
     lgfx/lgfxtexture.cpp \
-    lgfx/D3D9/ld3d9texture.cpp \
     lgfx/limage.cpp \
     lcore/lmemorystream.cpp \
-    los/linput.cpp
+    los/linput.cpp \
+    lgfx/D3D9/ld3d9device.cpp \
+    lgfx/D3D9/ld3d9indexbuffer.cpp \
+    lgfx/D3D9/ld3d9vertexbuffer.cpp \
+    lgfx/D3D9/ld3d9texture.cpp \
+    lgfx/D3D9/ld3d9shader.cpp \
 
 
 HEADERS +=\
@@ -75,10 +75,6 @@ HEADERS +=\
     lcore/lvector2.h \
     lcore/lvector3.h \
     lcore/lvector4.h \
-    lgfx/D3D9/ld3d9.h \
-    lgfx/D3D9/ld3d9device.h \
-    lgfx/D3D9/ld3d9indexbuffer.h \
-    lgfx/D3D9/ld3d9vertexbuffer.h \
     los/windows/lwindowapplication.h \
     los/lapplication.h \
     lconfig.h \
@@ -90,12 +86,16 @@ HEADERS +=\
     lgfx/lgfxindexbuffer.h \
     lgfx/lgfxshader.h \
     lgfx/lgfxvertexbuffer.h \
-    lgfx/D3D9/ld3d9shader.h \
     lgfx/lgfxtexture.h \
-    lgfx/D3D9/ld3d9texture.h \
     lgfx/limage.h \
     lcore/lmemorystream.h \
-    los/linput.h
+    los/linput.h\
+    lgfx/D3D9/ld3d9.h \
+    lgfx/D3D9/ld3d9device.h \
+    lgfx/D3D9/ld3d9indexbuffer.h \
+    lgfx/D3D9/ld3d9vertexbuffer.h \
+    lgfx/D3D9/ld3d9texture.h \
+    lgfx/D3D9/ld3d9shader.h \
 
 DISTFILES += \
     .gitignore

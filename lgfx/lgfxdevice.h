@@ -35,6 +35,17 @@ enum LGFXCompareFunction
     LGFXCompareFunction_Always
 };
 
+enum LGFXStencilOperation
+{
+    LGFXStencilOperation_Keep,
+    LGFXStencilOperation_Zero,
+    LGFXStencilOperation_SetValue,
+    LGFXStencilOperation_Invert,
+    LGFXStencilOperation_Increment ,
+    LGFXStencilOperation_Decrement
+};
+
+
 //! To create a Graphic Device . ( use LGFXDevice::create )
 class LAPI LGFXDevice
 {
@@ -123,14 +134,41 @@ public:
     //! set write to depth buffer is enabled or not
     virtual void                    setDepthWriteEnable(bool _value=true)=0;
 
+    //! set depth bias value
+    virtual void                    setDepthBias(f32 _val=0.0f)=0;
+
     //! set depth check function
     virtual void                    setDepthCheckFunction(LGFXCompareFunction _val=LGFXCompareFunction_LessEqual)=0;
+
+    //! set Back buffer true or false (for depth or stencil only drawing)
+    virtual void                    setBackBufferWriteEnable(bool _val=true)=0;
 
     //! set fill mode
     virtual void                    setFillMode(LGFXFillMode _type=LGFXFillMode_Solid)=0;
 
     //! set cull mode
     virtual void                    setCullMode(LGFXCullMode _mode=LGFXCullMode_CounterClockwise)=0;
+
+    //! set alpha blending is enabled or not
+    virtual void                    setAlphaBlending(bool _value=false)=0;
+
+    //! set stencil is enable or not
+    virtual void                    setStencilEnable(bool _value=false)=0;
+
+    //! set stencil check function
+    virtual void                    setStencilCheckFunction(LGFXCompareFunction _f=LGFXCompareFunction_Always)=0;
+
+    //! set what to do on stencil check fail
+    virtual void                    setStencilFailOperation(LGFXStencilOperation _o=LGFXStencilOperation_Keep)=0;
+
+    //! set what to do on stencil depth fail
+    virtual void                    setStencilDepthFailOperation(LGFXStencilOperation _o=LGFXStencilOperation_Keep)=0;
+
+    //! set what to do on stencil check pass
+    virtual void                    setStencilPassOperation(LGFXStencilOperation _o=LGFXStencilOperation_Keep)=0;
+
+    //! set stencil reference value
+    virtual void                    setStencilValue (i32 _value=0)=0;
 
     //! show rendering window
     virtual void                    showWindow()=0;

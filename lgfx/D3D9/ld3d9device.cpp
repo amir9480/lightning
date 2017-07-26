@@ -4,26 +4,33 @@
 
 LNAMESPACE_BEGIN
 
-LENUM_CONVERTOR(LGFXCullMode,D3DCULL,
-                LGFXCullMode_None,D3DCULL_NONE,
-                LGFXCullMode_Clockwise,D3DCULL_CW,
-                LGFXCullMode_CounterClockwise,D3DCULL_CCW)
+LENUM_CONVERTOR_CUSTOM( LAPI,LGFXCullMode               ,D3DCULL,
+                        LGFXCullMode_None               ,D3DCULL_NONE,
+                        LGFXCullMode_Clockwise          ,D3DCULL_CW,
+                        LGFXCullMode_CounterClockwise   ,D3DCULL_CCW)
 
-LENUM_CONVERTOR(LGFXFillMode,D3DFILLMODE,
-                LGFXFillMode_Point,D3DFILL_POINT,
-                LGFXFillMode_Wireframe,D3DFILL_WIREFRAME,
-                LGFXFillMode_Solid,D3DFILL_SOLID)
+LENUM_CONVERTOR_CUSTOM( LAPI,LGFXFillMode               ,D3DFILLMODE,
+                        LGFXFillMode_Point              ,D3DFILL_POINT,
+                        LGFXFillMode_Wireframe          ,D3DFILL_WIREFRAME,
+                        LGFXFillMode_Solid              ,D3DFILL_SOLID)
 
-LENUM_CONVERTOR(LGFXCompareFunction,D3DCMPFUNC,
-                LGFXCompareFunction_Never,D3DCMP_NEVER,
-                LGFXCompareFunction_Less,D3DCMP_LESS,
-                LGFXCompareFunction_Equal,D3DCMP_EQUAL,
-                LGFXCompareFunction_LessEqual,D3DCMP_LESSEQUAL,
-                LGFXCompareFunction_Greater,D3DCMP_GREATER,
-                LGFXCompareFunction_NotEqual,D3DCMP_NOTEQUAL,
-                LGFXCompareFunction_GreaterEqual,D3DCMP_GREATEREQUAL,
-                LGFXCompareFunction_Always,D3DCMP_ALWAYS)
+LENUM_CONVERTOR_CUSTOM( LAPI,LGFXCompareFunction        ,D3DCMPFUNC,
+                        LGFXCompareFunction_Never       ,D3DCMP_NEVER,
+                        LGFXCompareFunction_Less        ,D3DCMP_LESS,
+                        LGFXCompareFunction_Equal       ,D3DCMP_EQUAL,
+                        LGFXCompareFunction_LessEqual   ,D3DCMP_LESSEQUAL,
+                        LGFXCompareFunction_Greater     ,D3DCMP_GREATER,
+                        LGFXCompareFunction_NotEqual    ,D3DCMP_NOTEQUAL,
+                        LGFXCompareFunction_GreaterEqual,D3DCMP_GREATEREQUAL,
+                        LGFXCompareFunction_Always      ,D3DCMP_ALWAYS)
 
+LENUM_CONVERTOR_CUSTOM( LAPI,LGFXStencilOperation       ,D3DSTENCILOP,
+                        LGFXStencilOperation_Zero       ,D3DSTENCILOP_ZERO,
+                        LGFXStencilOperation_Keep       ,D3DSTENCILOP_KEEP,
+                        LGFXStencilOperation_SetValue   ,D3DSTENCILOP_REPLACE,
+                        LGFXStencilOperation_Invert     ,D3DSTENCILOP_INVERT,
+                        LGFXStencilOperation_Increment  ,D3DSTENCILOP_INCRSAT,
+                        LGFXStencilOperation_Decrement  ,D3DSTENCILOP_DECRSAT)
 
 void lCallOnStart()
 {
@@ -368,6 +375,28 @@ void LD3D9Device::setDepthWriteEnable(bool _value)
     HR(mDevice->SetRenderState(D3DRS_ZWRITEENABLE,_value));
 }
 
+void LD3D9Device::setDepthBias(f32 _val)
+{
+    HR(mDevice->SetRenderState(D3DRS_SLOPESCALEDEPTHBIAS,*((DWORD*)&_val)));
+}
+
+void LD3D9Device::setBackBufferWriteEnable(bool _val)
+{
+    if(_val)
+    {
+        mDevice->SetRenderState(D3DRS_ALPHABLENDENABLE,FALSE);
+        mDevice->SetRenderState( D3DRS_SRCBLEND, D3DBLEND_ZERO );
+        mDevice->SetRenderState( D3DRS_DESTBLEND, D3DBLEND_ONE );
+    }
+    else
+    {
+        mDevice->SetRenderState(D3DRS_ALPHABLENDENABLE,TRUE);
+        mDevice->SetRenderState( D3DRS_SRCBLEND, D3DBLEND_ZERO );
+        mDevice->SetRenderState( D3DRS_DESTBLEND, D3DBLEND_ONE );
+    }
+
+}
+
 void LD3D9Device::setFillMode(LGFXFillMode _type)
 {
     HR(mDevice->SetRenderState(D3DRS_FILLMODE,fromLGFXFillModeToD3DFILLMODE(_type)));
@@ -376,6 +405,52 @@ void LD3D9Device::setFillMode(LGFXFillMode _type)
 void LD3D9Device::setCullMode(LGFXCullMode _mode)
 {
     HR(mDevice->SetRenderState(D3DRS_CULLMODE,fromLGFXCullModeToD3DCULL(_mode)));
+}
+
+void LD3D9Device::setAlphaBlending(bool _value)
+{
+    if(_value)
+    {
+        mDevice->SetRenderState(D3DRS_ALPHABLENDENABLE,TRUE);
+        mDevice->SetRenderState( D3DRS_SRCBLEND, D3DBLEND_SRCALPHA );
+        mDevice->SetRenderState( D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA );
+    }
+    else
+    {
+        mDevice->SetRenderState(D3DRS_ALPHABLENDENABLE,FALSE);
+        mDevice->SetRenderState( D3DRS_SRCBLEND, D3DBLEND_ONE );
+        mDevice->SetRenderState( D3DRS_DESTBLEND, D3DBLEND_ZERO );
+    }
+}
+
+void LD3D9Device::setStencilEnable(bool _value)
+{
+    HR(mDevice->SetRenderState(D3DRS_STENCILENABLE,_value));
+}
+
+void LD3D9Device::setStencilValue(i32 _value)
+{
+    HR(mDevice->SetRenderState(D3DRS_STENCILREF,_value));
+}
+
+void LD3D9Device::setStencilCheckFunction(LGFXCompareFunction _f)
+{
+    HR(mDevice->SetRenderState(D3DRS_STENCILFUNC,fromLGFXCompareFunctionToD3DCMPFUNC(_f)));
+}
+
+void LD3D9Device::setStencilPassOperation(LGFXStencilOperation _o)
+{
+    HR(mDevice->SetRenderState(D3DRS_STENCILPASS,fromLGFXStencilOperationToD3DSTENCILOP(_o)));
+}
+
+void LD3D9Device::setStencilDepthFailOperation(LGFXStencilOperation _o)
+{
+    HR(mDevice->SetRenderState(D3DRS_STENCILZFAIL,fromLGFXStencilOperationToD3DSTENCILOP(_o)));
+}
+
+void LD3D9Device::setStencilFailOperation(LGFXStencilOperation _o)
+{
+    HR(mDevice->SetRenderState(D3DRS_STENCILFAIL,fromLGFXStencilOperationToD3DSTENCILOP(_o)));
 }
 
 void LD3D9Device::showWindow()

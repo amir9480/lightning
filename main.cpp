@@ -55,6 +55,10 @@ float4 mainPS(VSOut _in):COLOR0
 {
     float4 o=float4(0.0f,0.0f,0.0f,1.0f);
     o.rgb=tex2D(t0,_in.uv.xy).rgb;
+    //if(_in.uv.x>=0.25f&&_in.uv.x<=0.75f&&_in.uv.y>=0.25f&&_in.uv.y<=0.75f)
+    //    o.a=0.0f;
+    //else
+    //    o.a=1.0f;
     return o;
 }
 
@@ -130,6 +134,21 @@ LVector<u32> ibox={
   20,21,22,22,21,23
 };
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+enum TypeA
+{
+    TypeA_1=1,
+    TypeA_2=2,
+    TypeA_3=3
+};
+
+enum TypeB
+{
+    TypeB_1=101,
+    TypeB_2=102,
+    TypeB_3=103
+};
 
 
 int main()
@@ -178,35 +197,63 @@ int main()
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     LMatrix world,view,viewprojection,WVP,projection=LMatrix::createPerspectiveProjectionLH(60.0f,4.0f/3.0f,0.01f,1000.0f);
 
-    LVector3 camPos=LVector3(0,0.5,-2);
+    LVector3 camPos=LVector3(0,0.8,-4.5);
     LQuaternion camRot=LQuaternion(LVector3::forward,0.0f);
+
+    LVector3 boxPos=LVector3(0,1,0);
+    LQuaternion boxRot;
 
 
     while(dev->processOSMessage())
     {
         float camspeed=0.1f;
+
         if(LInput::isKeyDown(LInput::KeyCode_Escape))
             break;
-        if(LInput::isKeyPressed(LInput::KeyCode_LeftShift))
-            camspeed=0.1f;
-        else
-            camspeed=0.05f;
-        if(LInput::isKeyPressed(LInput::KeyCode_W))
-            camPos+=camRot.getForward()*camspeed;
-        else if(LInput::isKeyPressed(LInput::KeyCode_S))
-            camPos-=camRot.getForward()*camspeed;
-        if(LInput::isKeyPressed(LInput::KeyCode_A))
-            camPos-=camRot.getRight()*camspeed;
-        else if(LInput::isKeyPressed(LInput::KeyCode_D))
-            camPos+=camRot.getRight()*camspeed;
-        if(LInput::isKeyPressed(LInput::KeyCode_Q))
-            camPos-=camRot.getUp()*camspeed;
-        else if(LInput::isKeyPressed(LInput::KeyCode_E))
-            camPos+=camRot.getUp()*camspeed;
-        if(LInput::isMousePressed(LInput::MouseCode_left))
+
+        if(LInput::isMousePressed(LInput::MouseCode_right))
         {
-            camRot*=LQuaternion(LVector3::up,-LInput::getMouseDelta().x*0.5f);
-            camRot*=LQuaternion(camRot.getRight(),-LInput::getMouseDelta().y*0.5f);
+            if(LInput::isKeyPressed(LInput::KeyCode_W))
+                boxPos+=LVector3::forward*camspeed;
+            else if(LInput::isKeyPressed(LInput::KeyCode_S))
+                boxPos-=LVector3::forward*camspeed;
+            if(LInput::isKeyPressed(LInput::KeyCode_A))
+                boxPos-=LVector3::right*camspeed;
+            else if(LInput::isKeyPressed(LInput::KeyCode_D))
+                boxPos+=LVector3::right*camspeed;
+            if(LInput::isKeyPressed(LInput::KeyCode_Q))
+                boxPos-=LVector3::up*camspeed;
+            else if(LInput::isKeyPressed(LInput::KeyCode_E))
+                boxPos+=LVector3::up*camspeed;
+        }
+        else if(LInput::isMousePressed(LInput::MouseCode_middle))
+        {
+            boxRot*=LQuaternion(LVector3::up,LInput::getMouseDelta().x*0.5f);
+            boxRot*=LQuaternion(LVector3::right,-LInput::getMouseDelta().y*0.5f);
+        }
+        else
+        {
+            if(LInput::isKeyPressed(LInput::KeyCode_LeftShift))
+                camspeed=0.1f;
+            else
+                camspeed=0.05f;
+            if(LInput::isKeyPressed(LInput::KeyCode_W))
+                camPos+=camRot.getForward()*camspeed;
+            else if(LInput::isKeyPressed(LInput::KeyCode_S))
+                camPos-=camRot.getForward()*camspeed;
+            if(LInput::isKeyPressed(LInput::KeyCode_A))
+                camPos-=camRot.getRight()*camspeed;
+            else if(LInput::isKeyPressed(LInput::KeyCode_D))
+                camPos+=camRot.getRight()*camspeed;
+            if(LInput::isKeyPressed(LInput::KeyCode_Q))
+                camPos-=camRot.getUp()*camspeed;
+            else if(LInput::isKeyPressed(LInput::KeyCode_E))
+                camPos+=camRot.getUp()*camspeed;
+            if(LInput::isMousePressed(LInput::MouseCode_left))
+            {
+                camRot*=LQuaternion(LVector3::up,-LInput::getMouseDelta().x*0.5f);
+                camRot*=LQuaternion(camRot.getRight(),-LInput::getMouseDelta().y*0.5f);
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -219,6 +266,27 @@ int main()
         dev->clear(50,50,50);
         dev->beginScene();
 
+
+        dev->resetParameters();
+        {
+            world=boxRot.toRotationMatrix()*boxPos.toTranslationMatrix();
+            WVP=world*viewprojection;
+            shaderps01->setTexture("t0",texture02);
+            shadervs01->setMatrix("WVP",WVP);
+            dev->setVertexDeclaration(myVertex1Decl);
+            dev->setVertexBuffer(0,vbbox);
+            dev->setIndexBuffer(ibbox);
+            dev->setPixelShader(shaderps01);
+            dev->setVertexShader(shadervs01);
+
+            dev->setBackBufferWriteEnable(false);
+            dev->setStencilEnable(true);
+            dev->setStencilValue(0x1);
+            dev->setStencilCheckFunction(LGFXCompareFunction_Always);
+            dev->setStencilPassOperation(LGFXStencilOperation_SetValue);
+
+            dev->draw();
+        }
         dev->resetParameters();
         {
             dev->setCullMode(LGFXCullMode_None);
@@ -231,19 +299,14 @@ int main()
             dev->setIndexBuffer(ibplane);
             dev->setPixelShader(shaderps01);
             dev->setVertexShader(shadervs01);
-            dev->draw();
-        }
-        dev->resetParameters();
-        {
-            world=LMatrix::createTranslationMatrix(LVector3(0,1,0));
-            WVP=world*viewprojection;
-            shaderps01->setTexture("t0",texture02);
-            shadervs01->setMatrix("WVP",WVP);
-            dev->setVertexDeclaration(myVertex1Decl);
-            dev->setVertexBuffer(0,vbbox);
-            dev->setIndexBuffer(ibbox);
-            dev->setPixelShader(shaderps01);
-            dev->setVertexShader(shadervs01);
+
+
+            dev->setStencilEnable(true);
+            dev->setStencilValue(0x1);
+            dev->setStencilCheckFunction(LGFXCompareFunction_NotEqual);
+            dev->setStencilPassOperation(LGFXStencilOperation_Keep);
+            dev->setStencilDepthFailOperation(LGFXStencilOperation_Keep);
+
             dev->draw();
         }
 
