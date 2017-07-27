@@ -25,7 +25,10 @@ void LGFXDevice::resetParameters()
     mMaxSampler=0;
 
     for(u16 i=0;i<mMaxVertexBuffer;i++)
+    {
         setVertexBuffer(i,nullptr);
+        setVertexBufferFrequency(i,0);
+    }
     mMaxVertexBuffer=0;
 
     for(u32 i=0;i<mMaxRenderTarget;i++)

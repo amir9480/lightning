@@ -189,7 +189,7 @@ void LD3D9Device::initialize(bool _fullscreen, bool _vsync)
     mQuadVertexShader->compile(_d3d9quadshader,"mainVS");
     mQuadPixelShader=dynamic_cast<LD3D9Shader*>(createPixelShader());
     mQuadPixelShader->compile(_d3d9quadshader,"mainPS");
-
+    setRenderTarget(0,nullptr);
 }
 
 void LD3D9Device::beginScene()
@@ -360,6 +360,7 @@ void LD3D9Device::render()
 
 
     resetParameters();
+    setRenderTarget(0,nullptr);
 }
 
 void LD3D9Device::release()
@@ -443,7 +444,7 @@ void LD3D9Device::setVertexBufferFrequency(u16 _streamNumber, u32 _count)
     }
     else
     {
-        HR(mDevice->SetStreamSourceFreq(_streamNumber,D3DSTREAMSOURCE_INDEXEDDATA|_count));
+        HR(mDevice->SetStreamSourceFreq(_streamNumber,D3DSTREAMSOURCE_INDEXEDDATA |_count));
     }
 }
 

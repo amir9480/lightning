@@ -66,7 +66,83 @@ float4 mainPS(VSOut _in):COLOR0
 
 )";
 
+const char* myShader2=
+R"(
+uniform extern float4x4 VP;
+
+uniform extern sampler2D t0;
+
+struct VSInput
+{
+    float3 pos:POSITION0;
+    float2 uv:TEXCOORD0;
+
+    float4 r1:TEXCOORD1;
+    float4 r2:TEXCOORD2;
+    float4 r3:TEXCOORD3;
+    float4 r4:TEXCOORD4;
+};
+
+struct VSOut
+{
+    float4 pos:POSITION0;
+    float2 uv:TEXCOORD0;
+};
+
+float4x4 fromv4tom4(float4 a,float4 b,float4 c,float4 d)
+{
+    return float4x4(a.x,a.y,a.z,a.w,
+                    b.x,b.y,b.z,b.w,
+                    c.x,c.y,c.z,c.w,
+                    d.x,d.y,d.z,d.w
+                    );
+}
+
+VSOut mainVS(VSInput _in)
+{
+    VSOut o;
+    o.pos.xyz=_in.pos;
+    o.pos.w=1.0f;
+    float4x4 WVP = mul(fromv4tom4(_in.r1,_in.r2,_in.r3,_in.r4),VP);
+    //o.pos= mul(o.pos,VP);
+    o.pos=mul(o.pos,WVP);
+    //o.pos+=_in.r4;
+    o.uv=_in.uv;
+    return o;
+}
+
+
+float4 mainPS(VSOut _in):COLOR0
+{
+    float4 o=float4(0.0f,0.0f,0.0f,1.0f);
+    o.rgb=tex2D(t0,_in.uv.xy).rgb;
+    //if(_in.uv.x>=0.25f&&_in.uv.x<=0.75f&&_in.uv.y>=0.25f&&_in.uv.y<=0.75f)
+    //    o.a=0.0f;
+    //else
+    //    o.a=1.0f;
+    return o;
+}
+
+)";
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+struct MyVertex2
+{
+    LVector4 r1,r2,r3,r4;
+    static LGFXVertexDeclaration* decl;
+};
+LGFXVertexDeclaration* MyVertex2::decl=nullptr;
+LVector<LVertexElement> _myVertex2Decl={
+    {0,LVertexElementType_Float3,LVertexElementUsage_Position,0},
+    {0,LVertexElementType_Float2,LVertexElementUsage_TextureCoordinate,0},
+
+    {1,LVertexElementType_Float4,LVertexElementUsage_TextureCoordinate,1},
+    {1,LVertexElementType_Float4,LVertexElementUsage_TextureCoordinate,2},
+    {1,LVertexElementType_Float4,LVertexElementUsage_TextureCoordinate,3},
+    {1,LVertexElementType_Float4,LVertexElementUsage_TextureCoordinate,4},
+};
 
 
 struct MyVertex1
@@ -161,11 +237,23 @@ int main()
     LGFXDevice* dev = LGFXDevice::create(0,1);
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     LGFXVertexDeclaration* myVertex1Decl = dev->createVertexDeclaration(_myVertex1Decl);
+    LGFXVertexDeclaration* myVertex2Decl = dev->createVertexDeclaration(_myVertex2Decl);
+
     LGFXVertexBuffer* vbplane = dev->createVertexBuffer();
     vbplane->updateBuffer((char*)vplane,myVertex1Decl->getElementsSize(),sizeof(vplane)/sizeof(vplane[0]));
 
     LGFXVertexBuffer* vbbox = dev->createVertexBuffer();
     vbbox->updateBuffer((char*)vbox,myVertex1Decl->getElementsSize(),sizeof(vbox)/sizeof(vbox[0]));
+
+    LVector<LMatrix> _vboxinstance;
+    for(int i=-250;i<=250;i+=3)
+        for(int j=-250;j<=250;j+=3)
+        {
+            _vboxinstance.pushBack(LMatrix());
+            _vboxinstance[_vboxinstance.getSize()-1]=LMatrix::createTranslationMatrix(LVector3(i,1,j));
+        }
+    LGFXVertexBuffer* vbboxinstance=dev->createVertexBuffer();
+    vbboxinstance->updateBuffer((char*)_vboxinstance.getData(),sizeof(float)*4*4,_vboxinstance.getSize());
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     LGFXIndexBuffer* ibplane = dev->createIndexBuffer();
     ibplane->updateBuffer(iplane);
@@ -189,16 +277,20 @@ int main()
     texture02->updateTexture(3,image02.getResized(image02.getWidth()/8,image02.getHeight()/8));
     texture02->updateTexture(4,image02.getResized(image02.getWidth()/16,image02.getHeight()/16));
 
-    LGFXTexture* myrendertarget01 = dev->createRenderTarget(2048,2048,LImage::Format_R8G8B8);
-
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     LGFXShader* shadervs01=dev->createVertexShader();
     shadervs01->compile(myShader,"mainVS");
+
+    LGFXShader* shadervs02=dev->createVertexShader();
+    shadervs02->compile(myShader2,"mainVS");
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     LGFXShader* shaderps01=dev->createPixelShader();
     shaderps01->compile(myShader,"mainPS");
+
+    LGFXShader* shaderps02=dev->createPixelShader();
+    shaderps02->compile(myShader2,"mainPS");
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    LMatrix world,view,viewprojection,WVP,projection=LMatrix::createPerspectiveProjectionLH(60.0f,4.0f/3.0f,0.01f,1000.0f);
+    LMatrix world,view,viewprojection,WVP,projection=LMatrix::createPerspectiveProjectionLH(60.0f,4.0f/3.0f,0.01f,10000.0f);
 
     LVector3 camPos=LVector3(0,0.8,-4.5);
     LQuaternion camRot=LQuaternion(LVector3::forward,0.0f);
@@ -237,7 +329,7 @@ int main()
         else
         {
             if(LInput::isKeyPressed(LInput::KeyCode_LeftShift))
-                camspeed=0.1f;
+                camspeed=0.2f;
             else
                 camspeed=0.05f;
             if(LInput::isKeyPressed(LInput::KeyCode_W))
@@ -267,47 +359,43 @@ int main()
         ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-        // render target
-        dev->resetParameters();
-        dev->setRenderTarget(0,myrendertarget01);
-        dev->clear(0,150,255);
-        dev->beginScene();
-        {
-            dev->setCullMode(LGFXCullMode_None);
-            world=LMatrix::createScaleMatrix({6,6,6});
-            WVP=world*viewprojection;
-            shaderps01->setTexture("t0",texture02);
-            shadervs01->setMatrix("WVP",WVP);
-            dev->setVertexDeclaration(myVertex1Decl);
-            dev->setVertexBuffer(0,vbplane);
-            dev->setIndexBuffer(ibplane);
-            dev->setPixelShader(shaderps01);
-            dev->setVertexShader(shadervs01);
-
-            dev->draw();
-        }
-        dev->setRenderTarget(0,nullptr);
-        // render target end
-        dev->endScene();
-
 
         dev->clear(50,50,50);
         dev->beginScene();
-        //dev->drawQuad(myrendertarget01);
+
+//        dev->resetParameters();
+//        {
+//            world=boxRot.toRotationMatrix()*boxPos.toTranslationMatrix();
+//            WVP=world*viewprojection;
+//            shaderps01->setTexture("t0",texture02);
+//            shadervs01->setMatrix("WVP",WVP);
+//            dev->setVertexDeclaration(myVertex1Decl);
+//            dev->setVertexBuffer(0,vbbox);
+//            dev->setIndexBuffer(ibbox);
+//            dev->setPixelShader(shaderps01);
+//            dev->setVertexShader(shadervs01);
+
+//            dev->draw();
+//        }
+
         dev->resetParameters();
         {
-            world=boxRot.toRotationMatrix()*boxPos.toTranslationMatrix();
-            WVP=world*viewprojection;
-            shaderps01->setTexture("t0",myrendertarget01);
-            shadervs01->setMatrix("WVP",WVP);
-            dev->setVertexDeclaration(myVertex1Decl);
+            shaderps02->setTexture("t0",texture02);
+            shadervs02->setMatrix("VP",viewprojection);
+            dev->setVertexDeclaration(myVertex2Decl);
             dev->setVertexBuffer(0,vbbox);
+            dev->setVertexBuffer(1,vbboxinstance);
+            dev->setVertexBufferFrequency(0,_vboxinstance.getSize());
+            dev->setVertexBufferFrequency(1,1);
             dev->setIndexBuffer(ibbox);
-            dev->setPixelShader(shaderps01);
-            dev->setVertexShader(shadervs01);
+            dev->setPixelShader(shaderps02);
+            dev->setVertexShader(shadervs02);
 
             dev->draw();
         }
+
+
+
         dev->resetParameters();
         {
             dev->setCullMode(LGFXCullMode_None);
@@ -326,6 +414,7 @@ int main()
 
         dev->endScene();
         dev->render();
+
         LInput::resetInputs();
     }
 
