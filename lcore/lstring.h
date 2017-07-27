@@ -99,8 +99,13 @@ public:
     static LString_Base<chartype>   fromUTF8(const LString8& _in);
     static LString_Base<chartype>   fromUTF8(const char* _in);
 
+    //! Create string from utf16-encoded string
+    static LString_Base<chartype>   fromUTF16(const LString& _in);
+    static LString_Base<chartype>   fromUTF16(const wchar_t* _in);
+
+
     //! Get capacity of string means that how much is allocated by string
-    //! to get length you need use getLength
+    //! to get length you need use getLength \sa getSize
     u32                             getCapacity()const;
 
     //! returns string data directly
@@ -108,6 +113,9 @@ public:
 
     //! get reversed copy of this
     LString_Base<chartype>          getReversed()const;
+
+    //! get real size of this string \sa getCapacity
+    u32                             getSize()const;
 
     //! get part of string created from _n charcters from start. if end was -1 it means from _start to string end
     LString_Base<chartype>          getSubString(u32 _start,u32 _n=-1)const;
@@ -186,6 +194,12 @@ public:
 
     //! Convert to utf8
     LString8                        toUTF8()const;
+
+    //! convert to utf16
+    LString                         toUTF16()const;
+
+    //! convert to utf32
+    LString32                       toUTF32()const;
 
     //! Asign Copy operators
     LString_Base<chartype>&         operator=(const char* _other);

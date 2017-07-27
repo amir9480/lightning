@@ -30,7 +30,7 @@ struct VSInput
 
 struct VSOut
 {
-    float4 pos:POSITION0;
+    float4 pos:SV_POSITION0;
     float2 uv:TEXCOORD0;
 };
 
@@ -339,7 +339,27 @@ bool LD3D9Device::processOSMessage()
 
 void LD3D9Device::render()
 {
+    resetParameters();
+    setVertexDeclaration(D3D9QuadVertex::decl);
+    setVertexBuffer(0,mQuadVertexBuffer);
+    setIndexBuffer(mQuadIndexBuffer);
+    setDepthWriteEnable(false);
+    setDepthCheckEnable(false);
+    setVertexShader(mQuadVertexShader);
+    if(mCurrentPixelShader==nullptr)
+    {
+        setPixelShader(mQuadPixelShader);
+        mQuadPixelShader->setTexture("t0",mMainBackBuffer);
+    }
+
+    HR(mDevice->SetRenderTarget(0,mNativeBackBuffer));
+    draw();
+
+
     mDevice->Present(0,0,0,0);
+
+
+    resetParameters();
 }
 
 void LD3D9Device::release()
@@ -497,7 +517,7 @@ void LD3D9Device::setRenderTarget(u32 _index, LGFXTexture *_rt)
         }
         else
         {
-            HR(mDevice->SetRenderTarget(_index,mNativeBackBuffer));
+            setRenderTarget(0,mMainBackBuffer);
         }
         return;
     }

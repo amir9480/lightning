@@ -414,7 +414,7 @@ LString_Base<wchar_t> LString_Base<wchar_t>::fromUTF8(const char* _in)
             l+=5;
         else if(t<=0x7fffffff)
             l+=6;
-        if(t>0x10000)
+        if(t>=0x10000)
             i++;
     }
     out=o;
@@ -451,6 +451,46 @@ LString_Base<char32_t> LString_Base<char32_t>::fromUTF8(const char* _in)
     return o;
 }
 
+template <>
+LString_Base<wchar_t> LString_Base<wchar_t>::fromUTF16(const wchar_t* _in)
+{
+    return LString(_in);
+}
+
+template <>
+LString_Base<char32_t> LString_Base<char32_t>::fromUTF16(const wchar_t* _in)
+{
+    LString_Base<char32_t> o,out;
+    u32 ins=__utility_strlen(_in);
+    o.resize(ins);// maximum capacity that is needed
+    u32 l=0;
+    for(u32 i=0;i<ins;i++)
+    {
+        u32 t = __utility_utf16decode(&_in[l]);
+        o[i]=t;
+        o[i+1]=0;
+
+        if(t>=0x10000)
+            l+=2;
+        else
+            l++;
+    }
+    out=o;
+    return o;
+}
+
+template <>
+LString_Base<char32_t> LString_Base<char32_t>::fromUTF16(const LString& _in)
+{
+    return LString_Base<char32_t>::fromUTF16(_in.getData());
+}
+
+template <>
+LString_Base<wchar_t> LString_Base<wchar_t>::fromUTF16(const LString& _in)
+{
+    return _in;
+}
+
 template <typename chartype>
 u32 LString_Base<chartype>::getCapacity() const
 {
@@ -475,6 +515,55 @@ LString_Base<chartype> LString_Base<chartype>::getReversed() const
     LString_Base<chartype> o=*this;
     o.reverse();
     return o;
+}
+
+template <>
+u32 LString_Base<char>::getSize()const
+{
+    u32 out=0;
+    u32 ins = getCapacity();
+    for(u32 i=0;i<ins;)
+    {
+        u32 t = __utility_utf8decode(&mData[i]);
+
+        if(t<=0x7f)
+            i+=1;
+        else if(t<=0x7ff)
+            i+=2;
+        else if(t<=0xffff)
+            i+=3;
+        else if(t<=0x1fffff)
+            i+=4;
+        else if(t<=0x3ffffff)
+            i+=5;
+        else if(t<=0x7fffffff)
+            i+=6;
+        out++;
+    }
+    return out;
+}
+
+template <>
+u32 LString_Base<wchar_t>::getSize()const
+{
+    u32 out=0;
+    u32 ins = getCapacity();
+    for(u32 i=0;i<ins;)
+    {
+        u32 t = __utility_utf16decode(&mData[i]);
+        if(t<0x10000)
+            i+=1;
+        else
+            i+=2;
+        out++;
+    }
+    return out;
+}
+
+template <>
+u32 LString_Base<char32_t>::getSize()const
+{
+    return getCapacity();
 }
 
 template <typename chartype>
@@ -1226,8 +1315,8 @@ LString8 LString_Base<wchar_t>::toUTF8() const
         u32 eds=(__utility_strlen(ed)+1)*sizeof(char) ;
         lMemoryCopy(&o.mData[l],ed,eds);
         l+=eds-1;
-        //! Two charcters will show as one
-        if(t>0x10000)
+        // Two charcters will show as one
+        if(t>=0x10000)
             i++;
     }
     out=o;
@@ -1244,13 +1333,58 @@ LString8 LString_Base<char32_t>::toUTF8() const
     {
         u32 t=mData[i];
         char* ed=__utility_utf8encode(t);
-        u32 eds=(__utility_strlen(ed)+1)*sizeof(char);
-        lMemoryCopy(&o.mData[l],ed,eds);
+        u32 eds=(__utility_strlen(ed)+1);
+        lMemoryCopy(&o.mData[l],ed,eds*sizeof(char));
         l+=eds-1;
     }
     out=o;
     return out;
 }
+
+template<>
+LString LString_Base<char32_t>::toUTF16() const
+{
+    LString o,out;
+    o.resize(getCapacity()*2);// maximum capacity is need for output
+    u32 l=0;
+    for(u32 i=0;i<getCapacity();i++)
+    {
+        u32 t=mData[i];
+        wchar_t* ed=__utility_utf16encode(t);
+        u32 eds=(__utility_strlen(ed)+1);
+        lMemoryCopy(&o.mData[l],ed,eds*sizeof(wchar_t));
+        l+=eds-1;
+    }
+    out=o;
+    return out;
+}
+
+template<>
+LString LString_Base<char>::toUTF16() const
+{
+    return LString::fromUTF8(*this);
+}
+
+
+template<>
+LString32 LString_Base<char>::toUTF32() const
+{
+    return LString32::fromUTF8(mData);
+}
+
+template<>
+LString32 LString_Base<wchar_t>::toUTF32() const
+{
+    return LString32::fromUTF16(mData);
+}
+
+template<>
+LString32 LString_Base<char32_t>::toUTF32() const
+{
+    return *this;
+}
+
+
 
 template <typename chartype>
 char *LString_Base<chartype>::__utility_utf8encode(u32 _in)
