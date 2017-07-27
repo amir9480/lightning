@@ -246,8 +246,8 @@ int main()
     vbbox->updateBuffer((char*)vbox,myVertex1Decl->getElementsSize(),sizeof(vbox)/sizeof(vbox[0]));
 
     LVector<LMatrix> _vboxinstance;
-    for(int i=-250;i<=250;i+=3)
-        for(int j=-250;j<=250;j+=3)
+    for(int i=-50;i<=50;i+=3)
+        for(int j=-50;j<=50;j+=3)
         {
             _vboxinstance.pushBack(LMatrix());
             _vboxinstance[_vboxinstance.getSize()-1]=LMatrix::createTranslationMatrix(LVector3(i,1,j));
@@ -261,21 +261,15 @@ int main()
     LGFXIndexBuffer* ibbox = dev->createIndexBuffer();
     ibbox->updateBuffer(ibox);
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    LGFXTexture* texture01 = dev->createTexture(image01.getWidth(),image01.getHeight(),5,image01.getFormat());
+    LGFXTexture* texture01 = dev->createTexture(image01.getWidth(),image01.getHeight(),1,image01.getFormat());
     texture01->updateTexture(0,image01);
-    texture01->updateTexture(1,image01.getResized(image01.getWidth()/2,image01.getHeight()/2));
-    texture01->updateTexture(2,image01.getResized(image01.getWidth()/4,image01.getHeight()/4));
-    texture01->updateTexture(3,image01.getResized(image01.getWidth()/8,image01.getHeight()/8));
-    texture01->updateTexture(4,image01.getResized(image01.getWidth()/16,image01.getHeight()/16));
     texture01->setMipMapBias(-1.5f);
+    texture01->generateMipMaps();
 
 
-    LGFXTexture* texture02 = dev->createTexture(image02.getWidth(),image02.getHeight(),5,image02.getFormat());
+    LGFXTexture* texture02 = dev->createTexture(image02.getWidth(),image02.getHeight(),1,image02.getFormat());
     texture02->updateTexture(0,image02);
-    texture02->updateTexture(1,image02.getResized(image02.getWidth()/2,image02.getHeight()/2));
-    texture02->updateTexture(2,image02.getResized(image02.getWidth()/4,image02.getHeight()/4));
-    texture02->updateTexture(3,image02.getResized(image02.getWidth()/8,image02.getHeight()/8));
-    texture02->updateTexture(4,image02.getResized(image02.getWidth()/16,image02.getHeight()/16));
+    texture02->generateMipMaps();
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     LGFXShader* shadervs01=dev->createVertexShader();
@@ -363,36 +357,36 @@ int main()
         dev->clear(50,50,50);
         dev->beginScene();
 
-//        dev->resetParameters();
-//        {
-//            world=boxRot.toRotationMatrix()*boxPos.toTranslationMatrix();
-//            WVP=world*viewprojection;
-//            shaderps01->setTexture("t0",texture02);
-//            shadervs01->setMatrix("WVP",WVP);
-//            dev->setVertexDeclaration(myVertex1Decl);
-//            dev->setVertexBuffer(0,vbbox);
-//            dev->setIndexBuffer(ibbox);
-//            dev->setPixelShader(shaderps01);
-//            dev->setVertexShader(shadervs01);
-
-//            dev->draw();
-//        }
-
         dev->resetParameters();
         {
-            shaderps02->setTexture("t0",texture02);
-            shadervs02->setMatrix("VP",viewprojection);
-            dev->setVertexDeclaration(myVertex2Decl);
+            world=boxRot.toRotationMatrix()*boxPos.toTranslationMatrix();
+            WVP=world*viewprojection;
+            shaderps01->setTexture("t0",texture02);
+            shadervs01->setMatrix("WVP",WVP);
+            dev->setVertexDeclaration(myVertex1Decl);
             dev->setVertexBuffer(0,vbbox);
-            dev->setVertexBuffer(1,vbboxinstance);
-            dev->setVertexBufferFrequency(0,_vboxinstance.getSize());
-            dev->setVertexBufferFrequency(1,1);
             dev->setIndexBuffer(ibbox);
-            dev->setPixelShader(shaderps02);
-            dev->setVertexShader(shadervs02);
+            dev->setPixelShader(shaderps01);
+            dev->setVertexShader(shadervs01);
 
             dev->draw();
         }
+
+//        dev->resetParameters();
+//        {
+//            shaderps02->setTexture("t0",texture02);
+//            shadervs02->setMatrix("VP",viewprojection);
+//            dev->setVertexDeclaration(myVertex2Decl);
+//            dev->setVertexBuffer(0,vbbox);
+//            dev->setVertexBuffer(1,vbboxinstance);
+//            dev->setVertexBufferFrequency(0,_vboxinstance.getSize());
+//            dev->setVertexBufferFrequency(1,0);
+//            dev->setIndexBuffer(ibbox);
+//            dev->setPixelShader(shaderps02);
+//            dev->setVertexShader(shadervs02);
+
+//            dev->draw();
+//        }
 
 
 

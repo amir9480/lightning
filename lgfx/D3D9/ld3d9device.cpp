@@ -268,8 +268,14 @@ LGFXTexture *LD3D9Device::createTexture(u16 _width, u16 _height, u16 _mipmap_cou
     o->mFormat = _format;
     o->mType=LGFXTexture::TextureType_2D;
 
-    HR(mDevice->CreateTexture(_width,_height,_mipmap_count,0,lD3DTextureFormat(_format),D3DPOOL_MANAGED,(IDirect3DTexture9**)(&(o->mTexture)),0));
-
+    if(_mipmap_count==1)
+    {
+        HR(mDevice->CreateTexture(_width,_height,1,D3DUSAGE_AUTOGENMIPMAP,lD3DTextureFormat(_format),D3DPOOL_MANAGED,(IDirect3DTexture9**)(&(o->mTexture)),0));
+    }
+    else
+    {
+        HR(mDevice->CreateTexture(_width,_height,_mipmap_count,0,lD3DTextureFormat(_format),D3DPOOL_MANAGED,(IDirect3DTexture9**)(&(o->mTexture)),0));
+    }
     return o;
 }
 
@@ -432,13 +438,13 @@ void LD3D9Device::setVertexBuffer(u16 _streamNumber, LGFXVertexBuffer *_buffer)
     mMaxVertexBuffer = lMax(_streamNumber,mMaxVertexBuffer);
 }
 
-void LD3D9Device::setVertexBufferFrequency(u16 _streamNumber, u32 _count)
+void LD3D9Device::setVertexBufferFrequency(u16 _streamNumber, int _count)
 {
-    if(_count==0)
+    if(_count==-1)
     {
         HR(mDevice->SetStreamSourceFreq(_streamNumber,1));
     }
-    else if(_count==1)
+    else if(_count==0)
     {
         HR(mDevice->SetStreamSourceFreq(_streamNumber,D3DSTREAMSOURCE_INSTANCEDATA|1));
     }

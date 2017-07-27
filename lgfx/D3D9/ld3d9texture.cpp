@@ -63,9 +63,8 @@ LD3D9Texture::~LD3D9Texture()
 
 void LD3D9Texture::generateMipMaps()
 {
-//    if(mMipMapCount<=1)
-//        return;
-//    mTexture->GenerateMipSubLevels();
+    lError(mMipMapCount>1,"generateMipMaps Error . use mipmap =1 on CreateTextureFunction");
+    mTexture->GenerateMipSubLevels();
 }
 
 void LD3D9Texture::destroy()

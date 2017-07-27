@@ -119,8 +119,8 @@ public:
     //! set current vertex buffer
     virtual void                    setVertexBuffer(u16 _streamNumber,LGFXVertexBuffer *_buffer)=0;
 
-    //! set vertex buffer frequency (use 0 to disable)
-    virtual void                    setVertexBufferFrequency(u16 _streamNumber,u32 _count)=0;
+    //! set vertex buffer frequency. set _count to -1 to disable . 0 to set instanced data and _count>0 to set gemetry count
+    virtual void                    setVertexBufferFrequency(u16 _streamNumber,int _count=-1)=0;
 
     //! set current index buffer
     virtual void                    setIndexBuffer(LGFXIndexBuffer* _buffer)=0;

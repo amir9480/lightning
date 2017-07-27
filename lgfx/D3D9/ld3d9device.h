@@ -82,7 +82,7 @@ public:
 
     virtual void                    setVertexBuffer(u16 _streamNumber,LGFXVertexBuffer* _buffer);
 
-    virtual void                    setVertexBufferFrequency(u16 _streamNumber,u32 _count);
+    virtual void                    setVertexBufferFrequency(u16 _streamNumber,int _count);
 
     virtual void                    setIndexBuffer(LGFXIndexBuffer *_buffer);
 
