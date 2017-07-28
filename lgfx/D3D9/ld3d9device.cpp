@@ -117,6 +117,7 @@ LD3D9Device::LD3D9Device()
     mD3D9=0;
     mDevice=0;
     mNativeBackBuffer=0;
+    mNativeDepthBuffer=0;
     mMainBackBuffer=0;
     mQuadVertexBuffer=0;
     mQuadIndexBuffer=0;
@@ -169,6 +170,7 @@ void LD3D9Device::initialize(bool _fullscreen, bool _vsync, u16 _screen_width, u
                            D3DCREATE_HARDWARE_VERTEXPROCESSING,&dpp,&mDevice));
 
     HR(mDevice->GetBackBuffer(0,0,D3DBACKBUFFER_TYPE_MONO,&mNativeBackBuffer));
+    HR(mDevice->GetDepthStencilSurface(&mNativeDepthBuffer));
 
     mMainBackBuffer = new LD3D9Texture;
     mMainBackBuffer->mWidth=_screen_width;
@@ -181,7 +183,9 @@ void LD3D9Device::initialize(bool _fullscreen, bool _vsync, u16 _screen_width, u
     mMainBackBuffer->mFilter=LGFXTexture::TextureFilter_anisotropic;
     mMainBackBuffer->mMipMapCount=1;
     mMainBackBuffer->mType = LGFXTexture::TextureType_RenderTarget;
+    mMainBackBuffer->mHasDepthBuffer=true;
     HR(mDevice->CreateTexture(mMainBackBuffer->mWidth,mMainBackBuffer->mHeight,1,D3DUSAGE_RENDERTARGET,lD3DTextureFormat(mMainBackBuffer->mFormat),D3DPOOL_DEFAULT,(IDirect3DTexture9**)(&(mMainBackBuffer->mTexture)),0));
+    HR(mDevice->CreateDepthStencilSurface(_screen_width,_screen_height,D3DFMT_D24S8,D3DMULTISAMPLE_NONE,0,0,&mMainBackBuffer->mRenderTargetDepthStencil,0));
 
     D3D9QuadVertex::decl=createVertexDeclaration(_d3d9quad_decl);
     mQuadVertexBuffer=dynamic_cast<LD3D9VertexBuffer*>(createVertexBuffer(0,0));
@@ -194,7 +198,6 @@ void LD3D9Device::initialize(bool _fullscreen, bool _vsync, u16 _screen_width, u
     mQuadPixelShader->compile(_d3d9quadshader,"mainPS");
 
     setRenderTarget(0,nullptr);
-    mDevice->SetRenderTarget(0,mNativeBackBuffer);
 
 
     mScreenWidth=_screen_width;
@@ -210,6 +213,8 @@ void LD3D9Device::initialize(bool _fullscreen, bool _vsync, u16 _screen_width, u
 void LD3D9Device::reset(bool _fullscreen, bool _vsync, u16 _screen_width, u16 _screen_height)
 {
     resetParameters();
+    mDevice->SetRenderTarget(0,mNativeBackBuffer);
+    mDevice->SetDepthStencilSurface(mNativeDepthBuffer);
     delete D3D9QuadVertex::decl;
     mQuadVertexBuffer->preReset();
     mQuadIndexBuffer->preReset();
@@ -241,7 +246,7 @@ void LD3D9Device::reset(bool _fullscreen, bool _vsync, u16 _screen_width, u16 _s
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     mNativeBackBuffer->Release();
-
+    mNativeDepthBuffer->Release();
     HR(mDevice->Reset(&dpp));
     ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -257,6 +262,7 @@ void LD3D9Device::reset(bool _fullscreen, bool _vsync, u16 _screen_width, u16 _s
         mTextures[i]->postReset();
 
     HR(mDevice->GetBackBuffer(0,0,D3DBACKBUFFER_TYPE_MONO,&mNativeBackBuffer));
+    HR(mDevice->GetDepthStencilSurface(&mNativeDepthBuffer));
 
     D3D9QuadVertex::decl=createVertexDeclaration(_d3d9quad_decl);
 
@@ -276,8 +282,9 @@ void LD3D9Device::reset(bool _fullscreen, bool _vsync, u16 _screen_width, u16 _s
     mMainBackBuffer->mFilter=LGFXTexture::TextureFilter_anisotropic;
     mMainBackBuffer->mMipMapCount=1;
     mMainBackBuffer->mType = LGFXTexture::TextureType_RenderTarget;
+    mMainBackBuffer->mHasDepthBuffer=true;
     HR(mDevice->CreateTexture(mMainBackBuffer->mWidth,mMainBackBuffer->mHeight,1,D3DUSAGE_RENDERTARGET,lD3DTextureFormat(mMainBackBuffer->mFormat),D3DPOOL_DEFAULT,(IDirect3DTexture9**)(&(mMainBackBuffer->mTexture)),0));
-
+    HR(mDevice->CreateDepthStencilSurface(_screen_width,_screen_height,D3DFMT_D24S8,D3DMULTISAMPLE_NONE,0,0,&mMainBackBuffer->mRenderTargetDepthStencil,0));
 
     setRenderTarget(0,nullptr);
 
@@ -379,7 +386,7 @@ LGFXTexture *LD3D9Device::createTexture(u16 _width, u16 _height, LImage::Format 
     return o;
 }
 
-LGFXTexture *LD3D9Device::createRenderTarget(u16 _width, u16 _height, LImage::Format _renderable_format)
+LGFXTexture *LD3D9Device::createRenderTarget(u16 _width, u16 _height, LImage::Format _renderable_format, bool _has_depth_buffer)
 {
     lError(_width==0||_height==0||_renderable_format==LImage::Format_null,"Some thing is wrong",nullptr);
     LD3D9Texture* o =new LD3D9Texture;
@@ -392,6 +399,9 @@ LGFXTexture *LD3D9Device::createRenderTarget(u16 _width, u16 _height, LImage::Fo
     o->mIsRenderTarget=true;
     o->mType = LGFXTexture::TextureType_RenderTarget;
     HR(mDevice->CreateTexture(_width,_height,1,D3DUSAGE_RENDERTARGET,lD3DTextureFormat(_renderable_format),D3DPOOL_DEFAULT,(IDirect3DTexture9**)(&(o->mTexture)),0));
+    o->mHasDepthBuffer=_has_depth_buffer;
+    if(_has_depth_buffer)
+        HR(mDevice->CreateDepthStencilSurface(_width,_height,D3DFMT_D24S8,D3DMULTISAMPLE_NONE,0,0,&o->mRenderTargetDepthStencil,0));
     return o;
 }
 
@@ -477,29 +487,31 @@ bool LD3D9Device::processOSMessage()
 
 void LD3D9Device::render()
 {
-    //resetParameters();
-    //setVertexDeclaration(D3D9QuadVertex::decl);
-    //setVertexBuffer(0,mQuadVertexBuffer);
-    //setIndexBuffer(mQuadIndexBuffer);
-    //setDepthWriteEnable(false);
-    //setDepthCheckEnable(false);
-    //setVertexShader(mQuadVertexShader);
-//    if(mCurrentPixelShader==nullptr)
-//    {
-        //setPixelShader(mQuadPixelShader);
-        //mQuadPixelShader->setTexture("t0",mMainBackBuffer);
-//    }
+    resetParameters();
+    setVertexDeclaration(D3D9QuadVertex::decl);
+    setVertexBuffer(0,mQuadVertexBuffer);
+    setIndexBuffer(mQuadIndexBuffer);
+    setVertexShader(mQuadVertexShader);
+    if(mCurrentPixelShader==nullptr)
+    {
+        setPixelShader(mQuadPixelShader);
+        mQuadPixelShader->setTexture("t0",mMainBackBuffer);
+    }
+    setDepthWriteEnable(false);
+    setDepthCheckEnable(false);
 
-    //HR(mDevice->SetRenderTarget(0,mNativeBackBuffer));
-    //mDevice->BeginScene();
-    //draw();
-    //mDevice->EndScene();
+    HR(mDevice->SetRenderTarget(0,mNativeBackBuffer));
+    HR(mDevice->SetDepthStencilSurface(mNativeDepthBuffer));
+    clear(0,0,0,1,1,1,1.0f,0);
+    mDevice->BeginScene();
+    draw();
+    mDevice->EndScene();
 
     mDevice->Present(0,0,0,0);
 
 
-    //resetParameters();
-    //setRenderTarget(0,nullptr);
+    resetParameters();
+    setRenderTarget(0,nullptr);
 }
 
 void LD3D9Device::destroy()
@@ -660,6 +672,8 @@ void LD3D9Device::setRenderTarget(u32 _index, LGFXTexture *_rt)
     IDirect3DSurface9* _rs=nullptr;
     d3drt->mTexture->GetSurfaceLevel(0,&_rs);
     HR(mDevice->SetRenderTarget(_index,_rs));
+    if(_index==0&&d3drt->hasDepthBuffer())
+        HR(mDevice->SetDepthStencilSurface(d3drt->mRenderTargetDepthStencil));
     mMaxRenderTarget=lMax(mMaxRenderTarget,_index);
     _rs->Release();
 }

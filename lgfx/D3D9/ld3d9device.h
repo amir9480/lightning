@@ -59,7 +59,7 @@ public:
 
     virtual LGFXTexture*            createTexture(u16 _width,u16 _height,LImage::Format _format,u16 _mipmap_count);
 
-    virtual LGFXTexture*            createRenderTarget(u16 _width,u16 _height,LImage::Format _renderable_format);
+    virtual LGFXTexture*            createRenderTarget(u16 _width,u16 _height,LImage::Format _renderable_format,bool _has_depth_buffer);
 
     virtual void                    checkErrors();
 
@@ -144,6 +144,7 @@ protected:
 
 
     IDirect3DSurface9*          mNativeBackBuffer;
+    IDirect3DSurface9*          mNativeDepthBuffer;
     LD3D9Texture*               mMainBackBuffer;
     LD3D9VertexBuffer*          mQuadVertexBuffer;
     LD3D9IndexBuffer*           mQuadIndexBuffer;

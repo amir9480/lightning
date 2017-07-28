@@ -65,6 +65,12 @@ public:
     //! get content of this texture
     virtual LImage                  getImage(u16 _mip_map_level=0)=0;
 
+    //! check is this Render Target Has Depth Buffer
+    virtual bool                    hasDepthBuffer()const=0;
+
+    //! check texture is render target
+    virtual bool                    isRenderTarget()const=0;
+
     //! check texture has nothing
     virtual bool                    isNull()const;
 

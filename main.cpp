@@ -208,7 +208,7 @@ LVector<u32> ibox={
 
 
 
-/*int main()
+int main()
 {
     lMemoryLogStart();
 
@@ -221,7 +221,6 @@ LVector<u32> ibox={
     LGFXVertexDeclaration* myVertex1Decl = dev->createVertexDeclaration(_myVertex1Decl);
     LGFXVertexDeclaration* myVertex2Decl = dev->createVertexDeclaration(_myVertex2Decl);
 
-    delete myVertex2Decl;
 
     LGFXVertexBuffer* vbplane = dev->createVertexBuffer();
     vbplane->updateBuffer((char*)vplane,myVertex1Decl->getElementsSize(),sizeof(vplane)/sizeof(vplane[0]));
@@ -330,7 +329,7 @@ LVector<u32> ibox={
         if(LInput::isKeyDown(LInput::KeyCode_F2))
             dev->getScreenShot().saveAsPngFile("screenshot.png");
 
-        if(LInput::isKeyDown(LInput::KeyCode_F3))
+        if(LInput::isKeyDown(LInput::KeyCode_F1))
             dev->reset(0,0,1024,768);
 
         camFOV += -LInput::getMouseWheelDelta()*3;
@@ -345,7 +344,7 @@ LVector<u32> ibox={
 
 
 
-        dev->clear(20,20,20);
+        dev->clear(50,50,80);
         dev->beginScene();
 
 
@@ -362,7 +361,7 @@ LVector<u32> ibox={
             dev->setIndexBuffer(ibplane);
             dev->setPixelShader(shaderps01);
             dev->setVertexShader(shadervs01);
-            //dev->draw();
+            dev->draw();
         }
 
         // Box
@@ -410,42 +409,8 @@ LVector<u32> ibox={
     cout<<"\n\n";
     return 0;
 }
-*/
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-int main()
-{
-    lMemoryLogStart();
-
-
-    LGFXDevice* dev = LGFXDevice::create(0,0,800,600);
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-    while(dev->processOSMessage())
-    {
-        if(LInput::isKeyDown(LInput::KeyCode_Escape))
-            break;
-
-        if(LInput::isKeyDown(LInput::KeyCode_F1))
-            dev->reset(0,0,1024,768);
-
-
-        dev->clear(20,20,20);
-        dev->beginScene();
-
-
-        dev->endScene();
-        dev->render();
-
-        LInput::resetInputs();
-    }
-
-    delete dev;
-
-    lMemoryLogEnd();
-    cout<<"\n\n";
-    return 0;
-}

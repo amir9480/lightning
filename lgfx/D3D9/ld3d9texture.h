@@ -31,6 +31,10 @@ public:
 
     virtual LImage getImage(u16 _mip_map_level=0);
 
+    virtual bool hasDepthBuffer()const;
+
+    virtual bool isRenderTarget()const;
+
     virtual void preReset();
 
     virtual void postReset();
@@ -41,6 +45,8 @@ protected:
     LD3D9Device*        mDevice;
     IDirect3DTexture9*  mTexture;
 
+    bool                mHasDepthBuffer;
+    IDirect3DSurface9*  mRenderTargetDepthStencil;
 };
 
 

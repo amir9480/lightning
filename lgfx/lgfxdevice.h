@@ -82,7 +82,7 @@ public:
     virtual LGFXTexture*            createTexture(u16 _width,u16 _height,LImage::Format _format,u16 _mipmap_count=1)=0;
 
     //! create a renderable texture
-    virtual LGFXTexture*            createRenderTarget(u16 _width,u16 _height,LImage::Format _renderable_format)=0;
+    virtual LGFXTexture*            createRenderTarget(u16 _width,u16 _height,LImage::Format _renderable_format,bool _has_depth_buffer)=0;
 
     //! check device has any problem or not and tring to fix
     virtual void                    checkErrors()=0;

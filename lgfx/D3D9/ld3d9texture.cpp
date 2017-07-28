@@ -50,7 +50,9 @@ D3DTEXTUREADDRESS LAPI lD3DTextureAddress(LGFXTexture::TextureAddress _a)
 
 LD3D9Texture::LD3D9Texture():
     mDevice(nullptr),
-    mTexture(nullptr)
+    mTexture(nullptr),
+    mHasDepthBuffer(false),
+    mRenderTargetDepthStencil(nullptr)
 {
 
 }
@@ -165,10 +167,20 @@ LImage LD3D9Texture::getImage(u16 _mip_map_level)
     return o;
 }
 
+bool LD3D9Texture::hasDepthBuffer() const
+{
+    return mHasDepthBuffer;
+}
+
+bool LD3D9Texture::isRenderTarget() const
+{
+    return mIsRenderTarget;
+}
+
 void LD3D9Texture::destroy()
 {
-
     SAFE_RELEASE(mTexture);
+    SAFE_RELEASE(mRenderTargetDepthStencil);
     mWidth=mHeight=mMipMapCount=0;
     mFormat=LImage::Format_null;
 }
@@ -177,7 +189,8 @@ void LD3D9Texture::preReset()
 {
     if(mType==TextureType_RenderTarget&&mIsRenderTarget==true)
     {
-        HR(mTexture->Release());
+        SAFE_RELEASE(mTexture);
+        SAFE_RELEASE(mRenderTargetDepthStencil);
     }
 }
 
@@ -186,6 +199,8 @@ void LD3D9Texture::postReset()
     if(mType==TextureType_RenderTarget&&mIsRenderTarget==true)
     {
         HR(mDevice->mDevice->CreateTexture(mWidth,mHeight,1,D3DUSAGE_RENDERTARGET,lD3DTextureFormat(mFormat),D3DPOOL_DEFAULT,(IDirect3DTexture9**)(&(mTexture)),0));
+        if(mHasDepthBuffer)
+            HR(mDevice->mDevice->CreateDepthStencilSurface(mWidth,mHeight,D3DFMT_D24S8,D3DMULTISAMPLE_NONE,0,0,&mRenderTargetDepthStencil,0));
     }
 }
 

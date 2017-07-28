@@ -36,8 +36,8 @@ public:
     virtual void postReset();
 
 protected:
-    IDirect3DVertexDeclaration9* mDecl;
-    LD3D9Device*            mDevice;
+    IDirect3DVertexDeclaration9*    mDecl;
+    LD3D9Device*                    mDevice;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
