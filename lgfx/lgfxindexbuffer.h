@@ -7,6 +7,8 @@ LNAMESPACE_BEGIN
 //! to hold index buffers
 class LAPI LGFXIndexBuffer
 {
+    LNONCOPYABLE_CLASS(LGFXIndexBuffer)
+
     friend class LGFXDevice;
 public:
     LGFXIndexBuffer();

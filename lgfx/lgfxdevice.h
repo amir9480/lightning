@@ -49,6 +49,7 @@ enum LGFXStencilOperation
 //! To create a Graphic Device . ( use LGFXDevice::create )
 class LAPI LGFXDevice
 {
+    LNONCOPYABLE_CLASS(LGFXDevice)
 public:
     LGFXDevice();
     virtual ~LGFXDevice();
@@ -78,7 +79,7 @@ public:
     virtual LGFXShader*             createPixelShader()=0;
 
     //! create a texture . _mipmap_count : Count of mip maps
-    virtual LGFXTexture*            createTexture(u16 _width,u16 _height,u16 _mipmap_count,LImage::Format _format)=0;
+    virtual LGFXTexture*            createTexture(u16 _width,u16 _height,LImage::Format _format,u16 _mipmap_count=1)=0;
 
     //! create a renderable texture
     virtual LGFXTexture*            createRenderTarget(u16 _width,u16 _height,LImage::Format _renderable_format)=0;
@@ -91,6 +92,9 @@ public:
 
     //! to end scene before render on screen
     virtual void                    endScene()=0;
+
+    //! get a scrren shot! (Note : this function creates a screen shot from back buffer . do screen shot when you'r render is done
+    virtual LImage                  getScreenShot()=0;
 
     //! hide rendering window
     virtual void                    hideWindow()=0;

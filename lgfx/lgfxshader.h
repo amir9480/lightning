@@ -8,6 +8,7 @@ LNAMESPACE_BEGIN
 
 class LAPI LGFXShader
 {
+    LNONCOPYABLE_CLASS(LGFXShader)
 public:
     enum class ShaderType
     {

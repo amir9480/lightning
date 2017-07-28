@@ -48,6 +48,7 @@ class LGFXDevice;
 
 class LAPI LGFXVertexDeclaration
 {
+    LNONCOPYABLE_CLASS(LGFXVertexDeclaration)
 public:
     LGFXVertexDeclaration(const LVector<LVertexElement>& _es);
     virtual ~LGFXVertexDeclaration();
@@ -70,6 +71,7 @@ protected:
 
 class LAPI LGFXVertexBuffer
 {
+    LNONCOPYABLE_CLASS(LGFXVertexBuffer)
     friend class LGFXDevice;
 public:
     LGFXVertexBuffer();

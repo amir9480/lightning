@@ -21,6 +21,7 @@ bool __linput_get_mouseUp(LInput::MouseCode _code);
 bool __linput_get_mousePress(LInput::MouseCode _code);
 
 void __linput_set_mouse_pos(int _x,int _y);
+void __linput_set_mouse_wheel_delta(int _v);
 
 
 LApplication::LApplication()
@@ -253,7 +254,11 @@ LRESULT CALLBACK lightningmainwindowproc(HWND hwnd,UINT msg,WPARAM wparam,LPARAM
     __LIGHTNING_MOUSE_KEY_UPDATE(WM_RBUTTONDOWN,WM_RBUTTONUP,LInput::MouseCode_right)
     __LIGHTNING_MOUSE_KEY_UPDATE(WM_MBUTTONDOWN,WM_MBUTTONUP,LInput::MouseCode_middle)
 
-
+    case WM_MOUSEWHEEL:
+    {
+        __linput_set_mouse_wheel_delta(GET_WHEEL_DELTA_WPARAM(wparam)/120);
+        break;
+    }
     }
     return DefWindowProcW(hwnd,msg,wparam,lparam);
 }

@@ -12,6 +12,7 @@ int LInput::mMouse_x=0;
 int LInput::mMouse_y=0;
 int LInput::mMouseLast_x=0;
 int LInput::mMouseLast_y=0;
+int LInput::mMouseWheelDelta=0;
 
 void __linput_set_keyDown(LInput::KeyCode _code,bool _val)
 {
@@ -63,6 +64,11 @@ bool __linput_get_mouseUp(LInput::MouseCode _code)
 bool __linput_get_mousePress(LInput::MouseCode _code)
 {
     return LInput::mMousePresses[_code];
+}
+
+void __linput_set_mouse_wheel_delta(int _v)
+{
+    LInput::mMouseWheelDelta = _v;
 }
 
 void __linput_set_mouse_pos(int _x,int _y)
@@ -126,6 +132,11 @@ LVector2 LInput::getMouseDelta()
     return LVector2(mMouse_x-mMouseLast_x,mMouse_y-mMouseLast_y);
 }
 
+int LInput::getMouseWheelDelta()
+{
+    return mMouseWheelDelta;
+}
+
 void LInput::resetInputs()
 {
     lMemorySet(mKeyDowns,sizeof(mKeyDowns),0);
@@ -134,6 +145,7 @@ void LInput::resetInputs()
     lMemorySet(mMouseUps,sizeof(mMouseUps),0);
     mMouseLast_x=mMouse_x;
     mMouseLast_y=mMouse_y;
+    mMouseWheelDelta=0;
 }
 
 

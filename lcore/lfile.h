@@ -6,7 +6,7 @@
 
 LNAMESPACE_BEGIN
 
-
+//! for files
 class LAPI LFile
 {
 public:

@@ -140,4 +140,9 @@ LMemoryStream& LMemoryStream::operator=(LMemoryStream &&_other)
     return (*this);
 }
 
+u64 LMemoryStream::getSize() const
+{
+    return mSize;
+}
+
 LNAMESPACE_END

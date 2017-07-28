@@ -146,6 +146,9 @@ public:
     //! get mouse delta from last frame
     static LVector2     getMouseDelta();
 
+    //! get mouse wheel delta . for example +1 mean one roll up and -1 one roll down
+    static int          getMouseWheelDelta();
+
     //! do reset ( must be called end of every frame )
     static void         resetInputs();
 
@@ -160,6 +163,7 @@ protected:
     static int  mMouse_y;
     static int  mMouseLast_x;
     static int  mMouseLast_y;
+    static int  mMouseWheelDelta;
 
 
     friend void __linput_set_keyDown(LInput::KeyCode,bool);
@@ -177,6 +181,7 @@ protected:
     friend bool __linput_get_mousePress(LInput::MouseCode _code);
 
     friend void __linput_set_mouse_pos(int _x,int _y);
+    friend void __linput_set_mouse_wheel_delta(int _v);
 };
 
 LNAMESPACE_END

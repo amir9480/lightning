@@ -22,6 +22,9 @@ public:
     //! get Data
     char*       getData();
 
+    //! get Data Size
+    u64 getSize() const;
+
     //! is write/read position on end of stream
     bool        isEndOfStream()const;
 
@@ -51,6 +54,7 @@ public:
 
     LMemoryStream& operator=(const LMemoryStream& _other);
     LMemoryStream& operator=(LMemoryStream&& _other);
+
 private:
     char*   mData;
     u64     mSize;

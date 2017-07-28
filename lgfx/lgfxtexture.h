@@ -9,6 +9,7 @@ LNAMESPACE_BEGIN
 //! class to hold textures
 class LAPI LGFXTexture
 {
+    LNONCOPYABLE_CLASS(LGFXTexture)
 public:
     enum TextureType
     {
@@ -61,6 +62,9 @@ public:
     //! get UV addressing for UV.v
     virtual TextureAddress          getAddressV() const;
 
+    //! get content of this texture
+    virtual LImage                  getImage(u16 _mip_map_level=0)=0;
+
     //! check texture has nothing
     virtual bool                    isNull()const;
 
@@ -81,6 +85,9 @@ public:
 
     //! set max mipmap level
     virtual void                    setMaxMipMapLevel(int maxMipMapLevel=0);
+
+    //! set both address UV
+    virtual void                    setAddress(const TextureAddress &address);
 
     //! set UV addressing UV.u
     virtual void                    setAddressU(const TextureAddress &addressU);

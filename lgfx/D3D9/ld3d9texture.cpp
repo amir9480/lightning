@@ -5,8 +5,7 @@
 
 LNAMESPACE_BEGIN
 
-
-D3DFORMAT lD3DTextureFormat(LImage::Format _f)
+D3DFORMAT LAPI lD3DTextureFormat(LImage::Format _f)
 {
     switch (_f) {
     case LImage::Format_null:
@@ -19,7 +18,7 @@ D3DFORMAT lD3DTextureFormat(LImage::Format _f)
     return D3DFMT_UNKNOWN;
 }
 
-D3DTEXTUREFILTERTYPE lD3DTextureFilter(LGFXTexture::TextureFilter _f)
+D3DTEXTUREFILTERTYPE LAPI lD3DTextureFilter(LGFXTexture::TextureFilter _f)
 {
     switch (_f) {
     case LGFXTexture::TextureFilter_none:
@@ -34,7 +33,7 @@ D3DTEXTUREFILTERTYPE lD3DTextureFilter(LGFXTexture::TextureFilter _f)
     return D3DTEXF_NONE;
 }
 
-D3DTEXTUREADDRESS lD3DTextureAddress(LGFXTexture::TextureAddress _a)
+D3DTEXTUREADDRESS LAPI lD3DTextureAddress(LGFXTexture::TextureAddress _a)
 {
     switch (_a) {
     case LGFXTexture::TextureAddress_wrap:
@@ -65,6 +64,101 @@ void LD3D9Texture::generateMipMaps()
 {
     lError(mMipMapCount>1,"generateMipMaps Error . use mipmap =1 on CreateTextureFunction");
     mTexture->GenerateMipSubLevels();
+}
+
+LImage LD3D9Texture::getImage(u16 _mip_map_level)
+{
+    LImage o;
+    o.init(mWidth,mHeight,mFormat);
+
+    switch(mType)
+    {
+    case TextureType_2D:
+    {
+        D3DLOCKED_RECT r;
+        HR(mTexture->LockRect(_mip_map_level,&r,0,D3DLOCK_READONLY));
+
+        switch(mFormat)
+        {
+        case LImage::Format_R8G8B8:
+            for(u32 i=0;i<o.getPixelsCount();i++)
+            {
+                o.getData()[i*3+2]=((char*)r.pBits)[i*4+0];
+                o.getData()[i*3+1]=((char*)r.pBits)[i*4+1];
+                o.getData()[i*3+0]=((char*)r.pBits)[i*4+2];
+            }
+            break;
+        case LImage::Format_R8G8B8A8:
+            for(u32 i=0;i<o.getPixelsCount();i++)
+            {
+                o.getData()[i*4+2]=((char*)r.pBits)[i*4+0];
+                o.getData()[i*4+1]=((char*)r.pBits)[i*4+1];
+                o.getData()[i*4+0]=((char*)r.pBits)[i*4+2];
+                o.getData()[i*4+3]=((char*)r.pBits)[i*4+3];
+            }
+            break;
+        case LImage::Format_null:
+            lError(1,"LD3D9Texture::getImage : format is null",o);
+        }
+
+        HR(mTexture->UnlockRect(_mip_map_level));
+        break;
+    }
+    case TextureType_RenderTarget:
+    {
+        IDirect3DTexture9* _temp;
+        D3DFORMAT _tfmt;
+        IDirect3DSurface9* _dests;
+        IDirect3DSurface9* _srcs;
+
+        switch(mFormat)
+        {
+        case LImage::Format_R8G8B8:
+            _tfmt = D3DFMT_X8R8G8B8;
+            break;
+        case LImage::Format_R8G8B8A8:
+            _tfmt = D3DFMT_A8R8G8B8;
+            break;
+        case LImage::Format_null:
+            lError(1,"LD3D9Texture::getImage : format is null",o);
+        }
+        HR(mDevice->mDevice->CreateTexture(mWidth,mHeight,1,D3DUSAGE_DYNAMIC,_tfmt,D3DPOOL_SYSTEMMEM,&_temp,0));
+
+        HR(_temp->GetSurfaceLevel(0,&_dests));
+        HR(mTexture->GetSurfaceLevel(0,&_srcs));
+        HR(mDevice->mDevice->GetRenderTargetData(_srcs,_dests));
+
+        D3DLOCKED_RECT r;
+        HR(_temp->LockRect(_mip_map_level,&r,0,D3DLOCK_READONLY));
+        switch(mFormat)
+        {
+        case LImage::Format_R8G8B8:
+            for(u32 i=0;i<o.getPixelsCount();i++)
+            {
+                o.getData()[i*3+2]=((char*)r.pBits)[i*4+0];
+                o.getData()[i*3+1]=((char*)r.pBits)[i*4+1];
+                o.getData()[i*3+0]=((char*)r.pBits)[i*4+2];
+            }
+            break;
+        case LImage::Format_R8G8B8A8:
+            for(u32 i=0;i<o.getPixelsCount();i++)
+            {
+                o.getData()[i*4+2]=((char*)r.pBits)[i*4+0];
+                o.getData()[i*4+1]=((char*)r.pBits)[i*4+1];
+                o.getData()[i*4+0]=((char*)r.pBits)[i*4+2];
+                o.getData()[i*4+3]=((char*)r.pBits)[i*4+3];
+            }
+            break;
+        default:
+            break;
+        }
+        HR(_temp->UnlockRect(_mip_map_level));
+
+        HR(_temp->Release());
+        break;
+    }
+    }
+    return o;
 }
 
 void LD3D9Texture::destroy()
@@ -110,8 +204,8 @@ void LD3D9Texture::updateTexture(u16 _mip_map_level, const LImage &_data)
             ((char*)r.pBits)[i*4+3]=_data.getData()[i*4+3];
         }
         break;
-    default:
-        break;
+    case LImage::Format_null:
+        lError(1,"LD3D9Texture::updateTexture : format is null");
     }
 
     //lMemoryCopy(r.pBits,_data.getData(),_data.getPixelsCount()*_data.getBytePerPixel());

@@ -15,10 +15,6 @@ LNAMESPACE_BEGIN
  * All function name that ended with D is for working with double prections <br>
  * \enden
  *
- * \fa
- * <br> تمام توابع موجود در این فایل مثل سینوس بر اساس درجه کار میکند نه رادیان
- * <br> ها میباشد double ختم میشود جهت کار با  D تمام توابعی که نامشان به
- * \endfa
  *
  * \code{.cpp}
  * float a=lSin(90.0f);//=1.0f
@@ -82,6 +78,10 @@ f64 LAPI        lATan2D(const f64& _y,const f64& _x);
 //! Get Up Rounding of value
 linline f32     lCeil(const f32& _in);
 linline f64     lCeilD(const f64& _in);
+
+//! Make a limited range
+template<typename T>
+linline T       lClamp(T _value,T _min,T _max);
 
 //! Compare two float point number with precition limit
 linline bool    lCompareFloat(const f32& _a, const f32& _b, const u8& _precision=4);
@@ -196,14 +196,21 @@ f64 lCeilD(const f64& _in)
     return -lFloorD(-_in);
 }
 
+template<typename T>
+T lClamp(T _value,T _min,T _max)
+{
+    if(_value>_max)
+        return _max;
+    else if(_value>_min)
+        return _value;
+    return _min;
+}
+
 /*!
  * \en
  * \brief Compare two float point number with precition limit
  * \enden
  *
- * \fa
- * \brief مقایسه دو شناور که با محدود کردن تعداد ارقام اعشار
- * \endfa
  * *Example usage of this*
  * \code{.cpp}
  * float p= 31.4f/10.0f;
@@ -270,9 +277,6 @@ f32 lLerpD(const f64 &_a, const f64 &_b, const f64 &_p)
  * \en
  * when you send degree angle values to function this will convert it to a value between -90 and 90
  * \enden
- * \fa
- * وقتی که یک زاویه بر حسب درجه به این تابع بفرستید براتون تبدیلش میکنه به یک زاویه بین نود و منفی نود
- * \endfa
  */
 f32 lLimitedAngle90(const f32& _angle)
 {
@@ -288,9 +292,6 @@ f32 lLimitedAngle90(const f32& _angle)
  * \en
  * when you send degree angle values to function this will convert it to a value between -180 and 180
  * \enden
- * \fa
- * وقتی که یک زاویه بر حسب درجه به این تابع بفرستید براتون تبدیلش میکنه به یک زاویه بین صد و هشتاد  و منفی صد هشتاد
- * \endfa
  * \code
  * float a= lLimitedAngle180(210);// a=-150
  * \endcode
@@ -340,9 +341,6 @@ i32 lPower(const i32& _a,const u32& _b)
  * \return rounded float value
  * \enden
  *
- * \fa
- * \return عدد ممیز شناور گرد شده
- * \endfa
  * float p=3.1415;
  * float a=lRound(p);//a=3
  * float b=lRound(p,2);//b=3.14

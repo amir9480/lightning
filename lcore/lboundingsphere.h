@@ -20,10 +20,6 @@ class LPlane;
  * \details This class is for Bounding Sphere and using for intersections and visability determinate
  * \enden
  *
- * \fa
- * \brief کلاس کره
- * \details کلاس کره که کاربرد آن برای تشخیص برخورد و تشخیص در دید بودن میباشد
- * \endfa
  */
 class LAPI LBoundingSphere
 {
@@ -101,9 +97,6 @@ protected:
  * \brief Get sphere radius
  * \enden
  *
- * \fa
- * \brief تهیه شعاع کره
- * \endfa
  */
 f32 LBoundingSphere::getRadius() const
 {
@@ -115,9 +108,6 @@ f32 LBoundingSphere::getRadius() const
  * \brief Get transformed copy of this
  * \enden
  *
- * \fa
- * \brief تهیه یک کپی جابه جا شده از این کره
- * \endfa
  * \sa transform
  */
 LBoundingSphere LBoundingSphere::getTransformed(const LMatrix &_m) const
@@ -132,9 +122,6 @@ LBoundingSphere LBoundingSphere::getTransformed(const LMatrix &_m) const
  * \brief Get volume of sphere
  * \enden
  *
- * \fa
- * \brief تهیه حجم کره
- * \endfa
  */
 f32 LBoundingSphere::getVolume() const
 {
@@ -146,9 +133,6 @@ f32 LBoundingSphere::getVolume() const
  * \brief Check is point inside sphere or not, if was returns true.
  * \enden
  *
- * \fa
- * \brief چک کردن اینکه یک نقطه درون کره قرار داره یا نه. اگر داخل کره بود مقدار صحیح رو بر میگردونه
- * \endfa
  */
 bool LBoundingSphere::isContain(const LVector3 &_p) const
 {
@@ -160,9 +144,6 @@ bool LBoundingSphere::isContain(const LVector3 &_p) const
  * \brief Check is all part of another sphere is inside or not. if was returns true
  * \enden
  *
- * \fa
- * \brief چک کردن اینکه آیا تمام قسمت های یک کره دیگه داخل این قرار داره یا نه. اگر قرار داشت مقدار صحیح رو برمیگردونه
- * \endfa
  */
 bool LBoundingSphere::isContain(const LBoundingSphere &_b) const
 {
@@ -174,9 +155,6 @@ bool LBoundingSphere::isContain(const LBoundingSphere &_b) const
  * \brief  BoundingSphere-BoundingSphere Intersection Check
  * \enden
  *
- * \fa
- * \brief تشخیص برخورد بین دو کره
- * \endfa
  */
 bool LBoundingSphere::isIntersect(const LBoundingSphere &_other) const
 {
@@ -188,9 +166,6 @@ bool LBoundingSphere::isIntersect(const LBoundingSphere &_other) const
  * \brief  Merge this with another sphere
  * \enden
  *
- * \fa
- * \brief ترکیب کردن این کره با یک کره ی دیگر
- * \endfa
  * \sa getMerged
  */
 void LBoundingSphere::merge(const LBoundingSphere &_other)
@@ -208,11 +183,6 @@ void LBoundingSphere::merge(const LBoundingSphere &_other)
  * \param _radius Sphere radius
  * \enden
  *
- * \fa
- * \brief تابع تنظیم
- * \param _pos  مکان مرکز کره
- * \param _radius شعاع کره
- * \endfa
  * \sa getMerged
  */
 void LBoundingSphere::set(const LVector3 &_pos, const f32 &_radius)
@@ -226,9 +196,6 @@ void LBoundingSphere::set(const LVector3 &_pos, const f32 &_radius)
  * \brief  Set radius function
  * \enden
  *
- * \fa
- * \brief  تابع تنظیم شعاع
- * \endfa
  */
 void LBoundingSphere::setRadius(const f32 &radius)
 {
@@ -240,9 +207,6 @@ void LBoundingSphere::setRadius(const f32 &radius)
  * \brief  transform this sphere
  * \enden
  *
- * \fa
- * \brief  جابه جایی این کره
- * \endfa
  * \sa getTransformed
  */
 void LBoundingSphere::transform(const LMatrix &_m)
@@ -275,9 +239,6 @@ bool LBoundingSphere::operator!=(const LBoundingSphere &_other) const
  * \brief Default constructor with infinity radius
  * \enden
  *
- * \fa
- * \brief سازنده پیش فرض با شعاع بی نهایت
- * \endfa
  */
 LBoundingSphere::LBoundingSphere()
 {
@@ -291,11 +252,6 @@ LBoundingSphere::LBoundingSphere()
  * \param _radius Radius of sphere
  * \enden
  *
- * \fa
- * \brief سازنده با استفاده از مکان مرکز و شعاع
- * \param _pos نقطه مرکز
- * \param _radius شعاع کره
- * \endfa
  * \sa set(const LVector3& _pos,const f32& _radius)
  */
 LBoundingSphere::LBoundingSphere(const LVector3 &_pos, const f32 &_radius)
@@ -313,9 +269,6 @@ LBoundingSphere::LBoundingSphere(const LBoundingSphere &_other)
  * \brief Add an internal point in this bounding sphere
  * \enden
  *
- * \fa
- * \brief اضافه کردن یک نقطه به داخل کره
- * \endfa
  */
 void LBoundingSphere::add(const LVector3 &_p)
 {
@@ -329,9 +282,6 @@ void LBoundingSphere::add(const LVector3 &_p)
  * \brief Get merged copy of this with another sphere
  * \enden
  *
- * \fa
- * \brief تهیه یک کپی ترکیبی از کره و یک کره ی دیگر
- * \endfa
  * \sa merge
  */
 LBoundingSphere LBoundingSphere::getMerged(const LBoundingSphere &_other) const
@@ -346,9 +296,6 @@ LBoundingSphere LBoundingSphere::getMerged(const LBoundingSphere &_other) const
  * \brief Get center position
  * \enden
  *
- * \fa
- * \brief تهیه مکان مرکز
- * \endfa
  * \sa setPos
  */
 LVector3 LBoundingSphere::getPos() const
@@ -361,9 +308,6 @@ LVector3 LBoundingSphere::getPos() const
  * \brief Set center position
  * \enden
  *
- * \fa
- * \brief تنظیم مکان مرکز
- * \endfa
  * \sa getPos
  */
 void LBoundingSphere::setPos(const LVector3 &pos)

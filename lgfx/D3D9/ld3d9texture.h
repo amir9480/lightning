@@ -29,6 +29,8 @@ public:
 
     virtual void generateMipMaps();
 
+    virtual LImage getImage(u16 _mip_map_level=0);
+
     virtual void preReset();
 
     virtual void postReset();

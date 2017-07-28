@@ -12,13 +12,13 @@ const f32 lDegreePerRadian  =57.295779513082320876798156332941f;
 
 /*!
  * \fa
- * lNaN که اصطلاحا به آن تعریف نشده میگویند. یعنی آن عدد وجود خارجی ندارد
+ * lNaN means Not a Number
  * \endfa
  */
 extern const f32 lNaN       =0.0f/0.0f;
 /*!
  * \fa
- * lInfinity مقدار بی نهایت
+ * lInfinity value
  * \endfa
  */
 extern const f32 lInfinity  =1.0f/0.0f;

@@ -19,11 +19,6 @@ LNAMESPACE_BEGIN
  * \note To convert to 3D vector , all parameter must division on W
  * \enden
  *
- * \fa
- * \brief  کلاس بردار چهاربعدی
- * \details این کلاس برای تعریف بردارهای چهار بعدی به جای سه بعدی استفاده میشود و برای ضرب با ماتریس پیشنهاد میشود
- * \note تقسیم خواهد شد w در پایان تمام مقادیر برای تبدیل به بردار سه بعدی بر مقدار
- * \endfa
  *
  * LVector3(x,y,z) = LVector4(x/w,y/w,z/w,w/w) -> w=1
  *
@@ -148,9 +143,6 @@ public:
  * \brief LVector4  Default constructor . x=0,y=0,z=0 and w=1
  * \enden
  *
- * \fa
- * \brief x=0,y=0,z=0,w=1 سازنده پیش فرض با مقدار های
- * \endfa
  */
 LVector4::LVector4():
     x(0.0f),
@@ -168,11 +160,6 @@ LVector4::LVector4():
  * \param _w : w parameter .default is 1
  * \enden
  *
- * \fa
- * \brief  \a w سازنده با استفاده از بردار سه بعدی و مقدار
- * \param p  : مکان سه بعدی
- * \param _w : با مقدار پیش فرض 1 w مقدار
- * \endfa
  */
 LVector4::LVector4(const LVector3 &p, const f32 &_w):
     x(p.x),
@@ -189,10 +176,6 @@ LVector4::LVector4(const LVector3 &p, const f32 &_w):
  * \param _s scaler value
  * \enden
  *
- * \fa
- * \brief x=y=z=w= \a _s سازنده با مقدار اسکالر.
- * \param _s مقدار اسکالر
- * \endfa
  */
 LVector4::LVector4(const f32 &_s)
 {
@@ -213,9 +196,6 @@ LVector4::LVector4(const f32 &_x, const f32 &_y, const f32 &_z, const f32 &_w):
  * \brief Copy Constructor
  * \enden
  *
- * \fa
- * \brief سازنده کپی
- * \endfa
  */
 LVector4::LVector4(const LVector4 &_other)
 {
@@ -229,11 +209,6 @@ LVector4::LVector4(const LVector4 &_other)
  * \return will returns when _i (0=x , 1=y , 2=z , w=3)
  * \enden
  *
- * \fa
- * \brief دسترسی به پارامتر بردار با استفاده از نمایه
- * \param _i   ( 0 <= _i <= 1 )   مقدار نمایه که
- * \return (0=x , 1=y , 2=z , w=3) مقدار رو وقتی که ورودی به این ترتیب باشه
- * \endfa
  */
 f32& LVector4::at(u32 _i)
 {
@@ -254,11 +229,6 @@ f32 LVector4::at(u32 _i) const
  * \param _w : w parameter .default is 1
  * \enden
  *
- * \fa
- * \brief \a w تابع ست با استفاده از بردار سه بعدی و مقدار
- * \param p  : مکان سه بعدی
- * \param _w : با مقدار پیش فرض 1 w مقدار
- * \endfa
  */
 void LVector4::set(const LVector3 &p, const f32 &_w)
 {
@@ -282,10 +252,6 @@ void LVector4::set(const f32 &_x, const f32 &_y, const f32 &_z, const f32 &_w)
  * \param _s scaler value
  * \enden
  *
- * \fa
- * \brief x=y=z=w= \a _s تابع ست با مقدار اسکالر.
- * \param _s مقدار اسکالر
- * \endfa
  */
 void LVector4::set(const f32 &_s)
 {
@@ -297,9 +263,6 @@ void LVector4::set(const f32 &_s)
  * \brief Assign Operator
  * \enden
  *
- * \fa
- * \brief عملگر کپی
- * \endfa
  */
 LVector4 &LVector4::operator=(const LVector4 &_other)
 {
@@ -315,9 +278,6 @@ LVector4 &LVector4::operator=(const LVector4 &_other)
  * \brief Access to vector parameter by index
  * \enden
  *
- * \fa
- * \brief دسترسی به پارامتر بردار به کمک نمایه
- * \endfa
  * \sa \ref at
  */
 f32& LVector4::operator[](u32 _i)
@@ -349,9 +309,6 @@ f32 LVector4::operator()(u32 _i) const
  * \brief Compare Operator
  * \enden
  *
- * \fa
- * \brief عملگر مقایسه
- * \endfa
  */
 bool LVector4::operator==(const LVector4 &_other) const
 {
@@ -368,9 +325,6 @@ bool LVector4::operator==(const LVector4 &_other) const
  * \brief Compare Operator
  * \enden
  *
- * \fa
- * \brief عملگر مقایسه
- * \endfa
  */
 bool LVector4::operator!=(const LVector4 &_other) const
 {
@@ -455,10 +409,6 @@ LVector4 operator-(const f32 &_a, const LVector4 &_b)
  * \note : this IS NOT crossproduct or dotproduct
  * \enden
  *
- * \fa
- * \brief ضرب دو بردار
- * \note : این ضرب خارجی یا ضرب داخلی نمی باشد
- * \endfa
  */
 LVector4 LVector4::operator*(const LVector4 &_other) const
 {
@@ -475,9 +425,6 @@ LVector4 LVector4::operator*(const LVector4 &_other) const
  * \brief Multiply with matrix
  * \enden
  *
- * \fa
- * \brief ضرب در ماتریس
- * \endfa
  */
 LVector4 LVector4::operator*(const LMatrix &_other) const
 {
@@ -494,9 +441,6 @@ LVector4 LVector4::operator*(const LMatrix &_other) const
  * \brief Multiply with scaler
  * \enden
  *
- * \fa
- * \brief ضرب اسکالر
- * \endfa
  */
 LVector4 LVector4::operator*(const f32 &_scaler) const
 {
@@ -513,9 +457,6 @@ LVector4 LVector4::operator*(const f32 &_scaler) const
  * \brief Division operator
  * \enden
  *
- * \fa
- * \brief تقسیم دو بردار
- * \endfa
  */
 LVector4 LVector4::operator/(const LVector4 &_other) const
 {
@@ -532,9 +473,6 @@ LVector4 LVector4::operator/(const LVector4 &_other) const
  * \brief scaler Division
  * \enden
  *
- * \fa
- * \brief تقسیم اسکالر
- * \endfa
  */
 LVector4 LVector4::operator/(const f32 &_scaler) const
 {
@@ -551,9 +489,6 @@ LVector4 LVector4::operator/(const f32 &_scaler) const
  * \brief Positive Sign
  * \enden
  *
- * \fa
- * \brief علامت مثبت
- * \endfa
  * \return LVecotr4(x,y,z,w)
  */
 LVector4 LVector4::operator+() const
@@ -566,9 +501,6 @@ LVector4 LVector4::operator+() const
  * \brief Negetive Sign
  * \enden
  *
- * \fa
- * \brief علامت منفی
- * \endfa
  * \return LVecotr4(-x,-y,-z,-w)
  */
 LVector4 LVector4::operator-() const
@@ -586,9 +518,6 @@ LVector4::operator LVector3() const
  * \brief Addition
  * \enden
  *
- * \fa
- * \brief جمع
- * \endfa
  */
 LVector4 LVector4::operator+(const LVector4 &_other)const
 {
@@ -603,9 +532,6 @@ LVector4 LVector4::operator+(const LVector4 &_other)const
  * \brief Subtract
  * \enden
  *
- * \fa
- * \brief تفریق
- * \endfa
  */
 LVector4 LVector4::operator-(const LVector4 &_other)const
 {

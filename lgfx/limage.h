@@ -74,6 +74,10 @@ public:
     //! load from PNG format
     static LImage   loadFromPng(char* _data);
     static LImage   loadFromPngFile(const LString& _fileName);
+
+    //! save image as PNG
+    LMemoryStream   saveAsPng();
+    void            saveAsPngFile(const LString& _filename);
 #endif
 
 

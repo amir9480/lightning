@@ -144,6 +144,15 @@ private:
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//! use this to prevent copy and move
+#define LNONCOPYABLE_CLASS(CLASSNAME)\
+CLASSNAME(const CLASSNAME&);\
+CLASSNAME(CLASSNAME&&);\
+CLASSNAME& operator=(const CLASSNAME&);\
+CLASSNAME& operator=(CLASSNAME&&);
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 //! create automatically enum to enum convertor function
 //!
 //! LENUM_CONVERTOR(EnumA,EnumB,

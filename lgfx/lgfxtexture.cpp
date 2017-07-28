@@ -64,6 +64,12 @@ void LGFXTexture::setMaxMipMapLevel(int maxMipMapLevel)
     mMaxMipMapLevel = maxMipMapLevel;
 }
 
+void LGFXTexture::setAddress(const LGFXTexture::TextureAddress &address)
+{
+    setAddressU(address);
+    setAddressV(address);
+}
+
 LGFXTexture::TextureAddress LGFXTexture::getAddressU() const
 {
     return mAddressU;

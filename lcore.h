@@ -7,9 +7,6 @@
  * \brief Core part of Lightning and using by all other parts
  * \enden
  *
- * \fa
- * \brief این قسمت هسته ی لایتنینگ است که توسط سایر بخش ها مورد استفاده قرار میگیرد
- * \endfa
 */
 
 #include "lconfig.h"

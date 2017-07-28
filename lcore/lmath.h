@@ -6,9 +6,6 @@
  * \brief This part contains all Math function and classes
  * \enden
  *
- * \fa
- * \brief  این قسمت شامل تمام توابع کلاس های ریاضی میشود
- * \endfa
  * <a href="lmathutilitynotes.html">Math functions</a>
  *
  *

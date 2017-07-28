@@ -56,7 +56,7 @@ public:
 
     virtual LGFXShader*             createPixelShader();
 
-    virtual LGFXTexture*            createTexture(u16 _width,u16 _height,u16 _mipmap_count,LImage::Format _format);
+    virtual LGFXTexture*            createTexture(u16 _width,u16 _height,LImage::Format _format,u16 _mipmap_count);
 
     virtual LGFXTexture*            createRenderTarget(u16 _width,u16 _height,LImage::Format _renderable_format);
 
@@ -65,6 +65,8 @@ public:
     virtual void                    drawQuad(LGFXTexture *_tex);
 
     virtual void                    endScene();
+
+    virtual LImage                  getScreenShot();
 
     virtual void                    hideWindow();
 

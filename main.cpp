@@ -54,11 +54,7 @@ VSOut mainVS(VSInput _in)
 float4 mainPS(VSOut _in):COLOR0
 {
     float4 o=float4(0.0f,0.0f,0.0f,1.0f);
-    o.rgb=tex2D(t0,_in.uv.xy).rgb;
-    //if(_in.uv.x>=0.25f&&_in.uv.x<=0.75f&&_in.uv.y>=0.25f&&_in.uv.y<=0.75f)
-    //    o.a=0.0f;
-    //else
-    //    o.a=1.0f;
+    o.rgba=tex2D(t0,_in.uv.xy).rgba;
     return o;
 }
 
@@ -116,10 +112,6 @@ float4 mainPS(VSOut _in):COLOR0
 {
     float4 o=float4(0.0f,0.0f,0.0f,1.0f);
     o.rgb=tex2D(t0,_in.uv.xy).rgb;
-    //if(_in.uv.x>=0.25f&&_in.uv.x<=0.75f&&_in.uv.y>=0.25f&&_in.uv.y<=0.75f)
-    //    o.a=0.0f;
-    //else
-    //    o.a=1.0f;
     return o;
 }
 
@@ -234,6 +226,7 @@ int main()
     LImage image01 = LImage::loadFromPngFile("image3.png");
     LImage image02 = LImage::loadFromPngFile("image.png");
 
+
     LGFXDevice* dev = LGFXDevice::create(0,1);
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     LGFXVertexDeclaration* myVertex1Decl = dev->createVertexDeclaration(_myVertex1Decl);
@@ -261,16 +254,13 @@ int main()
     LGFXIndexBuffer* ibbox = dev->createIndexBuffer();
     ibbox->updateBuffer(ibox);
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    LGFXTexture* texture01 = dev->createTexture(image01.getWidth(),image01.getHeight(),1,image01.getFormat());
+    LGFXTexture* texture01 = dev->createTexture(image01.getWidth(),image01.getHeight(),image01.getFormat());
     texture01->updateTexture(0,image01);
-    texture01->setMipMapBias(-1.5f);
-    texture01->generateMipMaps();
 
 
-    LGFXTexture* texture02 = dev->createTexture(image02.getWidth(),image02.getHeight(),1,image02.getFormat());
-    texture02->updateTexture(0,image02);
-    texture02->generateMipMaps();
-
+    LGFXTexture* texture02 = dev->createTexture(image02.getWidth(),image02.getHeight(),image02.getFormat());
+    texture02->updateTexture(0,image02.getResized(image02.getWidth(),image02.getHeight()));
+    texture02->setAddress(LGFXTexture::TextureAddress_clamp);
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     LGFXShader* shadervs01=dev->createVertexShader();
     shadervs01->compile(myShader,"mainVS");
@@ -284,7 +274,8 @@ int main()
     LGFXShader* shaderps02=dev->createPixelShader();
     shaderps02->compile(myShader2,"mainPS");
     ////////////////////////////////////////////////////////////////////////////////////////////////////
-    LMatrix world,view,viewprojection,WVP,projection=LMatrix::createPerspectiveProjectionLH(60.0f,4.0f/3.0f,0.01f,10000.0f);
+    LMatrix world,view,viewprojection,WVP,projection;
+    float camFOV=60.0f;
 
     LVector3 camPos=LVector3(0,0.8,-4.5);
     LQuaternion camRot=LQuaternion(LVector3::forward,0.0f);
@@ -345,8 +336,14 @@ int main()
             }
         }
 
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        if(LInput::isKeyDown(LInput::KeyCode_F2))
+            dev->getScreenShot().saveAsPngFile("screenshot.png");
 
+        camFOV += -LInput::getMouseWheelDelta()*3;
+        camFOV = lClamp(camFOV,1.0f,179.0f);
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        projection =LMatrix::createPerspectiveProjectionLH(camFOV,4.0f/3.0f,0.01f,10000.0f);
         view = LMatrix::createViewMatrixLH(camPos,camRot.getForward(),camRot.getUp());
         viewprojection = view*projection;
 
@@ -357,6 +354,24 @@ int main()
         dev->clear(50,50,50);
         dev->beginScene();
 
+        // Plane
+        dev->resetParameters();
+        {
+            dev->setCullMode(LGFXCullMode_None);
+            world=LMatrix::createScaleMatrix({6,6,6});
+            WVP=world*viewprojection;
+            shaderps01->setTexture("t0",texture01);
+            shadervs01->setMatrix("WVP",WVP);
+            dev->setVertexDeclaration(myVertex1Decl);
+            dev->setVertexBuffer(0,vbplane);
+            dev->setIndexBuffer(ibplane);
+            dev->setPixelShader(shaderps01);
+            dev->setVertexShader(shadervs01);
+
+            dev->draw();
+        }
+
+        // Box
         dev->resetParameters();
         {
             world=boxRot.toRotationMatrix()*boxPos.toTranslationMatrix();
@@ -368,6 +383,7 @@ int main()
             dev->setIndexBuffer(ibbox);
             dev->setPixelShader(shaderps01);
             dev->setVertexShader(shadervs01);
+            dev->setAlphaBlending(true);
 
             dev->draw();
         }
@@ -387,24 +403,6 @@ int main()
 
 //            dev->draw();
 //        }
-
-
-
-        dev->resetParameters();
-        {
-            dev->setCullMode(LGFXCullMode_None);
-            world=LMatrix::createScaleMatrix({6,6,6});
-            WVP=world*viewprojection;
-            shaderps01->setTexture("t0",texture01);
-            shadervs01->setMatrix("WVP",WVP);
-            dev->setVertexDeclaration(myVertex1Decl);
-            dev->setVertexBuffer(0,vbplane);
-            dev->setIndexBuffer(ibplane);
-            dev->setPixelShader(shaderps01);
-            dev->setVertexShader(shadervs01);
-
-            dev->draw();
-        }
 
         dev->endScene();
         dev->render();

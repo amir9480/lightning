@@ -102,9 +102,9 @@ LImage LImage::getResized(u16 _width, u16 _height) const
         {
             for(u32 j=0;j<_width;j++)
             {
-                o.mData[(i*_width*o.mBytePerPixel)+(j*3)+0]=mData[(int)(((i*mWidth*_w*o.mBytePerPixel)+(j*_h*3)+0))];
-                o.mData[(i*_width*o.mBytePerPixel)+(j*3)+1]=mData[(int)(((i*mWidth*_w*o.mBytePerPixel)+(j*_h*3)+1))];
-                o.mData[(i*_width*o.mBytePerPixel)+(j*3)+2]=mData[(int)(((i*mWidth*_w*o.mBytePerPixel)+(j*_h*3)+2))];
+                o.mData[(i*_width*o.mBytePerPixel)+(j*3)+0]=mData[(int)(((i*_width*_w*o.mBytePerPixel)+(j*_h*3)+0))];
+                o.mData[(i*_width*o.mBytePerPixel)+(j*3)+1]=mData[(int)(((i*_width*_w*o.mBytePerPixel)+(j*_h*3)+1))];
+                o.mData[(i*_width*o.mBytePerPixel)+(j*3)+2]=mData[(int)(((i*_width*_w*o.mBytePerPixel)+(j*_h*3)+2))];
             }
         }
         break;
@@ -115,10 +115,10 @@ LImage LImage::getResized(u16 _width, u16 _height) const
         {
             for(u32 j=0;j<_width;j++)
             {
-                o.mData[(i*_width*o.mBytePerPixel)+(j*4)+0]=mData[(int)(((i*mWidth*_w*o.mBytePerPixel)+(j*_h*4)+0))];
-                o.mData[(i*_width*o.mBytePerPixel)+(j*4)+1]=mData[(int)(((i*mWidth*_w*o.mBytePerPixel)+(j*_h*4)+1))];
-                o.mData[(i*_width*o.mBytePerPixel)+(j*4)+2]=mData[(int)(((i*mWidth*_w*o.mBytePerPixel)+(j*_h*4)+2))];
-                o.mData[(i*_width*o.mBytePerPixel)+(j*4)+3]=mData[(int)(((i*mWidth*_w*o.mBytePerPixel)+(j*_h*4)+3))];
+                o.mData[(i*_width*o.mBytePerPixel)+(j*4)+0]=mData[(int)(((i*_width*_w*o.mBytePerPixel)+(j*_h*4)+0))];
+                o.mData[(i*_width*o.mBytePerPixel)+(j*4)+1]=mData[(int)(((i*_width*_w*o.mBytePerPixel)+(j*_h*4)+1))];
+                o.mData[(i*_width*o.mBytePerPixel)+(j*4)+2]=mData[(int)(((i*_width*_w*o.mBytePerPixel)+(j*_h*4)+2))];
+                o.mData[(i*_width*o.mBytePerPixel)+(j*4)+3]=mData[(int)(((i*_width*_w*o.mBytePerPixel)+(j*_h*4)+3))];
             }
         }
         break;
@@ -236,12 +236,23 @@ LImage LImage::loadFromPng(char *_data)
 
     u32 _width=png_get_image_width(png_ptr,info_ptr);
     u32 _height=png_get_image_height(png_ptr,info_ptr);
-   // int _depth=png_get_bit_depth(png_ptr,info_ptr);
+    int _depth=png_get_bit_depth(png_ptr,info_ptr);
     int _color_type=png_get_color_type(png_ptr,info_ptr);
+
+    if(_depth==16)
+        png_set_strip_16(png_ptr);
+    if(_color_type==PNG_COLOR_TYPE_PALETTE)
+        png_set_palette_to_rgb(png_ptr);
+    if(_color_type==PNG_COLOR_TYPE_GRAY&&_depth<8)
+        png_set_expand_gray_1_2_4_to_8(png_ptr);
+    if(png_get_valid(png_ptr,info_ptr,PNG_INFO_tRNS))
+        png_set_tRNS_to_alpha(png_ptr);
+    if(_color_type==PNG_COLOR_TYPE_GRAY||_color_type==PNG_COLOR_TYPE_GRAY_ALPHA)
+        png_set_gray_to_rgb(png_ptr);
+    png_read_update_info(png_ptr,info_ptr);
 
     const u32 _bytes_per_row = png_get_rowbytes(png_ptr,info_ptr);
     u8* _rowData=new u8[_bytes_per_row];
-
 
     switch (_color_type) {
     case PNG_COLOR_TYPE_RGB:
@@ -299,6 +310,103 @@ LImage LImage::loadFromPngFile(const LString &_fileName)
     o = loadFromPng(_data);
     delete[] _data;
     return o;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+struct __PngWrite_struct
+{
+    u32 index;
+    LMemoryStream* data;
+};
+
+void ___png_write(png_struct* _pngStruct,png_byte* _pngData,png_size_t _writesize)
+{
+//    png_voidp a = png_get_io_ptr(_pngStruct);
+//    __PngWrite_struct* b=(__PngWrite_struct*)a;
+//    lMemoryCopy((void*)_pngData,&b->data[b->index],_readsize);
+//    b->index+=_readsize;
+    png_voidp a = png_get_io_ptr(_pngStruct);
+    __PngWrite_struct* b=(__PngWrite_struct*)a;
+    b->data->write((void*)_pngData,_writesize);
+    b->index+=_writesize;
+}
+void ___png_write_flush(png_struct* png_ptr)
+{
+    LUNUSED(png_ptr);
+}
+
+LMemoryStream LImage::saveAsPng()
+{
+    LMemoryStream o;
+    png_struct* png_ptr;
+    png_info* info_ptr;
+
+    __PngWrite_struct buf;
+    buf.data=&o;
+    buf.index=0;
+
+    png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING,0,0,0);
+    if(!png_ptr)
+    {
+        lError(1,"libpng save png_create_write_struct Error",o);
+    }
+    info_ptr=png_create_info_struct(png_ptr);
+    if(!info_ptr)
+    {
+        lError(1,"libpng save png_create_info_struct Error",o);
+    }
+    if(setjmp(png_jmpbuf(png_ptr)))
+    {
+        lError(1,"libpng setjmp(png_jmpbuf(png_ptr)) Error",o);
+    }
+
+    png_set_write_fn(png_ptr,&buf,___png_write,___png_write_flush);
+
+    if(setjmp(png_jmpbuf(png_ptr)))
+    {
+        lError(1,"libpng setjmp(png_jmpbuf(png_ptr)) Error",o);
+    }
+
+    int _color_type;
+
+    switch (mFormat)
+    {
+    case Format_R8G8B8:
+        _color_type=PNG_COLOR_TYPE_RGB;
+        break;
+    case Format_R8G8B8A8:
+        _color_type=PNG_COLOR_TYPE_RGBA;
+        break;
+    default:
+        lError(1,"libpng save format is not supported ",o);
+        break;
+    }
+
+    png_set_IHDR(png_ptr,info_ptr,mWidth,mHeight,8,_color_type,PNG_INTERLACE_NONE,PNG_COMPRESSION_TYPE_BASE,PNG_FILTER_TYPE_BASE);
+    png_write_info(png_ptr, info_ptr);
+    if(setjmp(png_jmpbuf(png_ptr)))
+    {
+        lError(1,"libpng setjmp(png_jmpbuf(png_ptr)) Error",o);
+    }
+    for(u32 i=0;i<mHeight;i++)
+    {
+        png_write_row(png_ptr,(unsigned char*)&mData[i*mWidth*mBytePerPixel]);
+    }
+    if(setjmp(png_jmpbuf(png_ptr)))
+    {
+        lError(1,"libpng setjmp(png_jmpbuf(png_ptr)) Error",o);
+    }
+    png_write_end(png_ptr, NULL);
+    return o;
+}
+
+void LImage::saveAsPngFile(const LString &_filename)
+{
+    LFile f(_filename,LFile::IOTypeBinary|LFile::IOTypeWrite);
+    LMemoryStream ms=saveAsPng();
+    f.write(ms.getData(),ms.getSize());
+    f.close();
 }
 
 #endif
