@@ -329,8 +329,20 @@ int main()
         if(LInput::isKeyDown(LInput::KeyCode_F2))
             dev->getScreenShot().saveAsPngFile("screenshot.png");
 
+        static bool _isr=false;
         if(LInput::isKeyDown(LInput::KeyCode_F1))
-            dev->reset(0,0,1024,768);
+        {
+            if(_isr)
+            {
+                dev->reset(0,0,800,600);
+                _isr=false;
+            }
+            else
+            {
+                dev->reset(0,0,1024,768);
+                _isr=true;
+            }
+        }
 
         camFOV += -LInput::getMouseWheelDelta()*3;
         camFOV = lClamp(camFOV,1.0f,179.0f);

@@ -152,8 +152,8 @@ void LD3D9Device::initialize(bool _fullscreen, bool _vsync, u16 _screen_width, u
     dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
     dpp.Windowed= !_fullscreen;
     dpp.BackBufferCount=1;
-    dpp.BackBufferWidth=800;//GetSystemMetrics(SM_CXSCREEN);
-    dpp.BackBufferHeight=600;//GetSystemMetrics(SM_CYSCREEN);
+    dpp.BackBufferWidth=GetSystemMetrics(SM_CXSCREEN);
+    dpp.BackBufferHeight=GetSystemMetrics(SM_CYSCREEN);
     if(_fullscreen)
         dpp.BackBufferFormat = D3DFMT_X8R8G8B8;
     else
