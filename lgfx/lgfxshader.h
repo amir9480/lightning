@@ -21,7 +21,7 @@ public:
     virtual ~LGFXShader();
 
     //! to compile from string , _main_function_name : entry point function name
-    virtual bool                    compile(const LString& _content,const LString& _main_function_name)=0;
+    virtual bool                    compile(LString _content, LString _main_function_name)=0;
 
     //! destroy
     virtual void                    destroy()=0;
@@ -76,6 +76,7 @@ public:
 
 protected:
     LString         mContent;
+    LString         mMainFunction;
 };
 
 LNAMESPACE_END

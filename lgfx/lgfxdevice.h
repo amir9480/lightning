@@ -55,7 +55,7 @@ public:
     virtual ~LGFXDevice();
 
     //! create a new renderable window and initialize device
-    static LGFXDevice*              create(bool _fullscreen,bool _vsync);
+    static LGFXDevice*              create(bool _fullscreen, bool _vsync, u16 _screen_width, u16 _screen_height);
 
     //! to start rendering
     virtual void                    beginScene()=0;
@@ -84,6 +84,12 @@ public:
     //! create a renderable texture
     virtual LGFXTexture*            createRenderTarget(u16 _width,u16 _height,LImage::Format _renderable_format)=0;
 
+    //! check device has any problem or not and tring to fix
+    virtual void                    checkErrors()=0;
+
+    //! release
+    virtual void                    destroy()=0;
+
     //! draw stage
     virtual void                    draw()=0;
 
@@ -100,7 +106,7 @@ public:
     virtual void                    hideWindow()=0;
 
     //! initilize device
-    virtual void                    initialize(bool _fullscreen,bool _vsync)=0;
+    virtual void                    initialize(bool _fullscreen,bool _vsync,u16 _screen_width,u16 _screen_height)=0;
 
     //! if process done returns 1 and if request was Quit returns 2
     virtual bool                    processOSMessage()=0;
@@ -108,8 +114,8 @@ public:
     //! render on screen
     virtual void                    render()=0;
 
-    //! release
-    virtual void                    release()=0;
+    //! reset device
+    virtual void                    reset(bool _fullscreen,bool _vsync,u16 _screen_width,u16 _screen_height)=0;
 
     //! reset parameters to default
     virtual void                    resetParameters();
@@ -124,6 +130,7 @@ public:
     virtual void                    setVertexBuffer(u16 _streamNumber,LGFXVertexBuffer *_buffer)=0;
 
     //! set vertex buffer frequency. set _count to -1 to disable . 0 to set instanced data and _count>0 to set gemetry count
+    //! always use _streamNumber=0 for Geomety data NOT instanced data
     virtual void                    setVertexBufferFrequency(u16 _streamNumber,int _count=-1)=0;
 
     //! set current index buffer

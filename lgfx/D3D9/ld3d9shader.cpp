@@ -15,14 +15,19 @@ LD3D9Shader::LD3D9Shader():
 
 LD3D9Shader::~LD3D9Shader()
 {
+    u32 _i;
+    if((_i = mDevice->mShaders.find(this))==LVector<LD3D9Shader>::nothing)
+        return;
+    mDevice->mShaders.remove(_i);
     this->destroy();
 }
 
-bool LD3D9Shader::compile(const LString &_content, const LString &_main_function_name)
+bool LD3D9Shader::compile(LString _content,LString _main_function_name)
 {
     bool out=true;
     this->destroy();
     mContent=_content;
+    mMainFunction=_main_function_name;
     LString8 cont=mContent.toUTF8();
 
     ID3DXBuffer* sb=nullptr;
@@ -62,6 +67,7 @@ bool LD3D9Shader::compile(const LString &_content, const LString &_main_function
 
 void LD3D9Shader::destroy()
 {
+
     if(mType==LGFXShader::ShaderType::vertexShader)
     {
         SAFE_RELEASE(mVS);
@@ -94,12 +100,21 @@ D3DXHANDLE LD3D9Shader::getConstantHandle(const LString &_name)
 
 void LD3D9Shader::preReset()
 {
-
+    if(mType==LGFXShader::ShaderType::vertexShader)
+    {
+        SAFE_RELEASE(mVS);
+    }
+    else if(mType==LGFXShader::ShaderType::pixelShader)
+    {
+        SAFE_RELEASE(mPS);
+    }
+    SAFE_RELEASE(mConstantTable);
+    mConstantCache.clear();
 }
 
 void LD3D9Shader::postReset()
 {
-
+    compile(mContent,mMainFunction);
 }
 
 void LD3D9Shader::setBool(const LString &_name, bool _value)

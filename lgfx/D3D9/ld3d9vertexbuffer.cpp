@@ -91,11 +91,17 @@ LD3D9VertexDeclaration::LD3D9VertexDeclaration(const LVector<LVertexElement> &_e
 
 LD3D9VertexDeclaration::~LD3D9VertexDeclaration()
 {
+    u32 _i;
+    if((_i = mDevice->mVertexDecls.find(this))==LVector<LD3D9VertexDeclaration>::nothing)
+        return;
+    mDevice->mVertexDecls.remove(_i);
+
     this->destroy();
 }
 
 void LD3D9VertexDeclaration::destroy()
 {
+
     SAFE_RELEASE(mDecl);
 }
 
@@ -157,11 +163,17 @@ LD3D9VertexBuffer::LD3D9VertexBuffer():
 
 LD3D9VertexBuffer::~LD3D9VertexBuffer()
 {
+    u32 _i;
+    if((_i = mDevice->mVertexBuffers.find(this))==LVector<LD3D9VertexBuffer>::nothing)
+        return;
+    mDevice->mVertexBuffers.remove(_i);
+
     this->destroy();
 }
 
 void LD3D9VertexBuffer::destroy()
 {
+
     SAFE_RELEASE(mVertexBuffer);
     this->mBufferSize=0;
     if(mCopyData)

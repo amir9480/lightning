@@ -4,6 +4,7 @@
 
 LNAMESPACE_BEGIN
 
+
 LGFXVertexDeclaration* D3D9QuadVertex::decl=nullptr;
 LVector<LVertexElement> _d3d9quad_decl={
     {0,LVertexElementType_Float3,LVertexElementUsage_Position,0},
@@ -102,10 +103,10 @@ void lCallOnEnd()
     UnregisterClassW(L"lightningmainwindow",GetModuleHandleW(0));
 }
 
-LGFXDevice* LGFXDevice::create(bool _fullscreen, bool _vsync)
+LGFXDevice* LGFXDevice::create(bool _fullscreen, bool _vsync,u16 _screen_width,u16 _screen_height)
 {
     LGFXDevice* o =new LD3D9Device();
-    o->initialize(_fullscreen,_vsync);
+    o->initialize(_fullscreen,_vsync,_screen_width,_screen_height);
     return o;
 }
 
@@ -115,40 +116,43 @@ LD3D9Device::LD3D9Device()
     mWindowHandler=0;
     mD3D9=0;
     mDevice=0;
-    mCurrentIndexBuffer=0;
-    mCurrentIndexBuffer=0;
     mNativeBackBuffer=0;
     mMainBackBuffer=0;
     mQuadVertexBuffer=0;
     mQuadIndexBuffer=0;
+    mCurrentIndexBuffer=0;
+    mCurrentIndexBuffer=0;
     mCurrentVertexDecl=0;
     mCurrentVertexShader=0;
     mCurrentPixelShader=0;
+    mScreenWidth=0;
+    mScreenHeight=0;
+    mFullScreen=0;
+    mVSync=0;
 
     mWindowHandler = CreateWindowExW( (DWORD)NULL, L"lightningmainwindow",
                              (LSTR(LIGHTNING)+" "+LIGHTNING_VERSION).getData(),
                              /*WS_OVERLAPPEDWINDOW | WS_VISIBLE,*/
                              WS_SYSMENU|WS_CAPTION|WS_MINIMIZEBOX|WS_VISIBLE,
-                             0, 0, 800, 600, (HWND)NULL,(HMENU)NULL, GetModuleHandleA(0),(LPVOID)NULL );
+                             0, 0, 640, 480, (HWND)NULL,(HMENU)NULL, GetModuleHandleA(0),(LPVOID)NULL );
 }
 
 LD3D9Device::~LD3D9Device()
 {
-    release();
+    destroy();
     lLogMessage(1,"Direct3D9 Graphic Device Destroyed");
 }
 
-void LD3D9Device::initialize(bool _fullscreen, bool _vsync)
+void LD3D9Device::initialize(bool _fullscreen, bool _vsync, u16 _screen_width, u16 _screen_height)
 {
-    release();
+    destroy();
     NZ(mD3D9=Direct3DCreate9(D3D_SDK_VERSION));
-    static D3DPRESENT_PARAMETERS dpp;
     lMemorySet(&dpp,sizeof(dpp),0);
     dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
     dpp.Windowed= !_fullscreen;
     dpp.BackBufferCount=1;
-    dpp.BackBufferWidth=2048;//GetSystemMetrics(SM_CXSCREEN);
-    dpp.BackBufferHeight=2048;//GetSystemMetrics(SM_CYSCREEN);
+    dpp.BackBufferWidth=800;//GetSystemMetrics(SM_CXSCREEN);
+    dpp.BackBufferHeight=600;//GetSystemMetrics(SM_CYSCREEN);
     if(_fullscreen)
         dpp.BackBufferFormat = D3DFMT_X8R8G8B8;
     else
@@ -163,13 +167,12 @@ void LD3D9Device::initialize(bool _fullscreen, bool _vsync)
         dpp.PresentationInterval = D3DPRESENT_INTERVAL_ONE;
     HR(mD3D9->CreateDevice(D3DADAPTER_DEFAULT,D3DDEVTYPE::D3DDEVTYPE_HAL,mWindowHandler,
                            D3DCREATE_HARDWARE_VERTEXPROCESSING,&dpp,&mDevice));
-    lLogMessage(1,"Direct3D9 Graphic Device Initialized Successfully");
 
     HR(mDevice->GetBackBuffer(0,0,D3DBACKBUFFER_TYPE_MONO,&mNativeBackBuffer));
 
     mMainBackBuffer = new LD3D9Texture;
-    mMainBackBuffer->mWidth=800;
-    mMainBackBuffer->mHeight=600;
+    mMainBackBuffer->mWidth=_screen_width;
+    mMainBackBuffer->mHeight=_screen_height;
     mMainBackBuffer->mFormat=LImage::Format_R8G8B8;
     mMainBackBuffer->mIsRenderTarget=true;
     mMainBackBuffer->mAddressU=LGFXTexture::TextureAddress_border;
@@ -189,11 +192,108 @@ void LD3D9Device::initialize(bool _fullscreen, bool _vsync)
     mQuadVertexShader->compile(_d3d9quadshader,"mainVS");
     mQuadPixelShader=dynamic_cast<LD3D9Shader*>(createPixelShader());
     mQuadPixelShader->compile(_d3d9quadshader,"mainPS");
+
     setRenderTarget(0,nullptr);
+    mDevice->SetRenderTarget(0,mNativeBackBuffer);
+
+
+    mScreenWidth=_screen_width;
+    mScreenHeight=_screen_height;
+    mFullScreen=_fullscreen;
+    mVSync=_vsync;
+    SetWindowPos(mWindowHandler,0,0,0,mScreenWidth,mScreenHeight,0);
+
+
+    lLogMessage(1,"Direct3D9 Graphic Device Initialized Successfully");
+}
+
+void LD3D9Device::reset(bool _fullscreen, bool _vsync, u16 _screen_width, u16 _screen_height)
+{
+    resetParameters();
+    delete D3D9QuadVertex::decl;
+    mQuadVertexBuffer->preReset();
+    mQuadIndexBuffer->preReset();
+    mQuadVertexShader->preReset();
+    mQuadPixelShader->preReset();
+    mTextures.pushBack(mMainBackBuffer); // Fake for condition inside Texture destructor
+    delete mMainBackBuffer;
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    for(u32 i=0;i<mVertexDecls.getSize();i++)
+        mVertexDecls[i]->preReset();
+    for(u32 i=0;i<mVertexBuffers.getSize();i++)
+        mVertexBuffers[i]->preReset();
+    for(u32 i=0;i<mIndexBuffers.getSize();i++)
+        mIndexBuffers[i]->preReset();
+    for(u32 i=0;i<mShaders.getSize();i++)
+        mShaders[i]->preReset();
+    for(u32 i=0;i<mTextures.getSize();i++)
+        mTextures[i]->preReset();
+
+    dpp.Windowed= !_fullscreen;
+    if(_fullscreen)
+        dpp.BackBufferFormat = D3DFMT_X8R8G8B8;
+    else
+        dpp.BackBufferFormat = D3DFMT_UNKNOWN;
+    if(!_vsync)
+        dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
+    else
+        dpp.PresentationInterval = D3DPRESENT_INTERVAL_ONE;
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    mNativeBackBuffer->Release();
+
+    HR(mDevice->Reset(&dpp));
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    for(u32 i=0;i<mVertexDecls.getSize();i++)
+        mVertexDecls[i]->postReset();
+    for(u32 i=0;i<mVertexBuffers.getSize();i++)
+        mVertexBuffers[i]->postReset();
+    for(u32 i=0;i<mIndexBuffers.getSize();i++)
+        mIndexBuffers[i]->postReset();
+    for(u32 i=0;i<mShaders.getSize();i++)
+        mShaders[i]->postReset();
+    for(u32 i=0;i<mTextures.getSize();i++)
+        mTextures[i]->postReset();
+
+    HR(mDevice->GetBackBuffer(0,0,D3DBACKBUFFER_TYPE_MONO,&mNativeBackBuffer));
+
+    D3D9QuadVertex::decl=createVertexDeclaration(_d3d9quad_decl);
+
+    mQuadVertexBuffer->postReset();
+    mQuadIndexBuffer->postReset();
+    mQuadVertexShader->postReset();
+    mQuadPixelShader->postReset();
+
+    mMainBackBuffer = new LD3D9Texture;
+    mMainBackBuffer->mWidth=_screen_width;
+    mMainBackBuffer->mHeight=_screen_height;
+    mMainBackBuffer->mFormat=LImage::Format_R8G8B8;
+    mMainBackBuffer->mIsRenderTarget=true;
+    mMainBackBuffer->mAddressU=LGFXTexture::TextureAddress_border;
+    mMainBackBuffer->mAddressV=LGFXTexture::TextureAddress_border;
+    mMainBackBuffer->mDevice=this;
+    mMainBackBuffer->mFilter=LGFXTexture::TextureFilter_anisotropic;
+    mMainBackBuffer->mMipMapCount=1;
+    mMainBackBuffer->mType = LGFXTexture::TextureType_RenderTarget;
+    HR(mDevice->CreateTexture(mMainBackBuffer->mWidth,mMainBackBuffer->mHeight,1,D3DUSAGE_RENDERTARGET,lD3DTextureFormat(mMainBackBuffer->mFormat),D3DPOOL_DEFAULT,(IDirect3DTexture9**)(&(mMainBackBuffer->mTexture)),0));
+
+
+    setRenderTarget(0,nullptr);
+
+    mScreenWidth=_screen_width;
+    mScreenHeight=_screen_height;
+    mFullScreen=_fullscreen;
+    mVSync=_vsync;
+    SetWindowPos(mWindowHandler,0,0,0,mScreenWidth,mScreenHeight,0);
+
+
+    lLogMessage(1,"Direct3D9 Graphic Device Reseted Successfully");
 }
 
 void LD3D9Device::beginScene()
 {
+    checkErrors();
     mDevice->BeginScene();
 }
 
@@ -295,6 +395,28 @@ LGFXTexture *LD3D9Device::createRenderTarget(u16 _width, u16 _height, LImage::Fo
     return o;
 }
 
+void LD3D9Device::checkErrors()
+{
+    HRESULT _hr = mDevice->TestCooperativeLevel();
+    switch (_hr)
+    {
+    case D3DERR_DEVICELOST:
+        // TO DO : add sleep function
+        Sleep(50);
+        processOSMessage();
+        return checkErrors();
+        break;
+    case D3DERR_DRIVERINTERNALERROR:
+        lShowMessageBox("DirectX 9 Driver Error","This is an Internal Driver Error . Please Update You'r Graphic Card Driver or Contact to You'r Graphic Card Support");
+        break;
+    case D3DERR_DEVICENOTRESET:
+        reset(mFullScreen,mVSync,mScreenWidth,mScreenHeight);
+        break;
+    default:
+        break;
+    }
+}
+
 void LD3D9Device::draw()
 {
     HR(mDevice->DrawIndexedPrimitive( D3DPT_TRIANGLELIST,0,0,mCurrentVertexBuffer->getNumberOfElements(),0,mCurrentIndexBuffer->getIndicesCount()/3));
@@ -302,6 +424,7 @@ void LD3D9Device::draw()
 
 void LD3D9Device::drawQuad(LGFXTexture *_tex)
 {
+    LGFXShader* _ps=mCurrentPixelShader;
     resetParameters();
     setVertexDeclaration(D3D9QuadVertex::decl);
     setVertexBuffer(0,mQuadVertexBuffer);
@@ -309,10 +432,14 @@ void LD3D9Device::drawQuad(LGFXTexture *_tex)
     setDepthWriteEnable(false);
     setDepthCheckEnable(false);
     setVertexShader(mQuadVertexShader);
-    if(mCurrentPixelShader==nullptr)
+    if(_ps==nullptr)
     {
         setPixelShader(mQuadPixelShader);
         mQuadPixelShader->setTexture("t0",_tex);
+    }
+    else
+    {
+        setPixelShader(_ps);
     }
 
     draw();
@@ -350,56 +477,52 @@ bool LD3D9Device::processOSMessage()
 
 void LD3D9Device::render()
 {
-    resetParameters();
-    setVertexDeclaration(D3D9QuadVertex::decl);
-    setVertexBuffer(0,mQuadVertexBuffer);
-    setIndexBuffer(mQuadIndexBuffer);
-    setDepthWriteEnable(false);
-    setDepthCheckEnable(false);
-    setVertexShader(mQuadVertexShader);
-    if(mCurrentPixelShader==nullptr)
-    {
-        setPixelShader(mQuadPixelShader);
-        mQuadPixelShader->setTexture("t0",mMainBackBuffer);
-    }
+    //resetParameters();
+    //setVertexDeclaration(D3D9QuadVertex::decl);
+    //setVertexBuffer(0,mQuadVertexBuffer);
+    //setIndexBuffer(mQuadIndexBuffer);
+    //setDepthWriteEnable(false);
+    //setDepthCheckEnable(false);
+    //setVertexShader(mQuadVertexShader);
+//    if(mCurrentPixelShader==nullptr)
+//    {
+        //setPixelShader(mQuadPixelShader);
+        //mQuadPixelShader->setTexture("t0",mMainBackBuffer);
+//    }
 
-    HR(mDevice->SetRenderTarget(0,mNativeBackBuffer));
-    draw();
-
+    //HR(mDevice->SetRenderTarget(0,mNativeBackBuffer));
+    //mDevice->BeginScene();
+    //draw();
+    //mDevice->EndScene();
 
     mDevice->Present(0,0,0,0);
 
 
-    resetParameters();
-    setRenderTarget(0,nullptr);
+    //resetParameters();
+    //setRenderTarget(0,nullptr);
 }
 
-void LD3D9Device::release()
+void LD3D9Device::destroy()
 {
     while(mVertexDecls.getSize()>0)
     {
         delete mVertexDecls[0];
-        mVertexDecls.remove(0);
     }
     while(mVertexBuffers.getSize()>0)
     {
         delete mVertexBuffers[0];
-        mVertexBuffers.remove(0);
     }
     while(mIndexBuffers.getSize()>0)
     {
         delete mIndexBuffers[0];
-        mIndexBuffers.remove(0);
     }
     while(mShaders.getSize()>0)
     {
         delete mShaders[0];
-        mShaders.remove(0);
     }
     while(mTextures.getSize()>0)
     {
         delete mTextures[0];
-        mTextures.remove(0);
     }
 
     delete mMainBackBuffer;
@@ -538,6 +661,7 @@ void LD3D9Device::setRenderTarget(u32 _index, LGFXTexture *_rt)
     d3drt->mTexture->GetSurfaceLevel(0,&_rs);
     HR(mDevice->SetRenderTarget(_index,_rs));
     mMaxRenderTarget=lMax(mMaxRenderTarget,_index);
+    _rs->Release();
 }
 
 void LD3D9Device::setDepthCheckEnable(bool _value)

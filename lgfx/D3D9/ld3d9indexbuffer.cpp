@@ -14,11 +14,16 @@ LD3D9IndexBuffer::LD3D9IndexBuffer():
 
 LD3D9IndexBuffer::~LD3D9IndexBuffer()
 {
+    u32 _i;
+    if((_i = mDevice->mIndexBuffers.find(this))==LVector<LD3D9IndexBuffer>::nothing)
+        return;
+    mDevice->mIndexBuffers.remove(_i);
     this->destroy();
 }
 
 void LD3D9IndexBuffer::destroy()
 {
+
     SAFE_RELEASE(mIndexBuffer);
     mBufferSize=0;
     if(mCopyData)

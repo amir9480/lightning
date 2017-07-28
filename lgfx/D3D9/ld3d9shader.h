@@ -21,7 +21,7 @@ public:
     LD3D9Shader();
     virtual ~LD3D9Shader();
 
-    virtual bool                    compile(const LString& _content,const LString& _main_function_name);
+    virtual bool                    compile(LString _content, LString _main_function_name);
 
     virtual void                    destroy();
 

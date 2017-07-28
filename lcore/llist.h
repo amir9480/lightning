@@ -641,6 +641,8 @@ void LList<T>::erase(u32 _from, u32 _count)
 template<typename T> template<typename T2>
 u32 LList<T>::find(const T2 &_what, u32 _from) const
 {
+    if(mSize==0)
+        return nothing;
     lError(_from>=mSize,"u32 LList<T>::find(const T2 &_what, u32 _from) const: _from is not acceptable",nothing);
     return _LList_Search<decltype(*this),T2,LHasOperator::Equal<T,T2>::value>::__find((*this),mSize,_what,_from);
 }
@@ -648,6 +650,8 @@ u32 LList<T>::find(const T2 &_what, u32 _from) const
 template<typename T> template<typename T2>
 u32 LList<T>::findFromRight(const T2 &_what, u32 _from) const
 {
+    if(mSize==0)
+        return nothing;
     lError(_from>=mSize,"u32 LList<T>::find(const T2 &_what, u32 _from) const: _from is not acceptable",nothing);
     if(_from==(u32)-1)
         _from=mSize-1;

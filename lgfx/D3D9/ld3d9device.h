@@ -7,6 +7,7 @@
 
 #include "ld3d9.h"
 
+#include "../../los.h"
 #include "lcore.h"
 #include "../lgfxdevice.h"
 #include "ld3d9vertexbuffer.h"
@@ -60,6 +61,10 @@ public:
 
     virtual LGFXTexture*            createRenderTarget(u16 _width,u16 _height,LImage::Format _renderable_format);
 
+    virtual void                    checkErrors();
+
+    virtual void                    destroy();
+
     virtual void                    draw();
 
     virtual void                    drawQuad(LGFXTexture *_tex);
@@ -70,13 +75,13 @@ public:
 
     virtual void                    hideWindow();
 
-    virtual void                    initialize(bool _fullscreen,bool _vsync);
+    virtual void                    initialize(bool _fullscreen,bool _vsync,u16 _screen_width,u16 _screen_height);
 
     virtual bool                    processOSMessage();
 
     virtual void                    render();
 
-    virtual void                    release();
+    virtual void                    reset(bool _fullscreen,bool _vsync,u16 _screen_width,u16 _screen_height);
 
     virtual void                    setTitle(const LString& _newname);
 
@@ -144,6 +149,14 @@ protected:
     LD3D9IndexBuffer*           mQuadIndexBuffer;
     LD3D9Shader*                mQuadVertexShader;
     LD3D9Shader*                mQuadPixelShader;
+
+    u16                         mScreenWidth;
+    u16                         mScreenHeight;
+    bool                        mFullScreen;
+    bool                        mVSync;
+
+
+    D3DPRESENT_PARAMETERS dpp;
 };
 
 LNAMESPACE_END

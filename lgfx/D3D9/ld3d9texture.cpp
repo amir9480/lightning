@@ -57,6 +57,10 @@ LD3D9Texture::LD3D9Texture():
 
 LD3D9Texture::~LD3D9Texture()
 {
+    u32 _i;
+    if((_i = mDevice->mTextures.find(this))==LVector<LD3D9Texture>::nothing)
+        return;
+    mDevice->mTextures.remove(_i);
     this->destroy();
 }
 
@@ -163,6 +167,7 @@ LImage LD3D9Texture::getImage(u16 _mip_map_level)
 
 void LD3D9Texture::destroy()
 {
+
     SAFE_RELEASE(mTexture);
     mWidth=mHeight=mMipMapCount=0;
     mFormat=LImage::Format_null;
@@ -170,12 +175,18 @@ void LD3D9Texture::destroy()
 
 void LD3D9Texture::preReset()
 {
-
+    if(mType==TextureType_RenderTarget&&mIsRenderTarget==true)
+    {
+        HR(mTexture->Release());
+    }
 }
 
 void LD3D9Texture::postReset()
 {
-
+    if(mType==TextureType_RenderTarget&&mIsRenderTarget==true)
+    {
+        HR(mDevice->mDevice->CreateTexture(mWidth,mHeight,1,D3DUSAGE_RENDERTARGET,lD3DTextureFormat(mFormat),D3DPOOL_DEFAULT,(IDirect3DTexture9**)(&(mTexture)),0));
+    }
 }
 
 void LD3D9Texture::updateTexture(u16 _mip_map_level, const LImage &_data)

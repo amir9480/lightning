@@ -16,6 +16,7 @@ ostream& operator<<(ostream& _in,const LString& _str)
 // Dont forget LAPI
 // Add Reflection Support
 // *** Make Shared Pointer Thread Safe
+// LD3D9Device::checkErrors() add sleep function
 //
 ///////////////////////////////////////
 //
@@ -204,22 +205,10 @@ LVector<u32> ibox={
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-enum TypeA
-{
-    TypeA_1=1,
-    TypeA_2=2,
-    TypeA_3=3
-};
-
-enum TypeB
-{
-    TypeB_1=101,
-    TypeB_2=102,
-    TypeB_3=103
-};
 
 
-int main()
+
+/*int main()
 {
     lMemoryLogStart();
 
@@ -227,10 +216,12 @@ int main()
     LImage image02 = LImage::loadFromPngFile("image.png");
 
 
-    LGFXDevice* dev = LGFXDevice::create(0,1);
+    LGFXDevice* dev = LGFXDevice::create(0,0,800,600);
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     LGFXVertexDeclaration* myVertex1Decl = dev->createVertexDeclaration(_myVertex1Decl);
     LGFXVertexDeclaration* myVertex2Decl = dev->createVertexDeclaration(_myVertex2Decl);
+
+    delete myVertex2Decl;
 
     LGFXVertexBuffer* vbplane = dev->createVertexBuffer();
     vbplane->updateBuffer((char*)vplane,myVertex1Decl->getElementsSize(),sizeof(vplane)/sizeof(vplane[0]));
@@ -314,9 +305,9 @@ int main()
         else
         {
             if(LInput::isKeyPressed(LInput::KeyCode_LeftShift))
-                camspeed=0.2f;
-            else
                 camspeed=0.05f;
+            else
+                camspeed=0.025f;
             if(LInput::isKeyPressed(LInput::KeyCode_W))
                 camPos+=camRot.getForward()*camspeed;
             else if(LInput::isKeyPressed(LInput::KeyCode_S))
@@ -339,6 +330,9 @@ int main()
         if(LInput::isKeyDown(LInput::KeyCode_F2))
             dev->getScreenShot().saveAsPngFile("screenshot.png");
 
+        if(LInput::isKeyDown(LInput::KeyCode_F3))
+            dev->reset(0,0,1024,768);
+
         camFOV += -LInput::getMouseWheelDelta()*3;
         camFOV = lClamp(camFOV,1.0f,179.0f);
 
@@ -351,8 +345,9 @@ int main()
 
 
 
-        dev->clear(50,50,50);
+        dev->clear(20,20,20);
         dev->beginScene();
+
 
         // Plane
         dev->resetParameters();
@@ -367,8 +362,7 @@ int main()
             dev->setIndexBuffer(ibplane);
             dev->setPixelShader(shaderps01);
             dev->setVertexShader(shadervs01);
-
-            dev->draw();
+            //dev->draw();
         }
 
         // Box
@@ -388,21 +382,21 @@ int main()
             dev->draw();
         }
 
-//        dev->resetParameters();
-//        {
-//            shaderps02->setTexture("t0",texture02);
-//            shadervs02->setMatrix("VP",viewprojection);
-//            dev->setVertexDeclaration(myVertex2Decl);
-//            dev->setVertexBuffer(0,vbbox);
-//            dev->setVertexBuffer(1,vbboxinstance);
-//            dev->setVertexBufferFrequency(0,_vboxinstance.getSize());
-//            dev->setVertexBufferFrequency(1,0);
-//            dev->setIndexBuffer(ibbox);
-//            dev->setPixelShader(shaderps02);
-//            dev->setVertexShader(shadervs02);
+        dev->resetParameters();
+        {
+            shaderps02->setTexture("t0",texture02);
+            shadervs02->setMatrix("VP",viewprojection);
+            dev->setVertexDeclaration(myVertex2Decl);
+            dev->setVertexBuffer(0,vbbox);
+            dev->setVertexBuffer(1,vbboxinstance);
+            dev->setVertexBufferFrequency(0,_vboxinstance.getSize());
+            dev->setVertexBufferFrequency(1,0);
+            dev->setIndexBuffer(ibbox);
+            dev->setPixelShader(shaderps02);
+            dev->setVertexShader(shadervs02);
 
-//            dev->draw();
-//        }
+            dev->draw();
+        }
 
         dev->endScene();
         dev->render();
@@ -416,7 +410,42 @@ int main()
     cout<<"\n\n";
     return 0;
 }
+*/
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+int main()
+{
+    lMemoryLogStart();
 
 
+    LGFXDevice* dev = LGFXDevice::create(0,0,800,600);
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    while(dev->processOSMessage())
+    {
+        if(LInput::isKeyDown(LInput::KeyCode_Escape))
+            break;
+
+        if(LInput::isKeyDown(LInput::KeyCode_F1))
+            dev->reset(0,0,1024,768);
+
+
+        dev->clear(20,20,20);
+        dev->beginScene();
+
+
+        dev->endScene();
+        dev->render();
+
+        LInput::resetInputs();
+    }
+
+    delete dev;
+
+    lMemoryLogEnd();
+    cout<<"\n\n";
+    return 0;
+}

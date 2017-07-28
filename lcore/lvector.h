@@ -270,6 +270,8 @@ void LVector<T>::flush()
 template<typename T> template<typename T2>
 u32 LVector<T>::find(const T2 &_what, u32 _from) const
 {
+    if(mSize==0)
+        return nothing;
     lError(_from>=mSize,"u32 LVector<T>::find(const T2 &_what, u32 _from) const: _from is not acceptable",nothing);
     return _from+_LVector_Search<T,T2,LHasOperator::Equal<T,T2>::value>::__find(&mData[_from],mSize-_from,_what);
 }
@@ -277,6 +279,8 @@ u32 LVector<T>::find(const T2 &_what, u32 _from) const
 template<typename T> template<typename T2>
 u32 LVector<T>::findFromRight(const T2 &_what, u32 _from) const
 {
+    if(mSize==0)
+        return nothing;
     if(_from==(u32)-1)
         _from=mSize-1;
     lError(_from>=mSize,"u32 LVector<T>::find(const T2 &_what, u32 _from) const: _from is not acceptable",nothing);
