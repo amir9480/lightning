@@ -17,6 +17,7 @@ ostream& operator<<(ostream& _in,const LString& _str)
 // Add Reflection Support
 // *** Make Shared Pointer Thread Safe
 // LD3D9Device::checkErrors() add sleep function
+// Screen Resolution change make more optimize
 //
 ///////////////////////////////////////
 //
@@ -304,9 +305,9 @@ int main()
         else
         {
             if(LInput::isKeyPressed(LInput::KeyCode_LeftShift))
-                camspeed=0.05f;
+                camspeed=0.2f;
             else
-                camspeed=0.025f;
+                camspeed=0.1f;
             if(LInput::isKeyPressed(LInput::KeyCode_W))
                 camPos+=camRot.getForward()*camspeed;
             else if(LInput::isKeyPressed(LInput::KeyCode_S))
@@ -334,12 +335,12 @@ int main()
         {
             if(_isr)
             {
-                dev->reset(0,0,800,600);
+                dev->reset(0,1,800,600);
                 _isr=false;
             }
             else
             {
-                dev->reset(0,0,1024,768);
+                dev->reset(1,1,1360,768);
                 _isr=true;
             }
         }
@@ -393,21 +394,21 @@ int main()
             dev->draw();
         }
 
-        dev->resetParameters();
-        {
-            shaderps02->setTexture("t0",texture02);
-            shadervs02->setMatrix("VP",viewprojection);
-            dev->setVertexDeclaration(myVertex2Decl);
-            dev->setVertexBuffer(0,vbbox);
-            dev->setVertexBuffer(1,vbboxinstance);
-            dev->setVertexBufferFrequency(0,_vboxinstance.getSize());
-            dev->setVertexBufferFrequency(1,0);
-            dev->setIndexBuffer(ibbox);
-            dev->setPixelShader(shaderps02);
-            dev->setVertexShader(shadervs02);
+//        dev->resetParameters();
+//        {
+//            shaderps02->setTexture("t0",texture02);
+//            shadervs02->setMatrix("VP",viewprojection);
+//            dev->setVertexDeclaration(myVertex2Decl);
+//            dev->setVertexBuffer(0,vbbox);
+//            dev->setVertexBuffer(1,vbboxinstance);
+//            dev->setVertexBufferFrequency(0,_vboxinstance.getSize());
+//            dev->setVertexBufferFrequency(1,0);
+//            dev->setIndexBuffer(ibbox);
+//            dev->setPixelShader(shaderps02);
+//            dev->setVertexShader(shadervs02);
 
-            dev->draw();
-        }
+//            dev->draw();
+//        }
 
         dev->endScene();
         dev->render();

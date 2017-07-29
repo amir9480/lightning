@@ -130,12 +130,6 @@ LD3D9Device::LD3D9Device()
     mScreenHeight=0;
     mFullScreen=0;
     mVSync=0;
-
-    mWindowHandler = CreateWindowExW( (DWORD)NULL, L"lightningmainwindow",
-                             (LSTR(LIGHTNING)+" "+LIGHTNING_VERSION).getData(),
-                             /*WS_OVERLAPPEDWINDOW | WS_VISIBLE,*/
-                             WS_SYSMENU|WS_CAPTION|WS_MINIMIZEBOX|WS_VISIBLE,
-                             0, 0, 640, 480, (HWND)NULL,(HMENU)NULL, GetModuleHandleA(0),(LPVOID)NULL );
 }
 
 LD3D9Device::~LD3D9Device()
@@ -147,6 +141,23 @@ LD3D9Device::~LD3D9Device()
 void LD3D9Device::initialize(bool _fullscreen, bool _vsync, u16 _screen_width, u16 _screen_height)
 {
     destroy();
+    if(!_fullscreen)
+    {
+        mWindowHandler = CreateWindowExW( (DWORD)NULL, L"lightningmainwindow",
+                             (LSTR(LIGHTNING)+" "+LIGHTNING_VERSION).getData(),
+                             /*WS_OVERLAPPEDWINDOW | WS_VISIBLE,*/
+                             WS_VISIBLE|WS_CAPTION|WS_OVERLAPPED|WS_SYSMENU|WS_MINIMIZEBOX,
+                             0, 0, _screen_width, _screen_height, (HWND)NULL,(HMENU)NULL, GetModuleHandleA(0),(LPVOID)NULL );
+    }
+    else
+    {
+        mWindowHandler = CreateWindowExW( (DWORD)NULL, L"lightningmainwindow",
+                             (LSTR(LIGHTNING)+" "+LIGHTNING_VERSION).getData(),
+                             /*WS_OVERLAPPEDWINDOW | WS_VISIBLE,*/
+                             WS_VISIBLE|WS_EX_TOPMOST|WS_POPUP,
+                             0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), (HWND)NULL,(HMENU)NULL, GetModuleHandleA(0),(LPVOID)NULL );
+    }
+
     NZ(mD3D9=Direct3DCreate9(D3D_SDK_VERSION));
     lMemorySet(&dpp,sizeof(dpp),0);
     dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
@@ -172,20 +183,10 @@ void LD3D9Device::initialize(bool _fullscreen, bool _vsync, u16 _screen_width, u
     HR(mDevice->GetBackBuffer(0,0,D3DBACKBUFFER_TYPE_MONO,&mNativeBackBuffer));
     HR(mDevice->GetDepthStencilSurface(&mNativeDepthBuffer));
 
-    mMainBackBuffer = new LD3D9Texture;
-    mMainBackBuffer->mWidth=_screen_width;
-    mMainBackBuffer->mHeight=_screen_height;
-    mMainBackBuffer->mFormat=LImage::Format_R8G8B8;
-    mMainBackBuffer->mIsRenderTarget=true;
+    mMainBackBuffer = dynamic_cast<LD3D9Texture*>(createRenderTarget(_screen_width,_screen_height,LImage::Format_R8G8B8,true));
     mMainBackBuffer->mAddressU=LGFXTexture::TextureAddress_border;
     mMainBackBuffer->mAddressV=LGFXTexture::TextureAddress_border;
-    mMainBackBuffer->mDevice=this;
     mMainBackBuffer->mFilter=LGFXTexture::TextureFilter_anisotropic;
-    mMainBackBuffer->mMipMapCount=1;
-    mMainBackBuffer->mType = LGFXTexture::TextureType_RenderTarget;
-    mMainBackBuffer->mHasDepthBuffer=true;
-    HR(mDevice->CreateTexture(mMainBackBuffer->mWidth,mMainBackBuffer->mHeight,1,D3DUSAGE_RENDERTARGET,lD3DTextureFormat(mMainBackBuffer->mFormat),D3DPOOL_DEFAULT,(IDirect3DTexture9**)(&(mMainBackBuffer->mTexture)),0));
-    HR(mDevice->CreateDepthStencilSurface(_screen_width,_screen_height,D3DFMT_D24S8,D3DMULTISAMPLE_NONE,0,0,&mMainBackBuffer->mRenderTargetDepthStencil,0));
 
     D3D9QuadVertex::decl=createVertexDeclaration(_d3d9quad_decl);
     mQuadVertexBuffer=dynamic_cast<LD3D9VertexBuffer*>(createVertexBuffer(0,0));
@@ -199,13 +200,10 @@ void LD3D9Device::initialize(bool _fullscreen, bool _vsync, u16 _screen_width, u
 
     setRenderTarget(0,nullptr);
 
-
     mScreenWidth=_screen_width;
     mScreenHeight=_screen_height;
     mFullScreen=_fullscreen;
     mVSync=_vsync;
-    SetWindowPos(mWindowHandler,0,0,0,mScreenWidth,mScreenHeight,0);
-
 
     lLogMessage(1,"Direct3D9 Graphic Device Initialized Successfully");
 }
@@ -215,76 +213,80 @@ void LD3D9Device::reset(bool _fullscreen, bool _vsync, u16 _screen_width, u16 _s
     resetParameters();
     mDevice->SetRenderTarget(0,mNativeBackBuffer);
     mDevice->SetDepthStencilSurface(mNativeDepthBuffer);
-    delete D3D9QuadVertex::decl;
-    mQuadVertexBuffer->preReset();
-    mQuadIndexBuffer->preReset();
-    mQuadVertexShader->preReset();
-    mQuadPixelShader->preReset();
-    mTextures.pushBack(mMainBackBuffer); // Fake for condition inside Texture destructor
     delete mMainBackBuffer;
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    for(u32 i=0;i<mVertexDecls.getSize();i++)
-        mVertexDecls[i]->preReset();
-    for(u32 i=0;i<mVertexBuffers.getSize();i++)
-        mVertexBuffers[i]->preReset();
-    for(u32 i=0;i<mIndexBuffers.getSize();i++)
-        mIndexBuffers[i]->preReset();
-    for(u32 i=0;i<mShaders.getSize();i++)
-        mShaders[i]->preReset();
-    for(u32 i=0;i<mTextures.getSize();i++)
-        mTextures[i]->preReset();
-
-    dpp.Windowed= !_fullscreen;
-    if(_fullscreen)
-        dpp.BackBufferFormat = D3DFMT_X8R8G8B8;
-    else
-        dpp.BackBufferFormat = D3DFMT_UNKNOWN;
-    if(!_vsync)
-        dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
-    else
-        dpp.PresentationInterval = D3DPRESENT_INTERVAL_ONE;
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-    mNativeBackBuffer->Release();
-    mNativeDepthBuffer->Release();
-    HR(mDevice->Reset(&dpp));
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    for(u32 i=0;i<mVertexDecls.getSize();i++)
-        mVertexDecls[i]->postReset();
-    for(u32 i=0;i<mVertexBuffers.getSize();i++)
-        mVertexBuffers[i]->postReset();
-    for(u32 i=0;i<mIndexBuffers.getSize();i++)
-        mIndexBuffers[i]->postReset();
-    for(u32 i=0;i<mShaders.getSize();i++)
-        mShaders[i]->postReset();
-    for(u32 i=0;i<mTextures.getSize();i++)
-        mTextures[i]->postReset();
-
-    HR(mDevice->GetBackBuffer(0,0,D3DBACKBUFFER_TYPE_MONO,&mNativeBackBuffer));
-    HR(mDevice->GetDepthStencilSurface(&mNativeDepthBuffer));
-
-    D3D9QuadVertex::decl=createVertexDeclaration(_d3d9quad_decl);
-
-    mQuadVertexBuffer->postReset();
-    mQuadIndexBuffer->postReset();
-    mQuadVertexShader->postReset();
-    mQuadPixelShader->postReset();
-
-    mMainBackBuffer = new LD3D9Texture;
-    mMainBackBuffer->mWidth=_screen_width;
-    mMainBackBuffer->mHeight=_screen_height;
-    mMainBackBuffer->mFormat=LImage::Format_R8G8B8;
-    mMainBackBuffer->mIsRenderTarget=true;
+    mMainBackBuffer = dynamic_cast<LD3D9Texture*>(createRenderTarget(_screen_width,_screen_height,LImage::Format_R8G8B8,true));
     mMainBackBuffer->mAddressU=LGFXTexture::TextureAddress_border;
     mMainBackBuffer->mAddressV=LGFXTexture::TextureAddress_border;
-    mMainBackBuffer->mDevice=this;
     mMainBackBuffer->mFilter=LGFXTexture::TextureFilter_anisotropic;
-    mMainBackBuffer->mMipMapCount=1;
-    mMainBackBuffer->mType = LGFXTexture::TextureType_RenderTarget;
-    mMainBackBuffer->mHasDepthBuffer=true;
-    HR(mDevice->CreateTexture(mMainBackBuffer->mWidth,mMainBackBuffer->mHeight,1,D3DUSAGE_RENDERTARGET,lD3DTextureFormat(mMainBackBuffer->mFormat),D3DPOOL_DEFAULT,(IDirect3DTexture9**)(&(mMainBackBuffer->mTexture)),0));
-    HR(mDevice->CreateDepthStencilSurface(_screen_width,_screen_height,D3DFMT_D24S8,D3DMULTISAMPLE_NONE,0,0,&mMainBackBuffer->mRenderTargetDepthStencil,0));
+
+    if(mFullScreen!=_fullscreen||mVSync!=_vsync)
+    {
+        for(u32 i=0;i<mVertexDecls.getSize();i++)
+            mVertexDecls[i]->preReset();
+        for(u32 i=0;i<mVertexBuffers.getSize();i++)
+            mVertexBuffers[i]->preReset();
+        for(u32 i=0;i<mIndexBuffers.getSize();i++)
+            mIndexBuffers[i]->preReset();
+        for(u32 i=0;i<mShaders.getSize();i++)
+            mShaders[i]->preReset();
+        for(u32 i=0;i<mTextures.getSize();i++)
+            mTextures[i]->preReset();
+
+//        __is_changing_window = true;
+//        DestroyWindow(mWindowHandler);
+//        if(!_fullscreen)
+//        {
+//            mWindowHandler = CreateWindowExW( (DWORD)NULL, L"lightningmainwindow",
+//                                 (LSTR(LIGHTNING)+" "+LIGHTNING_VERSION).getData(),
+//                                 /*WS_OVERLAPPEDWINDOW | WS_VISIBLE,*/
+//                                 WS_VISIBLE|WS_CAPTION|WS_OVERLAPPED|WS_SYSMENU|WS_MINIMIZEBOX,
+//                                 0, 0, _screen_width, _screen_height, (HWND)NULL,(HMENU)NULL, GetModuleHandleA(0),(LPVOID)NULL );
+//        }
+//        else
+//        {
+//            mWindowHandler = CreateWindowExW( (DWORD)NULL, L"lightningmainwindow",
+//                                 (LSTR(LIGHTNING)+" "+LIGHTNING_VERSION).getData(),
+//                                 /*WS_OVERLAPPEDWINDOW | WS_VISIBLE,*/
+//                                 WS_VISIBLE|WS_EX_TOPMOST|WS_POPUP,
+//                                 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), (HWND)NULL,(HMENU)NULL, GetModuleHandleA(0),(LPVOID)NULL );
+//        }
+//        __is_changing_window=false;
+
+//        dpp.hDeviceWindow=mWindowHandler;
+        dpp.Windowed= !_fullscreen;
+        if(_fullscreen)
+        {
+            dpp.BackBufferFormat = D3DFMT_X8R8G8B8;
+        }
+        else
+        {
+            dpp.BackBufferFormat = D3DFMT_UNKNOWN;
+        }
+        if(!_vsync)
+            dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
+        else
+            dpp.PresentationInterval = D3DPRESENT_INTERVAL_ONE;
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        mNativeBackBuffer->Release();
+        mNativeDepthBuffer->Release();
+        HR(mDevice->Reset(&dpp));
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        for(u32 i=0;i<mVertexDecls.getSize();i++)
+            mVertexDecls[i]->postReset();
+        for(u32 i=0;i<mVertexBuffers.getSize();i++)
+            mVertexBuffers[i]->postReset();
+        for(u32 i=0;i<mIndexBuffers.getSize();i++)
+            mIndexBuffers[i]->postReset();
+        for(u32 i=0;i<mShaders.getSize();i++)
+            mShaders[i]->postReset();
+        for(u32 i=0;i<mTextures.getSize();i++)
+            mTextures[i]->postReset();
+
+        HR(mDevice->GetBackBuffer(0,0,D3DBACKBUFFER_TYPE_MONO,&mNativeBackBuffer));
+        HR(mDevice->GetDepthStencilSurface(&mNativeDepthBuffer));
+    }
 
     setRenderTarget(0,nullptr);
 
@@ -292,7 +294,17 @@ void LD3D9Device::reset(bool _fullscreen, bool _vsync, u16 _screen_width, u16 _s
     mScreenHeight=_screen_height;
     mFullScreen=_fullscreen;
     mVSync=_vsync;
-    SetWindowPos(mWindowHandler,0,0,0,mScreenWidth,mScreenHeight,0);
+
+    if(mFullScreen)
+    {
+        SetWindowLongPtr(mWindowHandler,GWL_STYLE,WS_VISIBLE|WS_EX_TOPMOST|WS_POPUP);
+        SetWindowPos(mWindowHandler,0,0,0,GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
+    }
+    else
+    {
+        SetWindowLongPtr(mWindowHandler,GWL_STYLE,WS_VISIBLE|WS_CAPTION|WS_OVERLAPPED|WS_SYSMENU|WS_MINIMIZEBOX);
+        SetWindowPos(mWindowHandler,0,0,0,mScreenWidth,mScreenHeight,SWP_SHOWWINDOW);
+    }
 
 
     lLogMessage(1,"Direct3D9 Graphic Device Reseted Successfully");
@@ -537,7 +549,6 @@ void LD3D9Device::destroy()
         delete mTextures[0];
     }
 
-    delete mMainBackBuffer;
     mCurrentIndexBuffer=0;
     mCurrentPixelShader=0;
     mCurrentVertexBuffer=0;

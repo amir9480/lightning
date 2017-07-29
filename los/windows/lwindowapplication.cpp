@@ -24,6 +24,8 @@ void __linput_set_mouse_pos(int _x,int _y);
 void __linput_set_mouse_wheel_delta(int _v);
 
 
+bool __is_changing_window=false;
+
 LApplication::LApplication()
 {
 
@@ -49,12 +51,16 @@ LRESULT CALLBACK lightningmainwindowproc(HWND hwnd,UINT msg,WPARAM wparam,LPARAM
     {
     case WM_CREATE:
     {
+        if(__is_changing_window)
+            break;
         break;
     }
     case WM_ERASEBKGND:
         return 0;
         break;
     case WM_DESTROY:
+        if(__is_changing_window)
+            break;
         PostQuitMessage(0);
         break;
     case WM_GETMINMAXINFO:

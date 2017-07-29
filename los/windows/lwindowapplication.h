@@ -9,6 +9,8 @@
 
 LNAMESPACE_BEGIN
 
+extern bool __is_changing_window;
+
 LRESULT CALLBACK lightningmainwindowproc(HWND hwnd,UINT msg,WPARAM wparam,LPARAM lparam);
 
 

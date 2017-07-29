@@ -100,21 +100,21 @@ D3DXHANDLE LD3D9Shader::getConstantHandle(const LString &_name)
 
 void LD3D9Shader::preReset()
 {
-    if(mType==LGFXShader::ShaderType::vertexShader)
-    {
-        SAFE_RELEASE(mVS);
-    }
-    else if(mType==LGFXShader::ShaderType::pixelShader)
-    {
-        SAFE_RELEASE(mPS);
-    }
-    SAFE_RELEASE(mConstantTable);
-    mConstantCache.clear();
+//    if(mType==LGFXShader::ShaderType::vertexShader)
+//    {
+//        SAFE_RELEASE(mVS);
+//    }
+//    else if(mType==LGFXShader::ShaderType::pixelShader)
+//    {
+//        SAFE_RELEASE(mPS);
+//    }
+//    SAFE_RELEASE(mConstantTable);
+//    mConstantCache.clear();
 }
 
 void LD3D9Shader::postReset()
 {
-    compile(mContent,mMainFunction);
+//    compile(mContent,mMainFunction);
 }
 
 void LD3D9Shader::setBool(const LString &_name, bool _value)
