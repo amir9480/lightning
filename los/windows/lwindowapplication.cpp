@@ -266,6 +266,41 @@ LRESULT CALLBACK lightningmainwindowproc(HWND hwnd,UINT msg,WPARAM wparam,LPARAM
         __linput_set_mouse_wheel_delta(GET_WHEEL_DELTA_WPARAM(wparam)/120);
         break;
     }
+
+    // manage alt+tab and ...
+    case WM_MOUSEACTIVATE:
+    {
+        if(__window_deivces.findKey(hwnd) !=LMap<HWND,LGFXDevice*>::nothing)
+        {
+            __window_deivces[hwnd]->setActive(true);
+        }
+        break;
+    }
+    case WM_ACTIVATE:
+    {
+        switch (LOWORD(wparam))
+        {
+        case WA_ACTIVE:case WA_CLICKACTIVE:
+            if(__window_deivces.findKey(hwnd) !=LMap<HWND,LGFXDevice*>::nothing)
+            {
+                __window_deivces[hwnd]->setActive(true);
+            }
+            break;
+        case WA_INACTIVE:
+            if(__window_deivces.findKey(hwnd) !=LMap<HWND,LGFXDevice*>::nothing)
+            {
+                LGFXDevice* _dev =__window_deivces[hwnd];
+                LSize _res = _dev->getResolution();
+                _dev->reset(false,_dev->isVSyncEnabled(),_res.width,_res.height);
+                _dev->setActive(false);
+            }
+            break;
+        default:
+            break;
+        }
+        break;
+    }
+
     }
     return DefWindowProcW(hwnd,msg,wparam,lparam);
 }

@@ -110,6 +110,11 @@ LGFXDevice* LGFXDevice::create(bool _fullscreen, bool _vsync,u16 _screen_width,u
     return o;
 }
 
+bool LGFXDevice::isActivated() const
+{
+    return mIsActivated;
+}
+
 
 LD3D9Device::LD3D9Device()
 {
@@ -145,7 +150,6 @@ void LD3D9Device::initialize(bool _fullscreen, bool _vsync, u16 _screen_width, u
     {
         mWindowHandler = CreateWindowExW( (DWORD)NULL, L"lightningmainwindow",
                              (LSTR(LIGHTNING)+" "+LIGHTNING_VERSION).getData(),
-                             /*WS_OVERLAPPEDWINDOW | WS_VISIBLE,*/
                              WS_VISIBLE|WS_CAPTION|WS_OVERLAPPED|WS_SYSMENU|WS_MINIMIZEBOX,
                              0, 0, _screen_width, _screen_height, (HWND)NULL,(HMENU)NULL, GetModuleHandleA(0),(LPVOID)NULL );
     }
@@ -153,10 +157,12 @@ void LD3D9Device::initialize(bool _fullscreen, bool _vsync, u16 _screen_width, u
     {
         mWindowHandler = CreateWindowExW( (DWORD)NULL, L"lightningmainwindow",
                              (LSTR(LIGHTNING)+" "+LIGHTNING_VERSION).getData(),
-                             /*WS_OVERLAPPEDWINDOW | WS_VISIBLE,*/
                              WS_VISIBLE|WS_EX_TOPMOST|WS_POPUP,
                              0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), (HWND)NULL,(HMENU)NULL, GetModuleHandleA(0),(LPVOID)NULL );
     }
+    lMemoryLogStartIgnore();
+    __window_deivces[mWindowHandler]=this;
+    lMemoryLogEndIgnore();
 
     NZ(mD3D9=Direct3DCreate9(D3D_SDK_VERSION));
     lMemorySet(&dpp,sizeof(dpp),0);
@@ -208,6 +214,16 @@ void LD3D9Device::initialize(bool _fullscreen, bool _vsync, u16 _screen_width, u
     lLogMessage(1,"Direct3D9 Graphic Device Initialized Successfully");
 }
 
+bool LD3D9Device::isFullScreen() const
+{
+    return mFullScreen;
+}
+
+bool LD3D9Device::isVSyncEnabled() const
+{
+    return mVSync;
+}
+
 void LD3D9Device::reset(bool _fullscreen, bool _vsync, u16 _screen_width, u16 _screen_height)
 {
     resetParameters();
@@ -233,12 +249,14 @@ void LD3D9Device::reset(bool _fullscreen, bool _vsync, u16 _screen_width, u16 _s
             mTextures[i]->preReset();
 
         __is_changing_window = true;
+        lMemoryLogStartIgnore();
+        __window_deivces.remove(mWindowHandler);
+        lMemoryLogEndIgnore();
         DestroyWindow(mWindowHandler);
         if(!_fullscreen)
         {
             mWindowHandler = CreateWindowExW( (DWORD)NULL, L"lightningmainwindow",
                                  (LSTR(LIGHTNING)+" "+LIGHTNING_VERSION).getData(),
-                                 /*WS_OVERLAPPEDWINDOW | WS_VISIBLE,*/
                                  WS_VISIBLE|WS_CAPTION|WS_OVERLAPPED|WS_SYSMENU|WS_MINIMIZEBOX,
                                  0, 0, _screen_width, _screen_height, (HWND)NULL,(HMENU)NULL, GetModuleHandleA(0),(LPVOID)NULL );
         }
@@ -246,11 +264,13 @@ void LD3D9Device::reset(bool _fullscreen, bool _vsync, u16 _screen_width, u16 _s
         {
             mWindowHandler = CreateWindowExW( (DWORD)NULL, L"lightningmainwindow",
                                  (LSTR(LIGHTNING)+" "+LIGHTNING_VERSION).getData(),
-                                 /*WS_OVERLAPPEDWINDOW | WS_VISIBLE,*/
                                  WS_VISIBLE|WS_EX_TOPMOST|WS_POPUP,
                                  0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), (HWND)NULL,(HMENU)NULL, GetModuleHandleA(0),(LPVOID)NULL );
         }
         __is_changing_window=false;
+        lMemoryLogStartIgnore();
+        __window_deivces[mWindowHandler]=this;
+        lMemoryLogEndIgnore();
 
         dpp.hDeviceWindow=mWindowHandler;
 
@@ -482,6 +502,16 @@ LImage LD3D9Device::getScreenShot()
     return mMainBackBuffer->getImage();
 }
 
+LSize LD3D9Device::getResolution() const
+{
+    return LSize(mScreenWidth,mScreenHeight);
+}
+
+HWND LD3D9Device::getWindowHandler() const
+{
+    return mWindowHandler;
+}
+
 void LD3D9Device::hideWindow()
 {
     ShowWindow(mWindowHandler,SW_HIDE);
@@ -490,13 +520,27 @@ void LD3D9Device::hideWindow()
 bool LD3D9Device::processOSMessage()
 {
     MSG msg;
-    if(PeekMessageW(&msg,0,0,0,PM_REMOVE))
+    if(mIsActivated==true)
     {
-        if(msg.message==WM_QUIT)
-            return false;
-        TranslateMessage(&msg);
-        DispatchMessageW(&msg);
-        return processOSMessage();
+        if(PeekMessageW(&msg,0,0,0,PM_REMOVE))
+        {
+            if(msg.message==WM_QUIT)
+                return false;
+            TranslateMessage(&msg);
+            DispatchMessageW(&msg);
+            return processOSMessage();
+        }
+    }
+    else
+    {
+        if(GetMessageW(&msg,0,0,0))
+        {
+            if(msg.message==WM_QUIT)
+                return false;
+            TranslateMessage(&msg);
+            DispatchMessageW(&msg);
+            return processOSMessage();
+        }
     }
     return true;
 }
@@ -564,6 +608,18 @@ void LD3D9Device::destroy()
 void LD3D9Device::setTitle(const LString &_newname)
 {
     SetWindowTextW(mWindowHandler,_newname.getData());
+}
+
+void LD3D9Device::setActive(bool _val)
+{
+    if(_val==false)
+    {
+        ShowWindow(mWindowHandler,SW_MINIMIZE);
+    }
+    else
+    {
+        ShowWindow(mWindowHandler,SW_SHOW);
+    }
 }
 
 void LD3D9Device::setVertexDeclaration(LGFXVertexDeclaration *_decl)

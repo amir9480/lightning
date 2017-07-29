@@ -102,11 +102,23 @@ public:
     //! get a scrren shot! (Note : this function creates a screen shot from back buffer . do screen shot when you'r render is done
     virtual LImage                  getScreenShot()=0;
 
+    //! get resolution of window
+    virtual LSize                   getResolution()const=0;
+
     //! hide rendering window
     virtual void                    hideWindow()=0;
 
     //! initilize device
     virtual void                    initialize(bool _fullscreen,bool _vsync,u16 _screen_width,u16 _screen_height)=0;
+
+    //! check game is fullscreen or not
+    virtual bool                    isFullScreen()const=0;
+
+    //! check is V-Sync Enabled or not
+    virtual bool                    isVSyncEnabled()const=0;
+
+    //! check game window is activate
+    virtual bool                    isActivated()const;
 
     //! if process done returns 1 and if request was Quit returns 2
     virtual bool                    processOSMessage()=0;
@@ -119,6 +131,9 @@ public:
 
     //! reset parameters to default
     virtual void                    resetParameters();
+
+    //! set game window active or decative
+    virtual void                    setActive(bool _val)=0;
 
     //! set rendering window title
     virtual void                    setTitle(const LString& _newname)=0;
@@ -203,6 +218,8 @@ protected:
     u32                             mMaxSampler;
     u16                             mMaxVertexBuffer;
     u32                             mMaxRenderTarget;
+
+    bool                            mIsActivated;
 
 };
 

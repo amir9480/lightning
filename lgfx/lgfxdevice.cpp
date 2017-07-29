@@ -7,7 +7,8 @@ LNAMESPACE_BEGIN
 LGFXDevice::LGFXDevice():
     mMaxSampler(0),
     mMaxVertexBuffer(0),
-    mMaxRenderTarget(0)
+    mMaxRenderTarget(0),
+    mIsActivated(true)
 {
 
 }

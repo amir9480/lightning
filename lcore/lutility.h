@@ -1008,8 +1008,6 @@ void lSort(T& _arr,u32 _size,LSortType _type=LSortType::LSortTypeAscending)
 
 }
 
-LNAMESPACE_END
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -1464,5 +1462,56 @@ struct NAME\
     static RETURNTYPE __call(const ___no,...){return ___fake_return<RETURNTYPE>::call();}\
     static RETURNTYPE call(T& _in){return __call(CT(),_in);}\
 };
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// for GUI based placment values
+struct LRect
+{
+    LRect();
+    LRect(int _x,int _y,int _width,int _height);
+
+    int x,y;
+    int width,height;
+};
+
+struct LRectF
+{
+    LRectF();
+    LRectF(float _x,float _y,float _width,float _height);
+    float x,y;
+    float width,height;
+};
+
+struct LPoint
+{
+    LPoint();
+    LPoint(int _x,int _y);
+    int x,y;
+};
+
+struct LPointF
+{
+    LPointF();
+    LPointF(float _x,float _y);
+    float x,y;
+};
+
+struct LSize
+{
+    LSize();
+    LSize(int _width,int _height);
+    int width,height;
+};
+
+struct LSizeF
+{
+    LSizeF();
+    LSizeF(float _width,float _height);
+    float width,height;
+};
+
+
+
+LNAMESPACE_END
 
 #endif // LUTILITY_H

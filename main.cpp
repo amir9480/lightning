@@ -16,8 +16,7 @@ ostream& operator<<(ostream& _in,const LString& _str)
 // Dont forget LAPI
 // Add Reflection Support
 // *** Make Shared Pointer Thread Safe
-// LD3D9Device::checkErrors() add sleep function
-// Screen Resolution change make more optimize
+// LD3D9Device::checkErrors() and processOSMessage() add sleep function
 //
 ///////////////////////////////////////
 //

@@ -73,9 +73,17 @@ public:
 
     virtual LImage                  getScreenShot();
 
+    virtual LSize                   getResolution()const;
+
+    HWND                            getWindowHandler()const;
+
     virtual void                    hideWindow();
 
     virtual void                    initialize(bool _fullscreen,bool _vsync,u16 _screen_width,u16 _screen_height);
+
+    virtual bool                    isFullScreen()const;
+
+    virtual bool                    isVSyncEnabled()const;
 
     virtual bool                    processOSMessage();
 
@@ -84,6 +92,8 @@ public:
     virtual void                    reset(bool _fullscreen,bool _vsync,u16 _screen_width,u16 _screen_height);
 
     virtual void                    setTitle(const LString& _newname);
+
+    virtual void                    setActive(bool _val);
 
     virtual void                    setVertexDeclaration(LGFXVertexDeclaration *_decl);
 
