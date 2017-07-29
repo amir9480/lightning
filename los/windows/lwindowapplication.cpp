@@ -289,10 +289,7 @@ LRESULT CALLBACK lightningmainwindowproc(HWND hwnd,UINT msg,WPARAM wparam,LPARAM
         case WA_INACTIVE:
             if(__window_deivces.findKey(hwnd) !=LMap<HWND,LGFXDevice*>::nothing)
             {
-                LGFXDevice* _dev =__window_deivces[hwnd];
-                LSize _res = _dev->getResolution();
-                _dev->reset(false,_dev->isVSyncEnabled(),_res.width,_res.height);
-                _dev->setActive(false);
+                __window_deivces[hwnd]->setActive(false);
             }
             break;
         default:

@@ -614,10 +614,20 @@ void LD3D9Device::setActive(bool _val)
 {
     if(_val==false)
     {
+        if(mFullScreen)
+        {
+            reset(false,mVSync,mScreenWidth,mScreenHeight);
+            mFullScreen=true;
+        }
+        render();
         ShowWindow(mWindowHandler,SW_MINIMIZE);
     }
     else
     {
+        if(mFullScreen)
+        {
+            reset(true,mVSync,mScreenWidth,mScreenHeight);
+        }
         ShowWindow(mWindowHandler,SW_SHOW);
     }
 }

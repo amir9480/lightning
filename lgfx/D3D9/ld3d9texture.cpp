@@ -160,7 +160,9 @@ LImage LD3D9Texture::getImage(u16 _mip_map_level)
         }
         HR(_temp->UnlockRect(_mip_map_level));
 
-        HR(_temp->Release());
+        SAFE_RELEASE(_temp);
+        SAFE_RELEASE(_srcs);
+        SAFE_RELEASE(_dests);
         break;
     }
     }
