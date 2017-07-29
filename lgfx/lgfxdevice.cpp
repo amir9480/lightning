@@ -55,6 +55,7 @@ void LGFXDevice::resetParameters()
     setStencilDepthFailOperation();
     setStencilPassOperation();
     setBackBufferWriteEnable();
+    setViewPort();
 }
 
 LNAMESPACE_END

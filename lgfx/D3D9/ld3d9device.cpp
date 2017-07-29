@@ -103,10 +103,9 @@ void lCallOnEnd()
     UnregisterClassW(L"lightningmainwindow",GetModuleHandleW(0));
 }
 
-LGFXDevice* LGFXDevice::create(bool _fullscreen, bool _vsync,u16 _screen_width,u16 _screen_height)
+LGFXDevice* LGFXDevice::create()
 {
     LGFXDevice* o =new LD3D9Device();
-    o->initialize(_fullscreen,_vsync,_screen_width,_screen_height);
     return o;
 }
 
@@ -135,6 +134,9 @@ LD3D9Device::LD3D9Device()
     mScreenHeight=0;
     mFullScreen=0;
     mVSync=0;
+
+    NZ(mD3D9=Direct3DCreate9(D3D_SDK_VERSION));
+
 }
 
 LD3D9Device::~LD3D9Device()
@@ -145,7 +147,6 @@ LD3D9Device::~LD3D9Device()
 
 void LD3D9Device::initialize(bool _fullscreen, bool _vsync, u16 _screen_width, u16 _screen_height)
 {
-    destroy();
     if(!_fullscreen)
     {
         mWindowHandler = CreateWindowExW( (DWORD)NULL, L"lightningmainwindow",
@@ -164,7 +165,6 @@ void LD3D9Device::initialize(bool _fullscreen, bool _vsync, u16 _screen_width, u
     __window_deivces[mWindowHandler]=this;
     lMemoryLogEndIgnore();
 
-    NZ(mD3D9=Direct3DCreate9(D3D_SDK_VERSION));
     lMemorySet(&dpp,sizeof(dpp),0);
     dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
     dpp.Windowed= !_fullscreen;
@@ -497,6 +497,29 @@ void LD3D9Device::endScene()
     mDevice->EndScene();
 }
 
+LSize LD3D9Device::getScreenResolution() const
+{
+    return LSize(GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN));
+}
+
+LVector<LSize> LD3D9Device::getAvailbleResolutions()
+{
+    LVector<LSize> o;
+    for(u32 i=0;i<mD3D9->GetAdapterCount();i++)
+    {
+        D3DDISPLAYMODE _mode;
+        u32 _amc=mD3D9->GetAdapterModeCount(i,D3DFMT_X8R8G8B8);
+        for(u32 j=0;j<_amc;j++)
+        {
+            mD3D9->EnumAdapterModes(i,D3DFMT_X8R8G8B8,j,&_mode);
+            if(o.find(LSize(_mode.Width,_mode.Height))==o.nothing)
+                o.pushBack(LSize(_mode.Width,_mode.Height));
+        }
+    }
+
+    return o;
+}
+
 LImage LD3D9Device::getScreenShot()
 {
     return mMainBackBuffer->getImage();
@@ -630,6 +653,27 @@ void LD3D9Device::setActive(bool _val)
         }
         ShowWindow(mWindowHandler,SW_SHOW);
     }
+}
+
+void LD3D9Device::setViewPort(LRectF _in)
+{
+    LRect r;
+    r.x=(_in.x)*mScreenWidth;
+    r.y=(_in.y)*mScreenHeight;
+    r.width=(_in.width)*mScreenWidth;
+    r.height=(_in.height)*mScreenHeight;
+    setViewPort(r);
+}
+
+void LD3D9Device::setViewPort(LRect _in)
+{
+    if(_in.x==0&&_in.y==0&&_in.width==0&&_in.height==0)
+    {
+        _in.width=mScreenWidth;
+        _in.height=mScreenHeight;
+    }
+    D3DVIEWPORT9 _vp={(unsigned long int)_in.x,(unsigned long int)_in.y,(unsigned long int)_in.width,(unsigned long int)_in.height,0.0f,1.0f};
+    HR(mDevice->SetViewport(&_vp));
 }
 
 void LD3D9Device::setVertexDeclaration(LGFXVertexDeclaration *_decl)

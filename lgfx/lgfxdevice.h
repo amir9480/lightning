@@ -55,7 +55,7 @@ public:
     virtual ~LGFXDevice();
 
     //! create a new renderable window and initialize device
-    static LGFXDevice*              create(bool _fullscreen, bool _vsync, u16 _screen_width, u16 _screen_height);
+    static LGFXDevice*              create();
 
     //! to start rendering
     virtual void                    beginScene()=0;
@@ -99,10 +99,16 @@ public:
     //! to end scene before render on screen
     virtual void                    endScene()=0;
 
+    //! Get screen Resolution ( Not Rendering window ) \sa getResolution
+    virtual LSize                   getScreenResolution()const=0;
+
+    //! Get Availble Resolutions ( to pass into Initialize and Reset )
+    virtual LVector<LSize>          getAvailbleResolutions()=0;
+
     //! get a scrren shot! (Note : this function creates a screen shot from back buffer . do screen shot when you'r render is done
     virtual LImage                  getScreenShot()=0;
 
-    //! get resolution of window
+    //! get resolution of rendering window ( NOT Entire Screen ) \sa getScreenResolution
     virtual LSize                   getResolution()const=0;
 
     //! hide rendering window
@@ -132,11 +138,17 @@ public:
     //! reset parameters to default
     virtual void                    resetParameters();
 
+    //! set rendering window title
+    virtual void                    setTitle(const LString& _newname)=0;
+
     //! set game window active or decative
     virtual void                    setActive(bool _val)=0;
 
-    //! set rendering window title
-    virtual void                    setTitle(const LString& _newname)=0;
+    //! set view port based on limited range 0-1 . all parameters must be between (0-1)
+    virtual void                    setViewPort(LRectF _in)=0;
+
+    //! set view port based on  resolution
+    virtual void                    setViewPort(LRect _in=LRect())=0;
 
     //! set current vertex declration
     virtual void                    setVertexDeclaration(LGFXVertexDeclaration* _decl)=0;

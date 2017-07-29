@@ -71,6 +71,10 @@ public:
 
     virtual void                    endScene();
 
+    virtual LSize                   getScreenResolution()const;
+
+    virtual LVector<LSize>          getAvailbleResolutions();
+
     virtual LImage                  getScreenShot();
 
     virtual LSize                   getResolution()const;
@@ -94,6 +98,10 @@ public:
     virtual void                    setTitle(const LString& _newname);
 
     virtual void                    setActive(bool _val);
+
+    virtual void                    setViewPort(LRectF _in);
+
+    virtual void                    setViewPort(LRect _in);
 
     virtual void                    setVertexDeclaration(LGFXVertexDeclaration *_decl);
 

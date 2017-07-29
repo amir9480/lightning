@@ -216,7 +216,13 @@ int main()
     LImage image02 = LImage::loadFromPngFile("image.png");
 
 
-    LGFXDevice* dev = LGFXDevice::create(0,0,800,600);
+    LGFXDevice* dev = LGFXDevice::create();
+
+    LVector<LSize> _sr = dev->getAvailbleResolutions();
+    for(int i=0;i<_sr.getSize();i++)
+        cout<<_sr[i].width<<" "<<_sr[i].height<<endl;
+
+    dev->initialize(0,0,800,600);
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     LGFXVertexDeclaration* myVertex1Decl = dev->createVertexDeclaration(_myVertex1Decl);
     LGFXVertexDeclaration* myVertex2Decl = dev->createVertexDeclaration(_myVertex2Decl);
@@ -339,7 +345,7 @@ int main()
             }
             else
             {
-                dev->reset(1,0,1024,768);
+                dev->reset(1,0,1360,768);
                 _isr=true;
             }
         }

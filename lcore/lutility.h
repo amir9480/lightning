@@ -1470,6 +1470,9 @@ struct LRect
     LRect();
     LRect(int _x,int _y,int _width,int _height);
 
+    bool operator==(const LRect& _other);
+    bool operator!=(const LRect& _other);
+
     int x,y;
     int width,height;
 };
@@ -1478,6 +1481,10 @@ struct LRectF
 {
     LRectF();
     LRectF(float _x,float _y,float _width,float _height);
+
+    bool operator==(const LRectF& _other);
+    bool operator!=(const LRectF& _other);
+
     float x,y;
     float width,height;
 };
@@ -1486,6 +1493,10 @@ struct LPoint
 {
     LPoint();
     LPoint(int _x,int _y);
+
+    bool operator==(const LPoint& _other);
+    bool operator!=(const LPoint& _other);
+
     int x,y;
 };
 
@@ -1493,6 +1504,10 @@ struct LPointF
 {
     LPointF();
     LPointF(float _x,float _y);
+
+    bool operator==(const LPointF& _other);
+    bool operator!=(const LPointF& _other);
+
     float x,y;
 };
 
@@ -1500,6 +1515,10 @@ struct LSize
 {
     LSize();
     LSize(int _width,int _height);
+
+    bool operator==(const LSize& _other);
+    bool operator!=(const LSize& _other);
+
     int width,height;
 };
 
@@ -1507,6 +1526,10 @@ struct LSizeF
 {
     LSizeF();
     LSizeF(float _width,float _height);
+
+    bool operator==(const LSizeF& _other);
+    bool operator!=(const LSizeF& _other);
+
     float width,height;
 };
 
