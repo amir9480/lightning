@@ -305,9 +305,9 @@ int main()
         else
         {
             if(LInput::isKeyPressed(LInput::KeyCode_LeftShift))
-                camspeed=0.2f;
-            else
                 camspeed=0.1f;
+            else
+                camspeed=0.05f;
             if(LInput::isKeyPressed(LInput::KeyCode_W))
                 camPos+=camRot.getForward()*camspeed;
             else if(LInput::isKeyPressed(LInput::KeyCode_S))
@@ -335,12 +335,12 @@ int main()
         {
             if(_isr)
             {
-                dev->reset(0,1,800,600);
+                dev->reset(0,0,800,600);
                 _isr=false;
             }
             else
             {
-                dev->reset(1,1,1360,768);
+                dev->reset(1,0,1024,768);
                 _isr=true;
             }
         }

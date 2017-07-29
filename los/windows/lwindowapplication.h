@@ -10,6 +10,7 @@
 LNAMESPACE_BEGIN
 
 extern bool __is_changing_window;
+extern LMap<HWND,LGFXDevice*> __window_deivces;
 
 LRESULT CALLBACK lightningmainwindowproc(HWND hwnd,UINT msg,WPARAM wparam,LPARAM lparam);
 

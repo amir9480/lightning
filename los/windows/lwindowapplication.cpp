@@ -25,6 +25,7 @@ void __linput_set_mouse_wheel_delta(int _v);
 
 
 bool __is_changing_window=false;
+LMap<HWND,LGFXDevice*> __window_deivces;
 
 LApplication::LApplication()
 {

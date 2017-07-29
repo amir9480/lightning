@@ -2,6 +2,7 @@
 #define LAPPLICATION_H
 
 #include "../lcore.h"
+#include "../lgfx.h"
 
 LNAMESPACE_BEGIN
 

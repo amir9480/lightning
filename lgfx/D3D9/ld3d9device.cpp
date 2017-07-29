@@ -232,27 +232,28 @@ void LD3D9Device::reset(bool _fullscreen, bool _vsync, u16 _screen_width, u16 _s
         for(u32 i=0;i<mTextures.getSize();i++)
             mTextures[i]->preReset();
 
-//        __is_changing_window = true;
-//        DestroyWindow(mWindowHandler);
-//        if(!_fullscreen)
-//        {
-//            mWindowHandler = CreateWindowExW( (DWORD)NULL, L"lightningmainwindow",
-//                                 (LSTR(LIGHTNING)+" "+LIGHTNING_VERSION).getData(),
-//                                 /*WS_OVERLAPPEDWINDOW | WS_VISIBLE,*/
-//                                 WS_VISIBLE|WS_CAPTION|WS_OVERLAPPED|WS_SYSMENU|WS_MINIMIZEBOX,
-//                                 0, 0, _screen_width, _screen_height, (HWND)NULL,(HMENU)NULL, GetModuleHandleA(0),(LPVOID)NULL );
-//        }
-//        else
-//        {
-//            mWindowHandler = CreateWindowExW( (DWORD)NULL, L"lightningmainwindow",
-//                                 (LSTR(LIGHTNING)+" "+LIGHTNING_VERSION).getData(),
-//                                 /*WS_OVERLAPPEDWINDOW | WS_VISIBLE,*/
-//                                 WS_VISIBLE|WS_EX_TOPMOST|WS_POPUP,
-//                                 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), (HWND)NULL,(HMENU)NULL, GetModuleHandleA(0),(LPVOID)NULL );
-//        }
-//        __is_changing_window=false;
+        __is_changing_window = true;
+        DestroyWindow(mWindowHandler);
+        if(!_fullscreen)
+        {
+            mWindowHandler = CreateWindowExW( (DWORD)NULL, L"lightningmainwindow",
+                                 (LSTR(LIGHTNING)+" "+LIGHTNING_VERSION).getData(),
+                                 /*WS_OVERLAPPEDWINDOW | WS_VISIBLE,*/
+                                 WS_VISIBLE|WS_CAPTION|WS_OVERLAPPED|WS_SYSMENU|WS_MINIMIZEBOX,
+                                 0, 0, _screen_width, _screen_height, (HWND)NULL,(HMENU)NULL, GetModuleHandleA(0),(LPVOID)NULL );
+        }
+        else
+        {
+            mWindowHandler = CreateWindowExW( (DWORD)NULL, L"lightningmainwindow",
+                                 (LSTR(LIGHTNING)+" "+LIGHTNING_VERSION).getData(),
+                                 /*WS_OVERLAPPEDWINDOW | WS_VISIBLE,*/
+                                 WS_VISIBLE|WS_EX_TOPMOST|WS_POPUP,
+                                 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), (HWND)NULL,(HMENU)NULL, GetModuleHandleA(0),(LPVOID)NULL );
+        }
+        __is_changing_window=false;
 
-//        dpp.hDeviceWindow=mWindowHandler;
+        dpp.hDeviceWindow=mWindowHandler;
+
         dpp.Windowed= !_fullscreen;
         if(_fullscreen)
         {
@@ -288,23 +289,26 @@ void LD3D9Device::reset(bool _fullscreen, bool _vsync, u16 _screen_width, u16 _s
         HR(mDevice->GetDepthStencilSurface(&mNativeDepthBuffer));
     }
 
-    setRenderTarget(0,nullptr);
-
-    mScreenWidth=_screen_width;
-    mScreenHeight=_screen_height;
-    mFullScreen=_fullscreen;
-    mVSync=_vsync;
-
-    if(mFullScreen)
+    if(_fullscreen)
     {
         SetWindowLongPtr(mWindowHandler,GWL_STYLE,WS_VISIBLE|WS_EX_TOPMOST|WS_POPUP);
         SetWindowPos(mWindowHandler,0,0,0,GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN),SWP_SHOWWINDOW);
     }
     else
     {
+        WINDOWPLACEMENT _wp;
+        GetWindowPlacement(mWindowHandler,&_wp);
+
         SetWindowLongPtr(mWindowHandler,GWL_STYLE,WS_VISIBLE|WS_CAPTION|WS_OVERLAPPED|WS_SYSMENU|WS_MINIMIZEBOX);
-        SetWindowPos(mWindowHandler,0,0,0,mScreenWidth,mScreenHeight,SWP_SHOWWINDOW);
+        SetWindowPos(mWindowHandler,0,_wp.rcNormalPosition.left,_wp.rcNormalPosition.top,_screen_width,_screen_height,SWP_SHOWWINDOW);
     }
+
+    setRenderTarget(0,nullptr);
+
+    mScreenWidth=_screen_width;
+    mScreenHeight=_screen_height;
+    mFullScreen=_fullscreen;
+    mVSync=_vsync;
 
 
     lLogMessage(1,"Direct3D9 Graphic Device Reseted Successfully");
@@ -504,16 +508,14 @@ void LD3D9Device::render()
     setVertexBuffer(0,mQuadVertexBuffer);
     setIndexBuffer(mQuadIndexBuffer);
     setVertexShader(mQuadVertexShader);
-    if(mCurrentPixelShader==nullptr)
-    {
-        setPixelShader(mQuadPixelShader);
-        mQuadPixelShader->setTexture("t0",mMainBackBuffer);
-    }
+    setPixelShader(mQuadPixelShader);
+    mQuadPixelShader->setTexture("t0",mMainBackBuffer);
     setDepthWriteEnable(false);
     setDepthCheckEnable(false);
 
     HR(mDevice->SetRenderTarget(0,mNativeBackBuffer));
     HR(mDevice->SetDepthStencilSurface(mNativeDepthBuffer));
+
     clear(0,0,0,1,1,1,1.0f,0);
     mDevice->BeginScene();
     draw();
