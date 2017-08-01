@@ -136,7 +136,7 @@ LD3D9Device::LD3D9Device()
     mVSync=0;
 
     NZ(mD3D9=Direct3DCreate9(D3D_SDK_VERSION));
-
+    HR(mD3D9->GetDeviceCaps(D3DADAPTER_DEFAULT,D3DDEVTYPE_HAL,&mDeviceCaps));
 }
 
 LD3D9Device::~LD3D9Device()
@@ -183,6 +183,15 @@ void LD3D9Device::initialize(bool _fullscreen, bool _vsync, u16 _screen_width, u
         dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
     else
         dpp.PresentationInterval = D3DPRESENT_INTERVAL_ONE;
+
+    DWORD _devb = 0;
+    if(mDeviceCaps.DevCaps & D3DDEVCAPS_HWTRANSFORMANDLIGHT)
+        _devb|=D3DCREATE_HARDWARE_VERTEXPROCESSING;
+    else
+        _devb|=D3DCREATE_SOFTWARE_VERTEXPROCESSING;
+    if(mDeviceCaps.DevCaps & D3DDEVCAPS_PUREDEVICE)
+        _devb|=D3DCREATE_PUREDEVICE;
+
     HR(mD3D9->CreateDevice(D3DADAPTER_DEFAULT,D3DDEVTYPE::D3DDEVTYPE_HAL,mWindowHandler,
                            D3DCREATE_HARDWARE_VERTEXPROCESSING,&dpp,&mDevice));
 
@@ -212,6 +221,7 @@ void LD3D9Device::initialize(bool _fullscreen, bool _vsync, u16 _screen_width, u
     mVSync=_vsync;
 
     lLogMessage(1,"Direct3D9 Graphic Device Initialized Successfully");
+    lLogMessage(1,"Direct3D availble VRAM="+LString::fromUInt(mDevice->GetAvailableTextureMem()/1000));
 }
 
 bool LD3D9Device::isFullScreen() const
@@ -401,17 +411,20 @@ LGFXShader *LD3D9Device::createPixelShader()
 
 LGFXTexture *LD3D9Device::createTexture(u16 _width, u16 _height, LImage::Format _format, u16 _mipmap_count)
 {
-    lError(_width==0||_height==0||_mipmap_count==0||_format==LImage::Format_null,"Some thing is wrong",nullptr);
+    lError(_width==0||_height==0||_format==LImage::Format_null||_width>getMaxTextureSize().width || _height > getMaxTextureSize().height ,"Some thing is wrong",nullptr);
     LD3D9Texture* o=new LD3D9Texture;
     mTextures.pushBack(o);
     o->mDevice=this;
     o->mWidth=_width;
     o->mHeight=_height;
-    o->mMipMapCount=_mipmap_count;
+    if(_mipmap_count==0)
+        o->mMipMapCount=1;
+    else
+        o->mMipMapCount=_mipmap_count;
     o->mFormat = _format;
     o->mType=LGFXTexture::TextureType_2D;
 
-    if(_mipmap_count==1)
+    if(_mipmap_count==0)
     {
         HR(mDevice->CreateTexture(_width,_height,1,D3DUSAGE_AUTOGENMIPMAP,lD3DTextureFormat(_format),D3DPOOL_MANAGED,(IDirect3DTexture9**)(&(o->mTexture)),0));
     }
@@ -533,6 +546,14 @@ LSize LD3D9Device::getResolution() const
 HWND LD3D9Device::getWindowHandler() const
 {
     return mWindowHandler;
+}
+
+LSize LD3D9Device::getMaxTextureSize() const
+{
+    LSize o;
+    o.width=mDeviceCaps.MaxTextureWidth;
+    o.height=mDeviceCaps.MaxTextureHeight;
+    return o;
 }
 
 void LD3D9Device::hideWindow()

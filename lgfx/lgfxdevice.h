@@ -78,8 +78,8 @@ public:
     //! create a pixel shader
     virtual LGFXShader*             createPixelShader()=0;
 
-    //! create a texture . _mipmap_count : Count of mip maps
-    virtual LGFXTexture*            createTexture(u16 _width,u16 _height,LImage::Format _format,u16 _mipmap_count=1)=0;
+    //! create a texture . _mipmap_count : Count of mip maps. use 0 to auto MipMaping
+    virtual LGFXTexture*            createTexture(u16 _width,u16 _height,LImage::Format _format,u16 _mipmap_count=0)=0;
 
     //! create a renderable texture
     virtual LGFXTexture*            createRenderTarget(u16 _width,u16 _height,LImage::Format _renderable_format,bool _has_depth_buffer)=0;
@@ -110,6 +110,9 @@ public:
 
     //! get resolution of rendering window ( NOT Entire Screen ) \sa getScreenResolution
     virtual LSize                   getResolution()const=0;
+
+    //! get Maximum Width Height can used for textures
+    virtual LSize                   getMaxTextureSize()const=0;
 
     //! hide rendering window
     virtual void                    hideWindow()=0;

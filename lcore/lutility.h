@@ -923,6 +923,142 @@ struct LHasDefaultConstructor
 
 };
 
+//! to do checks by or . maximum checks is 20
+template<bool... _vals>
+struct Lor
+{
+    static const bool value=true;
+};
+template<> struct Lor<false> { static const bool value=false; };
+template<> struct Lor<false,false> { static const bool value=false; };
+template<> struct Lor<false,false,false> { static const bool value=false; };
+template<> struct Lor<false,false,false,false> { static const bool value=false; };
+template<> struct Lor<false,false,false,false,false> { static const bool value=false; };
+template<> struct Lor<false,false,false,false,false,false> { static const bool value=false; };
+template<> struct Lor<false,false,false,false,false,false,false> { static const bool value=false; };
+template<> struct Lor<false,false,false,false,false,false,false,false> { static const bool value=false; };
+template<> struct Lor<false,false,false,false,false,false,false,false,false> { static const bool value=false; };
+template<> struct Lor<false,false,false,false,false,false,false,false,false,false> { static const bool value=false; };
+template<> struct Lor<false,false,false,false,false,false,false,false,false,false,false> { static const bool value=false; };
+template<> struct Lor<false,false,false,false,false,false,false,false,false,false,false,false> { static const bool value=false; };
+template<> struct Lor<false,false,false,false,false,false,false,false,false,false,false,false,false> { static const bool value=false; };
+template<> struct Lor<false,false,false,false,false,false,false,false,false,false,false,false,false,false> { static const bool value=false; };
+template<> struct Lor<false,false,false,false,false,false,false,false,false,false,false,false,false,false,false> { static const bool value=false; };
+template<> struct Lor<false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false> { static const bool value=false; };
+template<> struct Lor<false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false> { static const bool value=false; };
+template<> struct Lor<false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false> { static const bool value=false; };
+template<> struct Lor<false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false> { static const bool value=false; };
+template<> struct Lor<false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false> { static const bool value=false; };
+
+//! to do checks by and . maximum checks is 20
+template<bool... _vals>
+struct Land
+{
+    static const bool value=false;
+};
+template<> struct Land<true> { static const bool value=true; };
+template<> struct Land<true,true> { static const bool value=true; };
+template<> struct Land<true,true,true> { static const bool value=true; };
+template<> struct Land<true,true,true,true> { static const bool value=true; };
+template<> struct Land<true,true,true,true,true> { static const bool value=true; };
+template<> struct Land<true,true,true,true,true,true> { static const bool value=true; };
+template<> struct Land<true,true,true,true,true,true,true> { static const bool value=true; };
+template<> struct Land<true,true,true,true,true,true,true,true> { static const bool value=true; };
+template<> struct Land<true,true,true,true,true,true,true,true,true> { static const bool value=true; };
+template<> struct Land<true,true,true,true,true,true,true,true,true,true> { static const bool value=true; };
+template<> struct Land<true,true,true,true,true,true,true,true,true,true,true> { static const bool value=true; };
+template<> struct Land<true,true,true,true,true,true,true,true,true,true,true,true> { static const bool value=true; };
+template<> struct Land<true,true,true,true,true,true,true,true,true,true,true,true,true> { static const bool value=true; };
+template<> struct Land<true,true,true,true,true,true,true,true,true,true,true,true,true,true> { static const bool value=true; };
+template<> struct Land<true,true,true,true,true,true,true,true,true,true,true,true,true,true,true> { static const bool value=true; };
+template<> struct Land<true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true> { static const bool value=true; };
+template<> struct Land<true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true> { static const bool value=true; };
+template<> struct Land<true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true> { static const bool value=true; };
+template<> struct Land<true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true> { static const bool value=true; };
+template<> struct Land<true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true,true> { static const bool value=true; };
+
+//! to dectect type is function or not
+template<typename T>
+struct LIsFunction
+{
+    static const bool value=false;
+};
+template<typename R>
+struct LIsFunction<R()>
+{
+    static const bool value=true;
+};
+template<typename R,typename... Args>
+struct LIsFunction<R(Args...)>
+{
+    static const bool value=true;
+};
+template<typename R>
+struct LIsFunction<R(*)()>
+{
+    static const bool value=true;
+};
+template<typename R,typename... Args>
+struct LIsFunction<R(*)(Args...)>
+{
+    static const bool value=true;
+};
+template<typename C,typename R>
+struct LIsFunction<R(C::*)()>
+{
+    static const bool value=true;
+};
+template<typename C,typename R,typename... Args>
+struct LIsFunction<R(C::*)(Args...)>
+{
+    static const bool value=true;
+};
+
+//! to detect type is an array type or not
+template<typename T>
+struct LIsArray
+{
+    static const bool value=false;
+};
+template<typename T,unsigned int _size>
+struct LIsArray<T[_size]>
+{
+    static const bool value=true;
+};
+template<typename T>
+struct LIsArray<T[]>
+{
+    static const bool value=true;
+};
+
+
+template<typename _From, typename _To,
+         bool = Lor<LIsArray<_To>::value,LIsFunction<_To>::value,LIsSameType<void,_To>::value>::value>
+struct LIsConvertible
+{
+    static const bool value=false;
+};
+
+//! check type from  _From to _To is convertible
+template<typename _From, typename _To>
+struct LIsConvertible<_From, _To, false>
+{
+    struct yes{bool a[2];};
+    struct no{bool a[1];};
+
+    template<typename _to>
+    static int __to_tester(_to);
+
+    template<typename _From2, typename _To2,typename = decltype(__to_tester<_To2>(_From2()))>
+    static yes __test(int);
+
+    template<typename, typename>
+    static no __test(...);
+    static const bool value= LIsSameType<decltype(__test<_From, _To>(0)),yes>::value;
+};
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 enum LSortType

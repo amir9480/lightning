@@ -25,5 +25,4 @@
 #include "lcore/lpair.h"
 #include "lcore/lmemorystream.h"
 
-
 #endif // LCORE_H

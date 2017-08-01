@@ -81,6 +81,8 @@ public:
 
     HWND                            getWindowHandler()const;
 
+    virtual LSize                   getMaxTextureSize()const;
+
     virtual void                    hideWindow();
 
     virtual void                    initialize(bool _fullscreen,bool _vsync,u16 _screen_width,u16 _screen_height);
@@ -174,8 +176,9 @@ protected:
     bool                        mFullScreen;
     bool                        mVSync;
 
+    D3DCAPS9                    mDeviceCaps;
 
-    D3DPRESENT_PARAMETERS dpp;
+    D3DPRESENT_PARAMETERS       dpp;
 };
 
 LNAMESPACE_END

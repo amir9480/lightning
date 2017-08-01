@@ -207,20 +207,19 @@ LVector<u32> ibox={
 
 
 
-
 int main()
 {
     lMemoryLogStart();
 
-    LImage image01 = LImage::loadFromPngFile("image3.png");
+
+
+    /*LImage image01 = LImage::loadFromPngFile("image3.png");
     LImage image02 = LImage::loadFromPngFile("image.png");
 
 
     LGFXDevice* dev = LGFXDevice::create();
 
-    LVector<LSize> _sr = dev->getAvailbleResolutions();
-    for(int i=0;i<_sr.getSize();i++)
-        cout<<_sr[i].width<<" "<<_sr[i].height<<endl;
+    cout<<dev->getMaxTextureSize().width<<" "<<dev->getMaxTextureSize().height<<endl;
 
     dev->initialize(0,0,800,600);
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -421,7 +420,7 @@ int main()
         LInput::resetInputs();
     }
 
-    delete dev;
+    delete dev;*/
 
     lMemoryLogEnd();
     cout<<"\n\n";
