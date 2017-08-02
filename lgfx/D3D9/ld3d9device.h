@@ -43,8 +43,6 @@ public:
     LD3D9Device();
     virtual ~LD3D9Device();
 
-    virtual void                    beginScene();
-
     virtual void                    clear(int _r,int _g,int _b,bool _backbuffer, bool _zbuffer, bool _stencil,float _depthval,u8 _stencilval);
 
     virtual LGFXVertexDeclaration*  createVertexDeclaration(const LVector<LVertexElement> &_elements);
@@ -68,8 +66,6 @@ public:
     virtual void                    draw();
 
     virtual void                    drawQuad(LGFXTexture *_tex);
-
-    virtual void                    endScene();
 
     virtual LSize                   getScreenResolution()const;
 

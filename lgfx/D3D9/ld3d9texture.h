@@ -25,6 +25,8 @@ public:
     LD3D9Texture();
     virtual ~LD3D9Texture();
 
+    virtual void copyTo(LGFXTexture* _other);
+
     virtual void destroy();
 
     virtual void generateMipMaps();
@@ -47,6 +49,8 @@ protected:
 
     bool                mHasDepthBuffer;
     IDirect3DSurface9*  mRenderTargetDepthStencil;
+
+    LD3D9Texture*       mTemp;// temp for reset render targets
 };
 
 

@@ -35,6 +35,9 @@ public:
     LGFXTexture();
     virtual ~LGFXTexture();
 
+    //! copy from this texture to another
+    virtual void                    copyTo(LGFXTexture* _other)=0;
+
     //! destroy
     virtual void                    destroy()=0;
 
@@ -74,7 +77,7 @@ public:
     //! check texture has nothing
     virtual bool                    isNull()const;
 
-    //! before device reset
+    //! before device reset . Note : Render targets will lose their content
     virtual void                    preReset()=0;
 
     //! after device reset

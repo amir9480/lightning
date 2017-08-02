@@ -118,6 +118,34 @@ float4 mainPS(VSOut _in):COLOR0
 
 )";
 
+
+const char* myShader3=
+R"(
+uniform extern sampler2D t0;
+
+struct VSInput
+{
+    float3 pos:POSITION0;
+    float2 uv:TEXCOORD0;
+};
+
+struct VSOut
+{
+    float4 pos:SV_POSITION0;
+    float2 uv:TEXCOORD0;
+};
+
+
+float4 mainPS(VSOut _in):COLOR0
+{
+    float4 o=float4(0.0f,0.0f,0.0f,1.0f);
+    o.rgb=tex2D(t0,_in.uv.xy).rgb;
+    o.r=0;
+    return o;
+}
+
+)";
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -213,13 +241,12 @@ int main()
 
 
 
-    /*LImage image01 = LImage::loadFromPngFile("image3.png");
+    LImage image01 = LImage::loadFromPngFile("image3.png");
     LImage image02 = LImage::loadFromPngFile("image.png");
 
 
     LGFXDevice* dev = LGFXDevice::create();
 
-    cout<<dev->getMaxTextureSize().width<<" "<<dev->getMaxTextureSize().height<<endl;
 
     dev->initialize(0,0,800,600);
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -256,6 +283,12 @@ int main()
     LGFXTexture* texture02 = dev->createTexture(image02.getWidth(),image02.getHeight(),image02.getFormat());
     texture02->updateTexture(0,image02.getResized(image02.getWidth(),image02.getHeight()));
     texture02->setAddress(LGFXTexture::TextureAddress_clamp);
+
+    LGFXTexture* texture03 = dev->createRenderTarget(512,512,LImage::Format_R8G8B8,0);
+
+    texture02->copyTo(texture03);
+
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     LGFXShader* shadervs01=dev->createVertexShader();
     shadervs01->compile(myShader,"mainVS");
@@ -268,6 +301,9 @@ int main()
 
     LGFXShader* shaderps02=dev->createPixelShader();
     shaderps02->compile(myShader2,"mainPS");
+
+    LGFXShader* shaderpsscreen01=dev->createPixelShader();
+    shaderpsscreen01->compile(myShader3,"mainPS");
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     LMatrix world,view,viewprojection,WVP,projection;
     float camFOV=60.0f;
@@ -344,7 +380,7 @@ int main()
             }
             else
             {
-                dev->reset(1,0,1360,768);
+                dev->reset(1,0,640,480);
                 _isr=true;
             }
         }
@@ -362,7 +398,6 @@ int main()
 
 
         dev->clear(50,50,80);
-        dev->beginScene();
 
 
         // Plane
@@ -386,7 +421,7 @@ int main()
         {
             world=boxRot.toRotationMatrix()*boxPos.toTranslationMatrix();
             WVP=world*viewprojection;
-            shaderps01->setTexture("t0",texture02);
+            shaderps01->setTexture("t0",texture03);
             shadervs01->setMatrix("WVP",WVP);
             dev->setVertexDeclaration(myVertex1Decl);
             dev->setVertexBuffer(0,vbbox);
@@ -414,13 +449,21 @@ int main()
 //            dev->draw();
 //        }
 
-        dev->endScene();
+
+        //! screen effect
+        dev->resetParameters();
+        {
+            //shaderpsscreen01->setTexture("t0",texture02);
+            //dev->setPixelShader(shaderpsscreen01);
+            //dev->drawQuad(texture01);
+        }
+
         dev->render();
 
         LInput::resetInputs();
     }
 
-    delete dev;*/
+    delete dev;
 
     lMemoryLogEnd();
     cout<<"\n\n";

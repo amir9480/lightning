@@ -57,9 +57,6 @@ public:
     //! create a new renderable window and initialize device
     static LGFXDevice*              create();
 
-    //! to start rendering
-    virtual void                    beginScene()=0;
-
     //! clear back buffer | depth buffer | stencil buffer
     virtual void                    clear(int _r=0,int _g=0,int _b=0,bool _backbuffer=true,bool _zbuffer=true,bool _stencil=true,float _depthval=1.0f,u8 _stencilval=0)=0;
 
@@ -95,9 +92,6 @@ public:
 
     //! draw a texture on screen . note if you are not using custom pixel shader then set texture from here . otherwise set from you pixel shader
     virtual void                    drawQuad(LGFXTexture* _tex=0)=0;
-
-    //! to end scene before render on screen
-    virtual void                    endScene()=0;
 
     //! Get screen Resolution ( Not Rendering window ) \sa getResolution
     virtual LSize                   getScreenResolution()const=0;

@@ -66,6 +66,108 @@ LD3D9Texture::~LD3D9Texture()
     this->destroy();
 }
 
+void LD3D9Texture::copyTo(LGFXTexture *_other)
+{
+    LD3D9Texture* other = (LD3D9Texture*)(_other);
+    lError(_other==nullptr,"LD3D9Texture::copyTo : something is wrong");
+
+
+    switch(mType)
+    {
+    case TextureType_2D:
+    {
+        if(other->mType==TextureType_2D)
+        {
+            D3DLOCKED_RECT r1;
+            D3DLOCKED_RECT r2;
+            HR(mTexture->LockRect(0,&r1,0,D3DLOCK_DISCARD));
+            HR(other->mTexture->LockRect(0,&r2,0,D3DLOCK_DISCARD));
+            switch(mFormat)
+            {
+            case LImage::Format_R8G8B8:case LImage::Format_R8G8B8A8:
+                for(u32 i=0;i<((u32)other->mWidth)*((u32)other->mHeight)*((u32)4);i++)
+                {
+                    ((char*)r2.pBits)[i]=((char*)r1.pBits)[i];
+                }
+                break;
+            case LImage::Format_null:
+                lError(1,"LD3D9Texture::copyTo . format is null!");
+                break;
+            }
+
+            HR(mTexture->UnlockRect(0));
+            HR(other->mTexture->UnlockRect(0));
+        }
+        else if(other->mType==TextureType_RenderTarget)
+        {
+            mDevice->resetParameters();
+            mDevice->setRenderTarget(0,other);
+            mDevice->drawQuad(this);
+            mDevice->resetParameters();
+        }
+        break;
+    }
+    case TextureType_RenderTarget:
+    {
+        if(other->mType==TextureType_2D)
+        {
+            IDirect3DTexture9* _temp;
+            D3DFORMAT _tfmt;
+            IDirect3DSurface9* _dests;
+            IDirect3DSurface9* _srcs;
+
+            switch(mFormat)
+            {
+            case LImage::Format_R8G8B8:
+                _tfmt = D3DFMT_X8R8G8B8;
+                break;
+            case LImage::Format_R8G8B8A8:
+                _tfmt = D3DFMT_A8R8G8B8;
+                break;
+            case LImage::Format_null:
+                lError(1,"LD3D9Texture::copyTo : format is null");
+            }
+            HR(mDevice->mDevice->CreateTexture(mWidth,mHeight,1,D3DUSAGE_DYNAMIC,_tfmt,D3DPOOL_SYSTEMMEM,&_temp,0));
+
+            HR(_temp->GetSurfaceLevel(0,&_dests));
+            HR(mTexture->GetSurfaceLevel(0,&_srcs));
+            HR(mDevice->mDevice->GetRenderTargetData(_srcs,_dests));
+
+            D3DLOCKED_RECT r1;
+            D3DLOCKED_RECT r2;
+            HR(other->mTexture->LockRect(0,&r1,0,D3DLOCK_DISCARD));
+            HR(_temp->LockRect(0,&r2,0,D3DLOCK_DISCARD));
+            switch(mFormat)
+            {
+            case LImage::Format_R8G8B8:case LImage::Format_R8G8B8A8:
+                for(u32 i=0;i<((u32)other->mWidth)*((u32)other->mHeight)*((u32)4);i++)
+                {
+                    ((char*)r1.pBits)[i]=((char*)r2.pBits)[i];
+                }
+                break;
+            case LImage::Format_null:
+                lError(1,"LD3D9Texture::copyTo . format is null!");
+                break;
+            }
+            HR(_temp->UnlockRect(0));
+
+            SAFE_RELEASE(_temp);
+            SAFE_RELEASE(_srcs);
+            SAFE_RELEASE(_dests);
+            break;
+        }
+        else if(other->mType==TextureType_RenderTarget)
+        {
+            mDevice->resetParameters();
+            mDevice->setRenderTarget(0,other);
+            mDevice->drawQuad(this);
+            mDevice->resetParameters();
+        }
+        break;
+    }
+    }
+}
+
 void LD3D9Texture::generateMipMaps()
 {
     lError(mMipMapCount>1,"generateMipMaps Error . use mipmap =1 on CreateTextureFunction");

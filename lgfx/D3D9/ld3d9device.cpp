@@ -220,8 +220,9 @@ void LD3D9Device::initialize(bool _fullscreen, bool _vsync, u16 _screen_width, u
     mFullScreen=_fullscreen;
     mVSync=_vsync;
 
+    mDevice->BeginScene();
+
     lLogMessage(1,"Direct3D9 Graphic Device Initialized Successfully");
-    lLogMessage(1,"Direct3D availble VRAM="+LString::fromUInt(mDevice->GetAvailableTextureMem()/1000));
 }
 
 bool LD3D9Device::isFullScreen() const
@@ -340,14 +341,10 @@ void LD3D9Device::reset(bool _fullscreen, bool _vsync, u16 _screen_width, u16 _s
     mFullScreen=_fullscreen;
     mVSync=_vsync;
 
+    mDevice->BeginScene();
+
 
     lLogMessage(1,"Direct3D9 Graphic Device Reseted Successfully");
-}
-
-void LD3D9Device::beginScene()
-{
-    checkErrors();
-    mDevice->BeginScene();
 }
 
 void LD3D9Device::clear(int _r,int _g,int _b,bool _backbuffer, bool _zbuffer, bool _stencil, float _depthval, u8 _stencilval)
@@ -484,7 +481,6 @@ void LD3D9Device::draw()
 void LD3D9Device::drawQuad(LGFXTexture *_tex)
 {
     LGFXShader* _ps=mCurrentPixelShader;
-    resetParameters();
     setVertexDeclaration(D3D9QuadVertex::decl);
     setVertexBuffer(0,mQuadVertexBuffer);
     setIndexBuffer(mQuadIndexBuffer);
@@ -502,12 +498,6 @@ void LD3D9Device::drawQuad(LGFXTexture *_tex)
     }
 
     draw();
-    resetParameters();
-}
-
-void LD3D9Device::endScene()
-{
-    mDevice->EndScene();
 }
 
 LSize LD3D9Device::getScreenResolution() const
@@ -614,6 +604,7 @@ void LD3D9Device::render()
 
     resetParameters();
     setRenderTarget(0,nullptr);
+    mDevice->BeginScene();
 }
 
 void LD3D9Device::destroy()
