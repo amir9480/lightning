@@ -71,7 +71,6 @@ void LD3D9Texture::copyTo(LGFXTexture *_other)
     LD3D9Texture* other = (LD3D9Texture*)(_other);
     lError(_other==nullptr,"LD3D9Texture::copyTo : something is wrong");
 
-
     switch(mType)
     {
     case TextureType_2D:
@@ -100,10 +99,9 @@ void LD3D9Texture::copyTo(LGFXTexture *_other)
         }
         else if(other->mType==TextureType_RenderTarget)
         {
-            mDevice->resetParameters();
             mDevice->setRenderTarget(0,other);
             mDevice->drawQuad(this);
-            mDevice->resetParameters();
+            mDevice->setRenderTarget(0,0);
         }
         break;
     }
@@ -158,10 +156,9 @@ void LD3D9Texture::copyTo(LGFXTexture *_other)
         }
         else if(other->mType==TextureType_RenderTarget)
         {
-            mDevice->resetParameters();
             mDevice->setRenderTarget(0,other);
             mDevice->drawQuad(this);
-            mDevice->resetParameters();
+            mDevice->setRenderTarget(0,0);
         }
         break;
     }

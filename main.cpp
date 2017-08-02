@@ -15,7 +15,7 @@ ostream& operator<<(ostream& _in,const LString& _str)
 // TODO :
 // Dont forget LAPI
 // Add Reflection Support
-// *** Make Shared Pointer Thread Safe
+// *** Make Shared Pointer and device->drawQuad Thread Safe
 // LD3D9Device::checkErrors() and processOSMessage() add sleep function
 //
 ///////////////////////////////////////
@@ -453,9 +453,9 @@ int main()
         //! screen effect
         dev->resetParameters();
         {
-            //shaderpsscreen01->setTexture("t0",texture02);
-            //dev->setPixelShader(shaderpsscreen01);
-            //dev->drawQuad(texture01);
+            shaderpsscreen01->setTexture("t0",dev->getBackBuffer());
+            dev->setPixelShader(shaderpsscreen01);
+            dev->drawQuad();
         }
 
         dev->render();

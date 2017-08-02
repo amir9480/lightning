@@ -79,6 +79,8 @@ public:
 
     virtual LSize                   getMaxTextureSize()const;
 
+    virtual LGFXTexture*            getBackBuffer();
+
     virtual void                    hideWindow();
 
     virtual void                    initialize(bool _fullscreen,bool _vsync,u16 _screen_width,u16 _screen_height);

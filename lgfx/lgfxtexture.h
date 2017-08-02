@@ -35,7 +35,7 @@ public:
     LGFXTexture();
     virtual ~LGFXTexture();
 
-    //! copy from this texture to another
+    //! copy from this texture to another . when _other is render target do device->resetParameters before call this
     virtual void                    copyTo(LGFXTexture* _other)=0;
 
     //! destroy
@@ -64,6 +64,18 @@ public:
 
     //! get UV addressing for UV.v
     virtual TextureAddress          getAddressV() const;
+
+    //! get Width of texture
+    virtual u16                     getWidth() const;
+
+    //! get Height of texture
+    virtual u16                     getHeight() const;
+
+    //! get mipmap count
+    virtual u16                     getMipMapCount() const;
+
+    //! get Texture format
+    virtual LImage::Format          getFormat() const;
 
     //! get content of this texture
     virtual LImage                  getImage(u16 _mip_map_level=0)=0;
@@ -106,8 +118,6 @@ public:
 
     //! update texture content
     virtual void                    updateTexture(u16 _mip_map_level,const LImage& _data)=0;
-
-
 
 protected:
     u16             mWidth;

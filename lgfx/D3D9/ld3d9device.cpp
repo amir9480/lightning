@@ -490,7 +490,10 @@ void LD3D9Device::drawQuad(LGFXTexture *_tex)
     if(_ps==nullptr)
     {
         setPixelShader(mQuadPixelShader);
-        mQuadPixelShader->setTexture("t0",_tex);
+        if(_tex)
+            mQuadPixelShader->setTexture("t0",_tex);
+        else
+            mQuadPixelShader->setTexture("t0",getBackBuffer());
     }
     else
     {
@@ -498,6 +501,7 @@ void LD3D9Device::drawQuad(LGFXTexture *_tex)
     }
 
     draw();
+    //resetParameters();
 }
 
 LSize LD3D9Device::getScreenResolution() const
@@ -544,6 +548,19 @@ LSize LD3D9Device::getMaxTextureSize() const
     o.width=mDeviceCaps.MaxTextureWidth;
     o.height=mDeviceCaps.MaxTextureHeight;
     return o;
+}
+
+LGFXTexture *LD3D9Device::getBackBuffer()
+{
+    static LGFXTexture* _tempRT = nullptr;
+    if(_tempRT==nullptr||mMainBackBuffer->getWidth()!=_tempRT->getWidth()||mMainBackBuffer->getHeight()!=_tempRT->getHeight())
+    {
+        if(_tempRT)
+            delete _tempRT;
+        _tempRT=createRenderTarget(mMainBackBuffer->getWidth(),mMainBackBuffer->getHeight(),mMainBackBuffer->getFormat(),0);
+    }
+    mMainBackBuffer->copyTo(_tempRT);
+    return _tempRT;
 }
 
 void LD3D9Device::hideWindow()
@@ -808,7 +825,13 @@ void LD3D9Device::setRenderTarget(u32 _index, LGFXTexture *_rt)
     d3drt->mTexture->GetSurfaceLevel(0,&_rs);
     HR(mDevice->SetRenderTarget(_index,_rs));
     if(_index==0&&d3drt->hasDepthBuffer())
+    {
         HR(mDevice->SetDepthStencilSurface(d3drt->mRenderTargetDepthStencil));
+    }
+    else
+    {
+        HR(mDevice->SetDepthStencilSurface(mMainBackBuffer->mRenderTargetDepthStencil));
+    }
     mMaxRenderTarget=lMax(mMaxRenderTarget,_index);
     _rs->Release();
 }

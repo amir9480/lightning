@@ -90,7 +90,7 @@ public:
     //! draw stage
     virtual void                    draw()=0;
 
-    //! draw a texture on screen . note if you are not using custom pixel shader then set texture from here . otherwise set from you pixel shader
+    //! draw a texture on screen . note if you are not using custom pixel shader then set texture from here ( use setPixelShader(0) before call this or resetParameters ) . otherwise set from you pixel shader. use getBackBuffer to access a copy of backbuffer
     virtual void                    drawQuad(LGFXTexture* _tex=0)=0;
 
     //! Get screen Resolution ( Not Rendering window ) \sa getResolution
@@ -107,6 +107,9 @@ public:
 
     //! get Maximum Width Height can used for textures
     virtual LSize                   getMaxTextureSize()const=0;
+
+    //! get a copy of backbuffer as texture . because this function uses texture->copyTo so please resetParameters before call this
+    virtual LGFXTexture*            getBackBuffer()=0;
 
     //! hide rendering window
     virtual void                    hideWindow()=0;

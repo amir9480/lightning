@@ -97,5 +97,25 @@ void LGFXTexture::setAddressV(const TextureAddress &addressV)
     mAddressV = addressV;
 }
 
+u16 LGFXTexture::getWidth() const
+{
+    return mWidth;
+}
+
+u16 LGFXTexture::getHeight() const
+{
+    return mHeight;
+}
+
+u16 LGFXTexture::getMipMapCount() const
+{
+    return mMipMapCount;
+}
+
+LImage::Format LGFXTexture::getFormat() const
+{
+    return mFormat;
+}
+
 
 LNAMESPACE_END
