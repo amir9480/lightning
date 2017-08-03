@@ -1013,6 +1013,11 @@ struct LIsFunction<R(C::*)(Args...)>
 {
     static const bool value=true;
 };
+template<typename C,typename R,typename... Args>
+struct LIsFunction<R(C::*)(Args...)const>
+{
+    static const bool value=true;
+};
 
 //! to detect type is an array type or not
 template<typename T>
@@ -1058,6 +1063,33 @@ struct LIsConvertible<_From, _To, false>
 };
 
 
+//! detect type is class/struct or not
+template<typename T>
+struct LIsClass
+{
+    static const bool value = __is_class(T);
+};
+
+//! detect type is enum or not
+template<typename T>
+struct LIsEnum
+{
+    static const bool value = __is_enum(T);
+};
+
+//! detect type is union or not
+template <typename T>
+struct LIsUnion
+{
+    static const bool value = __is_union(T);
+};
+
+//!detect type is native c++ type or not
+template<typename T>
+struct LIsNativeType
+{
+    static const bool value = !(LIsClass<T>::value|LIsEnum<T>::value|LIsUnion<T>::value);
+};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

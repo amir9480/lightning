@@ -558,6 +558,7 @@ LGFXTexture *LD3D9Device::getBackBuffer()
         if(_tempRT)
             delete _tempRT;
         _tempRT=createRenderTarget(mMainBackBuffer->getWidth(),mMainBackBuffer->getHeight(),mMainBackBuffer->getFormat(),0);
+        _tempRT->setAddress(LGFXTexture::TextureAddress_border);
     }
     mMainBackBuffer->copyTo(_tempRT);
     return _tempRT;

@@ -1,4 +1,4 @@
-#include <bits/stdc++.h>
+#include <iostream>
 #include "Lightning"
 //#include "windows.h"
 
@@ -123,6 +123,8 @@ const char* myShader3=
 R"(
 uniform extern sampler2D t0;
 
+float PI = 3.14159265f;
+
 struct VSInput
 {
     float3 pos:POSITION0;
@@ -233,15 +235,25 @@ LVector<u32> ibox={
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+struct TypeA
+{
+    int a,b,c;
+};
 
 int main()
 {
     lMemoryLogStart();
 
+    TypeA a;
+    a.a=44;
+    a.b=88;
+    a.c=1;
+    LVariant v;
+    v=&a;
+    v.to<TypeA&>().c=11;
+    cout<<v.to<TypeA>().a<<" "<<v.to<TypeA>().b<<" "<<v.to<TypeA>().c<<endl;
 
-
-    LImage image01 = LImage::loadFromPngFile("image3.png");
+    /*LImage image01 = LImage::loadFromPngFile("image3.png");
     LImage image02 = LImage::loadFromPngFile("image.png");
 
 
@@ -283,10 +295,6 @@ int main()
     LGFXTexture* texture02 = dev->createTexture(image02.getWidth(),image02.getHeight(),image02.getFormat());
     texture02->updateTexture(0,image02.getResized(image02.getWidth(),image02.getHeight()));
     texture02->setAddress(LGFXTexture::TextureAddress_clamp);
-
-    LGFXTexture* texture03 = dev->createRenderTarget(512,512,LImage::Format_R8G8B8,0);
-
-    texture02->copyTo(texture03);
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -421,7 +429,7 @@ int main()
         {
             world=boxRot.toRotationMatrix()*boxPos.toTranslationMatrix();
             WVP=world*viewprojection;
-            shaderps01->setTexture("t0",texture03);
+            shaderps01->setTexture("t0",texture02);
             shadervs01->setMatrix("WVP",WVP);
             dev->setVertexDeclaration(myVertex1Decl);
             dev->setVertexBuffer(0,vbbox);
@@ -453,9 +461,10 @@ int main()
         //! screen effect
         dev->resetParameters();
         {
-            shaderpsscreen01->setTexture("t0",dev->getBackBuffer());
-            dev->setPixelShader(shaderpsscreen01);
-            dev->drawQuad();
+            //shaderpsscreen01->setTexture("t0",dev->getBackBuffer());
+            //shaderpsscreen01->setFloat("timer",(float)clock()/1000.0f);
+            //dev->setPixelShader(shaderpsscreen01);
+            //dev->drawQuad();
         }
 
         dev->render();
@@ -463,7 +472,9 @@ int main()
         LInput::resetInputs();
     }
 
-    delete dev;
+    delete dev;*/
+
+
 
     lMemoryLogEnd();
     cout<<"\n\n";

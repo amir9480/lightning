@@ -24,5 +24,6 @@
 #include "lcore/lmemorymanager.h"
 #include "lcore/lpair.h"
 #include "lcore/lmemorystream.h"
+#include "lcore/lvariant.h"
 
 #endif // LCORE_H
