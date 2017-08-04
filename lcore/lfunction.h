@@ -1385,7 +1385,7 @@ public:
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2>::get())
-            o=(_o.*mPtrF)(_a1,_a2);
+            (_o.*mPtrF)(_a1,_a2);
         return o;
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2)
@@ -1413,7 +1413,7 @@ public:
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3>::get())
-            o=(_o.*mPtrF)(_a1,_a2,_a3);
+            (_o.*mPtrF)(_a1,_a2,_a3);
         return o;
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3)
@@ -1441,7 +1441,7 @@ public:
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4>::get())
-            o=(_o.*mPtrF)(_a1,_a2,_a3,_a4);
+            (_o.*mPtrF)(_a1,_a2,_a3,_a4);
         return o;
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4)
@@ -1469,7 +1469,7 @@ public:
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5>::get())
-            o=(_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5);
+            (_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5);
         return o;
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5)
@@ -1497,7 +1497,7 @@ public:
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6>::get())
-            o=(_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5,_a6);
+            (_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5,_a6);
         return o;
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6)
@@ -1525,7 +1525,7 @@ public:
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7>::get())
-            o=(_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5,_a6,_a7);
+            (_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5,_a6,_a7);
         return o;
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7)
@@ -1553,7 +1553,7 @@ public:
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8>::get())
-            o=(_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5,_a6,_a7,_a8);
+            (_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5,_a6,_a7,_a8);
         return o;
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7,LVariant _a8)
@@ -1581,7 +1581,7 @@ public:
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9>::get())
-            o=(_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5,_a6,_a7,_a8,_a9);
+            (_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5,_a6,_a7,_a8,_a9);
         return o;
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7,LVariant _a8,LVariant _a9)
@@ -1609,7 +1609,7 @@ public:
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10>::get())
-            o=(_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5,_a6,_a7,_a8,_a9,_a10);
+            (_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5,_a6,_a7,_a8,_a9,_a10);
         return o;
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7,LVariant _a8,LVariant _a9,LVariant _a10)

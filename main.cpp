@@ -237,10 +237,9 @@ LVector<u32> ibox={
 
 struct A
 {
-int sayHello()
+void sayHello(int a,float b)const
 {
-    cout<<"Hello WOrld "<<endl;
-    return 7;
+    cout<<"Hello WOrld "<<a<<" "<<b<<endl;
 }
 
 };
@@ -252,7 +251,7 @@ int main()
     A a;
     LVariant v=LVariant::create(A());
     LFunction* f = new LMemberFunction<decltype(&A::sayHello)>(A::sayHello);
-    LVariant v2=(*f)(v);
+    LVariant v2=(*f)(v,44,3.14);
     delete f;
 
 //    TypeA a=TypeA::B;
