@@ -25,5 +25,6 @@
 #include "lcore/lpair.h"
 #include "lcore/lmemorystream.h"
 #include "lcore/lvariant.h"
+#include "lcore/lfunction.h"
 
 #endif // LCORE_H

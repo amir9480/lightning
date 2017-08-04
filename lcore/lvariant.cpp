@@ -207,6 +207,11 @@ LVariant::LVariant(LString* _val):
     *this=_val;
 }
 
+LVariant::LVariant(const LVariant &_other)
+{
+    *this=_other;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 LVariant::~LVariant()
@@ -369,6 +374,88 @@ LString LVariant::toString()const
         break;
     }
     return LString::empty;
+}
+
+LVariant &LVariant::operator=(const LVariant &_other)
+{
+    destroy();
+    mTypeName=_other.mTypeName;
+    mType=_other.mType;
+    switch(mType)
+    {
+    case Type::TInt:
+        mInt=_other.mInt;
+        break;
+    case Type::TUInt:
+        mUInt=_other.mUInt;
+        break;
+    case Type::TFloat:
+        mFloat=_other.mFloat;
+        break;
+    case Type::TDouble:
+        mDouble=_other.mDouble;
+        break;
+    case Type::TLongDouble:
+        mLongDouble=_other.mLongDouble;
+        break;
+    case Type::TBool:
+        mBool=_other.mBool;
+        break;
+    case Type::TShortInt:
+        mShortInt=_other.mShortInt;
+        break;
+    case Type::TUShortInt:
+        mUShortInt=_other.mUShortInt;
+        break;
+    case Type::TLongLongInt:
+        mLongLongInt=_other.mLongLongInt;
+        break;
+    case Type::TULongLongInt:
+        mULongLongInt=_other.mULongLongInt;
+        break;
+    case Type::TChar:
+        mChar=_other.mChar;
+        break;
+    case Type::TUChar:
+        mUChar=_other.mUChar;
+        break;
+    case Type::TWChar_t:
+        mWChar_t=_other.mWChar_t;
+        break;
+    case Type::TChar16_t:
+        mChar16_t=_other.mChar16_t;
+        break;
+    case Type::TChar32_t:
+        mChar32_t=_other.mChar32_t;
+        break;
+    case Type::TString:
+        mString=_other.mString;
+        break;
+
+    case Type::TIntR:
+    case Type::TUIntR:
+    case Type::TFloatR:
+    case Type::TDoubleR:
+    case Type::TLongDoubleR:
+    case Type::TBoolR:
+    case Type::TShortIntR:
+    case Type::TUShortIntR:
+    case Type::TLongLongIntR:
+    case Type::TULongLongIntR:
+    case Type::TStringR:
+    {
+        mCustom = _other.mCustom;
+        break;
+    }
+    case Type::TCustom:case Type::TCustomR:
+    {
+        this->mCustomClass=_other.mCustomClass->clone();
+        break;
+    }
+    default:
+        break;
+    }
+    return *this;
 }
 
 LVariant &LVariant::operator=(int _val)

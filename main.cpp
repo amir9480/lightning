@@ -235,23 +235,34 @@ LVector<u32> ibox={
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-struct TypeA
+struct A
 {
-    int a,b,c;
+int sayHello()
+{
+    cout<<"Hello WOrld "<<endl;
+    return 7;
+}
+
 };
 
 int main()
 {
     lMemoryLogStart();
 
-    TypeA a;
-    a.a=44;
-    a.b=88;
-    a.c=1;
-    LVariant v;
-    v=&a;
-    v.to<TypeA&>().c=11;
-    cout<<v.to<TypeA>().a<<" "<<v.to<TypeA>().b<<" "<<v.to<TypeA>().c<<endl;
+    A a;
+    LVariant v=LVariant::create(A());
+    LFunction* f = new LMemberFunction<decltype(&A::sayHello)>(A::sayHello);
+    LVariant v2=(*f)(v);
+    delete f;
+
+//    TypeA a=TypeA::B;
+//    LVariant v1,v2;
+//    v1=&a;
+//    v2=v1;
+//    cout<<v1.to<TypeA>()<<" "<<v2.to<TypeA>()<<endl;
+//    v2.to<TypeA&>()=TypeA::C;
+//    cout<<a<<endl;
+
 
     /*LImage image01 = LImage::loadFromPngFile("image3.png");
     LImage image02 = LImage::loadFromPngFile("image.png");

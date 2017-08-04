@@ -23,7 +23,7 @@ public:
     LCustomVariant(){}
     virtual ~LCustomVariant(){}
 
-
+    virtual LCustomVariant* clone()=0;// get a copy of this
 
 protected:
 
@@ -40,6 +40,8 @@ public:
     LCLassVariant(const T& _item);
     virtual ~LCLassVariant();
 
+    virtual LCustomVariant* clone();
+
 private:
     T   mData;
 };
@@ -54,6 +56,8 @@ class LAPI LClassVariantReference:public LCustomVariant
 public:
     LClassVariantReference(T& _item);
     virtual ~LClassVariantReference();
+
+    virtual LCustomVariant* clone();
 
 private:
     T*  mData;
@@ -76,7 +80,67 @@ struct LAPI __LVariantTypeCastHelper<T*>
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-
+/*!
+ * Working with vaiants
+ *
+ * //how to define a variant
+ * LVariant a = 12;
+ *
+ * //how to use it's value
+ * cout<<a.toInt()<<endl;
+ *
+ * // how to destroy variant
+ * a.destroy(); // will convert to null
+ *
+ * // how to create variant for custom class type
+ *
+ * LVariant a = LVariant::create(TestClass(...));
+ *
+ *  * Or *
+ *
+ * LVariant a;
+ * a=TestClass(...);
+ *
+ * // how to use it's value
+ * a.to<TestClass>(). ....
+ *
+ * // how to create variant as reference
+ * int value = 12;
+ * LVariant a= & value;
+ * cout<<a.toInt()<<" "<<value<<endl; // prints 12 12
+ * a=444;
+ * cout<<a.toInt()<<" "<<value<<endl; // prints 444 444
+ * a.destroy(); // destroy current session and prevent from changing value
+ * a=147;
+ * cout<<a.toInt()<<" "<<value<<endl; // prints 147 444
+ *
+ * it is recommended to cast to prevent from run time error ( because of RTTI )
+ * LVariant o=(int*)&a;
+ *
+ *
+ * // how create reference from custom class
+ * a=(CustomClass*)&obj;
+ *
+ * note : for custom class references and classes , your class should have these functions
+ *
+ * void lFromString(const LString& _in);
+ * LString lToString() const;
+ * void lSetProperty(const LString& _name,const LVariant &_in);
+ * LVariant lGetProperty(const LString &_name)const;
+ *
+ *
+ * how to create dynamic variant?
+ * LVariant a = new int(44);
+ *
+ * how use it
+ * ... a.to<int*>() ...
+ *
+ * how to delete it?
+ * delete a.to<int*>();
+ *
+ * call a.destroy() will NOT free your allocated memory so free it before destroy
+ *
+ */
 class LAPI LVariant
 {
     template<typename T>
@@ -156,8 +220,15 @@ public:
     LVariant(long long int* _val);
     LVariant(unsigned long long int* _val);
     LVariant(LString* _val);
+    LVariant(const LVariant& _other);
 
     virtual ~LVariant();
+
+    template<typename T>
+    static LVariant         create(const T& _val);
+
+    template<typename T>
+    static LVariant         create(T* _val);
 
     //! destroy variant data
     void                    destroy();
@@ -231,6 +302,8 @@ public:
     template<typename T>
     LVariant&               operator=(T* _val);
 
+    LVariant&               operator=(const LVariant& _other);
+
 private:
     template<typename T>
     T                       _convert()const;
@@ -278,6 +351,13 @@ LCLassVariant<T>::~LCLassVariant()
 
 }
 
+template<typename T>
+LCustomVariant *LCLassVariant<T>::clone()
+{
+    LCLassVariant* o=new LCLassVariant(mData);
+    return o;
+}
+
 
 
 template<typename T>
@@ -292,6 +372,14 @@ LClassVariantReference<T>::~LClassVariantReference()
 {
 
 }
+
+template<typename T>
+LCustomVariant *LClassVariantReference<T>::clone()
+{
+    LClassVariantReference* o=new LClassVariantReference(*mData);
+    return o;
+}
+
 
 
 template<typename T>
@@ -542,6 +630,23 @@ LVariant& LVariant::operator=(T* _val)
     mType=Type::TCustomR;
     mCustomClass =new LClassVariantReference<T>(*_val);
     return *this;
+}
+
+
+template<typename T>
+LVariant LVariant::create(const T& _val)
+{
+    LVariant o;
+    o=_val;
+    return o;
+}
+
+template<typename T>
+LVariant LVariant::create(T* _val)
+{
+    LVariant o;
+    o=_val;
+    return o;
 }
 
 template<typename T>

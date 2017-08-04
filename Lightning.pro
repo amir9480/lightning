@@ -48,7 +48,8 @@ SOURCES +=\
     lgfx/D3D9/ld3d9vertexbuffer.cpp \
     lgfx/D3D9/ld3d9texture.cpp \
     lgfx/D3D9/ld3d9shader.cpp \
-    lcore/lvariant.cpp
+    lcore/lvariant.cpp \
+    lcore/lfunction.cpp
 
 
 HEADERS +=\
@@ -97,7 +98,8 @@ HEADERS +=\
     lgfx/D3D9/ld3d9vertexbuffer.h \
     lgfx/D3D9/ld3d9texture.h \
     lgfx/D3D9/ld3d9shader.h \
-    lcore/lvariant.h
+    lcore/lvariant.h \
+    lcore/lfunction.h
 
 DISTFILES += \
     .gitignore
