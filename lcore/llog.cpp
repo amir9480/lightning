@@ -92,8 +92,8 @@ void __Log_Manager::addError(const LString &_message, const LString &_filename, 
         if(!__lastlog.isEmpty())
             __logfile.write(LSTR(" (")+LString::fromInt(__log_repeat)+L")\n");
     }
-    lMemoryLogStartIgnore();
     LString errormessage=L"\n[E] !***ERROR***! in "+_filename+L"["+LString::fromInt(_line)+L"] = "+_message;
+    lMemoryLogStartIgnore();
     __lastlog=_message;
     lMemoryLogEndIgnore();
     __log_repeat=1;

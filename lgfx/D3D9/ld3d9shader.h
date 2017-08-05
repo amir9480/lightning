@@ -2,12 +2,12 @@
 #define LD3D9SHADER_H
 
 
-#include "lconfig.h"
+#include "../../lconfig.h"
 
 #if ( LGFX == LGFX_D3D9 )
 
 #include "ld3d9.h"
-#include "lcore.h"
+#include "../../lcore.h"
 #include "../lgfxshader.h"
 
 LNAMESPACE_BEGIN

@@ -5,7 +5,7 @@
 
 LNAMESPACE_BEGIN
 
-D3DFORMAT LAPI lD3DTextureFormat(LImage::Format _f)
+D3DFORMAT lD3DTextureFormat(LImage::Format _f)
 {
     switch (_f) {
     case LImage::Format_null:
@@ -18,7 +18,7 @@ D3DFORMAT LAPI lD3DTextureFormat(LImage::Format _f)
     return D3DFMT_UNKNOWN;
 }
 
-D3DTEXTUREFILTERTYPE LAPI lD3DTextureFilter(LGFXTexture::TextureFilter _f)
+D3DTEXTUREFILTERTYPE lD3DTextureFilter(LGFXTexture::TextureFilter _f)
 {
     switch (_f) {
     case LGFXTexture::TextureFilter_none:
@@ -33,7 +33,7 @@ D3DTEXTUREFILTERTYPE LAPI lD3DTextureFilter(LGFXTexture::TextureFilter _f)
     return D3DTEXF_NONE;
 }
 
-D3DTEXTUREADDRESS LAPI lD3DTextureAddress(LGFXTexture::TextureAddress _a)
+D3DTEXTUREADDRESS lD3DTextureAddress(LGFXTexture::TextureAddress _a)
 {
     switch (_a) {
     case LGFXTexture::TextureAddress_wrap:

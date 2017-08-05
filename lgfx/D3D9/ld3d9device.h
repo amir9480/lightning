@@ -1,14 +1,14 @@
 #ifndef LD3D9DEVICE_H
 #define LD3D9DEVICE_H
 
-#include "lconfig.h"
+#include "../../../lconfig.h"
 
 #if ( LGFX == LGFX_D3D9 )
 
 #include "ld3d9.h"
 
 #include "../../los.h"
-#include "lcore.h"
+#include "../../lcore.h"
 #include "../lgfxdevice.h"
 #include "ld3d9vertexbuffer.h"
 #include "ld3d9indexbuffer.h"

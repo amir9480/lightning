@@ -33,7 +33,11 @@ SOURCES +=\
     lcore/lvector2.cpp \
     lcore/lvector3.cpp \
     lcore/lvector4.cpp \
+    lcore/lmemorystream.cpp \
+    lcore/lvariant.cpp \
+    lcore/lfunction.cpp \
     los/windows/lwindowapplication.cpp \
+    los/linput.cpp \
     los/lapplication.cpp \
     lgfx/lgfxdevice.cpp \
     lgfx/lgfxindexbuffer.cpp \
@@ -41,18 +45,17 @@ SOURCES +=\
     lgfx/lgfxvertexbuffer.cpp \
     lgfx/lgfxtexture.cpp \
     lgfx/limage.cpp \
-    lcore/lmemorystream.cpp \
-    los/linput.cpp \
     lgfx/D3D9/ld3d9device.cpp \
     lgfx/D3D9/ld3d9indexbuffer.cpp \
     lgfx/D3D9/ld3d9vertexbuffer.cpp \
     lgfx/D3D9/ld3d9texture.cpp \
-    lgfx/D3D9/ld3d9shader.cpp \
-    lcore/lvariant.cpp \
-    lcore/lfunction.cpp
+    lgfx/D3D9/ld3d9shader.cpp
 
 
 HEADERS +=\
+    Lightning \
+    lconfig.h \
+    lcore.h \
     lcore/lboundingbox.h \
     lcore/lboundingsphere.h \
     lcore/ldefines.h \
@@ -77,29 +80,26 @@ HEADERS +=\
     lcore/lvector2.h \
     lcore/lvector3.h \
     lcore/lvector4.h \
+    lcore/lmemorystream.h \
+    lcore/lvariant.h \
+    lcore/lfunction.h \
+    los.h \
     los/windows/lwindowapplication.h \
     los/lapplication.h \
-    lconfig.h \
-    lcore.h \
+    los/linput.h\
     lgfx.h \
-    Lightning \
-    los.h \
     lgfx/lgfxdevice.h \
     lgfx/lgfxindexbuffer.h \
     lgfx/lgfxshader.h \
     lgfx/lgfxvertexbuffer.h \
     lgfx/lgfxtexture.h \
     lgfx/limage.h \
-    lcore/lmemorystream.h \
-    los/linput.h\
     lgfx/D3D9/ld3d9.h \
     lgfx/D3D9/ld3d9device.h \
     lgfx/D3D9/ld3d9indexbuffer.h \
     lgfx/D3D9/ld3d9vertexbuffer.h \
     lgfx/D3D9/ld3d9texture.h \
-    lgfx/D3D9/ld3d9shader.h \
-    lcore/lvariant.h \
-    lcore/lfunction.h
+    lgfx/D3D9/ld3d9shader.h
 
 DISTFILES += \
     .gitignore

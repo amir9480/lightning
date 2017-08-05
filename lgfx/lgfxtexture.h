@@ -1,7 +1,7 @@
 #ifndef LGFXTEXTURE_H
 #define LGFXTEXTURE_H
 
-#include "lcore.h"
+#include "../lcore.h"
 #include "limage.h"
 
 LNAMESPACE_BEGIN

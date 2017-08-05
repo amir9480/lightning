@@ -1,7 +1,7 @@
 #ifndef LIMAGE_H
 #define LIMAGE_H
 
-#include "lcore.h"
+#include "../lcore.h"
 
 #if LIGHTNING_IMAGE_PNG
     #include <png.h>
@@ -73,7 +73,7 @@ public:
 #if LIGHTNING_IMAGE_PNG
     //! load from PNG format
     static LImage   loadFromPng(char* _data);
-    static LImage   loadFromPngFile(const LString& _fileName);
+    static LImage   loadFromPngFile(const LString &_fileName);
 
     //! save image as PNG
     LMemoryStream   saveAsPng();

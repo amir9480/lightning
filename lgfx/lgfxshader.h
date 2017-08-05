@@ -1,7 +1,7 @@
 #ifndef LGFXSHADER_H
 #define LGFXSHADER_H
 
-#include "lcore.h"
+#include "../lcore.h"
 #include "lgfxtexture.h"
 
 LNAMESPACE_BEGIN

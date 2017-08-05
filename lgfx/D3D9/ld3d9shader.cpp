@@ -125,9 +125,9 @@ void LD3D9Shader::setBool(const LString &_name, bool _value)
 
 void LD3D9Shader::setBoolArray(const LString &_name, const bool *_value, u32 _count)
 {
-    WINBOOL* _v=new WINBOOL[_count];
+    BOOL* _v=new BOOL[_count];
     for(u32 i=0;i<_count;i++)
-        _v[i]=(WINBOOL)_value[i];
+        _v[i]=(BOOL)(_value[i]);
     if(mConstantTable&&getConstantHandle(_name))
         mConstantTable->SetBoolArray(mDevice->mDevice,getConstantHandle(_name),_v,_count);
     delete[] _v;

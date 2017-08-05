@@ -21,7 +21,7 @@ void operator delete[](void *ptr)noexcept
     free(ptr);
 }
 
-void *operator new(unsigned int _size, const char *_filename, unsigned int _line)
+void *operator new(size_t _size, const char *_filename, unsigned int _line)
 {
     void* o=malloc(_size);
     _lptrobj a;
@@ -34,7 +34,7 @@ void *operator new(unsigned int _size, const char *_filename, unsigned int _line
     return o;
 }
 
-void *operator new[](unsigned int _size, const char *_filename, unsigned int _line)
+void *operator new[](size_t _size, const char *_filename, unsigned int _line)
 {
     void* o=malloc(_size);
     _lptrobj a;

@@ -30,7 +30,7 @@ public:
         friend class LList;
     public:
         linline Iterator();
-        linline Iterator(ListNode* _n);
+        linline Iterator(typename LList<T>::ListNode* _n);
 
         linline Iterator    operator +(i32 _i)const;
         linline Iterator    operator -(i32 _i)const;
@@ -54,7 +54,7 @@ public:
         friend class LList;
     public:
         linline ConstIterator();
-        linline ConstIterator(ListNode* _n);
+        linline ConstIterator(typename LList<T>::ListNode* _n);
 
         linline ConstIterator    operator +(i32 _i)const;
         linline ConstIterator    operator -(i32 _i)const;
@@ -218,10 +218,11 @@ LList<T>::Iterator::Iterator()
 }
 
 template<typename T>
-LList<T>::Iterator::Iterator(LList<T>::ListNode *_n)
+LList<T>::Iterator::Iterator(typename LList<T>::ListNode *_n)
 {
     mNode=_n;
 }
+
 
 template<typename T>
 typename LList<T>::Iterator LList<T>::Iterator::operator+(i32 _i)const
@@ -355,7 +356,7 @@ LList<T>::ConstIterator::ConstIterator()
 }
 
 template<typename T>
-LList<T>::ConstIterator::ConstIterator(LList<T>::ListNode *_n)
+LList<T>::ConstIterator::ConstIterator(typename LList<T>::ListNode *_n)
 {
     mNode=_n;
 }

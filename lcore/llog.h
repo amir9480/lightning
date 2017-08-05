@@ -34,7 +34,7 @@ LNAMESPACE_BEGIN
 
 //! Add a Error to log and returns from function .first parameter is CONDITION that if was true then message will be add.
 //! third parameter is what needs to be return . if you function returns void this parameter is not needed
-#define lError(...) LOVERLOADED_MACRO(_lError,__VA_ARGS__)
+#define lError(...) LOVERLOADED_MACRO(_lError, __VA_ARGS__ )
 
 //! Add a Error to log without return
 #define lError2(CONDITION,MESSAGE){if(CONDITION){Lightning::__Log_Manager::get.addError((MESSAGE),__FILE__,__LINE__);}}

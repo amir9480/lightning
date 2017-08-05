@@ -1,6 +1,6 @@
 #ifndef LGFXINDEXBUFFER_H
 #define LGFXINDEXBUFFER_H
-#include "lcore.h"
+#include "../lcore.h"
 
 LNAMESPACE_BEGIN
 

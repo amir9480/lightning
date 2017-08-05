@@ -1,7 +1,7 @@
 #ifndef LGFXVERTEXBUFFER_H
 #define LGFXVERTEXBUFFER_H
 
-#include "lcore.h"
+#include "../lcore.h"
 
 LNAMESPACE_BEGIN
 

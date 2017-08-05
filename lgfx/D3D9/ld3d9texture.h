@@ -1,13 +1,13 @@
 #ifndef LD3D9TEXTURE_H
 #define LD3D9TEXTURE_H
 
-#include "lconfig.h"
+#include "../../lconfig.h"
 
 #if ( LGFX == LGFX_D3D9 )
 
 #include "ld3d9.h"
 
-#include "lcore.h"
+#include "../../lcore.h"
 #include "../lgfxtexture.h"
 
 LNAMESPACE_BEGIN
