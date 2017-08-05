@@ -120,14 +120,14 @@ QMAKE_CXXFLAGS += -isystem $$PWD/dependencies/Directx9/Include #prevent form war
 
 
 #zlib
-win32: LIBS += -L$$PWD/dependencies/zlib/build/ -llibzlib.dll
+win32: LIBS += -L$$PWD/dependencies/zlib/buildMinGW/ -llibzlib.dll
 
 INCLUDEPATH += $$PWD/dependencies/zlib
 DEPENDPATH += $$PWD/dependencies/zlib
 
 
 #lib PNG
-win32: LIBS += -L$$PWD/dependencies/libpng/build/ -lpng
+win32: LIBS += -L$$PWD/dependencies/libpng/buildMinGW/ -lpng
 
 INCLUDEPATH += $$PWD/dependencies/libpng
 DEPENDPATH += $$PWD/dependencies/libpng

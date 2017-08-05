@@ -70,9 +70,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>E:\Qt\projects\Lightning\dependencies\Directx9\Include;E:\Qt\projects\Lightning\dependencies\zlib;E:\Qt\projects\Lightning\dependencies\libpng;$(IncludePath)</IncludePath>
+<<<<<<< HEAD
     <LibraryPath>E:\Qt\projects\Lightning\dependencies\zlib\buildMSVC14\Release;E:\Qt\projects\Lightning\dependencies\libpng\buildMSVC14\Release;E:\Qt\projects\Lightning\dependencies\Directx9\Lib\x86;$(LibraryPath)</LibraryPath>
     <LibraryWPath>E:\Qt\projects\Lightning\dependencies\zlib\buildMSVC14\Release;E:\Qt\projects\Lightning\dependencies\libpng\buildMSVC14\Release;E:\Qt\projects\Lightning\dependencies\Directx9\Developer Runtime\x86;$(LibraryWPath)</LibraryWPath>
     <ExecutablePath>E:\Qt\projects\Lightning\dependencies\libpng\buildMSVC14\Release;E:\Qt\projects\Lightning\dependencies\zlib\buildMSVC14\Release;$(ExecutablePath)</ExecutablePath>
+=======
+    <LibraryPath>E:\Qt\projects\Lightning\dependencies\Directx9\Lib\x86;E:\Qt\projects\Lightning\dependencies\zlib\build;E:\Qt\projects\Lightning\dependencies\libpng\build;$(LibraryPath)</LibraryPath>
+    <LibraryWPath>E:\Qt\projects\Lightning\dependencies\Directx9\Developer Runtime\x86;E:\Qt\projects\Lightning\dependencies\libpng\build;E:\Qt\projects\Lightning\dependencies\zlib\build;$(LibraryWPath)</LibraryWPath>
+>>>>>>> 9123b330b7f8279895e59f4275a4aac5302a1167
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -82,7 +87,11 @@
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
+<<<<<<< HEAD
       <AdditionalDependencies>d3d9.lib;d3dx9.lib;libpng16.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+=======
+      <AdditionalDependencies>libzlib.dll.a;libpng.a;d3d9.lib;d3dx9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+>>>>>>> 9123b330b7f8279895e59f4275a4aac5302a1167
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
