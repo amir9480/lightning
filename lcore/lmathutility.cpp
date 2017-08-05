@@ -15,13 +15,15 @@ const f32 lDegreePerRadian  =57.295779513082320876798156332941f;
  * lNaN means Not a Number
  * \endfa
  */
-extern const f32 lNaN       =0.0f/0.0f;
+const int& _lnan(){static int o=0x7F800001;return o;}
+const f32 lNaN       = *((float*)(&(_lnan())));
 /*!
  * \fa
  * lInfinity value
  * \endfa
  */
-extern const f32 lInfinity  =1.0f/0.0f;
+const int& _linf(){static int o=0x7F800000;return o;}
+const f32 lInfinity  = *((float*)(&(_linf())));
 
 f32 LAPI lACos(const f32& _in)
 {

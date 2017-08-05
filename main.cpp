@@ -248,8 +248,9 @@ int main()
 {
     lMemoryLogStart();
 
+    cout<<lNaN<<" "<<lInfinity<<endl;
 
-	LImage image01 = LImage::loadFromPngFile("image3.png");
+    /*LImage image01 = LImage::loadFromPngFile("image3.png");
 	LImage image02 = LImage::loadFromPngFile("image.png");
 
 
@@ -468,7 +469,7 @@ int main()
         LInput::resetInputs();
     }
 
-    delete dev;
+    delete dev;*/
 
 
 

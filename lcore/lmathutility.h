@@ -370,12 +370,12 @@ f64 lRoundD(const f64& _in, const u32& _precision)
 
 void lSetNaN(f32& _in)
 {
-    //_in=0.0f/0.0f;
+    _in=lNaN;
 }
 
 void lSetNaND(f64 &_in)
 {
-    //_in=0.0/0.0;
+    _in=lInfinity;
 }
 
 template<typename T>
