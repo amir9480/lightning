@@ -113,7 +113,7 @@ linline bool    lIsNaN(const f32& _in);
 linline bool    lIsNaND(const f64& _in);
 
 //! Get Lerp betweem two float point number .
-linline f32     lLerp(const f32& _a,const f32& _b,const f64& _p);
+linline f32     lLerp(const f32& _a,const f32& _b,const f32& _p);
 linline f32     lLerpD(const f64& _a,const f64& _b,const f64& _p);
 
 //! Get Limited Angle between -90 and 90
@@ -255,7 +255,7 @@ f64 lFloorD(const f64& _in)
     return -static_cast<f32>(static_cast<i32>(-_in));
 }
 
-f32 lLerp(const f32 &_a, const f32 &_b, const f64 &_p)
+f32 lLerp(const f32 &_a, const f32 &_b, const f32 &_p)
 {
     if(_p>1.0)
         return _b;
@@ -370,12 +370,12 @@ f64 lRoundD(const f64& _in, const u32& _precision)
 
 void lSetNaN(f32& _in)
 {
-    _in=0.0f/0.0f;
+    //_in=0.0f/0.0f;
 }
 
 void lSetNaND(f64 &_in)
 {
-    _in=0.0/0.0;
+    //_in=0.0/0.0;
 }
 
 template<typename T>

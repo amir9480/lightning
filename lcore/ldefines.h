@@ -1,7 +1,7 @@
 ﻿#ifndef LDEFINES_H
 #define LDEFINES_H
 
-#include "lconfig.h"
+#include "../lconfig.h"
 #include "lmemorylog.h"
 
 // set Lightning namespace Dynamically
@@ -44,9 +44,9 @@
 #elif  defined(__GNUC__) || defined(__GNUG__)
     //! Compiler is GCC
     #define LCOMPILER LCOMPILER_GCC
-#elif defined(__MSVCRT__)
+#elif defined(_MSC_VER )
     //! Compiler is MSVC
-    #define LCOMPILE LCOMPILER_MSVC
+    #define LCOMPILER LCOMPILER_MSVC
 #else
     #error Lightning compile time error:Undefined Compiler
 #endif

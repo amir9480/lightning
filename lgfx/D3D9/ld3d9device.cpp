@@ -57,17 +57,17 @@ float4 mainPS(VSOut _in):COLOR0
 
 )";
 
-LENUM_CONVERTOR_CUSTOM( LAPI,LGFXCullMode               ,D3DCULL,
+LENUM_CONVERTOR(		LGFXCullMode					,D3DCULL,
                         LGFXCullMode_None               ,D3DCULL_NONE,
                         LGFXCullMode_Clockwise          ,D3DCULL_CW,
                         LGFXCullMode_CounterClockwise   ,D3DCULL_CCW)
 
-LENUM_CONVERTOR_CUSTOM( LAPI,LGFXFillMode               ,D3DFILLMODE,
+LENUM_CONVERTOR(		LGFXFillMode					,D3DFILLMODE,
                         LGFXFillMode_Point              ,D3DFILL_POINT,
                         LGFXFillMode_Wireframe          ,D3DFILL_WIREFRAME,
                         LGFXFillMode_Solid              ,D3DFILL_SOLID)
 
-LENUM_CONVERTOR_CUSTOM( LAPI,LGFXCompareFunction        ,D3DCMPFUNC,
+LENUM_CONVERTOR(		LGFXCompareFunction				,D3DCMPFUNC,
                         LGFXCompareFunction_Never       ,D3DCMP_NEVER,
                         LGFXCompareFunction_Less        ,D3DCMP_LESS,
                         LGFXCompareFunction_Equal       ,D3DCMP_EQUAL,
@@ -671,9 +671,9 @@ void LD3D9Device::setActive(bool _val)
         {
             reset(false,mVSync,mScreenWidth,mScreenHeight);
             mFullScreen=true;
+			ShowWindow(mWindowHandler, SW_MINIMIZE);
         }
         render();
-        ShowWindow(mWindowHandler,SW_MINIMIZE);
     }
     else
     {

@@ -248,23 +248,9 @@ int main()
 {
     lMemoryLogStart();
 
-    A a;
-    LVariant v=LVariant::create(A());
-    LFunction* f = new LMemberFunction<decltype(&A::sayHello)>(A::sayHello);
-    LVariant v2=(*f)(v,44,3.14);
-    delete f;
 
-//    TypeA a=TypeA::B;
-//    LVariant v1,v2;
-//    v1=&a;
-//    v2=v1;
-//    cout<<v1.to<TypeA>()<<" "<<v2.to<TypeA>()<<endl;
-//    v2.to<TypeA&>()=TypeA::C;
-//    cout<<a<<endl;
-
-
-    /*LImage image01 = LImage::loadFromPngFile("image3.png");
-    LImage image02 = LImage::loadFromPngFile("image.png");
+	LImage image01 = LImage::loadFromPngFile("image3.png");
+	LImage image02 = LImage::loadFromPngFile("image.png");
 
 
     LGFXDevice* dev = LGFXDevice::create();
@@ -343,17 +329,17 @@ int main()
         if(LInput::isMousePressed(LInput::MouseCode_right))
         {
             if(LInput::isKeyPressed(LInput::KeyCode_W))
-                boxPos+=LVector3::forward*camspeed;
+                boxPos+=LVector3::forward*camspeed*0.2f;
             else if(LInput::isKeyPressed(LInput::KeyCode_S))
-                boxPos-=LVector3::forward*camspeed;
+                boxPos-=LVector3::forward*camspeed*0.2f;
             if(LInput::isKeyPressed(LInput::KeyCode_A))
-                boxPos-=LVector3::right*camspeed;
+                boxPos-=LVector3::right*camspeed*0.2f;
             else if(LInput::isKeyPressed(LInput::KeyCode_D))
-                boxPos+=LVector3::right*camspeed;
+                boxPos+=LVector3::right*camspeed*0.2f;
             if(LInput::isKeyPressed(LInput::KeyCode_Q))
-                boxPos-=LVector3::up*camspeed;
+                boxPos-=LVector3::up*camspeed*0.2f;
             else if(LInput::isKeyPressed(LInput::KeyCode_E))
-                boxPos+=LVector3::up*camspeed;
+                boxPos+=LVector3::up*camspeed*0.2f;
         }
         else if(LInput::isMousePressed(LInput::MouseCode_middle))
         {
@@ -385,8 +371,8 @@ int main()
             }
         }
 
-        if(LInput::isKeyDown(LInput::KeyCode_F2))
-            dev->getScreenShot().saveAsPngFile("screenshot.png");
+        //if(LInput::isKeyDown(LInput::KeyCode_F2))
+            //dev->getScreenShot().saveAsPngFile("screenshot.png");
 
         static bool _isr=false;
         if(LInput::isKeyDown(LInput::KeyCode_F1))
@@ -482,12 +468,13 @@ int main()
         LInput::resetInputs();
     }
 
-    delete dev;*/
+    delete dev;
 
 
 
     lMemoryLogEnd();
     cout<<"\n\n";
+	system("pause");
     return 0;
 }
 

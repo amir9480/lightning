@@ -326,7 +326,6 @@ private:
         char                    mChar;
         unsigned char           mUChar;
         wchar_t                 mWChar_t;
-        unsigned wchar_t        mUWChar_t;
         char16_t                mChar16_t;
         char32_t                mChar32_t;
         LString*                mString;

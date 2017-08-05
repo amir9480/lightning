@@ -1,7 +1,7 @@
 #ifndef LMEMORYLOG_H
 #define LMEMORYLOG_H
 
-#include "lconfig.h"
+#include "../lconfig.h"
 #include <stdio.h>
 #include <memory.h>
 #include <stdlib.h>
@@ -205,9 +205,9 @@ extern _lptrlogmanager __lptrlogmanager;
 
 extern bool __lmemlog_allowed;
 
-void* operator new (unsigned int _size,const char* _filename,unsigned int _line);
+void* operator new (size_t _size,const char* _filename,unsigned int _line);
 
-void* operator new[] (unsigned int _size,const char* _filename,unsigned int _line);
+void* operator new[] (size_t _size,const char* _filename,unsigned int _line);
 
 void operator delete (void* ptr)noexcept;
 

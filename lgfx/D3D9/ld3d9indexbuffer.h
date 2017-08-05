@@ -1,13 +1,13 @@
 #ifndef LD3D9INDEXBUFFER_H
 #define LD3D9INDEXBUFFER_H
 
-#include "lconfig.h"
+#include "../../lconfig.h"
 
 #if ( LGFX == LGFX_D3D9 )
 
 #include "ld3d9.h"
 
-#include "lcore.h"
+#include "../../lcore.h"
 #include "../lgfxindexbuffer.h"
 
 LNAMESPACE_BEGIN

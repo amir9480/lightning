@@ -350,13 +350,13 @@ LMatrix::LMatrix(const LMatrix &_other)
 
 f32& LMatrix::at(u32 i)
 {
-    lError(i>=16,"f32& LMatrix::at(u32 i) : i is  not acceptable",m[0][0]);
+	lError(i >= 16, "f32& LMatrix::at(u32 i) : i is  not acceptable", m[0][0]);
     return m[i/4][i%4];
 }
 
 f32& LMatrix::at(u32 i, u32 j)
 {
-    lError(i>=4||j>=4,"f32& LMatrix::at(u32 i, u32 j) : i or j is  not acceptable",m[0][0]);
+	lError(i >= 4 || j >= 4, "f32& LMatrix::at(u32 i, u32 j) : i or j is  not acceptable", m[0][0]);
     return m[i][j];
 }
 
