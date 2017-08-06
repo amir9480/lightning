@@ -142,7 +142,6 @@ float4 mainPS(VSOut _in):COLOR0
 {
     float4 o=float4(0.0f,0.0f,0.0f,1.0f);
     o.rgb=tex2D(t0,_in.uv.xy).rgb;
-    o.r=0;
     return o;
 }
 
@@ -248,9 +247,8 @@ int main()
 {
     lMemoryLogStart();
 
-    cout<<lNaN<<" "<<lInfinity<<endl;
 
-    /*LImage image01 = LImage::loadFromPngFile("image3.png");
+    LImage image01 = LImage::loadFromPngFile("image3.png");
 	LImage image02 = LImage::loadFromPngFile("image.png");
 
 
@@ -372,8 +370,8 @@ int main()
             }
         }
 
-        //if(LInput::isKeyDown(LInput::KeyCode_F2))
-            //dev->getScreenShot().saveAsPngFile("screenshot.png");
+        if(LInput::isKeyDown(LInput::KeyCode_F2))
+            dev->getScreenShot().saveAsPngFile("screenshot.png");
 
         static bool _isr=false;
         if(LInput::isKeyDown(LInput::KeyCode_F1))
@@ -385,7 +383,7 @@ int main()
             }
             else
             {
-                dev->reset(1,0,640,480);
+                dev->reset(1,0,dev->getScreenResolution().width,dev->getScreenResolution().height);
                 _isr=true;
             }
         }
@@ -456,12 +454,12 @@ int main()
 
 
         //! screen effect
-        dev->resetParameters();
+        for(int i=0;i<1;i++)
         {
+            dev->resetParameters();
             //shaderpsscreen01->setTexture("t0",dev->getBackBuffer());
-            //shaderpsscreen01->setFloat("timer",(float)clock()/1000.0f);
-            //dev->setPixelShader(shaderpsscreen01);
-            //dev->drawQuad();
+            dev->setPixelShader(shaderpsscreen01);
+            dev->drawQuad();
         }
 
         dev->render();
@@ -469,13 +467,13 @@ int main()
         LInput::resetInputs();
     }
 
-    delete dev;*/
+    delete dev;
 
 
 
     lMemoryLogEnd();
     cout<<"\n\n";
-	system("pause");
+    //system("pause");
     return 0;
 }
 

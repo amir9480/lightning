@@ -41,6 +41,13 @@ void LApplication::exec()
 
 }
 
+LPoint lGetMousePos()
+{
+    POINT _p;
+    GetCursorPos(&_p);
+    return LPoint(_p.x,_p.y);
+}
+
 void lShowMessageBox(const LString& _title,const LString& _content)
 {
     MessageBoxW((HWND)NULL,_content.getData(),_title.getData(),MB_OK);
@@ -229,13 +236,13 @@ LRESULT CALLBACK lightningmainwindowproc(HWND hwnd,UINT msg,WPARAM wparam,LPARAM
         break;
     }
 
-    case WM_MOUSEMOVE:
-    {
-        POINT _p;
-        GetCursorPos(&_p);
-        __linput_set_mouse_pos(_p.x,_p.y);
-        break;
-    }
+    //case WM_MOUSEMOVE:
+    //{
+    //    POINT _p;
+    //    GetCursorPos(&_p);
+    //    __linput_set_mouse_pos(_p.x,_p.y);
+    //    break;
+    //}
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 #define __LIGHTNING_MOUSE_KEY_UPDATE(_WIN_CODE_DOWN,_WIN_CODE_UP,_LIGHTNING_CODE)\
     case _WIN_CODE_DOWN:\

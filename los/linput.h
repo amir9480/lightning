@@ -3,6 +3,8 @@
 
 #include "../lcore.h"
 
+#include "lapplication.h"
+
 LNAMESPACE_BEGIN
 
 class LAPI LInput

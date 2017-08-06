@@ -91,6 +91,7 @@ public:
     virtual void                    draw()=0;
 
     //! draw a texture on screen . note if you are not using custom pixel shader then set texture from here ( use setPixelShader(0) before call this or resetParameters ) . otherwise set from you pixel shader. use getBackBuffer to access a copy of backbuffer
+    //! for custom pixel shaders you need a sampler2D inside you shader with "t0" name to get BackBuffer
     virtual void                    drawQuad(LGFXTexture* _tex=0)=0;
 
     //! Get screen Resolution ( Not Rendering window ) \sa getResolution

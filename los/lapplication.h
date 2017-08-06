@@ -8,6 +8,8 @@ LNAMESPACE_BEGIN
 
 void lShowMessageBox(const LString& _title,const LString& _content);
 
+LPoint lGetMousePos();
+
 class LApplication
 {
 public:

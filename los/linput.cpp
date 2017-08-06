@@ -146,6 +146,9 @@ void LInput::resetInputs()
     mMouseLast_x=mMouse_x;
     mMouseLast_y=mMouse_y;
     mMouseWheelDelta=0;
+
+    LPoint _mp=lGetMousePos();
+    __linput_set_mouse_pos(_mp.x,_mp.y);
 }
 
 

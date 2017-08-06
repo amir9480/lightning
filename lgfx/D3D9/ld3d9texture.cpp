@@ -134,7 +134,7 @@ void LD3D9Texture::copyTo(LGFXTexture *_other)
             D3DLOCKED_RECT r1;
             D3DLOCKED_RECT r2;
             HR(other->mTexture->LockRect(0,&r1,0,D3DLOCK_DISCARD));
-            HR(_temp->LockRect(0,&r2,0,D3DLOCK_DISCARD));
+            HR(_temp->LockRect(0,&r2,0,D3DLOCK_READONLY));
             switch(mFormat)
             {
             case LImage::Format_R8G8B8:case LImage::Format_R8G8B8A8:
@@ -148,6 +148,7 @@ void LD3D9Texture::copyTo(LGFXTexture *_other)
                 break;
             }
             HR(_temp->UnlockRect(0));
+            HR(other->mTexture->UnlockRect(0));
 
             SAFE_RELEASE(_temp);
             SAFE_RELEASE(_srcs);

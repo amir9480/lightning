@@ -159,6 +159,7 @@ protected:
     LD3D9VertexDeclaration*     mCurrentVertexDecl;
     LD3D9Shader*                mCurrentVertexShader;
     LD3D9Shader*                mCurrentPixelShader;
+    LD3D9Texture*               mCurrentRenderTarget0;
 
 
     IDirect3DSurface9*          mNativeBackBuffer;
