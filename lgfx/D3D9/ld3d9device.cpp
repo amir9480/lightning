@@ -166,16 +166,26 @@ void LD3D9Device::initialize(bool _fullscreen, bool _vsync, u16 _screen_width, u
     __window_deivces[mWindowHandler]=this;
     lMemoryLogEndIgnore();
 
+    D3DDISPLAYMODE d3ddm;
+    mD3D9->GetAdapterDisplayMode( D3DADAPTER_DEFAULT, &d3ddm );
+
     lMemorySet(&dpp,sizeof(dpp),0);
     dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
     dpp.Windowed= !_fullscreen;
-    dpp.BackBufferCount=1;
-    dpp.BackBufferWidth=GetSystemMetrics(SM_CXSCREEN);
-    dpp.BackBufferHeight=GetSystemMetrics(SM_CYSCREEN);
-    if(_fullscreen)
-        dpp.BackBufferFormat = D3DFMT_X8R8G8B8;
+    if(!_fullscreen)
+    {
+        dpp.BackBufferWidth=0;
+        dpp.BackBufferHeight=0;
+    }
     else
-        dpp.BackBufferFormat = D3DFMT_UNKNOWN;
+    {
+        dpp.BackBufferWidth=getScreenResolution().width;
+        dpp.BackBufferHeight=getScreenResolution().height;
+    }
+    if(_fullscreen)
+        dpp.BackBufferFormat = d3ddm.Format;
+    else
+        dpp.BackBufferFormat = d3ddm.Format;
     dpp.EnableAutoDepthStencil = true;
     dpp.AutoDepthStencilFormat = D3DFMT_D24S8;
     dpp.hDeviceWindow = mWindowHandler;
@@ -184,6 +194,7 @@ void LD3D9Device::initialize(bool _fullscreen, bool _vsync, u16 _screen_width, u
         dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
     else
         dpp.PresentationInterval = D3DPRESENT_INTERVAL_ONE;
+
 
     DWORD _devb = 0;
     if(mDeviceCaps.DevCaps & D3DDEVCAPS_HWTRANSFORMANDLIGHT)
@@ -281,15 +292,27 @@ void LD3D9Device::reset(bool _fullscreen, bool _vsync, u16 _screen_width, u16 _s
         lMemoryLogEndIgnore();
 
         dpp.hDeviceWindow=mWindowHandler;
-
-        dpp.Windowed= !_fullscreen;
-        if(_fullscreen)
+        if(!_fullscreen)
         {
-            dpp.BackBufferFormat = D3DFMT_X8R8G8B8;
+            dpp.BackBufferWidth=0;
+            dpp.BackBufferHeight=0;
         }
         else
         {
-            dpp.BackBufferFormat = D3DFMT_UNKNOWN;
+            dpp.BackBufferWidth=getScreenResolution().width;
+            dpp.BackBufferHeight=getScreenResolution().height;
+        }
+
+        dpp.Windowed= !_fullscreen;
+        D3DDISPLAYMODE d3ddm;
+        mD3D9->GetAdapterDisplayMode( D3DADAPTER_DEFAULT, &d3ddm );
+        if(_fullscreen)
+        {
+            dpp.BackBufferFormat = d3ddm.Format;
+        }
+        else
+        {
+            dpp.BackBufferFormat =  d3ddm.Format;
         }
         if(!_vsync)
             dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
@@ -494,7 +517,7 @@ void LD3D9Device::drawQuad(LGFXTexture *__tex)
             _tempRT=(LD3D9Texture*)createRenderTarget(mCurrentRenderTarget0->getWidth(),mCurrentRenderTarget0->getHeight(),mCurrentRenderTarget0->getFormat(),0);
             _tempRT->setAddress(LGFXTexture::TextureAddress_clamp);
         }
-        mCurrentRenderTarget0->setFilter(LGFXTexture::TextureFilter_none);
+        _tempRT->setFilter(LGFXTexture::TextureFilter_none);
         lSwap(mCurrentRenderTarget0->mTexture,_tempRT->mTexture);
         lSwap(mCurrentRenderTarget0->mRenderTargetDepthStencil,_tempRT->mRenderTargetDepthStencil);
         lSwap(mCurrentRenderTarget0->mHasDepthBuffer,_tempRT->mHasDepthBuffer);
@@ -525,7 +548,9 @@ void LD3D9Device::drawQuad(LGFXTexture *__tex)
 
 LSize LD3D9Device::getScreenResolution() const
 {
-    return LSize(GetSystemMetrics(SM_CXSCREEN),GetSystemMetrics(SM_CYSCREEN));
+    D3DDISPLAYMODE d3ddm;
+    mD3D9->GetAdapterDisplayMode( D3DADAPTER_DEFAULT, &d3ddm );
+    return LSize(d3ddm.Width,d3ddm.Height);
 }
 
 LVector<LSize> LD3D9Device::getAvailbleResolutions()
