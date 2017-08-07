@@ -44,49 +44,95 @@ struct __lGetMFTypesAsString<T1>
     }
 };
 
+/*!
+how to create and call non member function:
 
-class LFunction
+void sayHello()
+{
+    cout<<"Hello WOrld "<<endl;
+}
+
+LFunctionPtr* a = new LNonMemberFunction<decltype(&sayHello)>(&sayHello);
+(*a)();
+
+
+how to pass arguments to function
+
+void sayHello(LString _name)
+{
+    cout<<"Hello "<<_name.toUTF8().getData()<<endl;
+}
+
+
+how to use with member functions
+
+struct A
+{
+    void sayHello()
+    {
+        cout<<"Hello World"<<endl;
+    }
+};
+
+LFunctionPtr* a = new LMemberFunction<decltype(&A::sayHello)>(&A::sayHello);
+A obj;
+(*a)(LVariant::create(obj));// pass Class Object as first parameter
+
+how to get returned value
+
+int sum(int a,int b)
+{
+   return a+b;
+}
+
+LFunctionPtr* a = new LNonMemberFunction<decltype(&sum)>(&sum);
+LVariant r = (*a)(4,7);
+cout<<r.toInt()<<endl;
+
+
+ */
+class LFunctionPtr
 {
 public:
-    LFunction(LString _argtypes);
-    virtual ~LFunction();
+    LFunctionPtr(LString _argtypes);
+    virtual ~LFunctionPtr();
 
-    const LString       getArgTypes() const;
+    const LString           getArgTypes() const;
 
-    virtual LFunction*  clone()=0;// get a copy
+    virtual LFunctionPtr*   clone()=0;// get a copy
 
-    virtual LVariant    operator()()                                                                                                   {return LVariant();}
-    virtual LVariant    operator()(LVariant)                                                                                           {return LVariant();}
-    virtual LVariant    operator()(LVariant,LVariant)                                                                                  {return LVariant();}
-    virtual LVariant    operator()(LVariant,LVariant,LVariant)                                                                         {return LVariant();}
-    virtual LVariant    operator()(LVariant,LVariant,LVariant,LVariant)                                                                {return LVariant();}
-    virtual LVariant    operator()(LVariant,LVariant,LVariant,LVariant,LVariant)                                                       {return LVariant();}
-    virtual LVariant    operator()(LVariant,LVariant,LVariant,LVariant,LVariant,LVariant)                                              {return LVariant();}
-    virtual LVariant    operator()(LVariant,LVariant,LVariant,LVariant,LVariant,LVariant,LVariant)                                     {return LVariant();}
-    virtual LVariant    operator()(LVariant,LVariant,LVariant,LVariant,LVariant,LVariant,LVariant,LVariant)                            {return LVariant();}
-    virtual LVariant    operator()(LVariant,LVariant,LVariant,LVariant,LVariant,LVariant,LVariant,LVariant,LVariant)                   {return LVariant();}
-    virtual LVariant    operator()(LVariant,LVariant,LVariant,LVariant,LVariant,LVariant,LVariant,LVariant,LVariant,LVariant)          {return LVariant();}
-    virtual LVariant    operator()(LVariant,LVariant,LVariant,LVariant,LVariant,LVariant,LVariant,LVariant,LVariant,LVariant,LVariant) {return LVariant();}
+    virtual LVariant        operator()()                                                                                                   {return LVariant();}
+    virtual LVariant        operator()(LVariant)                                                                                           {return LVariant();}
+    virtual LVariant        operator()(LVariant,LVariant)                                                                                  {return LVariant();}
+    virtual LVariant        operator()(LVariant,LVariant,LVariant)                                                                         {return LVariant();}
+    virtual LVariant        operator()(LVariant,LVariant,LVariant,LVariant)                                                                {return LVariant();}
+    virtual LVariant        operator()(LVariant,LVariant,LVariant,LVariant,LVariant)                                                       {return LVariant();}
+    virtual LVariant        operator()(LVariant,LVariant,LVariant,LVariant,LVariant,LVariant)                                              {return LVariant();}
+    virtual LVariant        operator()(LVariant,LVariant,LVariant,LVariant,LVariant,LVariant,LVariant)                                     {return LVariant();}
+    virtual LVariant        operator()(LVariant,LVariant,LVariant,LVariant,LVariant,LVariant,LVariant,LVariant)                            {return LVariant();}
+    virtual LVariant        operator()(LVariant,LVariant,LVariant,LVariant,LVariant,LVariant,LVariant,LVariant,LVariant)                   {return LVariant();}
+    virtual LVariant        operator()(LVariant,LVariant,LVariant,LVariant,LVariant,LVariant,LVariant,LVariant,LVariant,LVariant)          {return LVariant();}
+    virtual LVariant        operator()(LVariant,LVariant,LVariant,LVariant,LVariant,LVariant,LVariant,LVariant,LVariant,LVariant,LVariant) {return LVariant();}
 protected:
     const LString   mArgTypes;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<typename... FT>
-class LNonMemberFunction:public LFunction
+class LNonMemberFunction:public LFunctionPtr
 {
 };
 
 template<typename RT> // Return Type
-class LNonMemberFunction<RT(*)()>:public LFunction
+class LNonMemberFunction<RT(*)()>:public LFunctionPtr
 {
 public:
     LNonMemberFunction(RT(*_Fptr)()):
-        LFunction(__lGetFTypesAsString<void>::get()),
+        LFunctionPtr(__lGetFTypesAsString<void>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction*  clone()
+    virtual LFunctionPtr*  clone()
     {
         return new LNonMemberFunction<RT(*)()>(mPtrF);
     }
@@ -102,15 +148,15 @@ private:
 };
 
 template<typename RT,typename A1> // Return Type, ArgType1
-class LNonMemberFunction<RT(*)(A1)>:public LFunction
+class LNonMemberFunction<RT(*)(A1)>:public LFunctionPtr
 {
 public:
     LNonMemberFunction(RT(*_Fptr)(A1)):
-        LFunction(__lGetFTypesAsString<A1>::get()),
+        LFunctionPtr(__lGetFTypesAsString<A1>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LNonMemberFunction<RT(*)(A1)>(mPtrF);
     }
@@ -130,15 +176,15 @@ private:
 };
 
 template<typename RT,typename A1,typename A2>
-class LNonMemberFunction<RT(*)(A1,A2)>:public LFunction
+class LNonMemberFunction<RT(*)(A1,A2)>:public LFunctionPtr
 {
 public:
     LNonMemberFunction(RT(*_Fptr)(A1,A2)):
-        LFunction(__lGetFTypesAsString<A1,A2>::get()),
+        LFunctionPtr(__lGetFTypesAsString<A1,A2>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LNonMemberFunction<RT(*)(A1,A2)>(mPtrF);
     }
@@ -158,15 +204,15 @@ private:
 };
 
 template<typename RT,typename A1,typename A2,typename A3>
-class LNonMemberFunction<RT(*)(A1,A2,A3)>:public LFunction
+class LNonMemberFunction<RT(*)(A1,A2,A3)>:public LFunctionPtr
 {
 public:
     LNonMemberFunction(RT(*_Fptr)(A1,A2,A3)):
-        LFunction(__lGetFTypesAsString<A1,A2,A3>::get()),
+        LFunctionPtr(__lGetFTypesAsString<A1,A2,A3>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LNonMemberFunction<RT(*)(A1,A2,A3)>(mPtrF);
     }
@@ -186,15 +232,15 @@ private:
 };
 
 template<typename RT,typename A1,typename A2,typename A3,typename A4>
-class LNonMemberFunction<RT(*)(A1,A2,A3,A4)>:public LFunction
+class LNonMemberFunction<RT(*)(A1,A2,A3,A4)>:public LFunctionPtr
 {
 public:
     LNonMemberFunction(RT(*_Fptr)(A1,A2,A3,A4)):
-        LFunction(__lGetFTypesAsString<A1,A2,A3,A4>::get()),
+        LFunctionPtr(__lGetFTypesAsString<A1,A2,A3,A4>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LNonMemberFunction<RT(*)(A1,A2,A3,A4)>(mPtrF);
     }
@@ -214,15 +260,15 @@ private:
 };
 
 template<typename RT,typename A1,typename A2,typename A3,typename A4,typename A5>
-class LNonMemberFunction<RT(*)(A1,A2,A3,A4,A5)>:public LFunction
+class LNonMemberFunction<RT(*)(A1,A2,A3,A4,A5)>:public LFunctionPtr
 {
 public:
     LNonMemberFunction(RT(*_Fptr)(A1,A2,A3,A4,A5)):
-        LFunction(__lGetFTypesAsString<A1,A2,A3,A4,A5>::get()),
+        LFunctionPtr(__lGetFTypesAsString<A1,A2,A3,A4,A5>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LNonMemberFunction<RT(*)(A1,A2,A3,A4,A5)>(mPtrF);
     }
@@ -242,15 +288,15 @@ private:
 };
 
 template<typename RT,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6>
-class LNonMemberFunction<RT(*)(A1,A2,A3,A4,A5,A6)>:public LFunction
+class LNonMemberFunction<RT(*)(A1,A2,A3,A4,A5,A6)>:public LFunctionPtr
 {
 public:
     LNonMemberFunction(RT(*_Fptr)(A1,A2,A3,A4,A5,A6)):
-        LFunction(__lGetFTypesAsString<A1,A2,A3,A4,A5,A6>::get()),
+        LFunctionPtr(__lGetFTypesAsString<A1,A2,A3,A4,A5,A6>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LNonMemberFunction<RT(*)(A1,A2,A3,A4,A5,A6)>(mPtrF);
     }
@@ -270,15 +316,15 @@ private:
 };
 
 template<typename RT,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7>
-class LNonMemberFunction<RT(*)(A1,A2,A3,A4,A5,A6,A7)>:public LFunction
+class LNonMemberFunction<RT(*)(A1,A2,A3,A4,A5,A6,A7)>:public LFunctionPtr
 {
 public:
     LNonMemberFunction(RT(*_Fptr)(A1,A2,A3,A4,A5,A6,A7)):
-        LFunction(__lGetFTypesAsString<A1,A2,A3,A4,A5,A6,A7>::get()),
+        LFunctionPtr(__lGetFTypesAsString<A1,A2,A3,A4,A5,A6,A7>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LNonMemberFunction<RT(*)(A1,A2,A3,A4,A5,A6,A7)>(mPtrF);
     }
@@ -298,15 +344,15 @@ private:
 };
 
 template<typename RT,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8>
-class LNonMemberFunction<RT(*)(A1,A2,A3,A4,A5,A6,A7,A8)>:public LFunction
+class LNonMemberFunction<RT(*)(A1,A2,A3,A4,A5,A6,A7,A8)>:public LFunctionPtr
 {
 public:
     LNonMemberFunction(RT(*_Fptr)(A1,A2,A3,A4,A5,A6,A7,A8)):
-        LFunction(__lGetFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8>::get()),
+        LFunctionPtr(__lGetFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LNonMemberFunction<RT(*)(A1,A2,A3,A4,A5,A6,A7,A8)>(mPtrF);
     }
@@ -326,15 +372,15 @@ private:
 };
 
 template<typename RT,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8,typename A9>
-class LNonMemberFunction<RT(*)(A1,A2,A3,A4,A5,A6,A7,A8,A9)>:public LFunction
+class LNonMemberFunction<RT(*)(A1,A2,A3,A4,A5,A6,A7,A8,A9)>:public LFunctionPtr
 {
 public:
     LNonMemberFunction(RT(*_Fptr)(A1,A2,A3,A4,A5,A6,A7,A8,A9)):
-        LFunction(__lGetFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9>::get()),
+        LFunctionPtr(__lGetFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LNonMemberFunction<RT(*)(A1,A2,A3,A4,A5,A6,A7,A8,A9)>(mPtrF);
     }
@@ -354,15 +400,15 @@ private:
 };
 
 template<typename RT,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8,typename A9,typename A10>
-class LNonMemberFunction<RT(*)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)>:public LFunction
+class LNonMemberFunction<RT(*)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)>:public LFunctionPtr
 {
 public:
     LNonMemberFunction(RT(*_Fptr)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)):
-        LFunction(__lGetFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10>::get()),
+        LFunctionPtr(__lGetFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LNonMemberFunction<RT(*)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)>(mPtrF);
     }
@@ -384,15 +430,15 @@ private:
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 template<>
-class LNonMemberFunction<void(*)()>:public LFunction
+class LNonMemberFunction<void(*)()>:public LFunctionPtr
 {
 public:
     LNonMemberFunction(void(*_Fptr)()):
-        LFunction(__lGetFTypesAsString<void>::get()),
+        LFunctionPtr(__lGetFTypesAsString<void>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction*  clone()
+    virtual LFunctionPtr*  clone()
     {
         return new LNonMemberFunction<void(*)()>(mPtrF);
     }
@@ -408,15 +454,15 @@ private:
 };
 
 template<typename A1>
-class LNonMemberFunction<void(*)(A1)>:public LFunction
+class LNonMemberFunction<void(*)(A1)>:public LFunctionPtr
 {
 public:
     LNonMemberFunction(void(*_Fptr)(A1)):
-        LFunction(__lGetFTypesAsString<A1>::get()),
+        LFunctionPtr(__lGetFTypesAsString<A1>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LNonMemberFunction<void(*)(A1)>(mPtrF);
     }
@@ -436,15 +482,15 @@ private:
 };
 
 template<typename A1,typename A2>
-class LNonMemberFunction<void(*)(A1,A2)>:public LFunction
+class LNonMemberFunction<void(*)(A1,A2)>:public LFunctionPtr
 {
 public:
     LNonMemberFunction(void(*_Fptr)(A1,A2)):
-        LFunction(__lGetFTypesAsString<A1,A2>::get()),
+        LFunctionPtr(__lGetFTypesAsString<A1,A2>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LNonMemberFunction<void(*)(A1,A2)>(mPtrF);
     }
@@ -464,15 +510,15 @@ private:
 };
 
 template<typename A1,typename A2,typename A3>
-class LNonMemberFunction<void(*)(A1,A2,A3)>:public LFunction
+class LNonMemberFunction<void(*)(A1,A2,A3)>:public LFunctionPtr
 {
 public:
     LNonMemberFunction(void(*_Fptr)(A1,A2,A3)):
-        LFunction(__lGetFTypesAsString<A1,A2,A3>::get()),
+        LFunctionPtr(__lGetFTypesAsString<A1,A2,A3>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LNonMemberFunction<void(*)(A1,A2,A3)>(mPtrF);
     }
@@ -492,15 +538,15 @@ private:
 };
 
 template<typename A1,typename A2,typename A3,typename A4>
-class LNonMemberFunction<void(*)(A1,A2,A3,A4)>:public LFunction
+class LNonMemberFunction<void(*)(A1,A2,A3,A4)>:public LFunctionPtr
 {
 public:
     LNonMemberFunction(void(*_Fptr)(A1,A2,A3,A4)):
-        LFunction(__lGetFTypesAsString<A1,A2,A3,A4>::get()),
+        LFunctionPtr(__lGetFTypesAsString<A1,A2,A3,A4>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LNonMemberFunction<void(*)(A1,A2,A3,A4)>(mPtrF);
     }
@@ -520,15 +566,15 @@ private:
 };
 
 template<typename A1,typename A2,typename A3,typename A4,typename A5>
-class LNonMemberFunction<void(*)(A1,A2,A3,A4,A5)>:public LFunction
+class LNonMemberFunction<void(*)(A1,A2,A3,A4,A5)>:public LFunctionPtr
 {
 public:
     LNonMemberFunction(void(*_Fptr)(A1,A2,A3,A4,A5)):
-        LFunction(__lGetFTypesAsString<A1,A2,A3,A4,A5>::get()),
+        LFunctionPtr(__lGetFTypesAsString<A1,A2,A3,A4,A5>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LNonMemberFunction<void(*)(A1,A2,A3,A4,A5)>(mPtrF);
     }
@@ -548,15 +594,15 @@ private:
 };
 
 template<typename A1,typename A2,typename A3,typename A4,typename A5,typename A6>
-class LNonMemberFunction<void(*)(A1,A2,A3,A4,A5,A6)>:public LFunction
+class LNonMemberFunction<void(*)(A1,A2,A3,A4,A5,A6)>:public LFunctionPtr
 {
 public:
     LNonMemberFunction(void(*_Fptr)(A1,A2,A3,A4,A5,A6)):
-        LFunction(__lGetFTypesAsString<A1,A2,A3,A4,A5,A6>::get()),
+        LFunctionPtr(__lGetFTypesAsString<A1,A2,A3,A4,A5,A6>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LNonMemberFunction<void(*)(A1,A2,A3,A4,A5,A6)>(mPtrF);
     }
@@ -576,15 +622,15 @@ private:
 };
 
 template<typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7>
-class LNonMemberFunction<void(*)(A1,A2,A3,A4,A5,A6,A7)>:public LFunction
+class LNonMemberFunction<void(*)(A1,A2,A3,A4,A5,A6,A7)>:public LFunctionPtr
 {
 public:
     LNonMemberFunction(void(*_Fptr)(A1,A2,A3,A4,A5,A6,A7)):
-        LFunction(__lGetFTypesAsString<A1,A2,A3,A4,A5,A6,A7>::get()),
+        LFunctionPtr(__lGetFTypesAsString<A1,A2,A3,A4,A5,A6,A7>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LNonMemberFunction<void(*)(A1,A2,A3,A4,A5,A6,A7)>(mPtrF);
     }
@@ -604,15 +650,15 @@ private:
 };
 
 template<typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8>
-class LNonMemberFunction<void(*)(A1,A2,A3,A4,A5,A6,A7,A8)>:public LFunction
+class LNonMemberFunction<void(*)(A1,A2,A3,A4,A5,A6,A7,A8)>:public LFunctionPtr
 {
 public:
     LNonMemberFunction(void(*_Fptr)(A1,A2,A3,A4,A5,A6,A7,A8)):
-        LFunction(__lGetFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8>::get()),
+        LFunctionPtr(__lGetFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LNonMemberFunction<void(*)(A1,A2,A3,A4,A5,A6,A7,A8)>(mPtrF);
     }
@@ -632,15 +678,15 @@ private:
 };
 
 template<typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8,typename A9>
-class LNonMemberFunction<void(*)(A1,A2,A3,A4,A5,A6,A7,A8,A9)>:public LFunction
+class LNonMemberFunction<void(*)(A1,A2,A3,A4,A5,A6,A7,A8,A9)>:public LFunctionPtr
 {
 public:
     LNonMemberFunction(void(*_Fptr)(A1,A2,A3,A4,A5,A6,A7,A8,A9)):
-        LFunction(__lGetFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9>::get()),
+        LFunctionPtr(__lGetFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LNonMemberFunction<void(*)(A1,A2,A3,A4,A5,A6,A7,A8,A9)>(mPtrF);
     }
@@ -660,15 +706,15 @@ private:
 };
 
 template<typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8,typename A9,typename A10>
-class LNonMemberFunction<void(*)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)>:public LFunction
+class LNonMemberFunction<void(*)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)>:public LFunctionPtr
 {
 public:
     LNonMemberFunction(void(*_Fptr)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)):
-        LFunction(__lGetFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10>::get()),
+        LFunctionPtr(__lGetFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LNonMemberFunction<void(*)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)>(mPtrF);
     }
@@ -689,20 +735,20 @@ private:
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<typename... FT>
-class LMemberFunction:public LFunction
+class LMemberFunction:public LFunctionPtr
 {
 };
 
 template<typename CT,typename RT> // Class type,Return Type
-class LMemberFunction<RT(CT::*)()>:public LFunction
+class LMemberFunction<RT(CT::*)()>:public LFunctionPtr
 {
 public:
     LMemberFunction(RT(CT::*_Fptr)()):
-        LFunction(__lGetMFTypesAsString<void>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<void>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction*  clone()
+    virtual LFunctionPtr*  clone()
     {
         return new LMemberFunction<RT(CT::*)()>(mPtrF);
     }
@@ -722,15 +768,15 @@ private:
 };
 
 template<typename CT,typename RT,typename A1> // Class type, Return Type, ArgType1
-class LMemberFunction<RT(CT::*)(A1)>:public LFunction
+class LMemberFunction<RT(CT::*)(A1)>:public LFunctionPtr
 {
 public:
     LMemberFunction(RT(CT::*_Fptr)(A1)):
-        LFunction(__lGetMFTypesAsString<A1>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<A1>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LMemberFunction<RT(CT::*)(A1)>(mPtrF);
     }
@@ -750,15 +796,15 @@ private:
 };
 
 template<typename CT,typename RT,typename A1,typename A2>
-class LMemberFunction<RT(CT::*)(A1,A2)>:public LFunction
+class LMemberFunction<RT(CT::*)(A1,A2)>:public LFunctionPtr
 {
 public:
     LMemberFunction(RT(CT::*_Fptr)(A1,A2)):
-        LFunction(__lGetMFTypesAsString<A1,A2>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<A1,A2>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LMemberFunction<RT(CT::*)(A1,A2)>(mPtrF);
     }
@@ -778,15 +824,15 @@ private:
 };
 
 template<typename CT,typename RT,typename A1,typename A2,typename A3>
-class LMemberFunction<RT(CT::*)(A1,A2,A3)>:public LFunction
+class LMemberFunction<RT(CT::*)(A1,A2,A3)>:public LFunctionPtr
 {
 public:
     LMemberFunction(RT(CT::*_Fptr)(A1,A2,A3)):
-        LFunction(__lGetMFTypesAsString<A1,A2,A3>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LMemberFunction<RT(CT::*)(A1,A2,A3)>(mPtrF);
     }
@@ -806,15 +852,15 @@ private:
 };
 
 template<typename CT,typename RT,typename A1,typename A2,typename A3,typename A4>
-class LMemberFunction<RT(CT::*)(A1,A2,A3,A4)>:public LFunction
+class LMemberFunction<RT(CT::*)(A1,A2,A3,A4)>:public LFunctionPtr
 {
 public:
     LMemberFunction(RT(CT::*_Fptr)(A1,A2,A3,A4)):
-        LFunction(__lGetMFTypesAsString<A1,A2,A3,A4>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LMemberFunction<RT(CT::*)(A1,A2,A3,A4)>(mPtrF);
     }
@@ -834,15 +880,15 @@ private:
 };
 
 template<typename CT,typename RT,typename A1,typename A2,typename A3,typename A4,typename A5>
-class LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5)>:public LFunction
+class LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5)>:public LFunctionPtr
 {
 public:
     LMemberFunction(RT(CT::*_Fptr)(A1,A2,A3,A4,A5)):
-        LFunction(__lGetMFTypesAsString<A1,A2,A3,A4,A5>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5)>(mPtrF);
     }
@@ -862,15 +908,15 @@ private:
 };
 
 template<typename CT,typename RT,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6>
-class LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6)>:public LFunction
+class LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6)>:public LFunctionPtr
 {
 public:
     LMemberFunction(RT(CT::*_Fptr)(A1,A2,A3,A4,A5,A6)):
-        LFunction(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6)>(mPtrF);
     }
@@ -890,15 +936,15 @@ private:
 };
 
 template<typename CT,typename RT,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7>
-class LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7)>:public LFunction
+class LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7)>:public LFunctionPtr
 {
 public:
     LMemberFunction(RT(CT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7)):
-        LFunction(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7)>(mPtrF);
     }
@@ -918,15 +964,15 @@ private:
 };
 
 template<typename CT,typename RT,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8>
-class LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8)>:public LFunction
+class LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8)>:public LFunctionPtr
 {
 public:
     LMemberFunction(RT(CT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7,A8)):
-        LFunction(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8)>(mPtrF);
     }
@@ -946,15 +992,15 @@ private:
 };
 
 template<typename CT,typename RT,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8,typename A9>
-class LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9)>:public LFunction
+class LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9)>:public LFunctionPtr
 {
 public:
     LMemberFunction(RT(CT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7,A8,A9)):
-        LFunction(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9)>(mPtrF);
     }
@@ -974,15 +1020,15 @@ private:
 };
 
 template<typename CT,typename RT,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8,typename A9,typename A10>
-class LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)>:public LFunction
+class LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)>:public LFunctionPtr
 {
 public:
     LMemberFunction(RT(CT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)):
-        LFunction(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)>(mPtrF);
     }
@@ -1004,15 +1050,15 @@ private:
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 template<typename CT,typename RT> // Class type,Return Type
-class LMemberFunction<RT(CT::*)()const>:public LFunction
+class LMemberFunction<RT(CT::*)()const>:public LFunctionPtr
 {
 public:
     LMemberFunction(RT(CT::*_Fptr)()const):
-        LFunction(__lGetMFTypesAsString<void>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<void>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction*  clone()
+    virtual LFunctionPtr*  clone()
     {
         return new LMemberFunction<RT(CT::*)()const>(mPtrF);
     }
@@ -1032,15 +1078,15 @@ private:
 };
 
 template<typename CT,typename RT,typename A1> // Class type, Return Type, ArgType1
-class LMemberFunction<RT(CT::*)(A1)const>:public LFunction
+class LMemberFunction<RT(CT::*)(A1)const>:public LFunctionPtr
 {
 public:
     LMemberFunction(RT(CT::*_Fptr)(A1)const):
-        LFunction(__lGetMFTypesAsString<A1>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<A1>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LMemberFunction<RT(CT::*)(A1)const>(mPtrF);
     }
@@ -1060,15 +1106,15 @@ private:
 };
 
 template<typename CT,typename RT,typename A1,typename A2>
-class LMemberFunction<RT(CT::*)(A1,A2)const>:public LFunction
+class LMemberFunction<RT(CT::*)(A1,A2)const>:public LFunctionPtr
 {
 public:
     LMemberFunction(RT(CT::*_Fptr)(A1,A2)const):
-        LFunction(__lGetMFTypesAsString<A1,A2>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<A1,A2>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LMemberFunction<RT(CT::*)(A1,A2)const>(mPtrF);
     }
@@ -1088,15 +1134,15 @@ private:
 };
 
 template<typename CT,typename RT,typename A1,typename A2,typename A3>
-class LMemberFunction<RT(CT::*)(A1,A2,A3)const>:public LFunction
+class LMemberFunction<RT(CT::*)(A1,A2,A3)const>:public LFunctionPtr
 {
 public:
     LMemberFunction(RT(CT::*_Fptr)(A1,A2,A3)const):
-        LFunction(__lGetMFTypesAsString<A1,A2,A3>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LMemberFunction<RT(CT::*)(A1,A2,A3)const>(mPtrF);
     }
@@ -1116,15 +1162,15 @@ private:
 };
 
 template<typename CT,typename RT,typename A1,typename A2,typename A3,typename A4>
-class LMemberFunction<RT(CT::*)(A1,A2,A3,A4)const>:public LFunction
+class LMemberFunction<RT(CT::*)(A1,A2,A3,A4)const>:public LFunctionPtr
 {
 public:
     LMemberFunction(RT(CT::*_Fptr)(A1,A2,A3,A4)const):
-        LFunction(__lGetMFTypesAsString<A1,A2,A3,A4>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LMemberFunction<RT(CT::*)(A1,A2,A3,A4)const>(mPtrF);
     }
@@ -1144,15 +1190,15 @@ private:
 };
 
 template<typename CT,typename RT,typename A1,typename A2,typename A3,typename A4,typename A5>
-class LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5)const>:public LFunction
+class LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5)const>:public LFunctionPtr
 {
 public:
     LMemberFunction(RT(CT::*_Fptr)(A1,A2,A3,A4,A5)const):
-        LFunction(__lGetMFTypesAsString<A1,A2,A3,A4,A5>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5)const>(mPtrF);
     }
@@ -1172,15 +1218,15 @@ private:
 };
 
 template<typename CT,typename RT,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6>
-class LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6)const>:public LFunction
+class LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6)const>:public LFunctionPtr
 {
 public:
     LMemberFunction(RT(CT::*_Fptr)(A1,A2,A3,A4,A5,A6)const):
-        LFunction(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6)const>(mPtrF);
     }
@@ -1200,15 +1246,15 @@ private:
 };
 
 template<typename CT,typename RT,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7>
-class LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7)const>:public LFunction
+class LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7)const>:public LFunctionPtr
 {
 public:
     LMemberFunction(RT(CT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7)const):
-        LFunction(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7)const>(mPtrF);
     }
@@ -1228,15 +1274,15 @@ private:
 };
 
 template<typename CT,typename RT,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8>
-class LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8)const>:public LFunction
+class LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8)const>:public LFunctionPtr
 {
 public:
     LMemberFunction(RT(CT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7,A8)const):
-        LFunction(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8)const>(mPtrF);
     }
@@ -1256,15 +1302,15 @@ private:
 };
 
 template<typename CT,typename RT,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8,typename A9>
-class LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9)const>:public LFunction
+class LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9)const>:public LFunctionPtr
 {
 public:
     LMemberFunction(RT(CT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7,A8,A9)const):
-        LFunction(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9)const>(mPtrF);
     }
@@ -1284,15 +1330,15 @@ private:
 };
 
 template<typename CT,typename RT,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8,typename A9,typename A10>
-class LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)const>:public LFunction
+class LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)const>:public LFunctionPtr
 {
 public:
     LMemberFunction(RT(CT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)const):
-        LFunction(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)const>(mPtrF);
     }
@@ -1313,15 +1359,15 @@ private:
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<typename CT> // Class type
-class LMemberFunction<void(CT::*)()>:public LFunction
+class LMemberFunction<void(CT::*)()>:public LFunctionPtr
 {
 public:
     LMemberFunction(void(CT::*_Fptr)()):
-        LFunction(__lGetMFTypesAsString<void>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<void>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction*  clone()
+    virtual LFunctionPtr*  clone()
     {
         return new LMemberFunction<void(CT::*)()>(mPtrF);
     }
@@ -1341,15 +1387,15 @@ private:
 };
 
 template<typename CT,typename A1> // Class type, ArgType1
-class LMemberFunction<void(CT::*)(A1)>:public LFunction
+class LMemberFunction<void(CT::*)(A1)>:public LFunctionPtr
 {
 public:
     LMemberFunction(void(CT::*_Fptr)(A1)):
-        LFunction(__lGetMFTypesAsString<A1>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<A1>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LMemberFunction<void(CT::*)(A1)>(mPtrF);
     }
@@ -1369,15 +1415,15 @@ private:
 };
 
 template<typename CT,typename A1,typename A2>
-class LMemberFunction<void(CT::*)(A1,A2)>:public LFunction
+class LMemberFunction<void(CT::*)(A1,A2)>:public LFunctionPtr
 {
 public:
     LMemberFunction(void(CT::*_Fptr)(A1,A2)):
-        LFunction(__lGetMFTypesAsString<A1,A2>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<A1,A2>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LMemberFunction<void(CT::*)(A1,A2)>(mPtrF);
     }
@@ -1397,15 +1443,15 @@ private:
 };
 
 template<typename CT,typename A1,typename A2,typename A3>
-class LMemberFunction<void(CT::*)(A1,A2,A3)>:public LFunction
+class LMemberFunction<void(CT::*)(A1,A2,A3)>:public LFunctionPtr
 {
 public:
     LMemberFunction(void(CT::*_Fptr)(A1,A2,A3)):
-        LFunction(__lGetMFTypesAsString<A1,A2,A3>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LMemberFunction<void(CT::*)(A1,A2,A3)>(mPtrF);
     }
@@ -1425,15 +1471,15 @@ private:
 };
 
 template<typename CT,typename A1,typename A2,typename A3,typename A4>
-class LMemberFunction<void(CT::*)(A1,A2,A3,A4)>:public LFunction
+class LMemberFunction<void(CT::*)(A1,A2,A3,A4)>:public LFunctionPtr
 {
 public:
     LMemberFunction(void(CT::*_Fptr)(A1,A2,A3,A4)):
-        LFunction(__lGetMFTypesAsString<A1,A2,A3,A4>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LMemberFunction<void(CT::*)(A1,A2,A3,A4)>(mPtrF);
     }
@@ -1453,15 +1499,15 @@ private:
 };
 
 template<typename CT,typename A1,typename A2,typename A3,typename A4,typename A5>
-class LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5)>:public LFunction
+class LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5)>:public LFunctionPtr
 {
 public:
     LMemberFunction(void(CT::*_Fptr)(A1,A2,A3,A4,A5)):
-        LFunction(__lGetMFTypesAsString<A1,A2,A3,A4,A5>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5)>(mPtrF);
     }
@@ -1481,15 +1527,15 @@ private:
 };
 
 template<typename CT,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6>
-class LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6)>:public LFunction
+class LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6)>:public LFunctionPtr
 {
 public:
     LMemberFunction(void(CT::*_Fptr)(A1,A2,A3,A4,A5,A6)):
-        LFunction(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6)>(mPtrF);
     }
@@ -1509,15 +1555,15 @@ private:
 };
 
 template<typename CT,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7>
-class LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6,A7)>:public LFunction
+class LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6,A7)>:public LFunctionPtr
 {
 public:
     LMemberFunction(void(CT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7)):
-        LFunction(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6,A7)>(mPtrF);
     }
@@ -1537,15 +1583,15 @@ private:
 };
 
 template<typename CT,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8>
-class LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8)>:public LFunction
+class LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8)>:public LFunctionPtr
 {
 public:
     LMemberFunction(void(CT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7,A8)):
-        LFunction(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8)>(mPtrF);
     }
@@ -1565,15 +1611,15 @@ private:
 };
 
 template<typename CT,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8,typename A9>
-class LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9)>:public LFunction
+class LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9)>:public LFunctionPtr
 {
 public:
     LMemberFunction(void(CT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7,A8,A9)):
-        LFunction(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9)>(mPtrF);
     }
@@ -1593,15 +1639,15 @@ private:
 };
 
 template<typename CT,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8,typename A9,typename A10>
-class LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)>:public LFunction
+class LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)>:public LFunctionPtr
 {
 public:
     LMemberFunction(void(CT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)):
-        LFunction(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)>(mPtrF);
     }
@@ -1621,15 +1667,15 @@ private:
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 template<typename CT> // Class type
-class LMemberFunction<void(CT::*)()const>:public LFunction
+class LMemberFunction<void(CT::*)()const>:public LFunctionPtr
 {
 public:
     LMemberFunction(void(CT::*_Fptr)()const):
-        LFunction(__lGetMFTypesAsString<void>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<void>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction*  clone()
+    virtual LFunctionPtr*  clone()
     {
         return new LMemberFunction<void(CT::*)()const>(mPtrF);
     }
@@ -1647,15 +1693,15 @@ public:
 private:
     void(CT::*mPtrF)()const;
 };template<typename CT,typename A1>
-class LMemberFunction<void(CT::*)(A1)const>:public LFunction
+class LMemberFunction<void(CT::*)(A1)const>:public LFunctionPtr
 {
 public:
     LMemberFunction(void(CT::*_Fptr)(A1)const):
-        LFunction(__lGetMFTypesAsString<A1>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<A1>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LMemberFunction<void(CT::*)(A1)const>(mPtrF);
     }
@@ -1675,15 +1721,15 @@ private:
 };
 
 template<typename CT,typename A1,typename A2>
-class LMemberFunction<void(CT::*)(A1,A2)const>:public LFunction
+class LMemberFunction<void(CT::*)(A1,A2)const>:public LFunctionPtr
 {
 public:
     LMemberFunction(void(CT::*_Fptr)(A1,A2)const):
-        LFunction(__lGetMFTypesAsString<A1,A2>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<A1,A2>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LMemberFunction<void(CT::*)(A1,A2)const>(mPtrF);
     }
@@ -1703,15 +1749,15 @@ private:
 };
 
 template<typename CT,typename A1,typename A2,typename A3>
-class LMemberFunction<void(CT::*)(A1,A2,A3)const>:public LFunction
+class LMemberFunction<void(CT::*)(A1,A2,A3)const>:public LFunctionPtr
 {
 public:
     LMemberFunction(void(CT::*_Fptr)(A1,A2,A3)const):
-        LFunction(__lGetMFTypesAsString<A1,A2,A3>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LMemberFunction<void(CT::*)(A1,A2,A3)const>(mPtrF);
     }
@@ -1731,15 +1777,15 @@ private:
 };
 
 template<typename CT,typename A1,typename A2,typename A3,typename A4>
-class LMemberFunction<void(CT::*)(A1,A2,A3,A4)const>:public LFunction
+class LMemberFunction<void(CT::*)(A1,A2,A3,A4)const>:public LFunctionPtr
 {
 public:
     LMemberFunction(void(CT::*_Fptr)(A1,A2,A3,A4)const):
-        LFunction(__lGetMFTypesAsString<A1,A2,A3,A4>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LMemberFunction<void(CT::*)(A1,A2,A3,A4)const>(mPtrF);
     }
@@ -1759,15 +1805,15 @@ private:
 };
 
 template<typename CT,typename A1,typename A2,typename A3,typename A4,typename A5>
-class LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5)const>:public LFunction
+class LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5)const>:public LFunctionPtr
 {
 public:
     LMemberFunction(void(CT::*_Fptr)(A1,A2,A3,A4,A5)const):
-        LFunction(__lGetMFTypesAsString<A1,A2,A3,A4,A5>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5)const>(mPtrF);
     }
@@ -1787,15 +1833,15 @@ private:
 };
 
 template<typename CT,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6>
-class LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6)const>:public LFunction
+class LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6)const>:public LFunctionPtr
 {
 public:
     LMemberFunction(void(CT::*_Fptr)(A1,A2,A3,A4,A5,A6)const):
-        LFunction(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6)const>(mPtrF);
     }
@@ -1815,15 +1861,15 @@ private:
 };
 
 template<typename CT,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7>
-class LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6,A7)const>:public LFunction
+class LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6,A7)const>:public LFunctionPtr
 {
 public:
     LMemberFunction(void(CT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7)const):
-        LFunction(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6,A7)const>(mPtrF);
     }
@@ -1843,15 +1889,15 @@ private:
 };
 
 template<typename CT,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8>
-class LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8)const>:public LFunction
+class LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8)const>:public LFunctionPtr
 {
 public:
     LMemberFunction(void(CT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7,A8)const):
-        LFunction(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8)const>(mPtrF);
     }
@@ -1871,15 +1917,15 @@ private:
 };
 
 template<typename CT,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8,typename A9>
-class LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9)const>:public LFunction
+class LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9)const>:public LFunctionPtr
 {
 public:
     LMemberFunction(void(CT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7,A8,A9)const):
-        LFunction(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9)const>(mPtrF);
     }
@@ -1899,15 +1945,15 @@ private:
 };
 
 template<typename CT,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8,typename A9,typename A10>
-class LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)const>:public LFunction
+class LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)const>:public LFunctionPtr
 {
 public:
     LMemberFunction(void(CT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)const):
-        LFunction(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10>::get()),
         mPtrF(_Fptr)
     {
     }
-    virtual LFunction* clone()
+    virtual LFunctionPtr* clone()
     {
         return new LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)const>(mPtrF);
     }
@@ -1927,12 +1973,186 @@ private:
 };
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*!
+
+this class using to hold functions
+
+how to create and call non member function?
+void sayHello()
+{
+   cout<<"Hello World"<<endl;
+}
+
+LFunction a=LFunction::create(&sayHello);
+a();
+
+or
+
+LFunction a;
+a=&sayHello;
+a();
+
+how to pass parameter to function
+
+void sayHello(LString _name)
+{
+   cout<<"Hello "<<_name.toUTF8().getData()<<endl;
+}
+
+LFunction a=LFunction::create(&sayHello);
+a("Lightning");
+
+how to get what returns
+int sum(int a,int b)
+{
+   return a+b;
+}
+
+LFunction a=LFunction::create(&sum);
+LVariant v = a(4,5);
+cout<<v.toInt()<<endl;
+
+how to create and call member functions?
+struct A
+{
+    void sayHello()
+    {
+        cout<<"Hello World"<<endl;
+    }
+};
+
+LFunction a=LFunction::create(&A::sayHello);
+A obj;
+a(obj);// pass class/struct object as first parameter
+
+*/
+class LFunction
+{
+public:
+    LFunction();
+    LFunction(const LFunction& _other);
+    LFunction(LFunction&& _other);
+    virtual ~LFunction();
+
+    LVariant call()const;
+    template<typename... Args>
+    LVariant call(Args... _args)const;
+
+    template<typename FT>
+    static LFunction   create(FT _in);
+
+    LFunction&  operator=(const LFunction& _other);
+    LFunction&  operator=(LFunction&& _other);
+
+    template<typename RT>
+    LFunction &operator=(RT(*_fptr)());
+    template<typename RT,typename... Args>
+    LFunction &operator=(RT(*_fptr)(Args...));
+    template<typename RT,typename CT>
+    LFunction &operator=(RT(CT::*_fptr)());
+    template<typename RT,typename CT,typename... Args>
+    LFunction &operator=(RT(CT::*_fptr)(Args...));
+    template<typename RT,typename CT>
+    LFunction &operator=(RT(CT::*_fptr)()const);
+    template<typename RT,typename CT,typename... Args>
+    LFunction &operator=(RT(CT::*_fptr)(Args...)const);
+
+
+    LVariant operator()()const;
+    template<typename... Args>
+    LVariant operator()(Args... _args)const;
+
+
+private:
+    LFunctionPtr* mFptr;
+};
+
+template<typename... Args>
+LVariant LFunction::call(Args... _args)const
+{
+    LVariant o;
+    o = (*mFptr)({LVariant::create(_args)...});
+    return o;
+}
+
+template<typename FT>
+LFunction LFunction::create(FT _in)
+{
+    LFunction o;
+    o = _in;
+    return o;
+}
+
+
+template<typename RT>
+LFunction &LFunction::operator=(RT(*_fptr)())
+{
+    if(mFptr)
+        delete mFptr;
+    mFptr = new LNonMemberFunction<RT(*)()>(_fptr);
+    return *this;
+}
+
+template<typename RT,typename... Args>
+LFunction &LFunction::operator=(RT(*_fptr)(Args...))
+{
+    if(mFptr)
+        delete mFptr;
+    mFptr = new LNonMemberFunction<RT(*)(Args...)>(_fptr);
+    return *this;
+}
+
+template<typename RT,typename CT>
+LFunction &LFunction::operator=(RT(CT::*_fptr)())
+{
+    if(mFptr)
+        delete mFptr;
+    mFptr = new LMemberFunction<RT(CT::*)()>(_fptr);
+    return *this;
+}
+
+template<typename RT,typename CT,typename... Args>
+LFunction &LFunction::operator=(RT(CT::*_fptr)(Args...))
+{
+    if(mFptr)
+        delete mFptr;
+    mFptr = new LMemberFunction<RT(CT::*)(Args...)>(_fptr);
+    return *this;
+}
+
+template<typename RT,typename CT>
+LFunction &LFunction::operator=(RT(CT::*_fptr)()const)
+{
+    if(mFptr)
+        delete mFptr;
+    mFptr = new LMemberFunction<RT(CT::*)()const>(_fptr);
+    return *this;
+}
+
+template<typename RT,typename CT,typename... Args>
+LFunction &LFunction::operator=(RT(CT::*_fptr)(Args...)const)
+{
+    if(mFptr)
+        delete mFptr;
+    mFptr = new LMemberFunction<RT(CT::*)(Args...)const>(_fptr);
+    return *this;
+}
 
 
 
 
+template<typename... Args>
+LVariant LFunction::operator()(Args... _args)const
+{
+    LVariant o;
+    if(mFptr)
+        o = (*mFptr)(LVariant::create(_args)...);
+    return o;
+}
 
 
 LNAMESPACE_END
 
-#endif // LFUNCTION_H
+#endif // LFunction_H

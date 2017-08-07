@@ -574,6 +574,25 @@ LVector<LSize> LD3D9Device::getAvailbleResolutions()
 LImage LD3D9Device::getScreenShot()
 {
     return mMainBackBuffer->getImage();
+    LImage o;
+    o.init(getScreenResolution().width,getScreenResolution().height,LImage::Format_R8G8B8);
+    IDirect3DSurface9* _sr;
+    HR(mDevice->GetFrontBufferData(0,_sr));
+    D3DLOCKED_RECT r;
+
+    HR(_sr->LockRect(&r,0,D3DLOCK_READONLY));
+
+    for(u32 i=0;i<o.getPixelsCount();i++)
+    {
+        o.getData()[i*3+2]=((char*)r.pBits)[i*4+0];
+        o.getData()[i*3+1]=((char*)r.pBits)[i*4+1];
+        o.getData()[i*3+0]=((char*)r.pBits)[i*4+2];
+    }
+
+    HR(_sr->UnlockRect());
+    HR(_sr->Release());
+    return o.getResized(mScreenWidth,mScreenHeight);
+
 }
 
 LSize LD3D9Device::getResolution() const

@@ -4,6 +4,8 @@
 #include "ldefines.h"
 #include "llog.h"
 
+
+
 LNAMESPACE_BEGIN
 
 template<typename T>
@@ -94,7 +96,8 @@ public:
     }
 
 private:
-    T* mData;
+    T*      mData;
+    bool    mIsArray;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -211,5 +214,7 @@ private:
 };
 
 LNAMESPACE_END
+
+
 
 #endif // LMEMORYMANAGER_H

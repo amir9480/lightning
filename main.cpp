@@ -234,29 +234,20 @@ LVector<u32> ibox={
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-struct A
-{
-void sayHello(int a,float b)const
-{
-    cout<<"Hello WOrld "<<a<<" "<<b<<endl;
-}
 
-};
 
 int main()
 {
     lMemoryLogStart();
 
 
-
-
-    LImage image01 = LImage::loadFromPngFile("image3.png");
+    /*LImage image01 = LImage::loadFromPngFile("image3.png");
     LImage image02 = LImage::loadFromPngFile("image.png");
 
 
     LGFXDevice* dev = LGFXDevice::create();
 
-    dev->initialize(0,0,dev->getAvailbleResolutions()[0].width,dev->getAvailbleResolutions()[0].height);
+    dev->initialize(0,0,800,600);
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     LGFXVertexDeclaration* myVertex1Decl = dev->createVertexDeclaration(_myVertex1Decl);
     LGFXVertexDeclaration* myVertex2Decl = dev->createVertexDeclaration(_myVertex2Decl);
@@ -321,8 +312,6 @@ int main()
 
     while(dev->processOSMessage())
     {
-        dev->clear(0,50,100);
-
         float camspeed=0.1f;
 
         if(LInput::isKeyDown(LInput::KeyCode_Escape))
@@ -386,7 +375,7 @@ int main()
             }
             else
             {
-                dev->reset(1,0,dev->getScreenResolution().width,dev->getScreenResolution().height);
+                dev->reset(1,0,640,480);
                 _isr=true;
             }
         }
@@ -403,6 +392,8 @@ int main()
 
 
 
+
+        dev->clear(0,50,100);
 
 
         // Plane
@@ -456,20 +447,20 @@ int main()
 
 
         //! screen effect
-//        for(int i=0;i<1;i++)
-//        {
-//            dev->resetParameters();
-//            //shaderpsscreen01->setTexture("t0",dev->getBackBuffer());
-//            dev->setPixelShader(shaderpsscreen01);
-//            dev->drawQuad();
-//        }
+        for(int i=0;i<4;i++)
+        {
+            dev->resetParameters();
+            //shaderpsscreen01->setTexture("t0",dev->getBackBuffer());
+            dev->setPixelShader(shaderpsscreen01);
+            dev->drawQuad();
+        }
 
         dev->render();
 
         LInput::resetInputs();
     }
 
-    delete dev;
+    delete dev;*/
 
 
 
