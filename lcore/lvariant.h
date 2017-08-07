@@ -464,6 +464,11 @@ T __LVariantTypeCastHelper<T>::cast(const LVariant &_in)
         LString o=_in.toString();
         return *((T*)&o);
     }
+    else if(LIsSameType<typename LRemoveReference<T>::type,LVariant>::value || LIsSameType<typename LRemoveReference<T>::type,const LVariant>::value)
+    {
+        LVariant o=_in;
+        return *((T*)&o);
+    }
 
     lError2( (_in.mType!=LVariant::Type::TCustom && _in.mType!=LVariant::Type::TCustomR) || _in.mTypeName!=lGetTypeName<T>() ,"Your type casting is not right");
 
@@ -586,13 +591,50 @@ T& __LVariantTypeCastHelper<T&>::cast(const LVariant &_in)
 template<typename T>
 T* __LVariantTypeCastHelper<T*>::cast(const LVariant &_in)
 {
-
     if(_in.mType==LVariant::Type::TCustom)
         return &(dynamic_cast<LCLassVariant<T>*>(_in.mCustomClass)->mData);
     if(_in.mType==LVariant::Type::TCustomR)
         return (dynamic_cast<LClassVariantReference<T>*>(_in.mCustomClass)->mData);
 
-    return *static_cast<T*>(_in.mCustom);
+
+    if(LIsSameType<typename LRemoveReference<T*>::type,char*>::value || LIsSameType<typename LRemoveReference<T*>::type,const char*>::value)
+    {
+        LString8 _o = _in.mString->toUTF8();
+        lMemoryLogStartIgnore();
+        static char* o = nullptr;
+        if(o)
+           delete[] o;
+        o = new char[_o.getCapacity()+1];
+        lMemoryCopy(o,_o.getData(),(_o.getCapacity()*sizeof(char))+1);
+        lMemoryLogEndIgnore();
+        return (*((T**)&o));
+    }
+    else if(LIsSameType<typename LRemoveReference<T*>::type,wchar_t*>::value || LIsSameType<typename LRemoveReference<T*>::type,const wchar_t*>::value)
+    {
+        LString _o = *_in.mString;
+        lMemoryLogStartIgnore();
+        static wchar_t* o = nullptr;
+        if(o)
+            delete[] o;
+        o = new wchar_t[_o.getCapacity()+1];
+        lMemoryCopy(o,_o.getData(),(_o.getCapacity()*sizeof(wchar_t))+1);
+        lMemoryLogEndIgnore();
+        return (*((T**)&o));
+    }
+    else if(LIsSameType<typename LRemoveReference<T*>::type,char32_t*>::value || LIsSameType<typename LRemoveReference<T*>::type,const char32_t*>::value)
+    {
+        LString32 _o = _in.mString->toUTF32();
+        lMemoryLogStartIgnore();
+        static char32_t* o = nullptr;
+        if(o)
+            delete[] o;
+        o = new char32_t[_o.getCapacity()+1];
+        lMemoryCopy(o,_o.getData(),(_o.getCapacity()*sizeof(char32_t))+1);
+        lMemoryLogEndIgnore();
+        return (*((T**)&o));
+    }
+
+    return static_cast<T*>(_in.mCustom);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

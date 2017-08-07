@@ -235,11 +235,17 @@ LVector<u32> ibox={
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+void sayHello(LVariant _in)
+{
+    cout<<"Hello "<<_in.toInt()<<endl;
+}
 
 int main()
 {
     lMemoryLogStart();
 
+    LFunction a=LFunction::create(&sayHello);
+    a(44);
 
     /*LImage image01 = LImage::loadFromPngFile("image3.png");
     LImage image02 = LImage::loadFromPngFile("image.png");

@@ -1303,6 +1303,12 @@ u32 LString_Base<chartype>::__utility_strlen(const T *_t)
 }
 
 template<>
+LString8 LString_Base<char>::toUTF8() const
+{
+    return *this;
+}
+
+template<>
 LString8 LString_Base<wchar_t>::toUTF8() const
 {
     LString8 o,out;
@@ -1339,6 +1345,12 @@ LString8 LString_Base<char32_t>::toUTF8() const
     }
     out=o;
     return out;
+}
+
+template<>
+LString LString_Base<wchar_t>::toUTF16() const
+{
+    return *this;
 }
 
 template<>

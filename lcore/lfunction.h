@@ -160,7 +160,7 @@ public:
     {
         return new LNonMemberFunction<RT(*)(A1)>(mPtrF);
     }
-    LVariant operator()(A1 _a1)
+    LVariant call(A1 _a1)
     {
         LVariant o;
         if(mArgTypes==__lGetFTypesAsString<A1>::get())
@@ -169,7 +169,7 @@ public:
     }
     virtual LVariant operator()(LVariant _a1)
     {
-        return (*this)(_a1.to<A1>());
+        return (*this).call(_a1.to<A1>());
     }
 private:
     RT(*mPtrF)(A1);
@@ -188,7 +188,7 @@ public:
     {
         return new LNonMemberFunction<RT(*)(A1,A2)>(mPtrF);
     }
-    LVariant operator()(A1 _a1,A2 _a2)
+    LVariant call(A1 _a1,A2 _a2)
     {
         LVariant o;
         if(mArgTypes==__lGetFTypesAsString<A1,A2>::get())
@@ -197,7 +197,7 @@ public:
     }
     virtual LVariant operator()(LVariant _a1,LVariant _a2)
     {
-        return (*this)(_a1.to<A1>(),_a2.to<A2>());
+        return (*this).call(_a1.to<A1>(),_a2.to<A2>());
     }
 private:
     RT(*mPtrF)(A1,A2);
@@ -216,7 +216,7 @@ public:
     {
         return new LNonMemberFunction<RT(*)(A1,A2,A3)>(mPtrF);
     }
-    LVariant operator()(A1 _a1,A2 _a2,A3 _a3)
+    LVariant call(A1 _a1,A2 _a2,A3 _a3)
     {
         LVariant o;
         if(mArgTypes==__lGetFTypesAsString<A1,A2,A3>::get())
@@ -225,7 +225,7 @@ public:
     }
     virtual LVariant operator()(LVariant _a1,LVariant _a2,LVariant _a3)
     {
-        return (*this)(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>());
+        return (*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>());
     }
 private:
     RT(*mPtrF)(A1,A2,A3);
@@ -244,7 +244,7 @@ public:
     {
         return new LNonMemberFunction<RT(*)(A1,A2,A3,A4)>(mPtrF);
     }
-    LVariant operator()(A1 _a1,A2 _a2,A3 _a3,A4 _a4)
+    LVariant call(A1 _a1,A2 _a2,A3 _a3,A4 _a4)
     {
         LVariant o;
         if(mArgTypes==__lGetFTypesAsString<A1,A2,A3,A4>::get())
@@ -253,7 +253,7 @@ public:
     }
     virtual LVariant operator()(LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4)
     {
-        return (*this)(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>());
+        return (*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>());
     }
 private:
     RT(*mPtrF)(A1,A2,A3,A4);
@@ -272,7 +272,7 @@ public:
     {
         return new LNonMemberFunction<RT(*)(A1,A2,A3,A4,A5)>(mPtrF);
     }
-    LVariant operator()(A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5)
+    LVariant call(A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5)
     {
         LVariant o;
         if(mArgTypes==__lGetFTypesAsString<A1,A2,A3,A4,A5>::get())
@@ -281,7 +281,7 @@ public:
     }
     virtual LVariant operator()(LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5)
     {
-        return (*this)(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>());
+        return (*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>());
     }
 private:
     RT(*mPtrF)(A1,A2,A3,A4,A5);
@@ -300,7 +300,7 @@ public:
     {
         return new LNonMemberFunction<RT(*)(A1,A2,A3,A4,A5,A6)>(mPtrF);
     }
-    LVariant operator()(A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6)
+    LVariant call(A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6)
     {
         LVariant o;
         if(mArgTypes==__lGetFTypesAsString<A1,A2,A3,A4,A5,A6>::get())
@@ -309,7 +309,7 @@ public:
     }
     virtual LVariant operator()(LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6)
     {
-        return (*this)(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>());
+        return (*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>());
     }
 private:
     RT(*mPtrF)(A1,A2,A3,A4,A5,A6);
@@ -328,7 +328,7 @@ public:
     {
         return new LNonMemberFunction<RT(*)(A1,A2,A3,A4,A5,A6,A7)>(mPtrF);
     }
-    LVariant operator()(A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7)
+    LVariant call(A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7)
     {
         LVariant o;
         if(mArgTypes==__lGetFTypesAsString<A1,A2,A3,A4,A5,A6,A7>::get())
@@ -337,7 +337,7 @@ public:
     }
     virtual LVariant operator()(LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7)
     {
-        return (*this)(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>());
+        return (*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>());
     }
 private:
     RT(*mPtrF)(A1,A2,A3,A4,A5,A6,A7);
@@ -356,7 +356,7 @@ public:
     {
         return new LNonMemberFunction<RT(*)(A1,A2,A3,A4,A5,A6,A7,A8)>(mPtrF);
     }
-    LVariant operator()(A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8)
+    LVariant call(A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8)
     {
         LVariant o;
         if(mArgTypes==__lGetFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8>::get())
@@ -365,7 +365,7 @@ public:
     }
     virtual LVariant operator()(LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7,LVariant _a8)
     {
-        return (*this)(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>());
+        return (*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>());
     }
 private:
     RT(*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8);
@@ -384,7 +384,7 @@ public:
     {
         return new LNonMemberFunction<RT(*)(A1,A2,A3,A4,A5,A6,A7,A8,A9)>(mPtrF);
     }
-    LVariant operator()(A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8,A9 _a9)
+    LVariant call(A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8,A9 _a9)
     {
         LVariant o;
         if(mArgTypes==__lGetFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9>::get())
@@ -393,7 +393,7 @@ public:
     }
     virtual LVariant operator()(LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7,LVariant _a8,LVariant _a9)
     {
-        return (*this)(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>());
+        return (*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>());
     }
 private:
     RT(*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8,A9);
@@ -412,7 +412,7 @@ public:
     {
         return new LNonMemberFunction<RT(*)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)>(mPtrF);
     }
-    LVariant operator()(A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8,A9 _a9,A10 _a10)
+    LVariant call(A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8,A9 _a9,A10 _a10)
     {
         LVariant o;
         if(mArgTypes==__lGetFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10>::get())
@@ -421,7 +421,7 @@ public:
     }
     virtual LVariant operator()(LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7,LVariant _a8,LVariant _a9,LVariant _a10)
     {
-        return (*this)(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>(),_a10.to<A10>());
+        return (*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>(),_a10.to<A10>());
     }
 private:
     RT(*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10);
@@ -466,7 +466,7 @@ public:
     {
         return new LNonMemberFunction<void(*)(A1)>(mPtrF);
     }
-    LVariant operator()(A1 _a1)
+    LVariant call(A1 _a1)
     {
         LVariant o;
         if(mArgTypes==__lGetFTypesAsString<A1>::get())
@@ -475,7 +475,7 @@ public:
     }
     virtual LVariant operator()(LVariant _a1)
     {
-        return (*this)(_a1.to<A1>());
+        return (*this).call(_a1.to<A1>());
     }
 private:
     void(*mPtrF)(A1);
@@ -494,7 +494,7 @@ public:
     {
         return new LNonMemberFunction<void(*)(A1,A2)>(mPtrF);
     }
-    LVariant operator()(A1 _a1,A2 _a2)
+    LVariant call(A1 _a1,A2 _a2)
     {
         LVariant o;
         if(mArgTypes==__lGetFTypesAsString<A1,A2>::get())
@@ -503,7 +503,7 @@ public:
     }
     virtual LVariant operator()(LVariant _a1,LVariant _a2)
     {
-        return (*this)(_a1.to<A1>(),_a2.to<A2>());
+        return (*this).call(_a1.to<A1>(),_a2.to<A2>());
     }
 private:
     void(*mPtrF)(A1,A2);
@@ -522,7 +522,7 @@ public:
     {
         return new LNonMemberFunction<void(*)(A1,A2,A3)>(mPtrF);
     }
-    LVariant operator()(A1 _a1,A2 _a2,A3 _a3)
+    LVariant call(A1 _a1,A2 _a2,A3 _a3)
     {
         LVariant o;
         if(mArgTypes==__lGetFTypesAsString<A1,A2,A3>::get())
@@ -531,7 +531,7 @@ public:
     }
     virtual LVariant operator()(LVariant _a1,LVariant _a2,LVariant _a3)
     {
-        return (*this)(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>());
+        return (*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>());
     }
 private:
     void(*mPtrF)(A1,A2,A3);
@@ -550,7 +550,7 @@ public:
     {
         return new LNonMemberFunction<void(*)(A1,A2,A3,A4)>(mPtrF);
     }
-    LVariant operator()(A1 _a1,A2 _a2,A3 _a3,A4 _a4)
+    LVariant call(A1 _a1,A2 _a2,A3 _a3,A4 _a4)
     {
         LVariant o;
         if(mArgTypes==__lGetFTypesAsString<A1,A2,A3,A4>::get())
@@ -559,7 +559,7 @@ public:
     }
     virtual LVariant operator()(LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4)
     {
-        return (*this)(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>());
+        return (*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>());
     }
 private:
     void(*mPtrF)(A1,A2,A3,A4);
@@ -578,7 +578,7 @@ public:
     {
         return new LNonMemberFunction<void(*)(A1,A2,A3,A4,A5)>(mPtrF);
     }
-    LVariant operator()(A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5)
+    LVariant call(A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5)
     {
         LVariant o;
         if(mArgTypes==__lGetFTypesAsString<A1,A2,A3,A4,A5>::get())
@@ -587,7 +587,7 @@ public:
     }
     virtual LVariant operator()(LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5)
     {
-        return (*this)(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>());
+        return (*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>());
     }
 private:
     void(*mPtrF)(A1,A2,A3,A4,A5);
@@ -606,7 +606,7 @@ public:
     {
         return new LNonMemberFunction<void(*)(A1,A2,A3,A4,A5,A6)>(mPtrF);
     }
-    LVariant operator()(A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6)
+    LVariant call(A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6)
     {
         LVariant o;
         if(mArgTypes==__lGetFTypesAsString<A1,A2,A3,A4,A5,A6>::get())
@@ -615,7 +615,7 @@ public:
     }
     virtual LVariant operator()(LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6)
     {
-        return (*this)(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>());
+        return (*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>());
     }
 private:
     void(*mPtrF)(A1,A2,A3,A4,A5,A6);
@@ -634,7 +634,7 @@ public:
     {
         return new LNonMemberFunction<void(*)(A1,A2,A3,A4,A5,A6,A7)>(mPtrF);
     }
-    LVariant operator()(A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7)
+    LVariant call(A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7)
     {
         LVariant o;
         if(mArgTypes==__lGetFTypesAsString<A1,A2,A3,A4,A5,A6,A7>::get())
@@ -643,7 +643,7 @@ public:
     }
     virtual LVariant operator()(LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7)
     {
-        return (*this)(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>());
+        return (*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>());
     }
 private:
     void(*mPtrF)(A1,A2,A3,A4,A5,A6,A7);
@@ -662,7 +662,7 @@ public:
     {
         return new LNonMemberFunction<void(*)(A1,A2,A3,A4,A5,A6,A7,A8)>(mPtrF);
     }
-    LVariant operator()(A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8)
+    LVariant call(A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8)
     {
         LVariant o;
         if(mArgTypes==__lGetFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8>::get())
@@ -671,7 +671,7 @@ public:
     }
     virtual LVariant operator()(LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7,LVariant _a8)
     {
-        return (*this)(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>());
+        return (*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>());
     }
 private:
     void(*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8);
@@ -690,7 +690,7 @@ public:
     {
         return new LNonMemberFunction<void(*)(A1,A2,A3,A4,A5,A6,A7,A8,A9)>(mPtrF);
     }
-    LVariant operator()(A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8,A9 _a9)
+    LVariant call(A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8,A9 _a9)
     {
         LVariant o;
         if(mArgTypes==__lGetFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9>::get())
@@ -699,7 +699,7 @@ public:
     }
     virtual LVariant operator()(LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7,LVariant _a8,LVariant _a9)
     {
-        return (*this)(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>());
+        return (*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>());
     }
 private:
     void(*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8,A9);
@@ -718,7 +718,7 @@ public:
     {
         return new LNonMemberFunction<void(*)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)>(mPtrF);
     }
-    LVariant operator()(A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8,A9 _a9,A10 _a10)
+    LVariant call(A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8,A9 _a9,A10 _a10)
     {
         LVariant o;
         if(mArgTypes==__lGetFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10>::get())
@@ -727,7 +727,7 @@ public:
     }
     virtual LVariant operator()(LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7,LVariant _a8,LVariant _a9,LVariant _a10)
     {
-        return (*this)(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>(),_a10.to<A10>());
+        return (*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>(),_a10.to<A10>());
     }
 private:
     void(*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10);
@@ -752,7 +752,7 @@ public:
     {
         return new LMemberFunction<RT(CT::*)()>(mPtrF);
     }
-    LVariant operator()(CT& _o)
+    LVariant call(CT& _o)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<void>::get())
@@ -761,7 +761,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o)
     {
-        return (*this)(_o.to<CT&>());
+        return (*this).call(_o.to<CT>());
     }
 private:
     RT(CT::*mPtrF)();
@@ -780,7 +780,7 @@ public:
     {
         return new LMemberFunction<RT(CT::*)(A1)>(mPtrF);
     }
-    LVariant operator()(CT& _o,A1 _a1)
+    LVariant call(CT& _o,A1 _a1)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1>::get())
@@ -789,7 +789,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1)
     {
-        return (*this)(_o.to<CT&>(),_a1.to<A1>());
+        return (*this).call(_o.to<CT>(),_a1.to<A1>());
     }
 private:
     RT(CT::*mPtrF)(A1);
@@ -808,7 +808,7 @@ public:
     {
         return new LMemberFunction<RT(CT::*)(A1,A2)>(mPtrF);
     }
-    LVariant operator()(CT& _o,A1 _a1,A2 _a2)
+    LVariant call(CT& _o,A1 _a1,A2 _a2)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2>::get())
@@ -817,7 +817,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2)
     {
-        return (*this)(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>());
+        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>());
     }
 private:
     RT(CT::*mPtrF)(A1,A2);
@@ -836,7 +836,7 @@ public:
     {
         return new LMemberFunction<RT(CT::*)(A1,A2,A3)>(mPtrF);
     }
-    LVariant operator()(CT& _o,A1 _a1,A2 _a2,A3 _a3)
+    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3>::get())
@@ -845,7 +845,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3)
     {
-        return (*this)(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>());
+        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>());
     }
 private:
     RT(CT::*mPtrF)(A1,A2,A3);
@@ -864,7 +864,7 @@ public:
     {
         return new LMemberFunction<RT(CT::*)(A1,A2,A3,A4)>(mPtrF);
     }
-    LVariant operator()(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4)
+    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4>::get())
@@ -873,7 +873,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4)
     {
-        return (*this)(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>());
+        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>());
     }
 private:
     RT(CT::*mPtrF)(A1,A2,A3,A4);
@@ -892,7 +892,7 @@ public:
     {
         return new LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5)>(mPtrF);
     }
-    LVariant operator()(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5)
+    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5>::get())
@@ -901,7 +901,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5)
     {
-        return (*this)(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>());
+        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>());
     }
 private:
     RT(CT::*mPtrF)(A1,A2,A3,A4,A5);
@@ -920,7 +920,7 @@ public:
     {
         return new LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6)>(mPtrF);
     }
-    LVariant operator()(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6)
+    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6>::get())
@@ -929,7 +929,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6)
     {
-        return (*this)(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>());
+        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>());
     }
 private:
     RT(CT::*mPtrF)(A1,A2,A3,A4,A5,A6);
@@ -948,7 +948,7 @@ public:
     {
         return new LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7)>(mPtrF);
     }
-    LVariant operator()(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7)
+    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7>::get())
@@ -957,7 +957,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7)
     {
-        return (*this)(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>());
+        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>());
     }
 private:
     RT(CT::*mPtrF)(A1,A2,A3,A4,A5,A6,A7);
@@ -976,7 +976,7 @@ public:
     {
         return new LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8)>(mPtrF);
     }
-    LVariant operator()(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8)
+    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8>::get())
@@ -985,7 +985,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7,LVariant _a8)
     {
-        return (*this)(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>());
+        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>());
     }
 private:
     RT(CT::*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8);
@@ -1004,7 +1004,7 @@ public:
     {
         return new LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9)>(mPtrF);
     }
-    LVariant operator()(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8,A9 _a9)
+    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8,A9 _a9)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9>::get())
@@ -1013,7 +1013,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7,LVariant _a8,LVariant _a9)
     {
-        return (*this)(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>());
+        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>());
     }
 private:
     RT(CT::*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8,A9);
@@ -1032,7 +1032,7 @@ public:
     {
         return new LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)>(mPtrF);
     }
-    LVariant operator()(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8,A9 _a9,A10 _a10)
+    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8,A9 _a9,A10 _a10)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10>::get())
@@ -1041,7 +1041,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7,LVariant _a8,LVariant _a9,LVariant _a10)
     {
-        return (*this)(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>(),_a10.to<A10>());
+        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>(),_a10.to<A10>());
     }
 private:
     RT(CT::*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10);
@@ -1062,7 +1062,7 @@ public:
     {
         return new LMemberFunction<RT(CT::*)()const>(mPtrF);
     }
-    LVariant operator()(CT& _o)
+    LVariant call(CT& _o)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<void>::get())
@@ -1071,7 +1071,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o)
     {
-        return (*this)(_o.to<CT&>());
+        return (*this).call(_o.to<CT>());
     }
 private:
     RT(CT::*mPtrF)()const;
@@ -1090,7 +1090,7 @@ public:
     {
         return new LMemberFunction<RT(CT::*)(A1)const>(mPtrF);
     }
-    LVariant operator()(CT& _o,A1 _a1)
+    LVariant call(CT& _o,A1 _a1)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1>::get())
@@ -1099,7 +1099,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1)
     {
-        return (*this)(_o.to<CT&>(),_a1.to<A1>());
+        return (*this).call(_o.to<CT>(),_a1.to<A1>());
     }
 private:
     RT(CT::*mPtrF)(A1)const;
@@ -1118,7 +1118,7 @@ public:
     {
         return new LMemberFunction<RT(CT::*)(A1,A2)const>(mPtrF);
     }
-    LVariant operator()(CT& _o,A1 _a1,A2 _a2)
+    LVariant call(CT& _o,A1 _a1,A2 _a2)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2>::get())
@@ -1127,7 +1127,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2)
     {
-        return (*this)(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>());
+        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>());
     }
 private:
     RT(CT::*mPtrF)(A1,A2)const;
@@ -1146,7 +1146,7 @@ public:
     {
         return new LMemberFunction<RT(CT::*)(A1,A2,A3)const>(mPtrF);
     }
-    LVariant operator()(CT& _o,A1 _a1,A2 _a2,A3 _a3)
+    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3>::get())
@@ -1155,7 +1155,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3)
     {
-        return (*this)(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>());
+        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>());
     }
 private:
     RT(CT::*mPtrF)(A1,A2,A3)const;
@@ -1174,7 +1174,7 @@ public:
     {
         return new LMemberFunction<RT(CT::*)(A1,A2,A3,A4)const>(mPtrF);
     }
-    LVariant operator()(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4)
+    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4>::get())
@@ -1183,7 +1183,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4)
     {
-        return (*this)(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>());
+        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>());
     }
 private:
     RT(CT::*mPtrF)(A1,A2,A3,A4)const;
@@ -1202,7 +1202,7 @@ public:
     {
         return new LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5)const>(mPtrF);
     }
-    LVariant operator()(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5)
+    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5>::get())
@@ -1211,7 +1211,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5)
     {
-        return (*this)(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>());
+        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>());
     }
 private:
     RT(CT::*mPtrF)(A1,A2,A3,A4,A5)const;
@@ -1230,7 +1230,7 @@ public:
     {
         return new LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6)const>(mPtrF);
     }
-    LVariant operator()(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6)
+    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6>::get())
@@ -1239,7 +1239,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6)
     {
-        return (*this)(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>());
+        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>());
     }
 private:
     RT(CT::*mPtrF)(A1,A2,A3,A4,A5,A6)const;
@@ -1258,7 +1258,7 @@ public:
     {
         return new LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7)const>(mPtrF);
     }
-    LVariant operator()(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7)
+    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7>::get())
@@ -1267,7 +1267,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7)
     {
-        return (*this)(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>());
+        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>());
     }
 private:
     RT(CT::*mPtrF)(A1,A2,A3,A4,A5,A6,A7)const;
@@ -1286,7 +1286,7 @@ public:
     {
         return new LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8)const>(mPtrF);
     }
-    LVariant operator()(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8)
+    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8>::get())
@@ -1295,7 +1295,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7,LVariant _a8)
     {
-        return (*this)(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>());
+        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>());
     }
 private:
     RT(CT::*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8)const;
@@ -1314,7 +1314,7 @@ public:
     {
         return new LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9)const>(mPtrF);
     }
-    LVariant operator()(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8,A9 _a9)
+    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8,A9 _a9)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9>::get())
@@ -1323,7 +1323,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7,LVariant _a8,LVariant _a9)
     {
-        return (*this)(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>());
+        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>());
     }
 private:
     RT(CT::*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8,A9)const;
@@ -1342,7 +1342,7 @@ public:
     {
         return new LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)const>(mPtrF);
     }
-    LVariant operator()(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8,A9 _a9,A10 _a10)
+    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8,A9 _a9,A10 _a10)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10>::get())
@@ -1351,7 +1351,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7,LVariant _a8,LVariant _a9,LVariant _a10)
     {
-        return (*this)(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>(),_a10.to<A10>());
+        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>(),_a10.to<A10>());
     }
 private:
     RT(CT::*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)const;
@@ -1371,7 +1371,7 @@ public:
     {
         return new LMemberFunction<void(CT::*)()>(mPtrF);
     }
-    LVariant operator()(CT& _o)
+    LVariant call(CT& _o)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<void>::get())
@@ -1380,7 +1380,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o)
     {
-        return (*this)(_o.to<CT&>());
+        return (*this).call(_o.to<CT>());
     }
 private:
     void(CT::*mPtrF)();
@@ -1399,7 +1399,7 @@ public:
     {
         return new LMemberFunction<void(CT::*)(A1)>(mPtrF);
     }
-    LVariant operator()(CT& _o,A1 _a1)
+    LVariant call(CT& _o,A1 _a1)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1>::get())
@@ -1408,7 +1408,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1)
     {
-        return (*this)(_o.to<CT&>(),_a1.to<A1>());
+        return (*this).call(_o.to<CT>(),_a1.to<A1>());
     }
 private:
     void(CT::*mPtrF)(A1);
@@ -1427,7 +1427,7 @@ public:
     {
         return new LMemberFunction<void(CT::*)(A1,A2)>(mPtrF);
     }
-    LVariant operator()(CT& _o,A1 _a1,A2 _a2)
+    LVariant call(CT& _o,A1 _a1,A2 _a2)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2>::get())
@@ -1436,7 +1436,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2)
     {
-        return (*this)(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>());
+        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>());
     }
 private:
     void(CT::*mPtrF)(A1,A2);
@@ -1455,7 +1455,7 @@ public:
     {
         return new LMemberFunction<void(CT::*)(A1,A2,A3)>(mPtrF);
     }
-    LVariant operator()(CT& _o,A1 _a1,A2 _a2,A3 _a3)
+    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3>::get())
@@ -1464,7 +1464,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3)
     {
-        return (*this)(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>());
+        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>());
     }
 private:
     void(CT::*mPtrF)(A1,A2,A3);
@@ -1483,7 +1483,7 @@ public:
     {
         return new LMemberFunction<void(CT::*)(A1,A2,A3,A4)>(mPtrF);
     }
-    LVariant operator()(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4)
+    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4>::get())
@@ -1492,7 +1492,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4)
     {
-        return (*this)(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>());
+        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>());
     }
 private:
     void(CT::*mPtrF)(A1,A2,A3,A4);
@@ -1511,7 +1511,7 @@ public:
     {
         return new LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5)>(mPtrF);
     }
-    LVariant operator()(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5)
+    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5>::get())
@@ -1520,7 +1520,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5)
     {
-        return (*this)(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>());
+        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>());
     }
 private:
     void(CT::*mPtrF)(A1,A2,A3,A4,A5);
@@ -1539,7 +1539,7 @@ public:
     {
         return new LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6)>(mPtrF);
     }
-    LVariant operator()(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6)
+    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6>::get())
@@ -1548,7 +1548,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6)
     {
-        return (*this)(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>());
+        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>());
     }
 private:
     void(CT::*mPtrF)(A1,A2,A3,A4,A5,A6);
@@ -1567,7 +1567,7 @@ public:
     {
         return new LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6,A7)>(mPtrF);
     }
-    LVariant operator()(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7)
+    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7>::get())
@@ -1576,7 +1576,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7)
     {
-        return (*this)(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>());
+        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>());
     }
 private:
     void(CT::*mPtrF)(A1,A2,A3,A4,A5,A6,A7);
@@ -1595,7 +1595,7 @@ public:
     {
         return new LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8)>(mPtrF);
     }
-    LVariant operator()(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8)
+    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8>::get())
@@ -1604,7 +1604,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7,LVariant _a8)
     {
-        return (*this)(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>());
+        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>());
     }
 private:
     void(CT::*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8);
@@ -1623,7 +1623,7 @@ public:
     {
         return new LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9)>(mPtrF);
     }
-    LVariant operator()(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8,A9 _a9)
+    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8,A9 _a9)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9>::get())
@@ -1632,7 +1632,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7,LVariant _a8,LVariant _a9)
     {
-        return (*this)(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>());
+        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>());
     }
 private:
     void(CT::*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8,A9);
@@ -1651,7 +1651,7 @@ public:
     {
         return new LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)>(mPtrF);
     }
-    LVariant operator()(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8,A9 _a9,A10 _a10)
+    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8,A9 _a9,A10 _a10)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10>::get())
@@ -1660,7 +1660,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7,LVariant _a8,LVariant _a9,LVariant _a10)
     {
-        return (*this)(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>(),_a10.to<A10>());
+        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>(),_a10.to<A10>());
     }
 private:
     void(CT::*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10);
@@ -1679,7 +1679,7 @@ public:
     {
         return new LMemberFunction<void(CT::*)()const>(mPtrF);
     }
-    LVariant operator()(CT& _o)
+    LVariant call(CT& _o)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<void>::get())
@@ -1688,7 +1688,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o)
     {
-        return (*this)(_o.to<CT&>());
+        return (*this).call(_o.to<CT>());
     }
 private:
     void(CT::*mPtrF)()const;
@@ -1705,7 +1705,7 @@ public:
     {
         return new LMemberFunction<void(CT::*)(A1)const>(mPtrF);
     }
-    LVariant operator()(CT& _o,A1 _a1)
+    LVariant call(CT& _o,A1 _a1)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1>::get())
@@ -1714,7 +1714,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1)
     {
-        return (*this)(_o.to<CT&>(),_a1.to<A1>());
+        return (*this).call(_o.to<CT>(),_a1.to<A1>());
     }
 private:
     void(CT::*mPtrF)(A1)const;
@@ -1733,7 +1733,7 @@ public:
     {
         return new LMemberFunction<void(CT::*)(A1,A2)const>(mPtrF);
     }
-    LVariant operator()(CT& _o,A1 _a1,A2 _a2)
+    LVariant call(CT& _o,A1 _a1,A2 _a2)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2>::get())
@@ -1742,7 +1742,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2)
     {
-        return (*this)(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>());
+        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>());
     }
 private:
     void(CT::*mPtrF)(A1,A2)const;
@@ -1761,7 +1761,7 @@ public:
     {
         return new LMemberFunction<void(CT::*)(A1,A2,A3)const>(mPtrF);
     }
-    LVariant operator()(CT& _o,A1 _a1,A2 _a2,A3 _a3)
+    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3>::get())
@@ -1770,7 +1770,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3)
     {
-        return (*this)(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>());
+        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>());
     }
 private:
     void(CT::*mPtrF)(A1,A2,A3)const;
@@ -1789,7 +1789,7 @@ public:
     {
         return new LMemberFunction<void(CT::*)(A1,A2,A3,A4)const>(mPtrF);
     }
-    LVariant operator()(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4)
+    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4>::get())
@@ -1798,7 +1798,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4)
     {
-        return (*this)(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>());
+        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>());
     }
 private:
     void(CT::*mPtrF)(A1,A2,A3,A4)const;
@@ -1817,7 +1817,7 @@ public:
     {
         return new LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5)const>(mPtrF);
     }
-    LVariant operator()(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5)
+    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5>::get())
@@ -1826,7 +1826,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5)
     {
-        return (*this)(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>());
+        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>());
     }
 private:
     void(CT::*mPtrF)(A1,A2,A3,A4,A5)const;
@@ -1845,7 +1845,7 @@ public:
     {
         return new LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6)const>(mPtrF);
     }
-    LVariant operator()(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6)
+    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6>::get())
@@ -1854,7 +1854,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6)
     {
-        return (*this)(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>());
+        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>());
     }
 private:
     void(CT::*mPtrF)(A1,A2,A3,A4,A5,A6)const;
@@ -1873,7 +1873,7 @@ public:
     {
         return new LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6,A7)const>(mPtrF);
     }
-    LVariant operator()(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7)
+    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7>::get())
@@ -1882,7 +1882,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7)
     {
-        return (*this)(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>());
+        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>());
     }
 private:
     void(CT::*mPtrF)(A1,A2,A3,A4,A5,A6,A7)const;
@@ -1901,7 +1901,7 @@ public:
     {
         return new LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8)const>(mPtrF);
     }
-    LVariant operator()(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8)
+    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8>::get())
@@ -1910,7 +1910,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7,LVariant _a8)
     {
-        return (*this)(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>());
+        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>());
     }
 private:
     void(CT::*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8)const;
@@ -1929,7 +1929,7 @@ public:
     {
         return new LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9)const>(mPtrF);
     }
-    LVariant operator()(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8,A9 _a9)
+    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8,A9 _a9)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9>::get())
@@ -1938,7 +1938,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7,LVariant _a8,LVariant _a9)
     {
-        return (*this)(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>());
+        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>());
     }
 private:
     void(CT::*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8,A9)const;
@@ -1957,7 +1957,7 @@ public:
     {
         return new LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)const>(mPtrF);
     }
-    LVariant operator()(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8,A9 _a9,A10 _a10)
+    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8,A9 _a9,A10 _a10)
     {
         LVariant o;
         if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10>::get())
@@ -1966,7 +1966,7 @@ public:
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7,LVariant _a8,LVariant _a9,LVariant _a10)
     {
-        return (*this)(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>(),_a10.to<A10>());
+        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>(),_a10.to<A10>());
     }
 private:
     void(CT::*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)const;
