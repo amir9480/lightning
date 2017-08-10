@@ -67,6 +67,8 @@ public:
 
     virtual void                    drawQuad(LGFXTexture *_tex);
 
+    virtual LString                 getName()const;
+
     virtual LSize                   getScreenResolution()const;
 
     virtual LVector<LSize>          getAvailbleResolutions();

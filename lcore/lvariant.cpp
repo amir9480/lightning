@@ -246,93 +246,197 @@ LString LVariant::getTypeName() const
     return mTypeName;
 }
 
+bool LVariant::isConverible(const LString &_typename) const
+{
+    if(mType==Type::TNull)
+        return false;
+    if(mType>=Type::TInt&&mType<=Type::TString)
+    {
+        if(     lGetTypeName<int>()==_typename||
+                lGetTypeName<unsigned int>()==_typename  ||
+                lGetTypeName<float>()==_typename ||
+                lGetTypeName<double>()==_typename ||
+                lGetTypeName<long double>()==_typename ||
+                lGetTypeName<bool>()==_typename ||
+                lGetTypeName<short int>()==_typename ||
+                lGetTypeName<unsigned short int>()==_typename ||
+                lGetTypeName<long long int>()==_typename ||
+                lGetTypeName<unsigned long long int>()==_typename||
+                lGetTypeName<char>()==_typename ||
+                lGetTypeName<unsigned char>()==_typename ||
+                lGetTypeName<wchar_t>()==_typename ||
+                lGetTypeName<char16_t>()==_typename ||
+                lGetTypeName<char32_t>()==_typename ||
+                lGetTypeName<LString>()==_typename
+                )
+            return true;
+        else
+            return false;
+    }
+    if(mType>=Type::TIntR&&mType<=Type::TStringR)
+    {
+        if(     lGetTypeName<int>()==_typename||
+                lGetTypeName<unsigned int>()==_typename  ||
+                lGetTypeName<float>()==_typename ||
+                lGetTypeName<double>()==_typename ||
+                lGetTypeName<long double>()==_typename ||
+                lGetTypeName<bool>()==_typename ||
+                lGetTypeName<short int>()==_typename ||
+                lGetTypeName<unsigned short int>()==_typename ||
+                lGetTypeName<long long int>()==_typename ||
+                lGetTypeName<unsigned long long int>()==_typename||
+                lGetTypeName<char>()==_typename ||
+                lGetTypeName<unsigned char>()==_typename ||
+                lGetTypeName<wchar_t>()==_typename ||
+                lGetTypeName<char16_t>()==_typename ||
+                lGetTypeName<char32_t>()==_typename ||
+                lGetTypeName<LString>()==_typename ||
+                lGetTypeName<int&>()==_typename||
+                lGetTypeName<unsigned int&>()==_typename  ||
+                lGetTypeName<float&>()==_typename ||
+                lGetTypeName<double&>()==_typename ||
+                lGetTypeName<long double&>()==_typename ||
+                lGetTypeName<bool&>()==_typename ||
+                lGetTypeName<short int&>()==_typename ||
+                lGetTypeName<unsigned short int&>()==_typename ||
+                lGetTypeName<long long int&>()==_typename ||
+                lGetTypeName<unsigned long long int&>()==_typename||
+                lGetTypeName<char&>()==_typename ||
+                lGetTypeName<unsigned char&>()==_typename ||
+                lGetTypeName<wchar_t&>()==_typename ||
+                lGetTypeName<char16_t&>()==_typename ||
+                lGetTypeName<char32_t&>()==_typename ||
+                lGetTypeName<LString&>()==_typename)
+            return true;
+        else
+            return false;
+    }
+    return (_typename==mTypeName);
+}
+
 int LVariant::toInt()const
 {
     lError(mType==Type::TNull,"LVariant is null",0);
+    if(mType==Type::TString||mType==Type::TStringR)
+        return toString().toInt();
     return _convert<int>();
 }
 
 unsigned int LVariant::toUInt()const
 {
     lError(mType==Type::TNull,"LVariant is null",0);
+    if(mType==Type::TString||mType==Type::TStringR)
+        return toString().toUInt();
     return _convert<unsigned int>();
 }
 
 float LVariant::toFloat()const
 {
     lError(mType==Type::TNull,"LVariant is null",0);
+    if(mType==Type::TString||mType==Type::TStringR)
+        return toString().toFloat();
     return _convert<float>();
 }
 
 double LVariant::toDouble()const
 {
     lError(mType==Type::TNull,"LVariant is null",0);
+    if(mType==Type::TString||mType==Type::TStringR)
+        return toString().toDouble();
     return _convert<double>();
 }
 
 long double LVariant::toLongDouble()const
 {
     lError(mType==Type::TNull,"LVariant is null",0);
+    if(mType==Type::TString||mType==Type::TStringR)
+        return toString().toLongDouble();
     return _convert<long double>();
 }
 
 bool LVariant::toBool()const
 {
     lError(mType==Type::TNull,"LVariant is null",0);
+    if(mType==Type::TString||mType==Type::TStringR)
+    {
+        if(toString().toLower()=="true")
+            return true;
+        else if(toString().toLower()=="false")
+            return false;
+        return (bool)toString().toInt();
+    }
     return _convert<bool>();
 }
 
 short LVariant::toShortInt()const
 {
     lError(mType==Type::TNull,"LVariant is null",0);
+    if(mType==Type::TString||mType==Type::TStringR)
+        return toString().toShortInt();
     return _convert<short int>();
 }
 
 unsigned short LVariant::toUShortInt()const
 {
     lError(mType==Type::TNull,"LVariant is null",0);
+    if(mType==Type::TString||mType==Type::TStringR)
+        return toString().toUShortInt();
     return _convert<unsigned short int>();
 }
 
 long long LVariant::toLongLongInt()const
 {
     lError(mType==Type::TNull,"LVariant is null",0);
+    if(mType==Type::TString||mType==Type::TStringR)
+        return toString().toLongLongInt();
     return _convert<long long int>();
 }
 
 unsigned long long LVariant::toULongLongInt()const
 {
     lError(mType==Type::TNull,"LVariant is null",0);
+    if(mType==Type::TString||mType==Type::TStringR)
+        return toString().toULongLongInt();
     return _convert<unsigned long long int>();
 }
 
 char LVariant::toChar()const
 {
     lError(mType==Type::TNull,"LVariant is null",0);
+    if(mType==Type::TString||mType==Type::TStringR)
+        return (char)toString()[0];
     return _convert<char>();
 }
 
 unsigned char LVariant::toUChar()const
 {
     lError(mType==Type::TNull,"LVariant is null",0);
+    if(mType==Type::TString||mType==Type::TStringR)
+        return (unsigned char)toString()[0];
     return _convert<unsigned char>();
 }
 
 wchar_t LVariant::toWChar_t()const
 {
     lError(mType==Type::TNull,"LVariant is null",0);
+    if(mType==Type::TString||mType==Type::TStringR)
+        return (wchar_t)toString()[0];
     return _convert<wchar_t>();
 }
 
 char16_t LVariant::toChar16_t()const
 {
     lError(mType==Type::TNull,"LVariant is null",0);
+    if(mType==Type::TString||mType==Type::TStringR)
+        return (char16_t)toString()[0];
     return _convert<char16_t>();
 }
 
 char32_t LVariant::toChar32_t()const
 {
     lError(mType==Type::TNull,"LVariant is null",0);
+    if(mType==Type::TString||mType==Type::TStringR)
+        return (char32_t)toString()[0];
     return _convert<char32_t>();
 }
 

@@ -1329,7 +1329,7 @@ struct ___fake_return<void>{static void call(){}};
 *
 * struct A
 * {
-*     void foo(int g)const{cout<<"FOO"<<endl;}
+*     void foo(int g){cout<<"FOO"<<endl;}
 * };
 * struct B
 * {

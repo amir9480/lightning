@@ -49,7 +49,8 @@ SOURCES +=\
     lgfx/D3D9/ld3d9indexbuffer.cpp \
     lgfx/D3D9/ld3d9vertexbuffer.cpp \
     lgfx/D3D9/ld3d9texture.cpp \
-    lgfx/D3D9/ld3d9shader.cpp
+    lgfx/D3D9/ld3d9shader.cpp \
+    lcore/lmetaproperty.cpp
 
 
 HEADERS +=\
@@ -99,7 +100,8 @@ HEADERS +=\
     lgfx/D3D9/ld3d9indexbuffer.h \
     lgfx/D3D9/ld3d9vertexbuffer.h \
     lgfx/D3D9/ld3d9texture.h \
-    lgfx/D3D9/ld3d9shader.h
+    lgfx/D3D9/ld3d9shader.h \
+    lcore/lmetaproperty.h
 
 DISTFILES += \
     .gitignore

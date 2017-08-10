@@ -147,7 +147,7 @@ private:
     RT(*mPtrF)();
 };
 
-template<typename RT,typename A1> // Return Type, ArgType1
+template<typename RT,typename A1>
 class LNonMemberFunction<RT(*)(A1)>:public LFunctionPtr
 {
 public:
@@ -169,7 +169,12 @@ public:
     }
     virtual LVariant operator()(LVariant _a1)
     {
-        return (*this).call(_a1.to<A1>());
+        LVariant o;
+        if(_a1.isConverible<A1>())
+             o=(*this).call(_a1.to<A1>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     RT(*mPtrF)(A1);
@@ -197,7 +202,12 @@ public:
     }
     virtual LVariant operator()(LVariant _a1,LVariant _a2)
     {
-        return (*this).call(_a1.to<A1>(),_a2.to<A2>());
+        LVariant o;
+        if(_a1.isConverible<A1>()&&_a2.isConverible<A2>())
+             o=(*this).call(_a1.to<A1>(),_a2.to<A2>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     RT(*mPtrF)(A1,A2);
@@ -225,7 +235,12 @@ public:
     }
     virtual LVariant operator()(LVariant _a1,LVariant _a2,LVariant _a3)
     {
-        return (*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>());
+        LVariant o;
+        if(_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>())
+             o=(*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     RT(*mPtrF)(A1,A2,A3);
@@ -253,7 +268,12 @@ public:
     }
     virtual LVariant operator()(LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4)
     {
-        return (*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>());
+        LVariant o;
+        if(_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>()&&_a4.isConverible<A4>())
+             o=(*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     RT(*mPtrF)(A1,A2,A3,A4);
@@ -281,7 +301,12 @@ public:
     }
     virtual LVariant operator()(LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5)
     {
-        return (*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>());
+        LVariant o;
+        if(_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>()&&_a4.isConverible<A4>()&&_a5.isConverible<A5>())
+             o=(*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     RT(*mPtrF)(A1,A2,A3,A4,A5);
@@ -309,7 +334,12 @@ public:
     }
     virtual LVariant operator()(LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6)
     {
-        return (*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>());
+        LVariant o;
+        if(_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>()&&_a4.isConverible<A4>()&&_a5.isConverible<A5>()&&_a6.isConverible<A6>())
+             o=(*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     RT(*mPtrF)(A1,A2,A3,A4,A5,A6);
@@ -337,7 +367,12 @@ public:
     }
     virtual LVariant operator()(LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7)
     {
-        return (*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>());
+        LVariant o;
+        if(_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>()&&_a4.isConverible<A4>()&&_a5.isConverible<A5>()&&_a6.isConverible<A6>()&&_a7.isConverible<A7>())
+             o=(*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     RT(*mPtrF)(A1,A2,A3,A4,A5,A6,A7);
@@ -365,7 +400,12 @@ public:
     }
     virtual LVariant operator()(LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7,LVariant _a8)
     {
-        return (*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>());
+        LVariant o;
+        if(_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>()&&_a4.isConverible<A4>()&&_a5.isConverible<A5>()&&_a6.isConverible<A6>()&&_a7.isConverible<A7>()&&_a8.isConverible<A8>())
+             o=(*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     RT(*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8);
@@ -393,7 +433,12 @@ public:
     }
     virtual LVariant operator()(LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7,LVariant _a8,LVariant _a9)
     {
-        return (*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>());
+        LVariant o;
+        if(_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>()&&_a4.isConverible<A4>()&&_a5.isConverible<A5>()&&_a6.isConverible<A6>()&&_a7.isConverible<A7>()&&_a8.isConverible<A8>()&&_a9.isConverible<A9>())
+             o=(*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     RT(*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8,A9);
@@ -421,7 +466,12 @@ public:
     }
     virtual LVariant operator()(LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7,LVariant _a8,LVariant _a9,LVariant _a10)
     {
-        return (*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>(),_a10.to<A10>());
+        LVariant o;
+        if(_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>()&&_a4.isConverible<A4>()&&_a5.isConverible<A5>()&&_a6.isConverible<A6>()&&_a7.isConverible<A7>()&&_a8.isConverible<A8>()&&_a9.isConverible<A9>()&&_a10.isConverible<A10>())
+             o=(*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>(),_a10.to<A10>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     RT(*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10);
@@ -429,7 +479,7 @@ private:
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-template<>
+template<> // Return Type
 class LNonMemberFunction<void(*)()>:public LFunctionPtr
 {
 public:
@@ -475,7 +525,12 @@ public:
     }
     virtual LVariant operator()(LVariant _a1)
     {
-        return (*this).call(_a1.to<A1>());
+        LVariant o;
+        if(_a1.isConverible<A1>())
+             (*this).call(_a1.to<A1>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     void(*mPtrF)(A1);
@@ -503,7 +558,12 @@ public:
     }
     virtual LVariant operator()(LVariant _a1,LVariant _a2)
     {
-        return (*this).call(_a1.to<A1>(),_a2.to<A2>());
+        LVariant o;
+        if(_a1.isConverible<A1>()&&_a2.isConverible<A2>())
+             (*this).call(_a1.to<A1>(),_a2.to<A2>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     void(*mPtrF)(A1,A2);
@@ -531,7 +591,12 @@ public:
     }
     virtual LVariant operator()(LVariant _a1,LVariant _a2,LVariant _a3)
     {
-        return (*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>());
+        LVariant o;
+        if(_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>())
+             (*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     void(*mPtrF)(A1,A2,A3);
@@ -559,7 +624,12 @@ public:
     }
     virtual LVariant operator()(LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4)
     {
-        return (*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>());
+        LVariant o;
+        if(_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>()&&_a4.isConverible<A4>())
+             (*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     void(*mPtrF)(A1,A2,A3,A4);
@@ -587,7 +657,12 @@ public:
     }
     virtual LVariant operator()(LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5)
     {
-        return (*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>());
+        LVariant o;
+        if(_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>()&&_a4.isConverible<A4>()&&_a5.isConverible<A5>())
+             (*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     void(*mPtrF)(A1,A2,A3,A4,A5);
@@ -615,7 +690,12 @@ public:
     }
     virtual LVariant operator()(LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6)
     {
-        return (*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>());
+        LVariant o;
+        if(_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>()&&_a4.isConverible<A4>()&&_a5.isConverible<A5>()&&_a6.isConverible<A6>())
+             (*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     void(*mPtrF)(A1,A2,A3,A4,A5,A6);
@@ -643,7 +723,12 @@ public:
     }
     virtual LVariant operator()(LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7)
     {
-        return (*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>());
+        LVariant o;
+        if(_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>()&&_a4.isConverible<A4>()&&_a5.isConverible<A5>()&&_a6.isConverible<A6>()&&_a7.isConverible<A7>())
+             (*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     void(*mPtrF)(A1,A2,A3,A4,A5,A6,A7);
@@ -671,7 +756,12 @@ public:
     }
     virtual LVariant operator()(LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7,LVariant _a8)
     {
-        return (*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>());
+        LVariant o;
+        if(_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>()&&_a4.isConverible<A4>()&&_a5.isConverible<A5>()&&_a6.isConverible<A6>()&&_a7.isConverible<A7>()&&_a8.isConverible<A8>())
+             (*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     void(*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8);
@@ -699,7 +789,12 @@ public:
     }
     virtual LVariant operator()(LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7,LVariant _a8,LVariant _a9)
     {
-        return (*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>());
+        LVariant o;
+        if(_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>()&&_a4.isConverible<A4>()&&_a5.isConverible<A5>()&&_a6.isConverible<A6>()&&_a7.isConverible<A7>()&&_a8.isConverible<A8>()&&_a9.isConverible<A9>())
+             (*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     void(*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8,A9);
@@ -727,7 +822,12 @@ public:
     }
     virtual LVariant operator()(LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7,LVariant _a8,LVariant _a9,LVariant _a10)
     {
-        return (*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>(),_a10.to<A10>());
+        LVariant o;
+        if(_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>()&&_a4.isConverible<A4>()&&_a5.isConverible<A5>()&&_a6.isConverible<A6>()&&_a7.isConverible<A7>()&&_a8.isConverible<A8>()&&_a9.isConverible<A9>()&&_a10.isConverible<A10>())
+             (*this).call(_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>(),_a10.to<A10>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     void(*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10);
@@ -744,7 +844,7 @@ class LMemberFunction<RT(CT::*)()>:public LFunctionPtr
 {
 public:
     LMemberFunction(RT(CT::*_Fptr)()):
-        LFunctionPtr(__lGetMFTypesAsString<void>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<CT>::get()),
         mPtrF(_Fptr)
     {
     }
@@ -755,24 +855,29 @@ public:
     LVariant call(CT& _o)
     {
         LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<void>::get())
+        if(mArgTypes==__lGetMFTypesAsString<CT>::get())
             o=(_o.*mPtrF)();
         return o;
     }
     virtual LVariant operator()(LVariant _o)
     {
-        return (*this).call(_o.to<CT>());
+        LVariant o;
+        if(_o.isConverible<CT>())
+            o=(*this).call(_o.to<CT&>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     RT(CT::*mPtrF)();
 };
 
-template<typename CT,typename RT,typename A1> // Class type, Return Type, ArgType1
+template<typename CT,typename RT,typename A1>
 class LMemberFunction<RT(CT::*)(A1)>:public LFunctionPtr
 {
 public:
     LMemberFunction(RT(CT::*_Fptr)(A1)):
-        LFunctionPtr(__lGetMFTypesAsString<A1>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<CT,A1>::get()),
         mPtrF(_Fptr)
     {
     }
@@ -783,13 +888,18 @@ public:
     LVariant call(CT& _o,A1 _a1)
     {
         LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<A1>::get())
+        if(mArgTypes==__lGetMFTypesAsString<CT,A1>::get())
             o=(_o.*mPtrF)(_a1);
         return o;
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1)
     {
-        return (*this).call(_o.to<CT>(),_a1.to<A1>());
+        LVariant o;
+        if(_o.isConverible<CT>()&&_a1.isConverible<A1>())
+            o=(*this).call(_o.to<CT&>(),_a1.to<A1>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     RT(CT::*mPtrF)(A1);
@@ -800,7 +910,7 @@ class LMemberFunction<RT(CT::*)(A1,A2)>:public LFunctionPtr
 {
 public:
     LMemberFunction(RT(CT::*_Fptr)(A1,A2)):
-        LFunctionPtr(__lGetMFTypesAsString<A1,A2>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<CT,A1,A2>::get()),
         mPtrF(_Fptr)
     {
     }
@@ -811,13 +921,18 @@ public:
     LVariant call(CT& _o,A1 _a1,A2 _a2)
     {
         LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<A1,A2>::get())
+        if(mArgTypes==__lGetMFTypesAsString<CT,A1,A2>::get())
             o=(_o.*mPtrF)(_a1,_a2);
         return o;
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2)
     {
-        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>());
+        LVariant o;
+        if(_o.isConverible<CT>()&&_a1.isConverible<A1>()&&_a2.isConverible<A2>())
+            o=(*this).call(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     RT(CT::*mPtrF)(A1,A2);
@@ -828,7 +943,7 @@ class LMemberFunction<RT(CT::*)(A1,A2,A3)>:public LFunctionPtr
 {
 public:
     LMemberFunction(RT(CT::*_Fptr)(A1,A2,A3)):
-        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<CT,A1,A2,A3>::get()),
         mPtrF(_Fptr)
     {
     }
@@ -839,13 +954,18 @@ public:
     LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3)
     {
         LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3>::get())
+        if(mArgTypes==__lGetMFTypesAsString<CT,A1,A2,A3>::get())
             o=(_o.*mPtrF)(_a1,_a2,_a3);
         return o;
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3)
     {
-        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>());
+        LVariant o;
+        if(_o.isConverible<CT>()&&_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>())
+            o=(*this).call(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     RT(CT::*mPtrF)(A1,A2,A3);
@@ -856,7 +976,7 @@ class LMemberFunction<RT(CT::*)(A1,A2,A3,A4)>:public LFunctionPtr
 {
 public:
     LMemberFunction(RT(CT::*_Fptr)(A1,A2,A3,A4)):
-        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<CT,A1,A2,A3,A4>::get()),
         mPtrF(_Fptr)
     {
     }
@@ -867,13 +987,18 @@ public:
     LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4)
     {
         LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4>::get())
+        if(mArgTypes==__lGetMFTypesAsString<CT,A1,A2,A3,A4>::get())
             o=(_o.*mPtrF)(_a1,_a2,_a3,_a4);
         return o;
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4)
     {
-        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>());
+        LVariant o;
+        if(_o.isConverible<CT>()&&_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>()&&_a4.isConverible<A4>())
+            o=(*this).call(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     RT(CT::*mPtrF)(A1,A2,A3,A4);
@@ -884,7 +1009,7 @@ class LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5)>:public LFunctionPtr
 {
 public:
     LMemberFunction(RT(CT::*_Fptr)(A1,A2,A3,A4,A5)):
-        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5>::get()),
         mPtrF(_Fptr)
     {
     }
@@ -895,13 +1020,18 @@ public:
     LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5)
     {
         LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5>::get())
+        if(mArgTypes==__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5>::get())
             o=(_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5);
         return o;
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5)
     {
-        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>());
+        LVariant o;
+        if(_o.isConverible<CT>()&&_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>()&&_a4.isConverible<A4>()&&_a5.isConverible<A5>())
+            o=(*this).call(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     RT(CT::*mPtrF)(A1,A2,A3,A4,A5);
@@ -912,7 +1042,7 @@ class LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6)>:public LFunctionPtr
 {
 public:
     LMemberFunction(RT(CT::*_Fptr)(A1,A2,A3,A4,A5,A6)):
-        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5,A6>::get()),
         mPtrF(_Fptr)
     {
     }
@@ -923,13 +1053,18 @@ public:
     LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6)
     {
         LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6>::get())
+        if(mArgTypes==__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5,A6>::get())
             o=(_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5,_a6);
         return o;
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6)
     {
-        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>());
+        LVariant o;
+        if(_o.isConverible<CT>()&&_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>()&&_a4.isConverible<A4>()&&_a5.isConverible<A5>()&&_a6.isConverible<A6>())
+            o=(*this).call(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     RT(CT::*mPtrF)(A1,A2,A3,A4,A5,A6);
@@ -940,7 +1075,7 @@ class LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7)>:public LFunctionPtr
 {
 public:
     LMemberFunction(RT(CT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7)):
-        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5,A6,A7>::get()),
         mPtrF(_Fptr)
     {
     }
@@ -951,13 +1086,18 @@ public:
     LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7)
     {
         LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7>::get())
+        if(mArgTypes==__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5,A6,A7>::get())
             o=(_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5,_a6,_a7);
         return o;
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7)
     {
-        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>());
+        LVariant o;
+        if(_o.isConverible<CT>()&&_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>()&&_a4.isConverible<A4>()&&_a5.isConverible<A5>()&&_a6.isConverible<A6>()&&_a7.isConverible<A7>())
+            o=(*this).call(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     RT(CT::*mPtrF)(A1,A2,A3,A4,A5,A6,A7);
@@ -968,7 +1108,7 @@ class LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8)>:public LFunctionPtr
 {
 public:
     LMemberFunction(RT(CT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7,A8)):
-        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5,A6,A7,A8>::get()),
         mPtrF(_Fptr)
     {
     }
@@ -979,13 +1119,18 @@ public:
     LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8)
     {
         LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8>::get())
+        if(mArgTypes==__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5,A6,A7,A8>::get())
             o=(_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5,_a6,_a7,_a8);
         return o;
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7,LVariant _a8)
     {
-        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>());
+        LVariant o;
+        if(_o.isConverible<CT>()&&_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>()&&_a4.isConverible<A4>()&&_a5.isConverible<A5>()&&_a6.isConverible<A6>()&&_a7.isConverible<A7>()&&_a8.isConverible<A8>())
+            o=(*this).call(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     RT(CT::*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8);
@@ -996,7 +1141,7 @@ class LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9)>:public LFunctionPtr
 {
 public:
     LMemberFunction(RT(CT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7,A8,A9)):
-        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5,A6,A7,A8,A9>::get()),
         mPtrF(_Fptr)
     {
     }
@@ -1007,13 +1152,18 @@ public:
     LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8,A9 _a9)
     {
         LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9>::get())
+        if(mArgTypes==__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5,A6,A7,A8,A9>::get())
             o=(_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5,_a6,_a7,_a8,_a9);
         return o;
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7,LVariant _a8,LVariant _a9)
     {
-        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>());
+        LVariant o;
+        if(_o.isConverible<CT>()&&_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>()&&_a4.isConverible<A4>()&&_a5.isConverible<A5>()&&_a6.isConverible<A6>()&&_a7.isConverible<A7>()&&_a8.isConverible<A8>()&&_a9.isConverible<A9>())
+            o=(*this).call(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     RT(CT::*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8,A9);
@@ -1024,7 +1174,7 @@ class LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)>:public LFunctio
 {
 public:
     LMemberFunction(RT(CT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)):
-        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5,A6,A7,A8,A9,A10>::get()),
         mPtrF(_Fptr)
     {
     }
@@ -1035,13 +1185,18 @@ public:
     LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8,A9 _a9,A10 _a10)
     {
         LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10>::get())
+        if(mArgTypes==__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5,A6,A7,A8,A9,A10>::get())
             o=(_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5,_a6,_a7,_a8,_a9,_a10);
         return o;
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7,LVariant _a8,LVariant _a9,LVariant _a10)
     {
-        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>(),_a10.to<A10>());
+        LVariant o;
+        if(_o.isConverible<CT>()&&_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>()&&_a4.isConverible<A4>()&&_a5.isConverible<A5>()&&_a6.isConverible<A6>()&&_a7.isConverible<A7>()&&_a8.isConverible<A8>()&&_a9.isConverible<A9>()&&_a10.isConverible<A10>())
+            o=(*this).call(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>(),_a10.to<A10>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     RT(CT::*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10);
@@ -1049,321 +1204,12 @@ private:
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-template<typename CT,typename RT> // Class type,Return Type
-class LMemberFunction<RT(CT::*)()const>:public LFunctionPtr
-{
-public:
-    LMemberFunction(RT(CT::*_Fptr)()const):
-        LFunctionPtr(__lGetMFTypesAsString<void>::get()),
-        mPtrF(_Fptr)
-    {
-    }
-    virtual LFunctionPtr*  clone()
-    {
-        return new LMemberFunction<RT(CT::*)()const>(mPtrF);
-    }
-    LVariant call(CT& _o)
-    {
-        LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<void>::get())
-            (_o.*mPtrF)();
-        return o;
-    }
-    virtual LVariant operator()(LVariant _o)
-    {
-        return (*this).call(_o.to<CT>());
-    }
-private:
-    RT(CT::*mPtrF)()const;
-};
-
-template<typename CT,typename RT,typename A1> // Class type, Return Type, ArgType1
-class LMemberFunction<RT(CT::*)(A1)const>:public LFunctionPtr
-{
-public:
-    LMemberFunction(RT(CT::*_Fptr)(A1)const):
-        LFunctionPtr(__lGetMFTypesAsString<A1>::get()),
-        mPtrF(_Fptr)
-    {
-    }
-    virtual LFunctionPtr* clone()
-    {
-        return new LMemberFunction<RT(CT::*)(A1)const>(mPtrF);
-    }
-    LVariant call(CT& _o,A1 _a1)
-    {
-        LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<A1>::get())
-            (_o.*mPtrF)(_a1);
-        return o;
-    }
-    virtual LVariant operator()(LVariant _o,LVariant _a1)
-    {
-        return (*this).call(_o.to<CT>(),_a1.to<A1>());
-    }
-private:
-    RT(CT::*mPtrF)(A1)const;
-};
-
-template<typename CT,typename RT,typename A1,typename A2>
-class LMemberFunction<RT(CT::*)(A1,A2)const>:public LFunctionPtr
-{
-public:
-    LMemberFunction(RT(CT::*_Fptr)(A1,A2)const):
-        LFunctionPtr(__lGetMFTypesAsString<A1,A2>::get()),
-        mPtrF(_Fptr)
-    {
-    }
-    virtual LFunctionPtr* clone()
-    {
-        return new LMemberFunction<RT(CT::*)(A1,A2)const>(mPtrF);
-    }
-    LVariant call(CT& _o,A1 _a1,A2 _a2)
-    {
-        LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<A1,A2>::get())
-            o=(_o.*mPtrF)(_a1,_a2);
-        return o;
-    }
-    virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2)
-    {
-        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>());
-    }
-private:
-    RT(CT::*mPtrF)(A1,A2)const;
-};
-
-template<typename CT,typename RT,typename A1,typename A2,typename A3>
-class LMemberFunction<RT(CT::*)(A1,A2,A3)const>:public LFunctionPtr
-{
-public:
-    LMemberFunction(RT(CT::*_Fptr)(A1,A2,A3)const):
-        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3>::get()),
-        mPtrF(_Fptr)
-    {
-    }
-    virtual LFunctionPtr* clone()
-    {
-        return new LMemberFunction<RT(CT::*)(A1,A2,A3)const>(mPtrF);
-    }
-    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3)
-    {
-        LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3>::get())
-            o=(_o.*mPtrF)(_a1,_a2,_a3);
-        return o;
-    }
-    virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3)
-    {
-        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>());
-    }
-private:
-    RT(CT::*mPtrF)(A1,A2,A3)const;
-};
-
-template<typename CT,typename RT,typename A1,typename A2,typename A3,typename A4>
-class LMemberFunction<RT(CT::*)(A1,A2,A3,A4)const>:public LFunctionPtr
-{
-public:
-    LMemberFunction(RT(CT::*_Fptr)(A1,A2,A3,A4)const):
-        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4>::get()),
-        mPtrF(_Fptr)
-    {
-    }
-    virtual LFunctionPtr* clone()
-    {
-        return new LMemberFunction<RT(CT::*)(A1,A2,A3,A4)const>(mPtrF);
-    }
-    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4)
-    {
-        LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4>::get())
-            o=(_o.*mPtrF)(_a1,_a2,_a3,_a4);
-        return o;
-    }
-    virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4)
-    {
-        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>());
-    }
-private:
-    RT(CT::*mPtrF)(A1,A2,A3,A4)const;
-};
-
-template<typename CT,typename RT,typename A1,typename A2,typename A3,typename A4,typename A5>
-class LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5)const>:public LFunctionPtr
-{
-public:
-    LMemberFunction(RT(CT::*_Fptr)(A1,A2,A3,A4,A5)const):
-        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5>::get()),
-        mPtrF(_Fptr)
-    {
-    }
-    virtual LFunctionPtr* clone()
-    {
-        return new LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5)const>(mPtrF);
-    }
-    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5)
-    {
-        LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5>::get())
-            o=(_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5);
-        return o;
-    }
-    virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5)
-    {
-        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>());
-    }
-private:
-    RT(CT::*mPtrF)(A1,A2,A3,A4,A5)const;
-};
-
-template<typename CT,typename RT,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6>
-class LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6)const>:public LFunctionPtr
-{
-public:
-    LMemberFunction(RT(CT::*_Fptr)(A1,A2,A3,A4,A5,A6)const):
-        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6>::get()),
-        mPtrF(_Fptr)
-    {
-    }
-    virtual LFunctionPtr* clone()
-    {
-        return new LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6)const>(mPtrF);
-    }
-    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6)
-    {
-        LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6>::get())
-            o=(_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5,_a6);
-        return o;
-    }
-    virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6)
-    {
-        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>());
-    }
-private:
-    RT(CT::*mPtrF)(A1,A2,A3,A4,A5,A6)const;
-};
-
-template<typename CT,typename RT,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7>
-class LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7)const>:public LFunctionPtr
-{
-public:
-    LMemberFunction(RT(CT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7)const):
-        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7>::get()),
-        mPtrF(_Fptr)
-    {
-    }
-    virtual LFunctionPtr* clone()
-    {
-        return new LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7)const>(mPtrF);
-    }
-    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7)
-    {
-        LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7>::get())
-            o=(_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5,_a6,_a7);
-        return o;
-    }
-    virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7)
-    {
-        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>());
-    }
-private:
-    RT(CT::*mPtrF)(A1,A2,A3,A4,A5,A6,A7)const;
-};
-
-template<typename CT,typename RT,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8>
-class LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8)const>:public LFunctionPtr
-{
-public:
-    LMemberFunction(RT(CT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7,A8)const):
-        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8>::get()),
-        mPtrF(_Fptr)
-    {
-    }
-    virtual LFunctionPtr* clone()
-    {
-        return new LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8)const>(mPtrF);
-    }
-    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8)
-    {
-        LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8>::get())
-            o=(_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5,_a6,_a7,_a8);
-        return o;
-    }
-    virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7,LVariant _a8)
-    {
-        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>());
-    }
-private:
-    RT(CT::*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8)const;
-};
-
-template<typename CT,typename RT,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8,typename A9>
-class LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9)const>:public LFunctionPtr
-{
-public:
-    LMemberFunction(RT(CT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7,A8,A9)const):
-        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9>::get()),
-        mPtrF(_Fptr)
-    {
-    }
-    virtual LFunctionPtr* clone()
-    {
-        return new LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9)const>(mPtrF);
-    }
-    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8,A9 _a9)
-    {
-        LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9>::get())
-            o=(_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5,_a6,_a7,_a8,_a9);
-        return o;
-    }
-    virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7,LVariant _a8,LVariant _a9)
-    {
-        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>());
-    }
-private:
-    RT(CT::*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8,A9)const;
-};
-
-template<typename CT,typename RT,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8,typename A9,typename A10>
-class LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)const>:public LFunctionPtr
-{
-public:
-    LMemberFunction(RT(CT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)const):
-        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10>::get()),
-        mPtrF(_Fptr)
-    {
-    }
-    virtual LFunctionPtr* clone()
-    {
-        return new LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)const>(mPtrF);
-    }
-    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8,A9 _a9,A10 _a10)
-    {
-        LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10>::get())
-            o=(_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5,_a6,_a7,_a8,_a9,_a10);
-        return o;
-    }
-    virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7,LVariant _a8,LVariant _a9,LVariant _a10)
-    {
-        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>(),_a10.to<A10>());
-    }
-private:
-    RT(CT::*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)const;
-};
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-template<typename CT> // Class type
+template<typename CT> // Class type,Return Type
 class LMemberFunction<void(CT::*)()>:public LFunctionPtr
 {
 public:
     LMemberFunction(void(CT::*_Fptr)()):
-        LFunctionPtr(__lGetMFTypesAsString<void>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<CT>::get()),
         mPtrF(_Fptr)
     {
     }
@@ -1374,24 +1220,29 @@ public:
     LVariant call(CT& _o)
     {
         LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<void>::get())
+        if(mArgTypes==__lGetMFTypesAsString<CT>::get())
             (_o.*mPtrF)();
         return o;
     }
     virtual LVariant operator()(LVariant _o)
     {
-        return (*this).call(_o.to<CT>());
+        LVariant o;
+        if(_o.isConverible<CT>())
+            (*this).call(_o.to<CT&>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     void(CT::*mPtrF)();
 };
 
-template<typename CT,typename A1> // Class type, ArgType1
+template<typename CT,typename A1>
 class LMemberFunction<void(CT::*)(A1)>:public LFunctionPtr
 {
 public:
     LMemberFunction(void(CT::*_Fptr)(A1)):
-        LFunctionPtr(__lGetMFTypesAsString<A1>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<CT,A1>::get()),
         mPtrF(_Fptr)
     {
     }
@@ -1402,13 +1253,18 @@ public:
     LVariant call(CT& _o,A1 _a1)
     {
         LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<A1>::get())
+        if(mArgTypes==__lGetMFTypesAsString<CT,A1>::get())
             (_o.*mPtrF)(_a1);
         return o;
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1)
     {
-        return (*this).call(_o.to<CT>(),_a1.to<A1>());
+        LVariant o;
+        if(_o.isConverible<CT>()&&_a1.isConverible<A1>())
+            (*this).call(_o.to<CT&>(),_a1.to<A1>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     void(CT::*mPtrF)(A1);
@@ -1419,7 +1275,7 @@ class LMemberFunction<void(CT::*)(A1,A2)>:public LFunctionPtr
 {
 public:
     LMemberFunction(void(CT::*_Fptr)(A1,A2)):
-        LFunctionPtr(__lGetMFTypesAsString<A1,A2>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<CT,A1,A2>::get()),
         mPtrF(_Fptr)
     {
     }
@@ -1430,13 +1286,18 @@ public:
     LVariant call(CT& _o,A1 _a1,A2 _a2)
     {
         LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<A1,A2>::get())
+        if(mArgTypes==__lGetMFTypesAsString<CT,A1,A2>::get())
             (_o.*mPtrF)(_a1,_a2);
         return o;
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2)
     {
-        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>());
+        LVariant o;
+        if(_o.isConverible<CT>()&&_a1.isConverible<A1>()&&_a2.isConverible<A2>())
+            (*this).call(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     void(CT::*mPtrF)(A1,A2);
@@ -1447,7 +1308,7 @@ class LMemberFunction<void(CT::*)(A1,A2,A3)>:public LFunctionPtr
 {
 public:
     LMemberFunction(void(CT::*_Fptr)(A1,A2,A3)):
-        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<CT,A1,A2,A3>::get()),
         mPtrF(_Fptr)
     {
     }
@@ -1458,13 +1319,18 @@ public:
     LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3)
     {
         LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3>::get())
+        if(mArgTypes==__lGetMFTypesAsString<CT,A1,A2,A3>::get())
             (_o.*mPtrF)(_a1,_a2,_a3);
         return o;
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3)
     {
-        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>());
+        LVariant o;
+        if(_o.isConverible<CT>()&&_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>())
+            (*this).call(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     void(CT::*mPtrF)(A1,A2,A3);
@@ -1475,7 +1341,7 @@ class LMemberFunction<void(CT::*)(A1,A2,A3,A4)>:public LFunctionPtr
 {
 public:
     LMemberFunction(void(CT::*_Fptr)(A1,A2,A3,A4)):
-        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<CT,A1,A2,A3,A4>::get()),
         mPtrF(_Fptr)
     {
     }
@@ -1486,13 +1352,18 @@ public:
     LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4)
     {
         LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4>::get())
+        if(mArgTypes==__lGetMFTypesAsString<CT,A1,A2,A3,A4>::get())
             (_o.*mPtrF)(_a1,_a2,_a3,_a4);
         return o;
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4)
     {
-        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>());
+        LVariant o;
+        if(_o.isConverible<CT>()&&_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>()&&_a4.isConverible<A4>())
+            (*this).call(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     void(CT::*mPtrF)(A1,A2,A3,A4);
@@ -1503,7 +1374,7 @@ class LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5)>:public LFunctionPtr
 {
 public:
     LMemberFunction(void(CT::*_Fptr)(A1,A2,A3,A4,A5)):
-        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5>::get()),
         mPtrF(_Fptr)
     {
     }
@@ -1514,13 +1385,18 @@ public:
     LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5)
     {
         LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5>::get())
+        if(mArgTypes==__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5>::get())
             (_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5);
         return o;
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5)
     {
-        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>());
+        LVariant o;
+        if(_o.isConverible<CT>()&&_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>()&&_a4.isConverible<A4>()&&_a5.isConverible<A5>())
+            (*this).call(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     void(CT::*mPtrF)(A1,A2,A3,A4,A5);
@@ -1531,7 +1407,7 @@ class LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6)>:public LFunctionPtr
 {
 public:
     LMemberFunction(void(CT::*_Fptr)(A1,A2,A3,A4,A5,A6)):
-        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5,A6>::get()),
         mPtrF(_Fptr)
     {
     }
@@ -1542,13 +1418,18 @@ public:
     LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6)
     {
         LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6>::get())
+        if(mArgTypes==__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5,A6>::get())
             (_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5,_a6);
         return o;
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6)
     {
-        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>());
+        LVariant o;
+        if(_o.isConverible<CT>()&&_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>()&&_a4.isConverible<A4>()&&_a5.isConverible<A5>()&&_a6.isConverible<A6>())
+            (*this).call(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     void(CT::*mPtrF)(A1,A2,A3,A4,A5,A6);
@@ -1559,7 +1440,7 @@ class LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6,A7)>:public LFunctionPtr
 {
 public:
     LMemberFunction(void(CT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7)):
-        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5,A6,A7>::get()),
         mPtrF(_Fptr)
     {
     }
@@ -1570,13 +1451,18 @@ public:
     LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7)
     {
         LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7>::get())
+        if(mArgTypes==__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5,A6,A7>::get())
             (_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5,_a6,_a7);
         return o;
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7)
     {
-        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>());
+        LVariant o;
+        if(_o.isConverible<CT>()&&_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>()&&_a4.isConverible<A4>()&&_a5.isConverible<A5>()&&_a6.isConverible<A6>()&&_a7.isConverible<A7>())
+            (*this).call(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     void(CT::*mPtrF)(A1,A2,A3,A4,A5,A6,A7);
@@ -1587,7 +1473,7 @@ class LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8)>:public LFunctionPtr
 {
 public:
     LMemberFunction(void(CT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7,A8)):
-        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5,A6,A7,A8>::get()),
         mPtrF(_Fptr)
     {
     }
@@ -1598,13 +1484,18 @@ public:
     LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8)
     {
         LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8>::get())
+        if(mArgTypes==__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5,A6,A7,A8>::get())
             (_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5,_a6,_a7,_a8);
         return o;
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7,LVariant _a8)
     {
-        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>());
+        LVariant o;
+        if(_o.isConverible<CT>()&&_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>()&&_a4.isConverible<A4>()&&_a5.isConverible<A5>()&&_a6.isConverible<A6>()&&_a7.isConverible<A7>()&&_a8.isConverible<A8>())
+            (*this).call(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     void(CT::*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8);
@@ -1615,7 +1506,7 @@ class LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9)>:public LFunctionP
 {
 public:
     LMemberFunction(void(CT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7,A8,A9)):
-        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5,A6,A7,A8,A9>::get()),
         mPtrF(_Fptr)
     {
     }
@@ -1626,13 +1517,18 @@ public:
     LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8,A9 _a9)
     {
         LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9>::get())
+        if(mArgTypes==__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5,A6,A7,A8,A9>::get())
             (_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5,_a6,_a7,_a8,_a9);
         return o;
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7,LVariant _a8,LVariant _a9)
     {
-        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>());
+        LVariant o;
+        if(_o.isConverible<CT>()&&_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>()&&_a4.isConverible<A4>()&&_a5.isConverible<A5>()&&_a6.isConverible<A6>()&&_a7.isConverible<A7>()&&_a8.isConverible<A8>()&&_a9.isConverible<A9>())
+            (*this).call(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     void(CT::*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8,A9);
@@ -1643,7 +1539,7 @@ class LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)>:public LFunct
 {
 public:
     LMemberFunction(void(CT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)):
-        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5,A6,A7,A8,A9,A10>::get()),
         mPtrF(_Fptr)
     {
     }
@@ -1654,24 +1550,399 @@ public:
     LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8,A9 _a9,A10 _a10)
     {
         LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10>::get())
+        if(mArgTypes==__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5,A6,A7,A8,A9,A10>::get())
             (_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5,_a6,_a7,_a8,_a9,_a10);
         return o;
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7,LVariant _a8,LVariant _a9,LVariant _a10)
     {
-        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>(),_a10.to<A10>());
+        LVariant o;
+        if(_o.isConverible<CT>()&&_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>()&&_a4.isConverible<A4>()&&_a5.isConverible<A5>()&&_a6.isConverible<A6>()&&_a7.isConverible<A7>()&&_a8.isConverible<A8>()&&_a9.isConverible<A9>()&&_a10.isConverible<A10>())
+            (*this).call(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>(),_a10.to<A10>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     void(CT::*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10);
 };
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+template<typename CT,typename RT> // Class type,Return Type
+class LMemberFunction<RT(CT::*)()const>:public LFunctionPtr
+{
+public:
+    LMemberFunction(RT(CT::*_Fptr)()const):
+        LFunctionPtr(__lGetMFTypesAsString<CT>::get()),
+        mPtrF(_Fptr)
+    {
+    }
+    virtual LFunctionPtr*  clone()
+    {
+        return new LMemberFunction<RT(CT::*)()const>(mPtrF);
+    }
+    LVariant call(CT& _o)
+    {
+        LVariant o;
+        if(mArgTypes==__lGetMFTypesAsString<CT>::get())
+            o=(_o.*mPtrF)();
+        return o;
+    }
+    virtual LVariant operator()(LVariant _o)
+    {
+        LVariant o;
+        if(_o.isConverible<CT>())
+            o=(*this).call(_o.to<CT&>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
+    }
+private:
+    RT(CT::*mPtrF)()const;
+};
+
+template<typename CT,typename RT,typename A1>
+class LMemberFunction<RT(CT::*)(A1)const>:public LFunctionPtr
+{
+public:
+    LMemberFunction(RT(CT::*_Fptr)(A1)const):
+        LFunctionPtr(__lGetMFTypesAsString<CT,A1>::get()),
+        mPtrF(_Fptr)
+    {
+    }
+    virtual LFunctionPtr* clone()
+    {
+        return new LMemberFunction<RT(CT::*)(A1)const>(mPtrF);
+    }
+    LVariant call(CT& _o,A1 _a1)
+    {
+        LVariant o;
+        if(mArgTypes==__lGetMFTypesAsString<CT,A1>::get())
+            o=(_o.*mPtrF)(_a1);
+        return o;
+    }
+    virtual LVariant operator()(LVariant _o,LVariant _a1)
+    {
+        LVariant o;
+        if(_o.isConverible<CT>()&&_a1.isConverible<A1>())
+            o=(*this).call(_o.to<CT&>(),_a1.to<A1>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
+    }
+private:
+    RT(CT::*mPtrF)(A1)const;
+};
+
+template<typename CT,typename RT,typename A1,typename A2>
+class LMemberFunction<RT(CT::*)(A1,A2)const>:public LFunctionPtr
+{
+public:
+    LMemberFunction(RT(CT::*_Fptr)(A1,A2)const):
+        LFunctionPtr(__lGetMFTypesAsString<CT,A1,A2>::get()),
+        mPtrF(_Fptr)
+    {
+    }
+    virtual LFunctionPtr* clone()
+    {
+        return new LMemberFunction<RT(CT::*)(A1,A2)const>(mPtrF);
+    }
+    LVariant call(CT& _o,A1 _a1,A2 _a2)
+    {
+        LVariant o;
+        if(mArgTypes==__lGetMFTypesAsString<CT,A1,A2>::get())
+            o=(_o.*mPtrF)(_a1,_a2);
+        return o;
+    }
+    virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2)
+    {
+        LVariant o;
+        if(_o.isConverible<CT>()&&_a1.isConverible<A1>()&&_a2.isConverible<A2>())
+            o=(*this).call(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
+    }
+private:
+    RT(CT::*mPtrF)(A1,A2)const;
+};
+
+template<typename CT,typename RT,typename A1,typename A2,typename A3>
+class LMemberFunction<RT(CT::*)(A1,A2,A3)const>:public LFunctionPtr
+{
+public:
+    LMemberFunction(RT(CT::*_Fptr)(A1,A2,A3)const):
+        LFunctionPtr(__lGetMFTypesAsString<CT,A1,A2,A3>::get()),
+        mPtrF(_Fptr)
+    {
+    }
+    virtual LFunctionPtr* clone()
+    {
+        return new LMemberFunction<RT(CT::*)(A1,A2,A3)const>(mPtrF);
+    }
+    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3)
+    {
+        LVariant o;
+        if(mArgTypes==__lGetMFTypesAsString<CT,A1,A2,A3>::get())
+            o=(_o.*mPtrF)(_a1,_a2,_a3);
+        return o;
+    }
+    virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3)
+    {
+        LVariant o;
+        if(_o.isConverible<CT>()&&_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>())
+            o=(*this).call(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
+    }
+private:
+    RT(CT::*mPtrF)(A1,A2,A3)const;
+};
+
+template<typename CT,typename RT,typename A1,typename A2,typename A3,typename A4>
+class LMemberFunction<RT(CT::*)(A1,A2,A3,A4)const>:public LFunctionPtr
+{
+public:
+    LMemberFunction(RT(CT::*_Fptr)(A1,A2,A3,A4)const):
+        LFunctionPtr(__lGetMFTypesAsString<CT,A1,A2,A3,A4>::get()),
+        mPtrF(_Fptr)
+    {
+    }
+    virtual LFunctionPtr* clone()
+    {
+        return new LMemberFunction<RT(CT::*)(A1,A2,A3,A4)const>(mPtrF);
+    }
+    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4)
+    {
+        LVariant o;
+        if(mArgTypes==__lGetMFTypesAsString<CT,A1,A2,A3,A4>::get())
+            o=(_o.*mPtrF)(_a1,_a2,_a3,_a4);
+        return o;
+    }
+    virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4)
+    {
+        LVariant o;
+        if(_o.isConverible<CT>()&&_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>()&&_a4.isConverible<A4>())
+            o=(*this).call(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
+    }
+private:
+    RT(CT::*mPtrF)(A1,A2,A3,A4)const;
+};
+
+template<typename CT,typename RT,typename A1,typename A2,typename A3,typename A4,typename A5>
+class LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5)const>:public LFunctionPtr
+{
+public:
+    LMemberFunction(RT(CT::*_Fptr)(A1,A2,A3,A4,A5)const):
+        LFunctionPtr(__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5>::get()),
+        mPtrF(_Fptr)
+    {
+    }
+    virtual LFunctionPtr* clone()
+    {
+        return new LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5)const>(mPtrF);
+    }
+    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5)
+    {
+        LVariant o;
+        if(mArgTypes==__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5>::get())
+            o=(_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5);
+        return o;
+    }
+    virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5)
+    {
+        LVariant o;
+        if(_o.isConverible<CT>()&&_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>()&&_a4.isConverible<A4>()&&_a5.isConverible<A5>())
+            o=(*this).call(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
+    }
+private:
+    RT(CT::*mPtrF)(A1,A2,A3,A4,A5)const;
+};
+
+template<typename CT,typename RT,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6>
+class LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6)const>:public LFunctionPtr
+{
+public:
+    LMemberFunction(RT(CT::*_Fptr)(A1,A2,A3,A4,A5,A6)const):
+        LFunctionPtr(__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5,A6>::get()),
+        mPtrF(_Fptr)
+    {
+    }
+    virtual LFunctionPtr* clone()
+    {
+        return new LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6)const>(mPtrF);
+    }
+    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6)
+    {
+        LVariant o;
+        if(mArgTypes==__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5,A6>::get())
+            o=(_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5,_a6);
+        return o;
+    }
+    virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6)
+    {
+        LVariant o;
+        if(_o.isConverible<CT>()&&_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>()&&_a4.isConverible<A4>()&&_a5.isConverible<A5>()&&_a6.isConverible<A6>())
+            o=(*this).call(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
+    }
+private:
+    RT(CT::*mPtrF)(A1,A2,A3,A4,A5,A6)const;
+};
+
+template<typename CT,typename RT,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7>
+class LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7)const>:public LFunctionPtr
+{
+public:
+    LMemberFunction(RT(CT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7)const):
+        LFunctionPtr(__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5,A6,A7>::get()),
+        mPtrF(_Fptr)
+    {
+    }
+    virtual LFunctionPtr* clone()
+    {
+        return new LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7)const>(mPtrF);
+    }
+    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7)
+    {
+        LVariant o;
+        if(mArgTypes==__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5,A6,A7>::get())
+            o=(_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5,_a6,_a7);
+        return o;
+    }
+    virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7)
+    {
+        LVariant o;
+        if(_o.isConverible<CT>()&&_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>()&&_a4.isConverible<A4>()&&_a5.isConverible<A5>()&&_a6.isConverible<A6>()&&_a7.isConverible<A7>())
+            o=(*this).call(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
+    }
+private:
+    RT(CT::*mPtrF)(A1,A2,A3,A4,A5,A6,A7)const;
+};
+
+template<typename CT,typename RT,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8>
+class LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8)const>:public LFunctionPtr
+{
+public:
+    LMemberFunction(RT(CT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7,A8)const):
+        LFunctionPtr(__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5,A6,A7,A8>::get()),
+        mPtrF(_Fptr)
+    {
+    }
+    virtual LFunctionPtr* clone()
+    {
+        return new LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8)const>(mPtrF);
+    }
+    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8)
+    {
+        LVariant o;
+        if(mArgTypes==__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5,A6,A7,A8>::get())
+            o=(_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5,_a6,_a7,_a8);
+        return o;
+    }
+    virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7,LVariant _a8)
+    {
+        LVariant o;
+        if(_o.isConverible<CT>()&&_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>()&&_a4.isConverible<A4>()&&_a5.isConverible<A5>()&&_a6.isConverible<A6>()&&_a7.isConverible<A7>()&&_a8.isConverible<A8>())
+            o=(*this).call(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
+    }
+private:
+    RT(CT::*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8)const;
+};
+
+template<typename CT,typename RT,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8,typename A9>
+class LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9)const>:public LFunctionPtr
+{
+public:
+    LMemberFunction(RT(CT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7,A8,A9)const):
+        LFunctionPtr(__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5,A6,A7,A8,A9>::get()),
+        mPtrF(_Fptr)
+    {
+    }
+    virtual LFunctionPtr* clone()
+    {
+        return new LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9)const>(mPtrF);
+    }
+    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8,A9 _a9)
+    {
+        LVariant o;
+        if(mArgTypes==__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5,A6,A7,A8,A9>::get())
+            o=(_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5,_a6,_a7,_a8,_a9);
+        return o;
+    }
+    virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7,LVariant _a8,LVariant _a9)
+    {
+        LVariant o;
+        if(_o.isConverible<CT>()&&_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>()&&_a4.isConverible<A4>()&&_a5.isConverible<A5>()&&_a6.isConverible<A6>()&&_a7.isConverible<A7>()&&_a8.isConverible<A8>()&&_a9.isConverible<A9>())
+            o=(*this).call(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
+    }
+private:
+    RT(CT::*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8,A9)const;
+};
+
+template<typename CT,typename RT,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8,typename A9,typename A10>
+class LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)const>:public LFunctionPtr
+{
+public:
+    LMemberFunction(RT(CT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)const):
+        LFunctionPtr(__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5,A6,A7,A8,A9,A10>::get()),
+        mPtrF(_Fptr)
+    {
+    }
+    virtual LFunctionPtr* clone()
+    {
+        return new LMemberFunction<RT(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)const>(mPtrF);
+    }
+    LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8,A9 _a9,A10 _a10)
+    {
+        LVariant o;
+        if(mArgTypes==__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5,A6,A7,A8,A9,A10>::get())
+            o=(_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5,_a6,_a7,_a8,_a9,_a10);
+        return o;
+    }
+    virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7,LVariant _a8,LVariant _a9,LVariant _a10)
+    {
+        LVariant o;
+        if(_o.isConverible<CT>()&&_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>()&&_a4.isConverible<A4>()&&_a5.isConverible<A5>()&&_a6.isConverible<A6>()&&_a7.isConverible<A7>()&&_a8.isConverible<A8>()&&_a9.isConverible<A9>()&&_a10.isConverible<A10>())
+            o=(*this).call(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>(),_a10.to<A10>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
+    }
+private:
+    RT(CT::*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)const;
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 template<typename CT> // Class type
 class LMemberFunction<void(CT::*)()const>:public LFunctionPtr
 {
 public:
     LMemberFunction(void(CT::*_Fptr)()const):
-        LFunctionPtr(__lGetMFTypesAsString<void>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<CT>::get()),
         mPtrF(_Fptr)
     {
     }
@@ -1682,22 +1953,29 @@ public:
     LVariant call(CT& _o)
     {
         LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<void>::get())
+        if(mArgTypes==__lGetMFTypesAsString<CT>::get())
             (_o.*mPtrF)();
         return o;
     }
     virtual LVariant operator()(LVariant _o)
     {
-        return (*this).call(_o.to<CT>());
+        LVariant o;
+        if(_o.isConverible<CT>())
+            (*this).call(_o.to<CT&>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     void(CT::*mPtrF)()const;
-};template<typename CT,typename A1>
+};
+
+template<typename CT,typename A1>
 class LMemberFunction<void(CT::*)(A1)const>:public LFunctionPtr
 {
 public:
     LMemberFunction(void(CT::*_Fptr)(A1)const):
-        LFunctionPtr(__lGetMFTypesAsString<A1>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<CT,A1>::get()),
         mPtrF(_Fptr)
     {
     }
@@ -1708,13 +1986,18 @@ public:
     LVariant call(CT& _o,A1 _a1)
     {
         LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<A1>::get())
+        if(mArgTypes==__lGetMFTypesAsString<CT,A1>::get())
             (_o.*mPtrF)(_a1);
         return o;
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1)
     {
-        return (*this).call(_o.to<CT>(),_a1.to<A1>());
+        LVariant o;
+        if(_o.isConverible<CT>()&&_a1.isConverible<A1>())
+            (*this).call(_o.to<CT&>(),_a1.to<A1>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     void(CT::*mPtrF)(A1)const;
@@ -1725,7 +2008,7 @@ class LMemberFunction<void(CT::*)(A1,A2)const>:public LFunctionPtr
 {
 public:
     LMemberFunction(void(CT::*_Fptr)(A1,A2)const):
-        LFunctionPtr(__lGetMFTypesAsString<A1,A2>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<CT,A1,A2>::get()),
         mPtrF(_Fptr)
     {
     }
@@ -1736,13 +2019,18 @@ public:
     LVariant call(CT& _o,A1 _a1,A2 _a2)
     {
         LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<A1,A2>::get())
+        if(mArgTypes==__lGetMFTypesAsString<CT,A1,A2>::get())
             (_o.*mPtrF)(_a1,_a2);
         return o;
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2)
     {
-        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>());
+        LVariant o;
+        if(_o.isConverible<CT>()&&_a1.isConverible<A1>()&&_a2.isConverible<A2>())
+            (*this).call(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     void(CT::*mPtrF)(A1,A2)const;
@@ -1753,7 +2041,7 @@ class LMemberFunction<void(CT::*)(A1,A2,A3)const>:public LFunctionPtr
 {
 public:
     LMemberFunction(void(CT::*_Fptr)(A1,A2,A3)const):
-        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<CT,A1,A2,A3>::get()),
         mPtrF(_Fptr)
     {
     }
@@ -1764,13 +2052,18 @@ public:
     LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3)
     {
         LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3>::get())
+        if(mArgTypes==__lGetMFTypesAsString<CT,A1,A2,A3>::get())
             (_o.*mPtrF)(_a1,_a2,_a3);
         return o;
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3)
     {
-        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>());
+        LVariant o;
+        if(_o.isConverible<CT>()&&_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>())
+            (*this).call(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     void(CT::*mPtrF)(A1,A2,A3)const;
@@ -1781,7 +2074,7 @@ class LMemberFunction<void(CT::*)(A1,A2,A3,A4)const>:public LFunctionPtr
 {
 public:
     LMemberFunction(void(CT::*_Fptr)(A1,A2,A3,A4)const):
-        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<CT,A1,A2,A3,A4>::get()),
         mPtrF(_Fptr)
     {
     }
@@ -1792,13 +2085,18 @@ public:
     LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4)
     {
         LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4>::get())
+        if(mArgTypes==__lGetMFTypesAsString<CT,A1,A2,A3,A4>::get())
             (_o.*mPtrF)(_a1,_a2,_a3,_a4);
         return o;
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4)
     {
-        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>());
+        LVariant o;
+        if(_o.isConverible<CT>()&&_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>()&&_a4.isConverible<A4>())
+            (*this).call(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     void(CT::*mPtrF)(A1,A2,A3,A4)const;
@@ -1809,7 +2107,7 @@ class LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5)const>:public LFunctionPtr
 {
 public:
     LMemberFunction(void(CT::*_Fptr)(A1,A2,A3,A4,A5)const):
-        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5>::get()),
         mPtrF(_Fptr)
     {
     }
@@ -1820,13 +2118,18 @@ public:
     LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5)
     {
         LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5>::get())
+        if(mArgTypes==__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5>::get())
             (_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5);
         return o;
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5)
     {
-        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>());
+        LVariant o;
+        if(_o.isConverible<CT>()&&_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>()&&_a4.isConverible<A4>()&&_a5.isConverible<A5>())
+            (*this).call(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     void(CT::*mPtrF)(A1,A2,A3,A4,A5)const;
@@ -1837,7 +2140,7 @@ class LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6)const>:public LFunctionPtr
 {
 public:
     LMemberFunction(void(CT::*_Fptr)(A1,A2,A3,A4,A5,A6)const):
-        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5,A6>::get()),
         mPtrF(_Fptr)
     {
     }
@@ -1848,13 +2151,18 @@ public:
     LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6)
     {
         LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6>::get())
+        if(mArgTypes==__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5,A6>::get())
             (_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5,_a6);
         return o;
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6)
     {
-        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>());
+        LVariant o;
+        if(_o.isConverible<CT>()&&_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>()&&_a4.isConverible<A4>()&&_a5.isConverible<A5>()&&_a6.isConverible<A6>())
+            (*this).call(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     void(CT::*mPtrF)(A1,A2,A3,A4,A5,A6)const;
@@ -1865,7 +2173,7 @@ class LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6,A7)const>:public LFunctionPt
 {
 public:
     LMemberFunction(void(CT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7)const):
-        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5,A6,A7>::get()),
         mPtrF(_Fptr)
     {
     }
@@ -1876,13 +2184,18 @@ public:
     LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7)
     {
         LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7>::get())
+        if(mArgTypes==__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5,A6,A7>::get())
             (_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5,_a6,_a7);
         return o;
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7)
     {
-        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>());
+        LVariant o;
+        if(_o.isConverible<CT>()&&_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>()&&_a4.isConverible<A4>()&&_a5.isConverible<A5>()&&_a6.isConverible<A6>()&&_a7.isConverible<A7>())
+            (*this).call(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     void(CT::*mPtrF)(A1,A2,A3,A4,A5,A6,A7)const;
@@ -1893,7 +2206,7 @@ class LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8)const>:public LFunctio
 {
 public:
     LMemberFunction(void(CT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7,A8)const):
-        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5,A6,A7,A8>::get()),
         mPtrF(_Fptr)
     {
     }
@@ -1904,13 +2217,18 @@ public:
     LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8)
     {
         LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8>::get())
+        if(mArgTypes==__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5,A6,A7,A8>::get())
             (_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5,_a6,_a7,_a8);
         return o;
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7,LVariant _a8)
     {
-        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>());
+        LVariant o;
+        if(_o.isConverible<CT>()&&_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>()&&_a4.isConverible<A4>()&&_a5.isConverible<A5>()&&_a6.isConverible<A6>()&&_a7.isConverible<A7>()&&_a8.isConverible<A8>())
+            (*this).call(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     void(CT::*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8)const;
@@ -1921,7 +2239,7 @@ class LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9)const>:public LFunc
 {
 public:
     LMemberFunction(void(CT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7,A8,A9)const):
-        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5,A6,A7,A8,A9>::get()),
         mPtrF(_Fptr)
     {
     }
@@ -1932,13 +2250,18 @@ public:
     LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8,A9 _a9)
     {
         LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9>::get())
+        if(mArgTypes==__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5,A6,A7,A8,A9>::get())
             (_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5,_a6,_a7,_a8,_a9);
         return o;
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7,LVariant _a8,LVariant _a9)
     {
-        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>());
+        LVariant o;
+        if(_o.isConverible<CT>()&&_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>()&&_a4.isConverible<A4>()&&_a5.isConverible<A5>()&&_a6.isConverible<A6>()&&_a7.isConverible<A7>()&&_a8.isConverible<A8>()&&_a9.isConverible<A9>())
+            (*this).call(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     void(CT::*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8,A9)const;
@@ -1949,7 +2272,7 @@ class LMemberFunction<void(CT::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)const>:public L
 {
 public:
     LMemberFunction(void(CT::*_Fptr)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)const):
-        LFunctionPtr(__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10>::get()),
+        LFunctionPtr(__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5,A6,A7,A8,A9,A10>::get()),
         mPtrF(_Fptr)
     {
     }
@@ -1960,19 +2283,42 @@ public:
     LVariant call(CT& _o,A1 _a1,A2 _a2,A3 _a3,A4 _a4,A5 _a5,A6 _a6,A7 _a7,A8 _a8,A9 _a9,A10 _a10)
     {
         LVariant o;
-        if(mArgTypes==__lGetMFTypesAsString<A1,A2,A3,A4,A5,A6,A7,A8,A9,A10>::get())
+        if(mArgTypes==__lGetMFTypesAsString<CT,A1,A2,A3,A4,A5,A6,A7,A8,A9,A10>::get())
             (_o.*mPtrF)(_a1,_a2,_a3,_a4,_a5,_a6,_a7,_a8,_a9,_a10);
         return o;
     }
     virtual LVariant operator()(LVariant _o,LVariant _a1,LVariant _a2,LVariant _a3,LVariant _a4,LVariant _a5,LVariant _a6,LVariant _a7,LVariant _a8,LVariant _a9,LVariant _a10)
     {
-        return (*this).call(_o.to<CT>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>(),_a10.to<A10>());
+        LVariant o;
+        if(_o.isConverible<CT>()&&_a1.isConverible<A1>()&&_a2.isConverible<A2>()&&_a3.isConverible<A3>()&&_a4.isConverible<A4>()&&_a5.isConverible<A5>()&&_a6.isConverible<A6>()&&_a7.isConverible<A7>()&&_a8.isConverible<A8>()&&_a9.isConverible<A9>()&&_a10.isConverible<A10>())
+            (*this).call(_o.to<CT&>(),_a1.to<A1>(),_a2.to<A2>(),_a3.to<A3>(),_a4.to<A4>(),_a5.to<A5>(),_a6.to<A6>(),_a7.to<A7>(),_a8.to<A8>(),_a9.to<A9>(),_a10.to<A10>());
+        else
+            lError2(1,"Can not call function because of function argument types mismatch");
+        return o;
     }
 private:
     void(CT::*mPtrF)(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10)const;
 };
 
 
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /*!
@@ -2005,6 +2351,7 @@ LFunction a=LFunction::create(&sayHello);
 a("Lightning");
 
 how to get what returns
+
 int sum(int a,int b)
 {
    return a+b;
@@ -2036,33 +2383,33 @@ public:
     LFunction(LFunction&& _other);
     virtual ~LFunction();
 
-    LVariant call()const;
+    LVariant        call()const;
     template<typename... Args>
-    LVariant call(Args... _args)const;
+    LVariant        call(Args... _args)const;
 
     template<typename FT>
     static LFunction   create(FT _in);
 
-    LFunction&  operator=(const LFunction& _other);
-    LFunction&  operator=(LFunction&& _other);
+    LFunction&      operator=(const LFunction& _other);
+    LFunction&      operator=(LFunction&& _other);
 
     template<typename RT>
-    LFunction &operator=(RT(*_fptr)());
+    LFunction&      operator=(RT(*_fptr)());
     template<typename RT,typename... Args>
-    LFunction &operator=(RT(*_fptr)(Args...));
+    LFunction&      operator=(RT(*_fptr)(Args...));
     template<typename RT,typename CT>
-    LFunction &operator=(RT(CT::*_fptr)());
+    LFunction&      operator=(RT(CT::*_fptr)());
     template<typename RT,typename CT,typename... Args>
-    LFunction &operator=(RT(CT::*_fptr)(Args...));
+    LFunction&      operator=(RT(CT::*_fptr)(Args...));
     template<typename RT,typename CT>
-    LFunction &operator=(RT(CT::*_fptr)()const);
+    LFunction&      operator=(RT(CT::*_fptr)()const);
     template<typename RT,typename CT,typename... Args>
-    LFunction &operator=(RT(CT::*_fptr)(Args...)const);
+    LFunction&      operator=(RT(CT::*_fptr)(Args...)const);
 
 
-    LVariant operator()()const;
+    LVariant        operator()()const;
     template<typename... Args>
-    LVariant operator()(Args... _args)const;
+    LVariant        operator()(Args... _args)const;
 
 
 private:

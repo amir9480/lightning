@@ -753,7 +753,9 @@ void LString_Base<chartype>::swap(LString_Base<chartype>& _other)
 template <typename chartype>
 short int LString_Base<chartype>::toShortInt(const u32 _base) const
 {
+    lMemoryLogStartIgnore()
     static const LString_Base<chartype> vt("0123456789ABCDEF");
+    lMemoryLogEndIgnore()
     u32 sc=getCapacity();
     short int o=0;
     u32 index=0,i=0;
@@ -778,7 +780,9 @@ short int LString_Base<chartype>::toShortInt(const u32 _base) const
 template <typename chartype>
 unsigned short int LString_Base<chartype>::toUShortInt(const u32 _base) const
 {
+    lMemoryLogStartIgnore()
     static const LString_Base<chartype> vt("0123456789ABCDEF");
+    lMemoryLogEndIgnore()
     u32 sc=getCapacity();
     unsigned short int o=0;
     u32 index=0,i=0;
@@ -799,18 +803,20 @@ unsigned short int LString_Base<chartype>::toUShortInt(const u32 _base) const
 template <typename chartype>
 int LString_Base<chartype>::toInt(const u32 _base) const
 {
+    lMemoryLogStartIgnore()
     static const LString_Base<chartype> vt("0123456789ABCDEF");
+    lMemoryLogEndIgnore()
     u32 sc=getCapacity();
     int o=0;
     u32 index=0,i=0;
     LString_Base<chartype> theData=toUpper();
     if(theData[0]==(chartype)'+'||theData[0]==(chartype)'-')
         i=1;
-    lError(_base<2||_base>16," _base is not acceptable",0);
-    lWarning(!isInt(_base)," string is not integer");
+    //lError(_base<2||_base>16," _base is not acceptable",0);
+    //lWarning(!isInt(_base)," string is not integer");
     for(;i<sc;i++)
         if((index=vt.find(LString_Base<chartype>(theData[i])))!=nothing &&
-            index<_base)
+           index<_base)
         {
             o= o*_base+index;
         }
@@ -824,13 +830,15 @@ int LString_Base<chartype>::toInt(const u32 _base) const
 template <typename chartype>
 unsigned int LString_Base<chartype>::toUInt(const u32 _base) const
 {
+    lMemoryLogStartIgnore()
     static const LString_Base<chartype> vt("0123456789ABCDEF");
+    lMemoryLogEndIgnore()
     u32 sc=getCapacity();
     unsigned int o=0;
     u32 index=0,i=0;
     LString_Base<chartype> theData=toUpper();
-    lError(_base<2||_base>16," _base is not acceptable",0);
-    lWarning(!isInt(_base),"const: string is not integer");
+    //lError(_base<2||_base>16," _base is not acceptable",0);
+    //lWarning(!isInt(_base),"const: string is not integer");
     for(;i<sc;i++)
         if((index=vt.find(LString_Base<chartype>(theData[i])))!=nothing &&
             index<_base)
@@ -845,15 +853,17 @@ unsigned int LString_Base<chartype>::toUInt(const u32 _base) const
 template <typename chartype>
 long long int LString_Base<chartype>::toLongLongInt(const u32 _base) const
 {
+    lMemoryLogStartIgnore()
     static const LString_Base<chartype> vt("0123456789ABCDEF");
+    lMemoryLogEndIgnore()
     u32 sc=getCapacity();
     long long int o=0;
     u32 index=0,i=0;
     LString_Base<chartype> theData=toUpper();
     if(theData[0]==(chartype)'+'||theData[0]==(chartype)'-')
         i=1;
-    lError(_base<2||_base>16," _base is not acceptable",0);
-    lWarning(!isInt(_base)," string is not integer");
+    //lError(_base<2||_base>16," _base is not acceptable",0);
+    //lWarning(!isInt(_base)," string is not integer");
     for(;i<sc;i++)
         if((index=vt.find(LString_Base<chartype>(theData[i])))!=nothing &&
             index<_base)
@@ -870,13 +880,15 @@ long long int LString_Base<chartype>::toLongLongInt(const u32 _base) const
 template <typename chartype>
 unsigned long long int LString_Base<chartype>::toULongLongInt(const u32 _base) const
 {
+    lMemoryLogStartIgnore()
     static const LString_Base<chartype> vt("0123456789ABCDEF");
+    lMemoryLogEndIgnore()
     u32 sc=getCapacity();
     unsigned long long int o=0;
     u32 index=0,i=0;
     LString_Base<chartype> theData=toUpper();
-    lError(_base<2||_base>16," _base is not acceptable",0);
-    lWarning(!isInt(_base),"const: string is not integer");
+    //lError(_base<2||_base>16," _base is not acceptable",0);
+    //lWarning(!isInt(_base),"const: string is not integer");
     for(;i<sc;i++)
         if((index=vt.find(LString_Base<chartype>(theData[i])))!=nothing &&
             index<_base)

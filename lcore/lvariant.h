@@ -81,7 +81,7 @@ struct LAPI __LVariantTypeCastHelper<T*>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 /*!
- * Working with vaiants
+ * Working with variants
  *
  * //how to define a variant
  * LVariant a = 12;
@@ -238,6 +238,14 @@ public:
 
     //! get typeid of variant
     LString                 getTypeName() const;
+
+    //! is convertible by typename
+    bool                    isConverible(const LString& _typename)const;
+
+    //! is convertible by type
+    template<typename T>
+    bool                    isConverible()const;
+
 
     int                     toInt()const;
     unsigned int            toUInt()const;
@@ -575,28 +583,31 @@ T& __LVariantTypeCastHelper<T&>::cast(const LVariant &_in)
     }
     else if(LIsSameType<typename LRemoveReference<T>::type,LString>::value || LIsSameType<typename LRemoveReference<T>::type,const LString>::value)
     {
+        lMemoryLogStartIgnore();
         static LString o;
+        lMemoryLogEndIgnore();
         o=_in.toString();
         return *((T*)&o);
     }
+    else if(_in.mType>=LVariant::Type::TIntR&&_in.mType<=LVariant::Type::TStringR)
+        return *static_cast<T*>(_in.mCustom);
+
+    lError2(_in.mTypeName!=lGetTypeName<T>(),"LVariant Converting is not right");
 
     if(_in.mType==LVariant::Type::TCustom)
         return (dynamic_cast<LCLassVariant<T>*>(_in.mCustomClass)->mData);
     if(_in.mType==LVariant::Type::TCustomR)
         return *(dynamic_cast<LClassVariantReference<T>*>(_in.mCustomClass)->mData);
 
-    return *static_cast<T*>(_in.mCustom);
+    lMemoryLogStartIgnore();
+    static T o;
+    lMemoryLogEndIgnore();
+    return o;
 }
 
 template<typename T>
 T* __LVariantTypeCastHelper<T*>::cast(const LVariant &_in)
 {
-    if(_in.mType==LVariant::Type::TCustom)
-        return &(dynamic_cast<LCLassVariant<T>*>(_in.mCustomClass)->mData);
-    if(_in.mType==LVariant::Type::TCustomR)
-        return (dynamic_cast<LClassVariantReference<T>*>(_in.mCustomClass)->mData);
-
-
     if(LIsSameType<typename LRemoveReference<T*>::type,char*>::value || LIsSameType<typename LRemoveReference<T*>::type,const char*>::value)
     {
         LString8 _o = _in.mString->toUTF8();
@@ -633,8 +644,17 @@ T* __LVariantTypeCastHelper<T*>::cast(const LVariant &_in)
         lMemoryLogEndIgnore();
         return (*((T**)&o));
     }
+    else if(_in.mType>=LVariant::Type::TIntR&&_in.mType<=LVariant::Type::TStringR)
+        return static_cast<T*>(_in.mCustom);
 
-    return static_cast<T*>(_in.mCustom);
+    lError2(_in.mTypeName!=lGetTypeName<T>(),"LVariant Converting is not right");
+
+    if(_in.mType==LVariant::Type::TCustom)
+        return &(dynamic_cast<LCLassVariant<T>*>(_in.mCustomClass)->mData);
+    if(_in.mType==LVariant::Type::TCustomR)
+        return (dynamic_cast<LClassVariantReference<T>*>(_in.mCustomClass)->mData);
+
+    return nullptr;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -760,6 +780,12 @@ T LVariant::_convert() const
     return *static_cast<T*>(mCustom);
 }
 
+
+template<typename T>
+bool LVariant::isConverible() const
+{
+    return isConverible(lGetTypeName<T>());
+}
 
 template<typename T>
 T LVariant::to()

@@ -546,6 +546,11 @@ void LD3D9Device::drawQuad(LGFXTexture *__tex)
     //resetParameters();
 }
 
+LString LD3D9Device::getName() const
+{
+    return LSTR("DirectX 9");
+}
+
 LSize LD3D9Device::getScreenResolution() const
 {
     D3DDISPLAYMODE d3ddm;

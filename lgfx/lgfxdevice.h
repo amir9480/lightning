@@ -94,6 +94,9 @@ public:
     //! for custom pixel shaders you need a sampler2D inside you shader with "t0" name to get BackBuffer
     virtual void                    drawQuad(LGFXTexture* _tex=0)=0;
 
+    //! get name of current renderer library
+    virtual LString                 getName()const=0;
+
     //! Get screen Resolution ( Not Rendering window ) \sa getResolution
     virtual LSize                   getScreenResolution()const=0;
 

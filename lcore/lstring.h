@@ -15,6 +15,9 @@ LNAMESPACE_BEGIN
 template <typename chartype>
 class LAPI LString_Base
 {
+
+    template<typename T>
+    friend struct __LVariantTypeCastHelper;
     friend class LString_Base<char>;
     friend class LString_Base<wchar_t>;
     friend class LString_Base<char32_t>;
