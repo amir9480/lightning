@@ -16,9 +16,6 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////
 
-//! if Namespace is requied set this to 1
-#define LIGHTING_USING_NAMESPACE 1
-
 //! Lightning compile type LTARGET_DEBUG or LTARGET_RELEASE
 #define LTARGET LTARGET_DEBUG
 

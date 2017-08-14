@@ -4,13 +4,9 @@
 #include "../lconfig.h"
 #include "lmemorylog.h"
 
-// set Lightning namespace Dynamically
-#if LIGHTING_USING_NAMESPACE
+#ifndef LNAMESPACE_BEGIN
 #define LNAMESPACE_BEGIN namespace Lightning {
 #define LNAMESPACE_END   }
-#else
-#define LNAMESPACE_BEGIN
-#define LNAMESPACE_END
 #endif
 
 #define LHEADER_USAGE_IMPORT 1

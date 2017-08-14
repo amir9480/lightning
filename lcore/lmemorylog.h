@@ -23,7 +23,6 @@
  * Note That Memory log only working with new and delete
  * it does not support malloc or free and ...
  */
-
 struct _lptrobj
 {
     void*        mAddress;//Address of memory
@@ -35,160 +34,32 @@ struct _lptrobj
 class _lptrlogmanager
 {
 public:
-    _lptrlogmanager()
-    {
-        FILE* f=fopen(LMLOG_FILE,"w");// clear previous session
-        fclose(f);
-        ptrs=(_lptrobj*)malloc(1*sizeof(_lptrobj));
-        arrayptrs=(_lptrobj*)malloc(1*sizeof(_lptrobj));
-        ptrssize=arrayptrssize=totalptrsize=totalarrayptrsize=0;
-        wrongjob=false;
-    }
+    _lptrlogmanager();
 
-    ~_lptrlogmanager()
-    {
-        FILE* f=fopen(LMLOG_FILE,"a");
+    ~_lptrlogmanager();
 
-        fprintf(f,"undestroyed Allocated size is %d B \n\n",ptrssize+arrayptrssize);
+    void addPtr(_lptrobj _in);
 
-        for(unsigned int i=0;i<ptrssize;i++)
-            fprintf(f,"memory leak detected . var was allocated in %s ( %d ) address=%p \n\n",ptrs[i].mFile,ptrs[i].mLine,ptrs[i].mAddress);
-
-        for(unsigned int i=0;i<arrayptrssize;i++)
-            fprintf(f,"memory leak detected . array was allocated in %s ( %d ) address=%p \n\n",arrayptrs[i].mFile,arrayptrs[i].mLine,arrayptrs[i].mAddress);
-
-        if(ptrssize>0||arrayptrssize>0||wrongjob)
-            printf("\n*************************************************************************\n*** Memory leak detected please check file =\"%s\" ***\n*************************************************************************\n",LMLOG_FILE);
-
-        if(ptrssize+arrayptrssize==0)
-            fprintf(f,"Every thing is OK . thanks for checking \n\n");
-
-        fclose(f);
-
-        free(ptrs);
-        free(arrayptrs);
-    }
-
-    void addPtr(_lptrobj _in)
-    {
-        ptrssize+=1;
-        _lptrobj* t=ptrs;
-        ptrs = (_lptrobj*)malloc(sizeof(_lptrobj)*ptrssize);
-        memcpy(ptrs,t,sizeof(_lptrobj)*(ptrssize-1));
-        free(t);
-        ptrs[ptrssize-1]=_in;
-        totalptrsize+=_in.mSize;
-    }
-
-    void addArrayPtr(_lptrobj _in)
-    {
-        arrayptrssize+=1;
-        _lptrobj* t=arrayptrs;
-        arrayptrs = (_lptrobj*)malloc(sizeof(_lptrobj)*arrayptrssize);
-        memcpy(arrayptrs,t,sizeof(_lptrobj)*(arrayptrssize-1));
-        free(t);
-        arrayptrs[arrayptrssize-1]=_in;
-        totalarrayptrsize+=_in.mSize;
-    }
+    void addArrayPtr(_lptrobj _in);
 
     //! check is address a valid allocated space
-    bool isValidPointer(void* address)
-    {
-        for(unsigned int i=0;i<ptrssize;i++)
-            if(ptrs[i].mAddress==address)
-                return true;
-        for(unsigned int i=0;i<arrayptrssize;i++)
-            if(arrayptrs[i].mAddress==address)
-                return true;
-        return false;
-    }
+    bool isValidPointer(void* address);
 
     //! check pointer is a simple dynamically allocated  (Not Array)
-    bool isSimplePointer(void* address)
-    {
-        for(unsigned int i=0;i<ptrssize;i++)
-            if(ptrs[i].mAddress==address)
-                return true;
-        return false;
-    }
+    bool isSimplePointer(void* address);
 
     // pointer is a array dynamically allocated
-    bool isArrayPointer(void* address)
-    {
-        for(unsigned int i=0;i<arrayptrssize;i++)
-            if(arrayptrs[i].mAddress==address)
-                return true;
-        return false;
-    }
+    bool isArrayPointer(void* address);
 
-    void removePtr(void* address)
-    {
-        for(unsigned int i=0;i<ptrssize;i++)
-            if(ptrs[i].mAddress==address)
-            {
-                totalptrsize-=ptrs[i].mSize;
-                removePtrItem(i);
-                return;
-            }
-        for(unsigned int i=0;i<arrayptrssize;i++)
-            if(arrayptrs[i].mAddress==address)
-            {
-                FILE* f=fopen(LMLOG_FILE,"a");
-                fprintf(f,"wrong type of delete . you need to use delete[] instead of delete address=%p \n\n",address);
-                wrongjob=true;
-                fclose(f);
-                return;
-            }
+    void removePtr(void* address);
 
-        FILE* f=fopen(LMLOG_FILE,"a");
-        fprintf(f,"you delete nothing! address=%p \n\n",address);
-        wrongjob=true;
-        fclose(f);
-    }
-
-    void removeArrayPtr(void* address)
-    {
-        for(unsigned int i=0;i<arrayptrssize;i++)
-            if(arrayptrs[i].mAddress==address)
-            {
-                totalarrayptrsize-=arrayptrs[i].mSize;
-                removeArrayPtrItem(i);
-                return;
-            }
-        for(unsigned int i=0;i<ptrssize;i++)
-            if(ptrs[i].mAddress==address)
-            {
-                FILE* f=fopen(LMLOG_FILE,"a");
-                fprintf(f,"wrong type of delete . you need to use delete instead of delete[] address=%p \n\n",address);
-                wrongjob=true;
-                fclose(f);
-                return;
-            }
-        FILE* f=fopen(LMLOG_FILE,"a");
-        fprintf(f,"you delete nothing! address=%p \n\n",address);
-        wrongjob=true;
-        fclose(f);
-    }
+    void removeArrayPtr(void* address);
 
 
 private:
-    void removePtrItem(unsigned int _index)
-    {
-        for(unsigned int i=_index;i<ptrssize-1;i++)
-            ptrs[i]=ptrs[i+1];
-        ptrssize--;
-        if(ptrssize>0)
-            ptrs=(_lptrobj*)realloc(ptrs,sizeof(_lptrobj)*ptrssize);
-    }
+    void removePtrItem(unsigned int _index);
 
-    void removeArrayPtrItem(unsigned int _index)
-    {
-        for(unsigned int i=_index;i<arrayptrssize-1;i++)
-            arrayptrs[i]=arrayptrs[i+1];
-        arrayptrssize--;
-        if(arrayptrssize>0)
-            arrayptrs=(_lptrobj*)realloc(arrayptrs,sizeof(_lptrobj)*arrayptrssize);
-    }
+    void removeArrayPtrItem(unsigned int _index);
 
 private:
     _lptrobj*          ptrs;

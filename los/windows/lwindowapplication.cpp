@@ -27,6 +27,7 @@ void __linput_set_mouse_wheel_delta(int _v);
 bool __is_changing_window=false;
 LMap<HWND,LGFXDevice*> __window_deivces;
 
+
 LApplication::LApplication()
 {
 
@@ -51,6 +52,77 @@ LPoint lGetMousePos()
 void lShowMessageBox(const LString& _title,const LString& _content)
 {
     MessageBoxW((HWND)NULL,_content.getData(),_title.getData(),MB_OK);
+}
+
+void lSetConsoleColor(Lightning::LConsoleColor _text_color, Lightning::LConsoleColor _background_color)
+{
+    int _fgcolor=0;
+    int _bgcolor=0;
+    switch (_text_color)
+    {
+    case LConsoleColor::Black:
+        _fgcolor=0;
+        break;
+    case LConsoleColor::Blue:
+        _fgcolor=9;
+        break;
+    case LConsoleColor::Yellow:
+        _fgcolor=14;
+        break;
+    case LConsoleColor::Cyan:
+        _fgcolor=11;
+        break;
+    case LConsoleColor::Green:
+        _fgcolor=10;
+        break;
+    case LConsoleColor::Magenta:
+        _fgcolor=13;
+        break;
+    case LConsoleColor::Red:
+        _fgcolor=12;
+        break;
+    case LConsoleColor::White:
+        _fgcolor=15;
+        break;
+    default:
+        break;
+    }
+    switch (_background_color)
+    {
+    case LConsoleColor::Black:
+        _bgcolor=0;
+        break;
+    case LConsoleColor::Blue:
+        _bgcolor=1;
+        break;
+    case LConsoleColor::Yellow:
+        _bgcolor=6;
+        break;
+    case LConsoleColor::Cyan:
+        _bgcolor=3;
+        break;
+    case LConsoleColor::Green:
+        _bgcolor=2;
+        break;
+    case LConsoleColor::Magenta:
+        _bgcolor=5;
+        break;
+    case LConsoleColor::Red:
+        _bgcolor=4;
+        break;
+    case LConsoleColor::White:
+        _bgcolor=7;
+        break;
+    default:
+        break;
+    }
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),(_bgcolor*16)+_fgcolor);
+    return;
+}
+
+void lConsoleClear()
+{
+    system("cls");
 }
 
 LRESULT CALLBACK lightningmainwindowproc(HWND hwnd,UINT msg,WPARAM wparam,LPARAM lparam)

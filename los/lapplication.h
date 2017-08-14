@@ -6,11 +6,15 @@
 
 LNAMESPACE_BEGIN
 
-void lShowMessageBox(const LString& _title,const LString& _content);
+void LAPI lShowMessageBox(const LString& _title,const LString& _content);
 
-LPoint lGetMousePos();
+void LAPI lSetConsoleColor(LConsoleColor _text_color,LConsoleColor _background_color);
 
-class LApplication
+void LAPI lConsoleClear();
+
+LPoint LAPI lGetMousePos();
+
+class LAPI LApplication
 {
 public:
     LApplication();

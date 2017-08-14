@@ -1,4 +1,4 @@
-#include <iostream>
+#include <bits/stdc++.h>
 #include "Lightning"
 //#include "windows.h"
 
@@ -6,7 +6,7 @@
 using namespace std;
 using namespace Lightning;
 
-ostream& operator<<(ostream& _in,const LString& _str)
+ostream& operator<<(ostream& _in,const Lightning::LString& _str)
 {
     _in<<_str.toUTF8().getData();
     return _in;
@@ -17,11 +17,12 @@ ostream& operator<<(ostream& _in,const LString& _str)
 // Add Reflection Support
 // *** Make Shared Pointer and device->drawQuad Thread Safe
 // LD3D9Device::checkErrors() and processOSMessage() add sleep function
+// add LSharedPtr::create and LUniquePtr::Create
 //
 ///////////////////////////////////////
 //
 
-
+/*
 const char* myShader=
 R"(
 uniform extern float4x4 WVP;
@@ -231,40 +232,98 @@ LVector<u32> ibox={
   17,16,18,17,18,19,
   20,21,22,22,21,23
 };
-
+*/
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-struct B
+enum class TypeA
 {
-    int a,b,c;
-    int test()
-    {
-        cout<<"Test B"<<endl;
-        return 74;
-    }
+    ValA,
+    ValB,
+    ValC
 };
 
-struct A
+
+
+//LMETAENUM_BEGIN_DEFINE("TypeA",TypeA,LMETA_ATTR("ename" , "Enenmy Difficult"),LMETA_ATTR("edet" , "to set difficuly of Enemy AI"))
+//    LMETAENUM_ELEMENT("ValA",ValA,LMETA_ATTR("ename" , "Easy"))
+//    LMETAENUM_ELEMENT("ValB",ValB,LMETA_ATTR("ename" , "Normal"))
+//    LMETAENUM_ELEMENT("ValC",ValC,LMETA_ATTR("ename" , "Hard"))
+//LMETAENUM_END_DEFINE(TypeA)
+
+
+struct StructB
 {
-    int a,b;
-    void test()const
-    {
-        cout<<"Test A"<<endl;
-    }
+public:
+    int testA;
+
 };
 
-void test()
+struct StructA
 {
-    cout<<"Hello WOrld "<<endl;
+public:
+    int valA;
+    StructB valB;
 
-}
-
+    int getValA() const
+    {
+        return valA;
+    }
+    void setValA(int value)
+    {
+        valA = value;
+    }
+    StructB getValB() const
+    {
+        return valB;
+    }
+    void setValB(StructB& value)
+    {
+        cout<<&value<<endl;
+        valB = value;
+    }
+};
 
 int main()
 {
     lMemoryLogStart();
-    A obj;
+    //    cout<<"Name:"<<LMetaObjectManager::getMetaEnumByName("TypeA").getName()<<"\nTypeName:"<<LMetaObjectManager::getMetaEnumByName("TypeA").getTypeName()<<"\nAttributes:{\n";
+//    for(auto _e:LMetaObjectManager::getMetaEnumByTypeName(lGetTypeName<TypeA>()).getAttributes())
+//        cout<<"\t"<<_e.first<<"="<<_e.second<<endl;
+//    cout<<"\t}\n\nElements:{\n";
+//    for(Lightning::LMetaEnumElement _e:LMetaObjectManager::getMetaEnumByType<TypeA>().getElements())
+//    {
+//        cout<<"\tName:"<<_e.getName()<<"\n\tValue:"<<_e.getValue()<<"\n\tAttributes:{\n";
+//        for(auto __e:_e.getAttributes())
+//            cout<<"\t\t"<<__e.first<<"="<<__e.second<<endl;
+//        cout<<"\t}\n";
+//    }
+//    cout<<"}\n";
+
+    StructA objA;
+    objA.valA = 771;
+//    LMetaProperty* _property = new LMetaPropertyRaw<StructA,int>("valA",&StructA::valA);
+//    _property->set(LVariant::create(&objA),74);
+//    cout<<objA.valA<<endl;
+//    cout<<_property->get(LVariant::create(&objA)).to<int>()<<endl;
+    //LMetaProperty* _property = new LMetaPropertyWithGetter<StructA,decltype(&StructA::getValA)>("valA",&StructA::getValA);
+    //cout<<_property->get(LVariant::create(&objA)).to<int>()<<endl;
+
+//    LMetaProperty* _property = new LMetaPropertyWithGetterSetter<StructA,decltype(&StructA::getValA),decltype(&StructA::setValA)>("valA",&StructA::getValA,&StructA::setValA);
+//    _property->set(LVariant::create(&objA),12);
+//    cout<<objA.valA<<endl;
+//    cout<<_property->get(LVariant::create(&objA)).to<int>()<<endl;
+
+    StructB objB = StructB{54};
+    cout<<&objB<<endl;
+
+    LMetaProperty* _property = new LMetaPropertyWithGetterSetter<StructA,decltype(&StructA::getValB),decltype(&StructA::setValB)>("valB",&StructA::getValB,&StructA::setValB);
+    _property->set(LVariant::create(&objA),LVariant::create(&objB));
+    cout<<objA.valB.testA<<endl;
+    cout<<_property->get(LVariant::create(&objA)).to<StructB>().testA<<endl;
+
+
+
 
     /*LImage image01 = LImage::loadFromPngFile("image3.png");
     LImage image02 = LImage::loadFromPngFile("image.png");
@@ -496,6 +555,14 @@ int main()
 }
 
 
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
 
 

@@ -180,6 +180,9 @@ public:
         TULongLongIntR,
         TStringR,
 
+        TEnum,
+        TEnumR,
+
         TCustom,//custom class
         TCustomR,//Custom class reference
     };
@@ -341,6 +344,7 @@ private:
         void*                   mCustom;
         LCustomVariant*         mCustomClass;
     };
+    unsigned int                mValueSize;
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -478,8 +482,41 @@ T __LVariantTypeCastHelper<T>::cast(const LVariant &_in)
         return *((T*)&o);
     }
 
-    lError2( (_in.mType!=LVariant::Type::TCustom && _in.mType!=LVariant::Type::TCustomR) || _in.mTypeName!=lGetTypeName<T>() ,"Your type casting is not right");
+    lError2( (_in.mType!=LVariant::Type::TCustom && _in.mType!=LVariant::Type::TCustomR && _in.mType!=LVariant::Type::TEnum && _in.mType != LVariant::Type::TEnumR ) && _in.mTypeName!=lGetTypeName<T>() ,"Your type casting is not right");
 
+    if(_in.mType==LVariant::Type::TEnum)
+    {
+        switch (sizeof(T))
+        {
+        case 1:
+        {
+            i8 value = (i8)_in.mLongLongInt;
+            return *((T*)(&value));
+        }
+        case 2:
+        {
+            i16 value = (i16)_in.mLongLongInt;
+            return *((T*)(&value));
+        }
+        case 4:
+        {
+            i32 value = (i32)_in.mLongLongInt;
+            return *((T*)(&value));
+        }
+        case 8:
+        {
+            i64 value = (i64)_in.mLongLongInt;
+            return *((T*)(&value));
+        }
+        default:
+            break;
+        }
+    }
+    if(_in.mType==LVariant::Type::TEnumR)
+    {
+        T* value = (T*)_in.mCustom;
+        return *value;
+    }
     if(_in.mType==LVariant::Type::TCustom)
         return (dynamic_cast<LCLassVariant<T>*>(_in.mCustomClass)->mData);
     if(_in.mType==LVariant::Type::TCustomR)
@@ -539,7 +576,7 @@ T& __LVariantTypeCastHelper<T&>::cast(const LVariant &_in)
         o=_in.toUShortInt();
         return *((T*)&o);
     }
-    else if(LIsSameType<typename LRemoveReference<T>::type,long long int>::value || LIsSameType<typename LRemoveReference<T>::type,const long long  int>::value)
+    else if(LIsSameType<typename LRemoveReference<T>::type,long long int>::value || LIsSameType<typename LRemoveReference<T>::type,const long long  int>::value )
     {
         static long long  int o;
         o=_in.toLongLongInt();
@@ -594,13 +631,23 @@ T& __LVariantTypeCastHelper<T&>::cast(const LVariant &_in)
 
     lError2(_in.mTypeName!=lGetTypeName<T>(),"LVariant Converting is not right");
 
+
+    if(_in.mType==LVariant::Type::TEnum)
+    {
+        static T* value = (T*)_in.mLongLongInt;
+        return *value;
+    }
+    if(_in.mType==LVariant::Type::TEnumR)
+    {
+        T* value = (T*)_in.mCustom;
+        return *value;
+    }
     if(_in.mType==LVariant::Type::TCustom)
         return (dynamic_cast<LCLassVariant<T>*>(_in.mCustomClass)->mData);
     if(_in.mType==LVariant::Type::TCustomR)
         return *(dynamic_cast<LClassVariantReference<T>*>(_in.mCustomClass)->mData);
-
     lMemoryLogStartIgnore();
-    static T o;
+    static T o = T();
     lMemoryLogEndIgnore();
     return o;
 }
@@ -649,6 +696,9 @@ T* __LVariantTypeCastHelper<T*>::cast(const LVariant &_in)
 
     lError2(_in.mTypeName!=lGetTypeName<T>(),"LVariant Converting is not right");
 
+    if(_in.mType==LVariant::Type::TEnumR)
+        return ((T*)_in.mCustom);
+
     if(_in.mType==LVariant::Type::TCustom)
         return &(dynamic_cast<LCLassVariant<T>*>(_in.mCustomClass)->mData);
     if(_in.mType==LVariant::Type::TCustomR)
@@ -662,6 +712,82 @@ T* __LVariantTypeCastHelper<T*>::cast(const LVariant &_in)
 template<typename T>
 LVariant& LVariant::operator=(const T& _val)
 {
+    if(mType==Type::TEnum||mType==Type::TEnumR)
+    {
+        if(     LIsSameType<int,T>::value||
+                LIsSameType<unsigned int,T>::value  ||
+                LIsSameType<short int,T>::value ||
+                LIsSameType<unsigned short int,T>::value ||
+                LIsSameType<long long int,T>::value ||
+                LIsSameType<unsigned long long int,T>::value )
+        {
+            if(mType==Type::TEnum)
+            {
+                switch (sizeof(T))
+                {
+                case 1:
+                {
+                    i8* value = (i8*)&_val;
+                    mLongLongInt=(long long int)(*value);
+                    break;
+                }
+                case 2:
+                {
+                    i16* value = (i16*)&_val;
+                    mLongLongInt=(long long int)(*value);
+                    break;
+                }
+                case 4:
+                {
+                    i32* value = (i32*)&_val;
+                    mLongLongInt=(long long int)(*value);
+                    break;
+                }
+                case 8:
+                {
+                    i64* value = (i64*)&_val;
+                    mLongLongInt=(long long int)(*value);
+                    break;
+                }
+                default:
+                    break;
+                }
+            }
+            else
+            {
+                switch (mValueSize)
+                {
+                case 1:
+                {
+                    i8* value = (i8*)mCustom;
+                    *value = *((i8*)&_val);
+                    break;
+                }
+                case 2:
+                {
+                    i16* value = (i16*)mCustom;
+                    *value = *((i16*)&_val);
+                    break;
+                }
+                case 4:
+                {
+                    i32* value = (i32*)mCustom;
+                    *value = *((i32*)&_val);
+                    break;
+                }
+                case 8:
+                {
+                    i64* value = (i64*)mCustom;
+                    *value = *((i64*)&_val);
+                    break;
+                }
+                default:
+                    break;
+                }
+            }
+            return *this;
+        }
+    }
     if(mTypeName==lGetTypeName<T>())
     {
         if(mType==Type::TCustom)
@@ -674,12 +800,86 @@ LVariant& LVariant::operator=(const T& _val)
             T* _ptr = (dynamic_cast<LClassVariantReference<T>*>(mCustomClass)->mData);
             (*_ptr)=_val;
         }
+        else if(mType==Type::TEnum)
+        {
+            switch (sizeof(T))
+            {
+            case 1:
+            {
+                i8* value = (i8*)&_val;
+                mLongLongInt=(long long int)(*value);
+                break;
+            }
+            case 2:
+            {
+                i16* value = (i16*)&_val;
+                mLongLongInt=(long long int)(*value);
+                break;
+            }
+            case 4:
+            {
+                i32* value = (i32*)&_val;
+                mLongLongInt=(long long int)(*value);
+                break;
+            }
+            case 8:
+            {
+                i64* value = (i64*)&_val;
+                mLongLongInt=(long long int)(*value);
+                break;
+            }
+            default:
+                break;
+            }
+        }
+        else if(mType==Type::TEnumR)
+        {
+            T* value = (T*)mCustom;
+            *value = _val;
+        }
         return *this;
     }
     this->destroy();
-    mType=Type::TCustom;
+    if(LIsEnum<T>::value)
+    {
+        mType=Type::TEnum;
+        switch (sizeof(T))
+        {
+        case 1:
+        {
+            i8* value = (i8*)&_val;
+            mLongLongInt=(long long int)(*value);
+            break;
+        }
+        case 2:
+        {
+            i16* value = (i16*)&_val;
+            mLongLongInt=(long long int)(*value);
+            break;
+        }
+        case 4:
+        {
+            i32* value = (i32*)&_val;
+            mLongLongInt=(long long int)(*value);
+            break;
+        }
+        case 8:
+        {
+            i64* value = (i64*)&_val;
+            mLongLongInt=(long long int)(*value);
+            break;
+        }
+        default:
+            break;
+        }
+    }
+    else
+    {
+        mType=Type::TCustom;
+        mCustomClass=new LCLassVariant<T>(_val);
+    }
     mTypeName=lGetTypeName<T>();
-    mCustomClass=new LCLassVariant<T>(_val);
+    mValueSize=sizeof(T);
     return *this;
 }
 
@@ -688,8 +888,17 @@ LVariant& LVariant::operator=(T* _val)
 {
     this->destroy();
     mTypeName = lGetTypeName<typename LRemovePointer<T>::type>();
-    mType=Type::TCustomR;
-    mCustomClass =new LClassVariantReference<T>(*_val);
+    if(LIsEnum<T>::value)
+    {
+        mType=Type::TEnumR;
+        mCustom=(void*)_val;
+    }
+    else
+    {
+        mType=Type::TCustomR;
+        mCustomClass =new LClassVariantReference<T>(*_val);
+    }
+    mValueSize=sizeof(T);
     return *this;
 }
 
@@ -774,6 +983,79 @@ T LVariant::_convert() const
     {
         return (*((T*)mCustom));
     }
+
+    case Type::TEnum:
+    {
+        if(     LIsSameType<int,T>::value||
+                LIsSameType<unsigned int,T>::value  ||
+                LIsSameType<short int,T>::value ||
+                LIsSameType<unsigned short int,T>::value ||
+                LIsSameType<long long int,T>::value ||
+                LIsSameType<unsigned long long int,T>::value )
+        {
+            switch (sizeof(T))
+            {
+            case 1:
+            {
+                i8 value = (i8)mLongLongInt;
+                return *((T*)(&value));
+            }
+            case 2:
+            {
+                i16 value = (i16)mLongLongInt;
+                return *((T*)(&value));
+            }
+            case 4:
+            {
+                i32 value = (i32)mLongLongInt;
+                return *((T*)(&value));
+            }
+            case 8:
+            {
+                i64 value = (i64)mLongLongInt;
+                return *((T*)(&value));
+            }
+            default:
+                break;
+            }
+        }
+        break;
+    }
+    case Type::TEnumR:
+    {
+        switch (mValueSize)
+        {
+        case 1:
+        {
+            i8* value = (i8*)mCustom;
+            return *((T*)value);
+            break;
+        }
+        case 2:
+        {
+            i16* value = (i16*)mCustom;
+            return *((T*)value);
+            break;
+        }
+        case 4:
+        {
+            i32* value = (i32*)mCustom;
+            return *((T*)value);
+            break;
+        }
+        case 8:
+        {
+            i64* value = (i64*)mCustom;
+            return *((T*)value);
+            break;
+        }
+        default:
+            break;
+        }
+        break;
+    }
+
+
     default:
         break;
     }

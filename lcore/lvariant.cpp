@@ -234,6 +234,7 @@ void LVariant::destroy()
     }
     mType=Type::TNull;
     mTypeName.clear();
+    mValueSize=0;
 }
 
 LVariant::Type LVariant::getType() const
@@ -485,6 +486,7 @@ LVariant &LVariant::operator=(const LVariant &_other)
     destroy();
     mTypeName=_other.mTypeName;
     mType=_other.mType;
+    mValueSize = _other.mValueSize;
     switch(mType)
     {
     case Type::TInt:
@@ -564,6 +566,46 @@ LVariant &LVariant::operator=(const LVariant &_other)
 
 LVariant &LVariant::operator=(int _val)
 {
+    if(mType==Type::TEnum||mType==Type::TEnumR)
+    {
+        if(mType==Type::TEnum)
+        {
+            mLongLongInt=(long long int)_val;
+        }
+        else
+        {
+            switch (mValueSize)
+            {
+            case 1:
+            {
+                i8* value = (i8*)mCustom;
+                *value = (i8)_val;
+                break;
+            }
+            case 2:
+            {
+                i16* value = (i16*)mCustom;
+                *value = (i16)_val;
+                break;
+            }
+            case 4:
+            {
+                i32* value = (i32*)mCustom;
+                *value = (i32)_val;
+                break;
+            }
+            case 8:
+            {
+                i64* value = (i64*)mCustom;
+                *value = (i64)_val;
+                break;
+            }
+            default:
+                break;
+            }
+        }
+        return *this;
+    }
     if(mType==Type::TIntR)
     {
        int* ptr = (int*)mCustom;
@@ -574,11 +616,52 @@ LVariant &LVariant::operator=(int _val)
     mTypeName=lGetTypeName<decltype(_val)>();
     mType=Type::TInt;
     mInt=_val;
+    mValueSize=sizeof(_val);
     return *this;
 }
 
 LVariant &LVariant::operator=(unsigned int _val)
 {
+    if(mType==Type::TEnum||mType==Type::TEnumR)
+    {
+        if(mType==Type::TEnum)
+        {
+            mLongLongInt=(long long int)_val;
+        }
+        else
+        {
+            switch (mValueSize)
+            {
+            case 1:
+            {
+                i8* value = (i8*)mCustom;
+                *value = (i8)_val;
+                break;
+            }
+            case 2:
+            {
+                i16* value = (i16*)mCustom;
+                *value = (i16)_val;
+                break;
+            }
+            case 4:
+            {
+                i32* value = (i32*)mCustom;
+                *value = (i32)_val;
+                break;
+            }
+            case 8:
+            {
+                i64* value = (i64*)mCustom;
+                *value = (i64)_val;
+                break;
+            }
+            default:
+                break;
+            }
+        }
+        return *this;
+    }
     if(mType==Type::TUIntR)
     {
        unsigned int* ptr = (unsigned int*)mCustom;
@@ -589,6 +672,7 @@ LVariant &LVariant::operator=(unsigned int _val)
     mTypeName=lGetTypeName<decltype(_val)>();
     mType=Type::TUInt;
     mUInt=_val;
+    mValueSize=sizeof(_val);
     return *this;
 }
 
@@ -604,6 +688,7 @@ LVariant &LVariant::operator=(float _val)
     mTypeName=lGetTypeName<decltype(_val)>();
     mType=Type::TFloat;
     mFloat=_val;
+    mValueSize=sizeof(_val);
     return *this;
 }
 
@@ -619,6 +704,7 @@ LVariant &LVariant::operator=(double _val)
     mTypeName=lGetTypeName<decltype(_val)>();
     mType=Type::TDouble;
     mDouble=_val;
+    mValueSize=sizeof(_val);
     return *this;
 }
 
@@ -634,6 +720,7 @@ LVariant &LVariant::operator=(long double _val)
     mTypeName=lGetTypeName<decltype(_val)>();
     mType=Type::TLongDouble;
     mLongDouble=_val;
+    mValueSize=sizeof(_val);
     return *this;
 }
 
@@ -649,11 +736,52 @@ LVariant &LVariant::operator=(bool _val)
     mTypeName=lGetTypeName<decltype(_val)>();
     mType=Type::TBool;
     mBool=_val;
+    mValueSize=sizeof(_val);
     return *this;
 }
 
 LVariant &LVariant::operator=(short _val)
 {
+    if(mType==Type::TEnum||mType==Type::TEnumR)
+    {
+        if(mType==Type::TEnum)
+        {
+            mLongLongInt=(long long int)_val;
+        }
+        else
+        {
+            switch (mValueSize)
+            {
+            case 1:
+            {
+                i8* value = (i8*)mCustom;
+                *value = (i8)_val;
+                break;
+            }
+            case 2:
+            {
+                i16* value = (i16*)mCustom;
+                *value = (i16)_val;
+                break;
+            }
+            case 4:
+            {
+                i32* value = (i32*)mCustom;
+                *value = (i32)_val;
+                break;
+            }
+            case 8:
+            {
+                i64* value = (i64*)mCustom;
+                *value = (i64)_val;
+                break;
+            }
+            default:
+                break;
+            }
+        }
+        return *this;
+    }
     if(mType==Type::TShortIntR)
     {
        short int* ptr = (short int*)mCustom;
@@ -664,11 +792,52 @@ LVariant &LVariant::operator=(short _val)
     mTypeName=lGetTypeName<decltype(_val)>();
     mType=Type::TShortInt;
     mShortInt=_val;
+    mValueSize=sizeof(_val);
     return *this;
 }
 
 LVariant &LVariant::operator=(unsigned short _val)
 {
+    if(mType==Type::TEnum||mType==Type::TEnumR)
+    {
+        if(mType==Type::TEnum)
+        {
+            mLongLongInt=(long long int)_val;
+        }
+        else
+        {
+            switch (mValueSize)
+            {
+            case 1:
+            {
+                i8* value = (i8*)mCustom;
+                *value = (i8)_val;
+                break;
+            }
+            case 2:
+            {
+                i16* value = (i16*)mCustom;
+                *value = (i16)_val;
+                break;
+            }
+            case 4:
+            {
+                i32* value = (i32*)mCustom;
+                *value = (i32)_val;
+                break;
+            }
+            case 8:
+            {
+                i64* value = (i64*)mCustom;
+                *value = (i64)_val;
+                break;
+            }
+            default:
+                break;
+            }
+        }
+        return *this;
+    }
     if(mType==Type::TUIntR)
     {
        unsigned int* ptr = (unsigned int*)mCustom;
@@ -679,11 +848,52 @@ LVariant &LVariant::operator=(unsigned short _val)
     mTypeName=lGetTypeName<decltype(_val)>();
     mType=Type::TUShortInt;
     mUShortInt=_val;
+    mValueSize=sizeof(_val);
     return *this;
 }
 
 LVariant &LVariant::operator=(long long _val)
 {
+    if(mType==Type::TEnum||mType==Type::TEnumR)
+    {
+        if(mType==Type::TEnum)
+        {
+            mLongLongInt=(long long int)_val;
+        }
+        else
+        {
+            switch (mValueSize)
+            {
+            case 1:
+            {
+                i8* value = (i8*)mCustom;
+                *value = (i8)_val;
+                break;
+            }
+            case 2:
+            {
+                i16* value = (i16*)mCustom;
+                *value = (i16)_val;
+                break;
+            }
+            case 4:
+            {
+                i32* value = (i32*)mCustom;
+                *value = (i32)_val;
+                break;
+            }
+            case 8:
+            {
+                i64* value = (i64*)mCustom;
+                *value = (i64)_val;
+                break;
+            }
+            default:
+                break;
+            }
+        }
+        return *this;
+    }
     if(mType==Type::TLongLongIntR)
     {
        long long int* ptr = (long long int*)mCustom;
@@ -694,11 +904,52 @@ LVariant &LVariant::operator=(long long _val)
     mTypeName=lGetTypeName<decltype(_val)>();
     mType=Type::TLongLongInt;
     mLongLongInt=_val;
+    mValueSize=sizeof(_val);
     return *this;
 }
 
 LVariant &LVariant::operator=(unsigned long long _val)
 {
+    if(mType==Type::TEnum||mType==Type::TEnumR)
+    {
+        if(mType==Type::TEnum)
+        {
+            mLongLongInt=(long long int)_val;
+        }
+        else
+        {
+            switch (mValueSize)
+            {
+            case 1:
+            {
+                i8* value = (i8*)mCustom;
+                *value = (i8)_val;
+                break;
+            }
+            case 2:
+            {
+                i16* value = (i16*)mCustom;
+                *value = (i16)_val;
+                break;
+            }
+            case 4:
+            {
+                i32* value = (i32*)mCustom;
+                *value = (i32)_val;
+                break;
+            }
+            case 8:
+            {
+                i64* value = (i64*)mCustom;
+                *value = (i64)_val;
+                break;
+            }
+            default:
+                break;
+            }
+        }
+        return *this;
+    }
     if(mType==Type::TIntR)
     {
        unsigned long long int* ptr = (unsigned long long int*)mCustom;
@@ -709,6 +960,7 @@ LVariant &LVariant::operator=(unsigned long long _val)
     mTypeName=lGetTypeName<decltype(_val)>();
     mType=Type::TULongLongInt;
     mLongLongInt=_val;
+    mValueSize=sizeof(_val);
     return *this;
 }
 
@@ -717,6 +969,7 @@ LVariant &LVariant::operator=(char _val)
     mTypeName=lGetTypeName<decltype(_val)>();
     mType=Type::TChar;
     mChar=_val;
+    mValueSize=sizeof(_val);
     return *this;
 }
 
@@ -725,6 +978,7 @@ LVariant &LVariant::operator=(unsigned char _val)
     mTypeName=lGetTypeName<decltype(_val)>();
     mType=Type::TUChar;
     mUChar=_val;
+    mValueSize=sizeof(_val);
     return *this;
 }
 
@@ -733,6 +987,7 @@ LVariant &LVariant::operator=(wchar_t _val)
     mTypeName=lGetTypeName<decltype(_val)>();
     mType=Type::TWChar_t;
     mWChar_t=_val;
+    mValueSize=sizeof(_val);
     return *this;
 }
 
@@ -741,6 +996,7 @@ LVariant &LVariant::operator=(char16_t _val)
     mTypeName=lGetTypeName<decltype(_val)>();
     mType=Type::TChar16_t;
     mChar16_t=_val;
+    mValueSize=sizeof(_val);
     return *this;
 }
 
@@ -749,6 +1005,7 @@ LVariant &LVariant::operator=(char32_t _val)
     mTypeName=lGetTypeName<decltype(_val)>();
     mType=Type::TChar32_t;
     mChar32_t=_val;
+    mValueSize=sizeof(_val);
     return *this;
 }
 
@@ -800,6 +1057,7 @@ LVariant &LVariant::operator=(LString _val)
     mTypeName=lGetTypeName<decltype(_val)>();
     mType=Type::TString;
     mString =new LString(_val);
+    mValueSize=sizeof(_val);
     return *this;
 }
 
@@ -811,6 +1069,7 @@ LVariant &LVariant::operator=(int *_val)
     mTypeName=lGetTypeName<decltype(_val)>();
     mType=Type::TIntR;
     mCustom=(void*)_val;
+    mValueSize=sizeof(*_val);
     return *this;
 }
 
@@ -820,6 +1079,7 @@ LVariant &LVariant::operator=(unsigned int *_val)
     mTypeName=lGetTypeName<decltype(_val)>();
     mType=Type::TUIntR;
     mCustom=(void*)_val;
+    mValueSize=sizeof(*_val);
     return *this;
 }
 
@@ -829,6 +1089,7 @@ LVariant &LVariant::operator=(float *_val)
     mTypeName=lGetTypeName<decltype(_val)>();
     mType=Type::TFloatR;
     mCustom=(void*)_val;
+    mValueSize=sizeof(*_val);
     return *this;
 }
 
@@ -838,6 +1099,7 @@ LVariant &LVariant::operator=(double *_val)
     mTypeName=lGetTypeName<decltype(_val)>();
     mType=Type::TDoubleR;
     mCustom=(void*)_val;
+    mValueSize=sizeof(*_val);
     return *this;
 }
 
@@ -847,6 +1109,7 @@ LVariant &LVariant::operator=(long double *_val)
     mTypeName=lGetTypeName<decltype(_val)>();
     mType=Type::TLongDoubleR;
     mCustom=(void*)_val;
+    mValueSize=sizeof(*_val);
     return *this;
 }
 
@@ -856,6 +1119,7 @@ LVariant &LVariant::operator=(bool *_val)
     mTypeName=lGetTypeName<decltype(_val)>();
     mType=Type::TBoolR;
     mCustom=(void*)_val;
+    mValueSize=sizeof(*_val);
     return *this;
 }
 
@@ -865,6 +1129,7 @@ LVariant &LVariant::operator=(short *_val)
     mTypeName=lGetTypeName<decltype(_val)>();
     mType=Type::TShortIntR;
     mCustom=(void*)_val;
+    mValueSize=sizeof(*_val);
     return *this;
 }
 
@@ -874,6 +1139,7 @@ LVariant &LVariant::operator=(unsigned short *_val)
     mTypeName=lGetTypeName<decltype(_val)>();
     mType=Type::TUShortIntR;
     mCustom=(void*)_val;
+    mValueSize=sizeof(*_val);
     return *this;
 }
 
@@ -883,6 +1149,7 @@ LVariant &LVariant::operator=(long long *_val)
     mTypeName=lGetTypeName<decltype(_val)>();
     mType=Type::TLongLongIntR;
     mCustom=(void*)_val;
+    mValueSize=sizeof(*_val);
     return *this;
 }
 
@@ -892,6 +1159,7 @@ LVariant &LVariant::operator=(unsigned long long *_val)
     mTypeName=lGetTypeName<decltype(_val)>();
     mType=Type::TULongLongIntR;
     mCustom=(void*)_val;
+    mValueSize=sizeof(*_val);
     return *this;
 }
 
@@ -901,6 +1169,7 @@ LVariant &LVariant::operator=(LString *_val)
     mTypeName=lGetTypeName<decltype(_val)>();
     mType=Type::TStringR;
     mCustom=(void*)_val;
+    mValueSize=sizeof(*_val);
     return *this;
 }
 

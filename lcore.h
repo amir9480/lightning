@@ -26,5 +26,6 @@
 #include "lcore/lmemorystream.h"
 #include "lcore/lvariant.h"
 #include "lcore/lfunction.h"
+#include "lcore/lmetaproperty.h"
 
 #endif // LCORE_H

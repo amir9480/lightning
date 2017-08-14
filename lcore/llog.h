@@ -6,7 +6,6 @@
 #include "lfile.h"
 #include "lutility.h"
 
-LNAMESPACE_BEGIN
 
 #if LTARGET==LTARGET_DEBUG
 
@@ -56,9 +55,15 @@ LNAMESPACE_BEGIN
 
 //! Add a Error to log and returns from function .first parameter is CONDITION that if was true then message will be add.
 //! third parameter is what needs to be return . if you function returns void this parameter is not needed
-#define lError(...) L_OVERLOADED_MACRO(_lError,__VA_ARGS__)
+#define lError(...) LOVERLOADED_MACRO(_lError,__VA_ARGS__)
+//! Add a Error to log without return
+#define lError2(CONDITION,MESSAGE){if(CONDITION){Lightning::__Log_Manager::get.addError((MESSAGE),__FILE__,__LINE__);}}
 
 #endif// LIGHTING_USING_NAMESPACE
+
+LNAMESPACE_BEGIN
+
+void lSetConsoleColor(LConsoleColor _text_color,LConsoleColor _background_color=LConsoleColor::Black);
 
 //! singlton class for manage log file
 class LAPI __Log_Manager

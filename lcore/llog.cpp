@@ -54,7 +54,9 @@ void __Log_Manager::addLog(const LString &_message, const LString &_filename, co
     __logfile.write(_errormessage);
     __logfile.flush();
 
+    lSetConsoleColor(LConsoleColor::White);
     puts(_errormessage.toUTF8().getData());
+    lSetConsoleColor(LConsoleColor::Cyan);
 }
 
 void __Log_Manager::addWarning(const LString &_message, const LString &_filename, const i32 &_line)
@@ -77,7 +79,9 @@ void __Log_Manager::addWarning(const LString &_message, const LString &_filename
     __logfile.write(_errormessage);
     __logfile.flush();
 
+    lSetConsoleColor(LConsoleColor::Yellow);
     puts(_errormessage.toUTF8().getData());
+    lSetConsoleColor(LConsoleColor::Cyan);
 }
 
 void __Log_Manager::addError(const LString &_message, const LString &_filename, const i32 &_line)
@@ -100,7 +104,9 @@ void __Log_Manager::addError(const LString &_message, const LString &_filename, 
     __logfile.write(errormessage);
     __logfile.flush();
 
+    lSetConsoleColor(LConsoleColor::Red);
     puts(errormessage.toUTF8().getData());
+    lSetConsoleColor(LConsoleColor::Cyan);
 }
 
 void __Log_Manager::addAssert(const LString &_message, const LString &_filename, const i32 &_line)
@@ -116,6 +122,7 @@ void __Log_Manager::addAssert(const LString &_message, const LString &_filename,
     __logfile.write(LSTR("\n\n==================================================\n\n"));
     __logfile.flush();
 
+    lSetConsoleColor(LConsoleColor::Red);
     puts("\n\n==================================================\n\n");
     puts(_errormessage.toUTF8().getData());
     puts("\nPROGRAM IS GOING TO BE CLOSED");
