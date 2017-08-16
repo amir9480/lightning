@@ -42,6 +42,16 @@ const LMap<LString, LString>& LMetaAttributes::getAttributes() const
     return mAttributes;
 }
 
+bool LMetaAttributes::removeAttribute(const LString &_name)
+{
+    if(mAttributes.findKey(_name)!=LMap<LString,LString>::nothing)
+    {
+        mAttributes.remove(_name);
+        return true;
+    }
+    return false;
+}
+
 bool LMetaAttributes::setAttribute(const LString &_name, const LString &_value)
 {
     if(mAttributes.findKey(_name)!=LMap<LString,LString>::nothing)
@@ -200,6 +210,14 @@ LMetaProperty::LMetaProperty(const LString &_name, const LString &_typename):
 
 }
 
+LMetaProperty::LMetaProperty(const LString &_name, const LString &_typename, const LMap<LString, LString> &_attrs):
+    LMetaAttributes(_attrs),
+    mName(_name),
+    mTypeName(_typename)
+{
+
+}
+
 LMetaProperty::~LMetaProperty()
 {
 
@@ -213,6 +231,59 @@ LString LMetaProperty::getName() const
 LString LMetaProperty::getTypeName() const
 {
     return mTypeName;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+LMetaObject::LMetaObject(const LString &_name, const LString &_typename):
+    mName(_name),
+    mTypeName(_typename)
+{
+
+}
+
+LMetaObject::LMetaObject(const LString &_name, const LString &_typename, const LMap<LString, LString> &_attrs):
+    LMetaAttributes(_attrs),
+    mName(_name),
+    mTypeName(_typename)
+{
+
+}
+
+LMetaObject::~LMetaObject()
+{
+    for(u32 i=0;i<mProperties.getSize();i++)
+        delete mProperties[i];
+}
+
+LMetaObject &LMetaObject::addProperty(LMetaProperty *_property)
+{
+    mProperties.pushBack(_property);
+    return *this;
+}
+
+LString LMetaObject::getTypeName() const
+{
+    return mTypeName;
+}
+
+LMetaProperty *LMetaObject::getProperty(const LString &_name)
+{
+    for(u32 i=0;i<mProperties.getSize();i++)
+        if(mProperties[i]->getName()==_name)
+            return mProperties[i];
+    return nullptr;
+}
+
+LVector<LMetaProperty *> &LMetaObject::getProperties()
+{
+    return mProperties;
+}
+
+LString LMetaObject::getName() const
+{
+    return mName;
 }
 
 

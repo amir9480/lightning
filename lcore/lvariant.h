@@ -114,6 +114,12 @@ struct LAPI __LVariantTypeCastHelper<T*>
  * a=147;
  * cout<<a.toInt()<<" "<<value<<endl; // prints 147 444
  *
+ * You can also use:
+ * cout<<a.to<int>()<<endl;
+ * or:
+ * cout<<(int)a<<endl;
+ *
+ *
  * it is recommended to cast to prevent from run time error ( because of RTTI )
  * LVariant o=(int*)&a;
  *
@@ -314,6 +320,9 @@ public:
     LVariant&               operator=(T* _val);
 
     LVariant&               operator=(const LVariant& _other);
+
+    template<typename T>
+    operator T();
 
 private:
     template<typename T>
@@ -1073,6 +1082,12 @@ template<typename T>
 T LVariant::to()
 {
     return __LVariantTypeCastHelper<T>::cast(*this);
+}
+
+template<typename T>
+LVariant::operator T()
+{
+    return this->to<T>();
 }
 
 LNAMESPACE_END

@@ -66,10 +66,13 @@ public:
     //! get all attributes
     const LMap<LString, LString>&   getAttributes() const;
 
+    //! removes an attribute if exists. if doesn't exists returns false
+    bool                            removeAttribute(const LString& _name);
+
     //! set an attribute if exist. if doesn't exists returns false
     bool                            setAttribute(const LString& _name,const LString& _value);
 
-private:
+protected:
     LMap<LString,LString>   mAttributes;
 };
 
@@ -151,6 +154,7 @@ class LMetaProperty:public LMetaAttributes
 {
 public:
     LMetaProperty(const LString& _name,const LString& _typename);
+    LMetaProperty(const LString& _name,const LString& _typename,const LMap<LString,LString>& _attrs);
     virtual ~LMetaProperty();
 
     LString             getName() const;
@@ -172,6 +176,7 @@ class LMetaPropertyRaw:public LMetaProperty
 {
 public:
     LMetaPropertyRaw(const LString& _name,PropertyType ClassType::*_property);
+    LMetaPropertyRaw(const LString& _name,PropertyType ClassType::*_property,const LMap<LString,LString>& _attrs);
     virtual ~LMetaPropertyRaw();
 
     virtual LVariant    get( LVariant _obj);
@@ -187,6 +192,7 @@ class LMetaPropertyWithGetter:public LMetaProperty
 {
 public:
     LMetaPropertyWithGetter(const LString& _name,GetterType  _getter);
+    LMetaPropertyWithGetter(const LString& _name,GetterType  _getter,const LMap<LString,LString>& _attrs);
     virtual ~LMetaPropertyWithGetter();
 
     virtual LVariant    get( LVariant _obj);
@@ -202,6 +208,7 @@ class LMetaPropertyWithSetter:public LMetaProperty
 {
 public:
     LMetaPropertyWithSetter(const LString& _name,SetterType  _setter);
+    LMetaPropertyWithSetter(const LString& _name,SetterType  _setter,const LMap<LString,LString>& _attrs);
     virtual ~LMetaPropertyWithSetter();
 
     virtual LVariant    get( LVariant _obj);
@@ -218,6 +225,7 @@ class LMetaPropertyWithGetterSetter:public LMetaProperty
 {
 public:
     LMetaPropertyWithGetterSetter(const LString& _name,GetterType  _getter, SetterType _setter);
+    LMetaPropertyWithGetterSetter(const LString& _name,GetterType  _getter, SetterType _setter,const LMap<LString,LString>& _attrs);
     virtual ~LMetaPropertyWithGetterSetter();
 
     virtual LVariant    get( LVariant _obj);
@@ -227,6 +235,46 @@ public:
 private:
     GetterType          mGetter;
     SetterType          mSetter;
+};
+
+class LMetaObject:public LMetaAttributes
+{
+public:
+    LMetaObject(const LString& _name,const LString& _typename);
+    LMetaObject(const LString& _name,const LString& _typename,const LMap<LString,LString>& _attrs);
+    virtual ~LMetaObject();
+
+    //! add new property directly
+    LMetaObject&                addProperty(LMetaProperty* _property);
+
+    //! add raw property
+    template<typename ClassType,typename PropertyType>
+    LMetaObject&                addPropertyRaw(const LString& _name,PropertyType ClassType::*_property,const LMap<LString,LString>& _attrs={});
+
+    //! add property with getter
+    template<typename GetterType>
+    LMetaObject&                addPropertyWithGetter(const LString& _name,GetterType  _getter,const LMap<LString,LString>& _attrs={});
+
+    //! add property with setter
+    template<typename SetterType>
+    LMetaObject&                addPropertyWithSetter(const LString& _name,SetterType  _setter,const LMap<LString,LString>& _attrs={});
+
+    //! get class name
+    LString                     getName() const;
+
+    //! get class typename
+    LString                     getTypeName() const;
+
+    //! get a property
+    LMetaProperty*              getProperty(const LString& _name);
+
+    //! get all properties
+    LVector<LMetaProperty*>&    getProperties();
+
+protected:
+    LString                     mName;
+    LString                     mTypeName;
+    LVector<LMetaProperty*>     mProperties;
 };
 
 
@@ -272,6 +320,13 @@ LMetaPropertyRaw<ClassType,PropertyType>::LMetaPropertyRaw(const LString &_name,
 {
 
 }
+template<typename ClassType,typename PropertyType>
+LMetaPropertyRaw<ClassType,PropertyType>::LMetaPropertyRaw(const LString &_name, PropertyType ClassType::*_property,const LMap<LString,LString>& _attrs):
+    LMetaProperty(_name,lGetTypeName<PropertyType>(),_attrs),
+    mProperty(_property)
+{
+
+}
 
 template<typename ClassType,typename PropertyType>
 LMetaPropertyRaw<ClassType,PropertyType>::~LMetaPropertyRaw()
@@ -296,6 +351,13 @@ void LMetaPropertyRaw<ClassType,PropertyType>::set(LVariant _obj, LVariant _new_
 template<typename ClassType,typename GetterType>
 LMetaPropertyWithGetter<ClassType,GetterType>::LMetaPropertyWithGetter(const LString &_name, GetterType _getter):
     LMetaProperty(_name,lGetTypeName<GetterType>()),
+    mGetter(_getter)
+{
+
+}
+template<typename ClassType,typename GetterType>
+LMetaPropertyWithGetter<ClassType,GetterType>::LMetaPropertyWithGetter(const LString &_name, GetterType _getter,const LMap<LString,LString>& _attrs):
+    LMetaProperty(_name,lGetTypeName<GetterType>(),_attrs),
     mGetter(_getter)
 {
 
@@ -347,9 +409,35 @@ struct ___property_setter_helper<RT (CT::*)(const AT&)>
     typedef AT ArgType;
 };
 
+template<typename T>
+struct ___property_getter_helper
+{
+};
+template<typename RT,typename CT>
+struct ___property_getter_helper<RT (CT::*)()>
+{
+    typedef RT ReturnType;
+    typedef CT ClassType;
+};
+template<typename RT,typename CT>
+struct ___property_getter_helper<RT (CT::*)()const>
+{
+    typedef RT ReturnType;
+    typedef CT ClassType;
+};
+
+
 template<typename ClassType,typename SetterType>
 LMetaPropertyWithSetter<ClassType,SetterType>::LMetaPropertyWithSetter(const LString &_name, SetterType _setter):
     LMetaProperty(_name,lGetTypeName<SetterType>()),
+    mSetter(_setter)
+{
+
+}
+
+template<typename ClassType,typename SetterType>
+LMetaPropertyWithSetter<ClassType,SetterType>::LMetaPropertyWithSetter(const LString &_name, SetterType _setter,const LMap<LString,LString>& _attrs):
+    LMetaProperty(_name,lGetTypeName<SetterType>(),_attrs),
     mSetter(_setter)
 {
 
@@ -371,7 +459,6 @@ LVariant LMetaPropertyWithSetter<ClassType,SetterType>::get(LVariant )
 template<typename ClassType,typename SetterType>
 void LMetaPropertyWithSetter<ClassType,SetterType>::set(LVariant _obj, LVariant _new_value)
 {
-    lLogMessage(1,"Setter Type is not supported");
     ((_obj.to<ClassType&>()).*mSetter)( _new_value.to< typename ___property_setter_helper<SetterType>::ArgType >() );
 }
 
@@ -382,6 +469,13 @@ void LMetaPropertyWithSetter<ClassType,SetterType>::set(LVariant _obj, LVariant 
 template<typename ClassType,typename GetterType,typename SetterType>
 LMetaPropertyWithGetterSetter<ClassType,GetterType,SetterType>::LMetaPropertyWithGetterSetter(const LString &_name, GetterType _getter, SetterType _setter):
     LMetaProperty(_name,lGetTypeName<SetterType>()),
+    mGetter(_getter),
+    mSetter(_setter)
+{
+}
+template<typename ClassType,typename GetterType,typename SetterType>
+LMetaPropertyWithGetterSetter<ClassType,GetterType,SetterType>::LMetaPropertyWithGetterSetter(const LString &_name, GetterType _getter, SetterType _setter,const LMap<LString,LString>& _attrs):
+    LMetaProperty(_name,lGetTypeName<SetterType>(),_attrs),
     mGetter(_getter),
     mSetter(_setter)
 {
@@ -403,6 +497,33 @@ template<typename ClassType,typename GetterType,typename SetterType>
 void LMetaPropertyWithGetterSetter<ClassType,GetterType,SetterType>::set(LVariant _obj, LVariant _new_value)
 {
     ((_obj.to<ClassType&>()).*mSetter)( _new_value.to< typename ___property_setter_helper<SetterType>::ArgType >() );
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+template<typename ClassType,typename PropertyType>
+LMetaObject &LMetaObject::addPropertyRaw(const LString &_name, PropertyType ClassType::*_property, const LMap<LString, LString> &_attrs)
+{
+    mProperties.pushBack(new LMetaPropertyRaw<ClassType,PropertyType>(_name,_property,_attrs));
+    return *this;
+}
+
+
+template<typename GetterType>
+LMetaObject &LMetaObject::addPropertyWithGetter(const LString &_name, GetterType _getter, const LMap<LString, LString> &_attrs)
+{
+    mProperties.pushBack(new LMetaPropertyWithGetter<typename ___property_getter_helper<GetterType>::ClassType,GetterType>(_name,_getter,_attrs));
+    return *this;
+}
+
+
+template<typename SetterType>
+LMetaObject &LMetaObject::addPropertyWithSetter(const LString &_name,SetterType _setter, const LMap<LString, LString> &_attrs)
+{
+    mProperties.pushBack(new LMetaPropertyWithSetter<typename ___property_setter_helper<SetterType>::ClassType,SetterType>(_name,_setter,_attrs));
+    return *this;
 }
 
 

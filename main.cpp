@@ -300,8 +300,8 @@ int main()
 //    }
 //    cout<<"}\n";
 
-    StructA objA;
-    objA.valA = 771;
+//    StructA objA;
+//    objA.valA = 771;
 //    LMetaProperty* _property = new LMetaPropertyRaw<StructA,int>("valA",&StructA::valA);
 //    _property->set(LVariant::create(&objA),74);
 //    cout<<objA.valA<<endl;
@@ -314,16 +314,26 @@ int main()
 //    cout<<objA.valA<<endl;
 //    cout<<_property->get(LVariant::create(&objA)).to<int>()<<endl;
 
-    StructB objB = StructB{54};
-    cout<<&objB<<endl;
+//    StructB objB = StructB{54};
+//    cout<<&objB<<endl;
 
-    LMetaProperty* _property = new LMetaPropertyWithGetterSetter<StructA,decltype(&StructA::getValB),decltype(&StructA::setValB)>("valB",&StructA::getValB,&StructA::setValB);
-    _property->set(LVariant::create(&objA),LVariant::create(&objB));
-    cout<<objA.valB.testA<<endl;
-    cout<<_property->get(LVariant::create(&objA)).to<StructB>().testA<<endl;
+//    LMetaProperty* _property = new LMetaPropertyWithGetterSetter<StructA,decltype(&StructA::getValB),decltype(&StructA::setValB)>("valB",&StructA::getValB,&StructA::setValB);
+//    _property->set(LVariant::create(&objA),LVariant::create(&objB));
+//    cout<<objA.valB.testA<<endl;
+//    cout<<_property->get(LVariant::create(&objA)).to<StructB>().testA<<endl;
 
+    StructA objA;
+    objA.valA=777;
 
+    LMetaObject metaobj("StructA",lGetTypeName<StructA>(),{{"ename","Game Object"}});
+    metaobj
+    .addPropertyWithSetter("valA",&StructA::setValA);
+    //.addProperty(new LMetaPropertyWithGetterSetter<StructA,decltype(&StructA::getValA),decltype(&StructA::setValA)>("valA",&StructA::getValA,&StructA::setValA))
+    //.addProperty(new LMetaPropertyWithGetterSetter<StructA,decltype(&StructA::getValB),decltype(&StructA::setValB)>("valB",&StructA::getValB,&StructA::setValB));
 
+    //cout<<metaobj.getProperty("valA")->get(LVariant::create(objA)).to<int>()<<endl;
+    metaobj.getProperty("valA")->set(LVariant::create(&objA),45);
+    cout<<objA.valA<<endl;
 
     /*LImage image01 = LImage::loadFromPngFile("image3.png");
     LImage image02 = LImage::loadFromPngFile("image.png");
