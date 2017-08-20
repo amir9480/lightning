@@ -42,6 +42,13 @@ const LMap<LString, LString>& LMetaAttributes::getAttributes() const
     return mAttributes;
 }
 
+bool LMetaAttributes::hasAttribute(const LString &_name) const
+{
+    if(mAttributes.findKey(_name)!=LMap<LString,LString>::nothing)
+        return true;
+    return false;
+}
+
 bool LMetaAttributes::removeAttribute(const LString &_name)
 {
     if(mAttributes.findKey(_name)!=LMap<LString,LString>::nothing)
@@ -134,6 +141,13 @@ LMetaEnum& LMetaEnum::addElement(const LMetaEnumElement &_element)
     return *this;
 }
 
+void LMetaEnum::destroy()
+{
+    mName.clear();
+    mTypeName.clear();
+    mElemenets.clear();
+}
+
 const LVector<LMetaEnumElement> &LMetaEnum::getElements() const
 {
     return mElemenets;
@@ -168,7 +182,8 @@ LString LMetaEnum::getTypeName() const
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-LVector<LMetaEnum> LMetaObjectManager::mEnums;
+LVector<LMetaEnum*> LMetaObjectManager::mEnums;
+LVector<LMetaObject*> LMetaObjectManager::mObjects;
 
 LMetaObjectManager::LMetaObjectManager()
 {
@@ -184,8 +199,8 @@ LMetaEnum &LMetaObjectManager::getMetaEnumByName(const LString &_name)
 {
     static LMetaEnum def;
     for(u32 i=0;i<mEnums.getSize();i++)
-        if(mEnums[i].getName()==_name)
-            return mEnums[i];
+        if(mEnums[i]->getName()==_name)
+            return *mEnums[i];
     lError2(1,"Enum by name ("+_name+") Not Found");
     return def;
 }
@@ -194,9 +209,29 @@ LMetaEnum &LMetaObjectManager::getMetaEnumByTypeName(const LString &_tname)
 {
     static LMetaEnum def;
     for(u32 i=0;i<mEnums.getSize();i++)
-        if(mEnums[i].getTypeName()==_tname)
-            return mEnums[i];
+        if(mEnums[i]->getTypeName()==_tname)
+            return *mEnums[i];
     lError2(1,"Enum by type Name ("+_tname+") Not Found");
+    return def;
+}
+
+LMetaObject &LMetaObjectManager::getMetaObjectByName(const LString &_name)
+{
+    static LMetaObject def;
+    for(u32 i=0;i<mObjects.getSize();i++)
+        if(mObjects[i]->getName()==_name)
+            return *mObjects[i];
+    lError2(1,"Object by name ("+_name+") Not Found");
+    return def;
+}
+
+LMetaObject &LMetaObjectManager::getMetaObjectByTypeName(const LString &_tname)
+{
+    static LMetaObject def;
+    for(u32 i=0;i<mObjects.getSize();i++)
+        if(mObjects[i]->getTypeName()==_tname)
+            return *mObjects[i];
+    lError2(1,"Object by type Name ("+_tname+") Not Found");
     return def;
 }
 
@@ -236,6 +271,11 @@ LString LMetaProperty::getTypeName() const
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+LMetaObject::LMetaObject()
+{
+
+}
+
 LMetaObject::LMetaObject(const LString &_name, const LString &_typename):
     mName(_name),
     mTypeName(_typename)
@@ -263,6 +303,15 @@ LMetaObject &LMetaObject::addProperty(LMetaProperty *_property)
     return *this;
 }
 
+void LMetaObject::destroy()
+{
+    mName.clear();
+    mTypeName.clear();
+    for(u32 i=0;i<mProperties.getSize();i++)
+        delete mProperties[i];
+    mProperties.clear();
+}
+
 LString LMetaObject::getTypeName() const
 {
     return mTypeName;
@@ -279,6 +328,14 @@ LMetaProperty *LMetaObject::getProperty(const LString &_name)
 LVector<LMetaProperty *> &LMetaObject::getProperties()
 {
     return mProperties;
+}
+
+bool LMetaObject::hasProperty(const LString &_name)
+{
+    for(u32 i=0;i<mProperties.getSize();i++)
+        if(mProperties[i]->getName()==_name)
+            return true;
+    return false;
 }
 
 LString LMetaObject::getName() const

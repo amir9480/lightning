@@ -245,25 +245,19 @@ enum class TypeA
 
 
 
-//LMETAENUM_BEGIN_DEFINE("TypeA",TypeA,LMETA_ATTR("ename" , "Enenmy Difficult"),LMETA_ATTR("edet" , "to set difficuly of Enemy AI"))
-//    LMETAENUM_ELEMENT("ValA",ValA,LMETA_ATTR("ename" , "Easy"))
-//    LMETAENUM_ELEMENT("ValB",ValB,LMETA_ATTR("ename" , "Normal"))
-//    LMETAENUM_ELEMENT("ValC",ValC,LMETA_ATTR("ename" , "Hard"))
-//LMETAENUM_END_DEFINE(TypeA)
+LMETAENUM_BEGIN_DEFINE("TypeA",TypeA,LMETA_ATTR("ename" , "Enenmy Difficult"),LMETA_ATTR("edet" , "to set difficuly of Enemy AI"))
+    LMETAENUM_ELEMENT("ValA",ValA,LMETA_ATTR("ename" , "Easy"))
+    LMETAENUM_ELEMENT("ValB",ValB,LMETA_ATTR("ename" , "Normal"))
+    LMETAENUM_ELEMENT("ValC",ValC,LMETA_ATTR("ename" , "Hard"))
+LMETAENUM_END_DEFINE(TypeA)
 
 
-struct StructB
-{
-public:
-    int testA;
-
-};
 
 struct StructA
 {
 public:
-    int valA;
-    StructB valB;
+    int     valA;
+    LString valB;
 
     int getValA() const
     {
@@ -273,16 +267,44 @@ public:
     {
         valA = value;
     }
-    StructB getValB() const
+};
+
+template<typename OperateType>
+class LMetaObjectDefine<OperateType,StructA>
+{
+    LNONCOPYABLE_CLASS(LMetaObjectDefine)
+public:
+    LMetaObjectDefine(){}
+    virtual ~LMetaObjectDefine(){}
+    static Lightning::LMetaObject& get()
     {
-        return valB;
-    }
-    void setValB(StructB& value)
-    {
-        cout<<&value<<endl;
-        valB = value;
+        lMemoryLogStartIgnore();
+        typedef StructA __The_Type;
+        static bool done=false;
+        static OperateType o("StructA",lGetTypeName<__The_Type>(),{{"ename","Using to define enemy"}});
+        if((!done && LIsSameType<OperateType,Lightning::LMetaObject>::value) || !LIsSameType<OperateType,Lightning::LMetaObject>::value)
+        {
+            o.addPropertyWithGetterSetter("valA",&__The_Type::getValA,&__The_Type::setValA,{{"ename","Enenmy Health"},{"edet","Using to set enemy health"}});
+            o.addPropertyRaw("valB",&__The_Type::valB);
+            {
+
+            }
+        }
+        if(!done && LIsSameType<OperateType,Lightning::LMetaObject>::value) // only needed once for MetaObject not for serialization
+        {
+            Lightning::LMetaObjectManager::mObjects.pushBack(&o);
+            done =true;
+        }
+        lMemoryLogEndIgnore();
+        return o;
     }
 };
+void lCallOnStart()
+{
+    LMetaObjectDefine<Lightning::LMetaObject,StructA>::get();
+}
+
+
 
 int main()
 {
@@ -324,16 +346,24 @@ int main()
 
     StructA objA;
     objA.valA=777;
+    objA.valB="Hello World!";
 
-    LMetaObject metaobj("StructA",lGetTypeName<StructA>(),{{"ename","Game Object"}});
-    metaobj
-    .addPropertyWithSetter("valA",&StructA::setValA);
+    for(auto a:LMetaObjectManager::getMetaObjectByName("StructA").getAttributes())
+        cout<<a.first<<" : "<<a.second<<endl;
+
+    cout<<LMetaObjectManager::getMetaObjectByName("StructA").getProperty("valB")->get(LVariant::create(&objA)).toString()<<endl;
+
+
+
+    //LMetaObject metaobj("StructA",lGetTypeName<StructA>(),{{"ename","Game Object"}});
+    //metaobj
+    //.addPropertyWithGetterSetter("valA",&StructA::getValA,&StructA::setValA);
     //.addProperty(new LMetaPropertyWithGetterSetter<StructA,decltype(&StructA::getValA),decltype(&StructA::setValA)>("valA",&StructA::getValA,&StructA::setValA))
     //.addProperty(new LMetaPropertyWithGetterSetter<StructA,decltype(&StructA::getValB),decltype(&StructA::setValB)>("valB",&StructA::getValB,&StructA::setValB));
 
     //cout<<metaobj.getProperty("valA")->get(LVariant::create(objA)).to<int>()<<endl;
-    metaobj.getProperty("valA")->set(LVariant::create(&objA),45);
-    cout<<objA.valA<<endl;
+    //metaobj.getProperty("valA")->set(LVariant::create(&objA),45);
+    //cout<<objA.valA<<endl;
 
     /*LImage image01 = LImage::loadFromPngFile("image3.png");
     LImage image02 = LImage::loadFromPngFile("image.png");

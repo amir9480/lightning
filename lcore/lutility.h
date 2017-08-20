@@ -1267,6 +1267,11 @@ struct LIsFunction<R(C::*)()>
 {
     static const bool value=true;
 };
+template<typename C,typename R>
+struct LIsFunction<R(C::*)()const>
+{
+    static const bool value=true;
+};
 template<typename C,typename R,typename... Args>
 struct LIsFunction<R(C::*)(Args...)>
 {

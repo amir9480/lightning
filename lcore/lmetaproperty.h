@@ -28,7 +28,7 @@
     static bool _done=false;\
     if(!_done)\
     {\
-        Lightning::LMetaObjectManager::mEnums.pushBack(o);\
+        Lightning::LMetaObjectManager::mEnums.pushBack(&o);\
         _done=true;\
     }\
     lMemoryLogEndIgnore(); \
@@ -65,6 +65,9 @@ public:
 
     //! get all attributes
     const LMap<LString, LString>&   getAttributes() const;
+
+    //! check attribute is exists or not
+    bool                            hasAttribute(const LString& _name)const;
 
     //! removes an attribute if exists. if doesn't exists returns false
     bool                            removeAttribute(const LString& _name);
@@ -107,6 +110,9 @@ public:
     //! add a new Enum element
     LMetaEnum&                          addElement(const LMetaEnumElement& _element);
 
+    //! destroy this Meta manually
+    void                                destroy();
+
     //! get elements directly
     const LVector<LMetaEnumElement>&    getElements()const;
 
@@ -129,26 +135,6 @@ private:
 };
 
 
-LNAMESPACE_END // Lightning namespace End
-
-
-//! to define new meta for enum
-template<typename T>
-class LMetaEnumDefine
-{
-    LNONCOPYABLE_CLASS(LMetaEnumDefine)
-public:
-    LMetaEnumDefine(){}
-    virtual ~LMetaEnumDefine(){}
-    static Lightning::LMetaEnum& get()
-    {
-        static Lightning::LMetaEnum o;
-        return o;
-    }
-};
-
-
-LNAMESPACE_BEGIN
 
 class LMetaProperty:public LMetaAttributes
 {
@@ -240,6 +226,7 @@ private:
 class LMetaObject:public LMetaAttributes
 {
 public:
+    LMetaObject();
     LMetaObject(const LString& _name,const LString& _typename);
     LMetaObject(const LString& _name,const LString& _typename,const LMap<LString,LString>& _attrs);
     virtual ~LMetaObject();
@@ -259,17 +246,27 @@ public:
     template<typename SetterType>
     LMetaObject&                addPropertyWithSetter(const LString& _name,SetterType  _setter,const LMap<LString,LString>& _attrs={});
 
+    //! add property with getter setter
+    template<typename GetterType,typename SetterType>
+    LMetaObject&                addPropertyWithGetterSetter(const LString& _name,GetterType  _getter, SetterType _setter,const LMap<LString,LString>& _attrs={});
+
+    //! destroy meta manually
+    void                        destroy();
+
     //! get class name
     LString                     getName() const;
 
     //! get class typename
     LString                     getTypeName() const;
 
-    //! get a property
+    //! get a property. if not found returns nullptr
     LMetaProperty*              getProperty(const LString& _name);
 
     //! get all properties
     LVector<LMetaProperty*>&    getProperties();
+
+    //! check property is exists or not
+    bool                        hasProperty(const LString& _name);
 
 protected:
     LString                     mName;
@@ -278,10 +275,54 @@ protected:
 };
 
 
+
+
+
+LNAMESPACE_END // Lightning namespace End
+
+
+//! to define new meta for enum
+template<typename T>
+class LMetaEnumDefine
+{
+    LNONCOPYABLE_CLASS(LMetaEnumDefine)
+public:
+    LMetaEnumDefine(){}
+    virtual ~LMetaEnumDefine(){}
+    static Lightning::LMetaEnum& get()
+    {
+        static Lightning::LMetaEnum o;
+        return o;
+    }
+};
+
+//! to define new meta for object
+template<typename OperateType,typename T>
+class LMetaObjectDefine
+{
+    LNONCOPYABLE_CLASS(LMetaObjectDefine)
+public:
+    LMetaObjectDefine(){}
+    virtual ~LMetaObjectDefine(){}
+    static Lightning::LMetaObject& get()
+    {
+        static Lightning::LMetaObject o;
+        return o;
+    }
+};
+
+
+LNAMESPACE_BEGIN
+
+
+
+
 class LMetaObjectManager
 {
     template<typename T>
     friend LMetaEnum& LMetaEnumDefine<T>::get();
+    template<typename Operate,typename T>
+    friend LMetaObject& LMetaObjectDefine<Operate,T>::get();
 
     LNONCOPYABLE_CLASS(LMetaObjectManager)
     LMetaObjectManager();
@@ -298,15 +339,34 @@ public:
     template<typename T>
     static LMetaEnum&                   getMetaEnumByType();
 
+
+    //! Get a Object meta by it's name . returns something when Not found
+    static LMetaObject&                 getMetaObjectByName(const LString& _name);
+
+    //! Get a Object meta by it's type name . with lGetTypeName . returns something when Not found
+    static LMetaObject&                 getMetaObjectByTypeName(const LString& _tname);
+
+    //! Get a Object meta by it's Type . returns something when Not found
+    template<typename T>
+    static LMetaObject&                 getMetaObjectByType();
 private:
-    static LVector<LMetaEnum>           mEnums;
+    static LVector<LMetaEnum*>          mEnums;
+    static LVector<LMetaObject*>        mObjects;
 };
+
+
 
 
 template<typename T>
 LMetaEnum &LMetaObjectManager::getMetaEnumByType()
 {
     return LMetaEnumDefine<T>::get();
+}
+
+template<typename T>
+LMetaObject &LMetaObjectManager::getMetaObjectByType()
+{
+    return LMetaObjectDefine<LMetaObject,T>::get();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -523,6 +583,14 @@ template<typename SetterType>
 LMetaObject &LMetaObject::addPropertyWithSetter(const LString &_name,SetterType _setter, const LMap<LString, LString> &_attrs)
 {
     mProperties.pushBack(new LMetaPropertyWithSetter<typename ___property_setter_helper<SetterType>::ClassType,SetterType>(_name,_setter,_attrs));
+    return *this;
+}
+
+
+template<typename GetterType,typename SetterType>
+LMetaObject &LMetaObject::addPropertyWithGetterSetter(const LString &_name,GetterType _getter,SetterType _setter, const LMap<LString, LString> &_attrs)
+{
+    mProperties.pushBack(new LMetaPropertyWithGetterSetter<typename ___property_setter_helper<SetterType>::ClassType,GetterType,SetterType>(_name,_getter,_setter,_attrs));
     return *this;
 }
 
