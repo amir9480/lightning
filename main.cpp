@@ -22,8 +22,8 @@ ostream& operator<<(ostream& _in,const Lightning::LString& _str)
 ///////////////////////////////////////
 //
 
-/*
-const char* myShader=
+
+/*const char* myShader=
 R"(
 uniform extern float4x4 WVP;
 
@@ -231,8 +231,8 @@ LVector<u32> ibox={
   12,14,13,13,14,15,
   17,16,18,17,18,19,
   20,21,22,22,21,23
-};
-*/
+};*/
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -255,7 +255,9 @@ LMETAENUM_END_DEFINE(TypeA)
 
 struct StructA
 {
+    L_CLASS(StructA)
 public:
+    StructA(){}
     int     valA;
     LString valB;
 
@@ -269,8 +271,8 @@ public:
     }
 };
 
-template<typename OperateType>
-class LMetaObjectDefine<OperateType,StructA>
+template<>
+class LMetaObjectDefine<StructA>
 {
     LNONCOPYABLE_CLASS(LMetaObjectDefine)
 public:
@@ -281,17 +283,12 @@ public:
         lMemoryLogStartIgnore();
         typedef StructA __The_Type;
         static bool done=false;
-        static OperateType o("StructA",lGetTypeName<__The_Type>(),{{"ename","Using to define enemy"}});
-        if((!done && LIsSameType<OperateType,Lightning::LMetaObject>::value) || !LIsSameType<OperateType,Lightning::LMetaObject>::value)
+        static Lightning::LMetaObject o("StructA",lGetTypeName<__The_Type>(),{{"ename",LVariant::create("Using to define enemy")}});
+        if(!done)
         {
-            o.addPropertyWithGetterSetter("valA",&__The_Type::getValA,&__The_Type::setValA,{{"ename","Enenmy Health"},{"edet","Using to set enemy health"}});
+            o.addPropertyWithGetterSetter("valA",&__The_Type::getValA,&__The_Type::setValA,{{"ename",LVariant::create("Enenmy Health")},{"edet",LVariant::create("Using to set enemy health")}});
             o.addPropertyRaw("valB",&__The_Type::valB);
-            {
 
-            }
-        }
-        if(!done && LIsSameType<OperateType,Lightning::LMetaObject>::value) // only needed once for MetaObject not for serialization
-        {
             Lightning::LMetaObjectManager::mObjects.pushBack(&o);
             done =true;
         }
@@ -301,7 +298,7 @@ public:
 };
 void lCallOnStart()
 {
-    LMetaObjectDefine<Lightning::LMetaObject,StructA>::get();
+    LMetaObjectDefine<StructA>::get();
 }
 
 
@@ -309,7 +306,7 @@ void lCallOnStart()
 int main()
 {
     lMemoryLogStart();
-    //    cout<<"Name:"<<LMetaObjectManager::getMetaEnumByName("TypeA").getName()<<"\nTypeName:"<<LMetaObjectManager::getMetaEnumByName("TypeA").getTypeName()<<"\nAttributes:{\n";
+//    cout<<"Name:"<<LMetaObjectManager::getMetaEnumByName("TypeA").getName()<<"\nTypeName:"<<LMetaObjectManager::getMetaEnumByName("TypeA").getTypeName()<<"\nAttributes:{\n";
 //    for(auto _e:LMetaObjectManager::getMetaEnumByTypeName(lGetTypeName<TypeA>()).getAttributes())
 //        cout<<"\t"<<_e.first<<"="<<_e.second<<endl;
 //    cout<<"\t}\n\nElements:{\n";
@@ -348,10 +345,17 @@ int main()
     objA.valA=777;
     objA.valB="Hello World!";
 
-    for(auto a:LMetaObjectManager::getMetaObjectByName("StructA").getAttributes())
-        cout<<a.first<<" : "<<a.second<<endl;
+    cout<<objA.__lGetName()<<endl;
 
-    cout<<LMetaObjectManager::getMetaObjectByName("StructA").getProperty("valB")->get(LVariant::create(&objA)).toString()<<endl;
+
+    for(auto a:LMetaObjectManager::getMetaObjectByName("StructA").getAttributes())
+        cout<<a.first<<" : "<<a.second.to<LString>()<<endl;
+
+    cout<<LMetaObjectManager::getMetaObjectByName("StructA").getProperty("valB")->get(objA).toString()<<endl;
+    cout<<LMetaObjectManager::getMetaObjectByName("StructA").getProperty("valA")->get(objA).toInt()<<endl;
+    LMetaObjectManager::getMetaObjectByName("StructA").getProperty("valA")->set(objA,47);
+    cout<<objA.getValA();
+
 
 
 
@@ -363,7 +367,7 @@ int main()
 
     //cout<<metaobj.getProperty("valA")->get(LVariant::create(objA)).to<int>()<<endl;
     //metaobj.getProperty("valA")->set(LVariant::create(&objA),45);
-    //cout<<objA.valA<<endl;
+    //cout<<objA.valA<<endl;*/
 
     /*LImage image01 = LImage::loadFromPngFile("image3.png");
     LImage image02 = LImage::loadFromPngFile("image.png");
@@ -408,6 +412,10 @@ int main()
     texture02->setAddress(LGFXTexture::TextureAddress_clamp);
 
 
+    texture01->setFilter(LGFXTexture::TextureFilter_anisotropic16);
+    texture02->setFilter(LGFXTexture::TextureFilter_anisotropic16);
+
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////
     LGFXShader* shadervs01=dev->createVertexShader();
     shadervs01->compile(myShader,"mainVS");
@@ -427,8 +435,9 @@ int main()
     LMatrix world,view,viewprojection,WVP,projection;
     float camFOV=60.0f;
 
-    LVector3 camPos=LVector3(0,0.8,-4.5);
-    LQuaternion camRot=LQuaternion(LVector3::forward,0.0f);
+    LVector3 camPos=LVector3(-4.5,2.8,-4.5);
+    LQuaternion camRot=LQuaternion(LVector3::up,-45.0f);
+    camRot*=LQuaternion(camRot.getRight(),-25.0f);
 
     LVector3 boxPos=LVector3(0,1,0);
     LQuaternion boxRot;

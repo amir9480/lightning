@@ -112,6 +112,9 @@ public:
     //! get Maximum Width Height can used for textures
     virtual LSize                   getMaxTextureSize()const=0;
 
+    //! get Maximum Value for anistropic
+    virtual u32                     getMaxAnisotropy()const=0;
+
     //! get a copy of backbuffer as texture . because this function uses texture->copyTo so please resetParameters before call this
     //! what return's is static and you can change texture parameters like texture addressing
     virtual LGFXTexture*            getBackBuffer()=0;

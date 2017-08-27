@@ -27,7 +27,7 @@ D3DTEXTUREFILTERTYPE lD3DTextureFilter(LGFXTexture::TextureFilter _f)
         return D3DTEXF_POINT;
     case LGFXTexture::TextureFilter_linear:
         return D3DTEXF_LINEAR;
-    case LGFXTexture::TextureFilter_anisotropic:
+    case LGFXTexture::TextureFilter_anisotropic2:case LGFXTexture::TextureFilter_anisotropic4:case LGFXTexture::TextureFilter_anisotropic8:case LGFXTexture::TextureFilter_anisotropic16:
         return D3DTEXF_ANISOTROPIC;
     }
     return D3DTEXF_NONE;

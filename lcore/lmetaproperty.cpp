@@ -9,7 +9,7 @@ LMetaAttributes::LMetaAttributes()
 
 }
 
-LMetaAttributes::LMetaAttributes(const LMap<LString, LString> &_attrs):
+LMetaAttributes::LMetaAttributes(const LMap<LString, LVariant> &_attrs):
     mAttributes(_attrs)
 {
 
@@ -30,14 +30,14 @@ bool LMetaAttributes::exists(const LString &_name) const
     return (mAttributes.findKey(_name)!=LMap<LString,LString>::nothing);
 }
 
-LString LMetaAttributes::getAttribute(const LString &_name,const LString& _default) const
+LVariant LMetaAttributes::getAttribute(const LString &_name,const LString& _default) const
 {
     if(mAttributes.findKey(_name)!=LMap<LString,LString>::nothing)
         return mAttributes[_name];
     return _default;
 }
 
-const LMap<LString, LString>& LMetaAttributes::getAttributes() const
+const LMap<LString, LVariant> &LMetaAttributes::getAttributes() const
 {
     return mAttributes;
 }
@@ -82,7 +82,7 @@ LMetaEnumElement::LMetaEnumElement(const LString &_name, const i64 &_value):
 
 }
 
-LMetaEnumElement::LMetaEnumElement(const LString &_name, const i64 &_value, const LMap<LString, LString> &_attrs):
+LMetaEnumElement::LMetaEnumElement(const LString &_name, const i64 &_value, const LMap<LString, LVariant> &_attrs):
     LMetaAttributes(_attrs),
     mName(_name),
     mValue(_value)
@@ -121,7 +121,7 @@ LMetaEnum::LMetaEnum(const LString &_name, const LString &_typename, const LVect
 
 }
 
-LMetaEnum::LMetaEnum(const LString &_name, const LString &_typename, const LMap<LString, LString> &_attrs, const LVector<LMetaEnumElement> &_elements):
+LMetaEnum::LMetaEnum(const LString &_name, const LString &_typename, const LMap<LString, LVariant> &_attrs, const LVector<LMetaEnumElement> &_elements):
     LMetaAttributes(_attrs),
     mName(_name),
     mTypeName(_typename),
@@ -245,7 +245,7 @@ LMetaProperty::LMetaProperty(const LString &_name, const LString &_typename):
 
 }
 
-LMetaProperty::LMetaProperty(const LString &_name, const LString &_typename, const LMap<LString, LString> &_attrs):
+LMetaProperty::LMetaProperty(const LString &_name, const LString &_typename, const LMap<LString, LVariant> &_attrs):
     LMetaAttributes(_attrs),
     mName(_name),
     mTypeName(_typename)
@@ -283,7 +283,7 @@ LMetaObject::LMetaObject(const LString &_name, const LString &_typename):
 
 }
 
-LMetaObject::LMetaObject(const LString &_name, const LString &_typename, const LMap<LString, LString> &_attrs):
+LMetaObject::LMetaObject(const LString &_name, const LString &_typename, const LMap<LString, LVariant> &_attrs):
     LMetaAttributes(_attrs),
     mName(_name),
     mTypeName(_typename)

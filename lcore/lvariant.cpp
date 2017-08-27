@@ -235,6 +235,7 @@ void LVariant::destroy()
     mType=Type::TNull;
     mTypeName.clear();
     mValueSize=0;
+    mULongLongInt=0;
 }
 
 LVariant::Type LVariant::getType() const
@@ -535,7 +536,7 @@ LVariant &LVariant::operator=(const LVariant &_other)
         mChar32_t=_other.mChar32_t;
         break;
     case Type::TString:
-        mString=_other.mString;
+        *this=*_other.mString;
         break;
 
     case Type::TIntR:

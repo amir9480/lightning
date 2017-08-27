@@ -21,7 +21,10 @@ public:
         TextureFilter_none,
         TextureFilter_point,
         TextureFilter_linear,
-        TextureFilter_anisotropic
+        TextureFilter_anisotropic2,
+        TextureFilter_anisotropic4,
+        TextureFilter_anisotropic8,
+        TextureFilter_anisotropic16
     };
     enum TextureAddress
     {
@@ -49,9 +52,6 @@ public:
 
     //! get Filter type
     virtual TextureFilter           getFilter();
-
-    //! get Max Value for Anistropic
-    virtual int                     getMaxAnisotropic() const;
 
     //! get MipMap bias
     virtual float                   getMipMapBias() const;
@@ -98,9 +98,6 @@ public:
     //! set filter type
     virtual void                    setFilter(TextureFilter _f);
 
-    //! set max anistropic value
-    virtual void                    setMaxAnisotropic(int _in=1);
-
     //! set mip map bias
     virtual void                    setMipMapBias(float mipMapBias=0.0f);
 
@@ -128,7 +125,6 @@ protected:
     TextureFilter   mFilter;
     float           mMipMapBias;
     int             mMaxMipMapLevel;
-    int             mMaxAnisotropic;
     TextureAddress  mAddressU;
     TextureAddress  mAddressV;
     bool            mIsRenderTarget;

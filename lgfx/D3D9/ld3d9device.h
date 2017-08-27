@@ -8,7 +8,6 @@
 #include "ld3d9.h"
 
 #include "../../los.h"
-#include "../../lcore.h"
 #include "../lgfxdevice.h"
 #include "ld3d9vertexbuffer.h"
 #include "ld3d9indexbuffer.h"
@@ -80,6 +79,8 @@ public:
     HWND                            getWindowHandler()const;
 
     virtual LSize                   getMaxTextureSize()const;
+
+    virtual u32                     getMaxAnisotropy()const;
 
     virtual LGFXTexture*            getBackBuffer();
 
