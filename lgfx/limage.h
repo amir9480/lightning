@@ -1,7 +1,9 @@
 #ifndef LIMAGE_H
 #define LIMAGE_H
 
-#include "../lcore.h"
+#include "../lcore/ldefines.h"
+#include "../lcore/lstring.h"
+#include "../lcore/lmemorystream.h"
 
 #if LIGHTNING_IMAGE_PNG
 	#include <png.h>

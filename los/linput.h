@@ -1,7 +1,7 @@
 #ifndef LINPUT_H
 #define LINPUT_H
 
-#include "../lcore.h"
+#include "../lcore/lvector2.h"
 
 #include "lapplication.h"
 

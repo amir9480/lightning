@@ -1,7 +1,7 @@
 #ifndef LGFXDEVICE_H
 #define LGFXDEVICE_H
 
-#include "../lcore.h"
+#include "../lcore/ldefines.h"
 #include "lgfxvertexbuffer.h"
 #include "lgfxindexbuffer.h"
 #include "lgfxshader.h"

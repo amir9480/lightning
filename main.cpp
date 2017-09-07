@@ -301,10 +301,24 @@ void lCallOnStart()
     LMetaObjectDefine<StructA>::get();
 }
 
+template<typename T,bool _val>
+struct Test
+{
+    static void call(T& ){  }
+};
+template<typename T>
+struct Test<T,true>
+{
+    static void call(T& _in){ hellotest(_in); }
+};
 
 
 int main()
 {
+    int a;
+    Test<int,true>::call(a);
+
+
     lMemoryLogStart();
 //    cout<<"Name:"<<LMetaObjectManager::getMetaEnumByName("TypeA").getName()<<"\nTypeName:"<<LMetaObjectManager::getMetaEnumByName("TypeA").getTypeName()<<"\nAttributes:{\n";
 //    for(auto _e:LMetaObjectManager::getMetaEnumByTypeName(lGetTypeName<TypeA>()).getAttributes())
@@ -341,20 +355,20 @@ int main()
 //    cout<<objA.valB.testA<<endl;
 //    cout<<_property->get(LVariant::create(&objA)).to<StructB>().testA<<endl;
 
-    StructA objA;
-    objA.valA=777;
-    objA.valB="Hello World!";
+//    StructA objA;
+//    objA.valA=777;
+//    objA.valB="Hello World!";
 
-    cout<<objA.__lGetName()<<endl;
+//    cout<<objA.__lGetName()<<endl;
 
 
-    for(auto a:LMetaObjectManager::getMetaObjectByName("StructA").getAttributes())
-        cout<<a.first<<" : "<<a.second.to<LString>()<<endl;
+//    for(auto a:LMetaObjectManager::getMetaObjectByName("StructA").getAttributes())
+//        cout<<a.first<<" : "<<a.second.to<LString>()<<endl;
 
-    cout<<LMetaObjectManager::getMetaObjectByName("StructA").getProperty("valB")->get(objA).toString()<<endl;
-    cout<<LMetaObjectManager::getMetaObjectByName("StructA").getProperty("valA")->get(objA).toInt()<<endl;
-    LMetaObjectManager::getMetaObjectByName("StructA").getProperty("valA")->set(objA,47);
-    cout<<objA.getValA();
+//    cout<<LMetaObjectManager::getMetaObjectByName("StructA").getProperty("valB")->get(objA).toString()<<endl;
+//    cout<<LMetaObjectManager::getMetaObjectByName("StructA").getProperty("valA")->get(objA).toInt()<<endl;
+//    LMetaObjectManager::getMetaObjectByName("StructA").getProperty("valA")->set(objA,47);
+//    cout<<objA.getValA();
 
 
 

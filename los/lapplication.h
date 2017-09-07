@@ -1,8 +1,10 @@
 #ifndef LAPPLICATION_H
 #define LAPPLICATION_H
 
-#include "../lcore.h"
-#include "../lgfx.h"
+#include "../lcore/ldefines.h"
+#include "../lcore/lstring.h"
+#include "../lcore/lutility.h"
+#include "../lcore/lmap.h"
 
 LNAMESPACE_BEGIN
 

@@ -7,7 +7,7 @@
 
 #include "ld3d9.h"
 
-#include "../../lcore.h"
+#include "../../lcore/ldefines.h"
 #include "../lgfxtexture.h"
 
 LNAMESPACE_BEGIN

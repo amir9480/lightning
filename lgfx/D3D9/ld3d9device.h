@@ -7,7 +7,7 @@
 
 #include "ld3d9.h"
 
-#include "../../los.h"
+#include "../../los/windows/lwindowapplication.h"
 #include "../lgfxdevice.h"
 #include "ld3d9vertexbuffer.h"
 #include "ld3d9indexbuffer.h"

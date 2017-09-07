@@ -2,6 +2,7 @@
 #define LWINDOWAPPLICATION_H
 
 #include "../lapplication.h"
+#include "../../lgfx/lgfxdevice.h"
 
 #if (LOS == LOS_WINDOWS)
 #include "windows.h"

@@ -7,7 +7,7 @@
 
 #include "ld3d9.h"
 
-#include "../../lcore.h"
+#include "../../lcore/ldefines.h"
 #include "../lgfxvertexbuffer.h"
 
 LNAMESPACE_BEGIN

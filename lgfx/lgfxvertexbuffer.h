@@ -1,7 +1,8 @@
 #ifndef LGFXVERTEXBUFFER_H
 #define LGFXVERTEXBUFFER_H
 
-#include "../lcore.h"
+#include "../lcore/ldefines.h"
+#include "../lcore/lvector.h"
 
 LNAMESPACE_BEGIN
 

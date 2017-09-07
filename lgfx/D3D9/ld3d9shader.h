@@ -7,7 +7,9 @@
 #if ( LGFX == LGFX_D3D9 )
 
 #include "ld3d9.h"
-#include "../../lcore.h"
+#include "../../lcore/ldefines.h"
+#include "../../lcore/lstring.h"
+#include "../../lcore/lmap.h"
 #include "../lgfxshader.h"
 
 LNAMESPACE_BEGIN

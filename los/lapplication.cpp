@@ -4,7 +4,7 @@ LNAMESPACE_BEGIN
 
 void lCallOnStart()
 {
-    lSetConsoleColor(LConsoleColor::Cyan);
+    lSetConsoleColor(LConsoleColor::Cyan,LConsoleColor::Black);
 }
 
 LNAMESPACE_END

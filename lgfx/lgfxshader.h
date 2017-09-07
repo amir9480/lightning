@@ -1,7 +1,12 @@
 #ifndef LGFXSHADER_H
 #define LGFXSHADER_H
 
-#include "../lcore.h"
+#include "../lcore/ldefines.h"
+#include "../lcore/lstring.h"
+#include "../lcore/lmatrix.h"
+#include "../lcore/lvector2.h"
+#include "../lcore/lvector3.h"
+#include "../lcore/lvector4.h"
 #include "lgfxtexture.h"
 
 LNAMESPACE_BEGIN
