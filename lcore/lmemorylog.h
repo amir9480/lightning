@@ -6,17 +6,40 @@
 #include <memory.h>
 #include <stdlib.h>
 
-#define lMemoryLogStart()\
-    __lmemlog_allowed=true;{
+#define LNATIVE_NEW new
 
-#define lMemoryLogEnd()\
-    }__lmemlog_allowed=false;
+#if LTARGET == LTARGET_RELEASE
+
+#define lMemoryLogStart()
+#define lMemoryLogEnd()
+#define lMemoryLogStartIgnore()
+#define lMemoryLogEndIgnore()
+
+#define LIGHTNING_NEW new
+
+#elif LTARGET == LTARGET_DEBUG
+
+#define lMemoryLogStart(){\
+    ___lmemlog_allowed++;\
+    if(___lmemlog_allowed>1)\
+        ___lmemlog_allowed=1;
+
+#define lMemoryLogEnd() }\
+    ___lmemlog_allowed--;\
+    if(___lmemlog_allowed>1)\
+        ___lmemlog_allowed=1;
 
 #define lMemoryLogStartIgnore()\
-    __lmemlog_allowed=false;
+    ___lmemlog_allowed--;\
+    if(___lmemlog_allowed>1)\
+        ___lmemlog_allowed=1;
 
 #define lMemoryLogEndIgnore()\
-    __lmemlog_allowed=true;
+    ___lmemlog_allowed++;\
+    if(___lmemlog_allowed>1)\
+        ___lmemlog_allowed=1;
+
+#define LIGHTNING_NEW new(__FILE__,__LINE__)
 
 
 /*!
@@ -74,7 +97,7 @@ private:
 //! default memory logger
 extern _lptrlogmanager __lptrlogmanager;
 
-extern bool __lmemlog_allowed;
+extern int ___lmemlog_allowed;
 
 void* operator new (size_t _size,const char* _filename,unsigned int _line);
 
@@ -85,7 +108,7 @@ void operator delete (void* ptr)noexcept;
 void operator delete[] (void* ptr)noexcept;
 
 #undef new
-#define new  new(__FILE__,__LINE__)
-
+#define new LIGHTNING_NEW
+#endif
 
 #endif // LMEMORYLOG_H

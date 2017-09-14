@@ -28,7 +28,7 @@ public:
     linline                     LBoundingSphere();
 
     //! Constructor with center point and radius
-    linline                     LBoundingSphere(const LVector3& _pos,const f32& _radius);
+    linline                     LBoundingSphere(const LVector3& _pos, const f32& _radius);
     // Copy constructor
     linline                     LBoundingSphere(const LBoundingSphere& _other);
 

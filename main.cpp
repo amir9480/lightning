@@ -313,13 +313,39 @@ struct Test<T,true>
 };
 
 
+struct TestStruct
+{
+    TestStruct(){}
+
+    TestStruct(int _a){a=_a;}
+
+    TestStruct(int _a,LString _b){a=_a;b=_b;}
+
+    int a;
+    LString b;
+};
+
 int main()
 {
-    int a;
-    Test<int,true>::call(a);
-
-
     lMemoryLogStart();
+
+
+
+
+    //int a;
+    //Test<int,false>::call(a);
+
+    auto a = LUniquePointer<TestStruct[]>::create(10,44,"FOo");
+
+    for(int i=0;i<10;i++)
+    {
+        cout<<a[i].a<<" "<<a[i].b<<endl;
+        a[i].b="ttes";
+        cout<<a[i].a<<" "<<a[i].b<<endl;
+    }
+
+
+
 //    cout<<"Name:"<<LMetaObjectManager::getMetaEnumByName("TypeA").getName()<<"\nTypeName:"<<LMetaObjectManager::getMetaEnumByName("TypeA").getTypeName()<<"\nAttributes:{\n";
 //    for(auto _e:LMetaObjectManager::getMetaEnumByTypeName(lGetTypeName<TypeA>()).getAttributes())
 //        cout<<"\t"<<_e.first<<"="<<_e.second<<endl;

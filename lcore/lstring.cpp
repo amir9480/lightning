@@ -83,8 +83,7 @@ LString_Base<chartype>::LString_Base(LString_Base<chartype>&& _other)
 template <typename chartype>
 LString_Base<chartype>::~LString_Base()
 {
-    if(mData)
-        delete[] mData;
+    clear();
 }
 
 template <typename chartype>

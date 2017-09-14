@@ -35,7 +35,7 @@ public:
     linline                 LBoundingBox();
 
     //! \ref set(const LVector3& _min,const LVector3& _max)
-    linline                 LBoundingBox(const LVector3& _min,const LVector3& _max);
+    linline                 LBoundingBox(const LVector3& _min, const LVector3& _max);
 
     // Copy Constructor
     linline                 LBoundingBox(const LBoundingBox& _other);
@@ -104,7 +104,7 @@ public:
     linline void            merge(const LBoundingBox& _other);
 
     //! Set function from min and max
-    linline void            set(const LVector3& _min,const LVector3& _max);
+    linline void            set(const LVector3& _min, const LVector3& _max);
 
     //!Set plain Maximum function
     linline void            setMax(const LVector3& _p);

@@ -31,10 +31,10 @@ public:
     linline                 LMatrix();
 
     //! Matrix with first value
-    linline                 LMatrix(f32 _11,f32 _12,f32 _13,f32 _14,
-                                    f32 _21,f32 _22,f32 _23,f32 _24,
-                                    f32 _31,f32 _32,f32 _33,f32 _34,
-                                    f32 _41,f32 _42,f32 _43,f32 _44
+    linline                 LMatrix(f32 _11, f32 _12, f32 _13, f32 _14,
+                                    f32 _21, f32 _22, f32 _23, f32 _24,
+                                    f32 _31, f32 _32, f32 _33, f32 _34,
+                                    f32 _41, f32 _42, f32 _43, f32 _44
                                    );
 
     //! Matrix from pointer or array
@@ -56,22 +56,22 @@ public:
     linline f32             at(u32 i,u32 j)const;
 
     //! Creates an orthgraphic projection Left Handed by screen values
-    linline static LMatrix  createOrthgraphicProjectionLH(const f32& _left,const f32& _right,const f32& _top,const f32& _bottom,const f32& _znear,const f32& _zfar);
+    linline static LMatrix  createOrthgraphicProjectionLH(const f32& _left, const f32& _right, const f32& _top, const f32& _bottom, const f32& _znear, const f32& _zfar);
 
     //! Creates an orthgraphic Projection Right Handed by screen values
-    linline static LMatrix  createOrthgraphicProjectionRH(const f32& _left,const f32& _right,const f32& _top,const f32& _bottom,const f32& _znear,const f32& _zfar);
+    linline static LMatrix  createOrthgraphicProjectionRH(const f32& _left, const f32& _right, const f32& _top, const f32& _bottom, const f32& _znear, const f32& _zfar);
 
     //! Creates an orthgraphic Projection Left Handed
-    linline static LMatrix  createOrthgraphicProjectionLH(const f32& _width=4.0f,const f32& _height=3.0f,const f32& _znear=0.1f,const f32& _zfar=1000.0f);
+    linline static LMatrix  createOrthgraphicProjectionLH(const f32& _width=4.0f, const f32& _height=3.0f, const f32& _znear=0.1f, const f32& _zfar=1000.0f);
 
     //! Creates an orthgraphic Projection Right Handed
-    linline static LMatrix  createOrthgraphicProjectionRH(const f32& _width=4.0f,const f32& _height=3.0f,const f32& _znear=0.1f,const f32& _zfar=1000.0f);
+    linline static LMatrix  createOrthgraphicProjectionRH(const f32& _width=4.0f, const f32& _height=3.0f, const f32& _znear=0.1f, const f32& _zfar=1000.0f);
 
     //! Creates a Perspective Projection Left Handed
-    linline static LMatrix  createPerspectiveProjectionLH(const f32& _fov=45.0f,const f32& _aspectratio=4.0f/3.0f,const f32& _znear=0.1f,const f32& _zfar=1000.0f);
+    linline static LMatrix  createPerspectiveProjectionLH(const f32& _fov=45.0f, const f32& _aspectratio=4.0f/3.0f, const f32& _znear=0.1f, const f32& _zfar=1000.0f);
 
     //! Creates a Perspective Projection Right Handed
-    linline static LMatrix  createPerspectiveProjectionRH(const f32& _fov=45.0f,const f32& _aspectratio=4.0f/3.0f,const f32& _znear=0.1f,const f32& _zfar=1000.0f);
+    linline static LMatrix  createPerspectiveProjectionRH(const f32& _fov=45.0f, const f32& _aspectratio=4.0f/3.0f, const f32& _znear=0.1f, const f32& _zfar=1000.0f);
 
     //! Creates a Rotation Matrix from Axis
     static LMatrix          createRotationMatrixAxis(LVector3 _axis, const f32& _angle);
@@ -80,7 +80,7 @@ public:
     //! roll  = z
     //! pitch = x
     //! yaw   = y
-    linline static LMatrix  createRotationMatrix(const f32& _pitch,const f32& _yaw,const f32& _roll);
+    linline static LMatrix  createRotationMatrix(const f32& _pitch,const f32& _yaw, const f32& _roll);
 
     //! Creates a RotationX Matrix
     linline static LMatrix  createRotationMatrixX(const f32& _angle);
@@ -98,7 +98,7 @@ public:
     static LMatrix          createTranslationMatrix(const LVector3& _position);
 
     //! Create a View Matrix
-    static LMatrix          createViewMatrix(const LVector3& _camerapos,const LVector3& axis_x, const LVector3& axis_y, const LVector3& axis_z);
+    static LMatrix          createViewMatrix(const LVector3& _camerapos, const LVector3& axis_x, const LVector3& axis_y, const LVector3& axis_z);
 
     //! Create a View Matrix Left Handed
     static LMatrix          createViewMatrixLH(const LVector3& _camerapos, const LVector3& _forward, const LVector3& _up);

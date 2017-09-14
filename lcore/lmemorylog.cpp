@@ -1,8 +1,9 @@
 #include "lmemorylog.h"
 #include "llog.h"
 
+#if LTARGET == LTARGET_DEBUG
 
-bool __lmemlog_allowed=false;
+int ___lmemlog_allowed=0;
 
 #undef new
 #define new new
@@ -11,14 +12,14 @@ _lptrlogmanager __lptrlogmanager;
 
 void operator delete(void *ptr)noexcept
 {
-    if(__lmemlog_allowed)
+    if(___lmemlog_allowed==1)
         __lptrlogmanager.removePtr(ptr);
     free(ptr);
 }
 
 void operator delete[](void *ptr)noexcept
 {
-    if(__lmemlog_allowed)
+    if(___lmemlog_allowed==1)
         __lptrlogmanager.removeArrayPtr(ptr);
     free(ptr);
 }
@@ -31,7 +32,7 @@ void *operator new(size_t _size, const char *_filename, unsigned int _line)
     a.mFile=_filename;
     a.mLine=_line;
     a.mSize=_size;
-    if(__lmemlog_allowed)
+    if(___lmemlog_allowed==1)
         __lptrlogmanager.addPtr(a);
     return o;
 }
@@ -44,7 +45,7 @@ void *operator new[](size_t _size, const char *_filename, unsigned int _line)
     a.mFile=_filename;
     a.mLine=_line;
     a.mSize=_size;
-    if(__lmemlog_allowed)
+    if(___lmemlog_allowed==1)
         __lptrlogmanager.addArrayPtr(a);
     return o;
 }
@@ -207,3 +208,6 @@ void _lptrlogmanager::removeArrayPtrItem(unsigned int _index)
     if(arrayptrssize>0)
         arrayptrs=(_lptrobj*)realloc(arrayptrs,sizeof(_lptrobj)*arrayptrssize);
 }
+
+
+#endif

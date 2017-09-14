@@ -45,11 +45,11 @@ public:
 
     //! find index and key of an element. if there was nothing retruns.second is LMap::nothing
     template<typename T3>
-    linline LPair<u32,T1>                   find(const T3& _what,u32 _from=0)const;
+    linline LPair<u32,T1>                   find(const T3& _what, u32 _from=0)const;
 
     //! find index and key of an element and search starting from right. if there was nothing retruns.second is LMap::nothing
     template<typename T3>
-    linline LPair<u32,T1>                   findFromRight(const T3& _what,u32 _from=(u32)-1)const;
+    linline LPair<u32,T1>                   findFromRight(const T3& _what, u32 _from=(u32)-1)const;
 
     //! get index of key . if there was nothing returns LMap::nothing
     linline u32                             findKey(const T1& _key)const;
@@ -67,10 +67,10 @@ public:
     linline u32                             getSize()const;
 
     //! insert a new item , _newkey = key of new item and _newitem is value of new item
-    linline void                            insert(const T1& _newkey,const T2& _newitem);
+    linline void                            insert(const T1& _newkey, const T2& _newitem);
     linline void                            insert(const T1& _newkey, T2&& _newitem);
-    linline void                            insert(T1&& _newkey,const T2& _newitem);
-    linline void                            insert(T1&& _newkey,T2&& _newitem);
+    linline void                            insert(T1&& _newkey, const T2& _newitem);
+    linline void                            insert(T1&& _newkey, T2&& _newitem);
 
     //! Get Access to Map keys by index
     linline T1&                             keyAt(const u32 _i);

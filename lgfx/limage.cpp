@@ -186,7 +186,7 @@ bool LImage::isNull() const
     return (mData==nullptr);
 }
 
-#if LIGHTNING_IMAGE_PNG
+#if LIGHTNING_USING_LIB_PNG
 
 struct __PngRead_struct
 {
@@ -331,9 +331,9 @@ void ___png_write(png_struct* _pngStruct,png_byte* _pngData,png_size_t _writesiz
     b->data->write((void*)_pngData,_writesize);
     b->index+=_writesize;
 }
-void ___png_write_flush(png_struct* png_ptr)
+void ___png_write_flush(png_struct* )
 {
-    LUNUSED(png_ptr);
+
 }
 
 LMemoryStream LImage::saveAsPng()

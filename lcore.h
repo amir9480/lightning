@@ -21,7 +21,7 @@
 #include "lcore/lmap.h"
 #include "lcore/lutility.h"
 #include "lcore/lmemory.h"
-#include "lcore/lmemorymanager.h"
+#include "lcore/lsmartpointers.h"
 #include "lcore/lpair.h"
 #include "lcore/lmemorystream.h"
 #include "lcore/lvariant.h"

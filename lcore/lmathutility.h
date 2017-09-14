@@ -72,8 +72,8 @@ f32 LAPI        lATan(const f32& _in);
 f64 LAPI        lATanD(const f64& _in);
 
 //! Compute aTan by degree _y/_x
-f32 LAPI        lATan2(const f32& _y,const f32& _x);
-f64 LAPI        lATan2D(const f64& _y,const f64& _x);
+f32 LAPI        lATan2(const f32& _y, const f32& _x);
+f64 LAPI        lATan2D(const f64& _y, const f64& _x);
 
 //! Get Up Rounding of value
 linline f32     lCeil(const f32& _in);
@@ -104,17 +104,17 @@ linline f32     lFloor(const f32& _in);
 linline f64     lFloorD(const f64& _in);
 
 //! Get Mod of float points
-f32             lFMod(const f32& _a,const f32& _b);
-f64             lFModD(const f64& _a,const f64& _b);
-f96             lFModLD(const f64& _a,const f64& _b);
+f32             lFMod(const f32& _a, const f32& _b);
+f64             lFModD(const f64& _a, const f64& _b);
+f96             lFModLD(const f64& _a, const f64& _b);
 
 //! CheckOut FloatPoint is NaN
 linline bool    lIsNaN(const f32& _in);
 linline bool    lIsNaND(const f64& _in);
 
 //! Get Lerp betweem two float point number .
-linline f32     lLerp(const f32& _a,const f32& _b,const f32& _p);
-linline f32     lLerpD(const f64& _a,const f64& _b,const f64& _p);
+linline f32     lLerp(const f32& _a, const f32& _b, const f32& _p);
+linline f32     lLerpD(const f64& _a, const f64& _b, const f64& _p);
 
 //! Get Limited Angle between -90 and 90
 linline f32     lLimitedAngle90(const f32& _angle);
@@ -132,22 +132,22 @@ f64             lLog10D(const f64& _in);
 
 //! Get Minimum one
 template<typename T>
-linline T       lMin(const T& _a,const T& _b);
+linline T       lMin(const T& _a, const T& _b);
 
 //! Get Maximum one
 template<typename T>
-linline T       lMax(const T& _a,const T& _b);
+linline T       lMax(const T& _a, const T& _b);
 
 //! Get Interger Power
-linline i32     lPower(const i32& _a,const u32& _b);
+linline i32     lPower(const i32& _a, const u32& _b);
 
 //! Get Float Point Power
-f32 LAPI        lPow(const f32& _a,const f32& _b);
-f64 LAPI        lPowD(const f64& _a,const f64& _b);
+f32 LAPI        lPow(const f32& _a, const f32& _b);
+f64 LAPI        lPowD(const f64& _a, const f64& _b);
 
 //! Compute round of a float point number
 linline f32     lRound(const f32& _in, const u32& _precision=0);
-linline f64     lRoundD(const f64& _in,const u32 &_precision=0);
+linline f64     lRoundD(const f64& _in, const u32 &_precision=0);
 
 //! Get Sign Value . if x<0 will returns -1 otherwise returns 1
 template<typename T>
@@ -163,8 +163,8 @@ linline void    lSetNaN(f32 &_in);
 linline void    lSetNaND(f64& _in);
 
 //! sqrt
-f32 LAPI        lSqrt(const f32& _in,f32 _base=2);
-f64 LAPI        lSqrtD(const f64& _in,f64 _base=2);
+f32 LAPI        lSqrt(const f32& _in, f32 _base=2);
+f64 LAPI        lSqrtD(const f64& _in, f64 _base=2);
 
 //! Compute tan by degree
 linline f32     lTan(const f32& _in);

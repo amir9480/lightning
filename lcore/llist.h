@@ -96,26 +96,26 @@ public:
     linline ConstIterator           end()const;
 
     //! erase part of list . from _from to _from+_count
-    linline void                    erase(u32 _from,u32 _count=(u32)-1);
+    linline void                    erase(u32 _from, u32 _count=(u32)-1);
 
     // get index of _what in list from _from . if there was nothing returns LList::nothing
     template<typename T2>
-    linline u32                     find(const T2& _what,u32 _from=0) const;
+    linline u32                     find(const T2& _what, u32 _from=0) const;
 
     // get index of _what in list from _from . if there was nothing returns LList::nothing . this starts searching from right
     template<typename T2>
-    linline u32                     findFromRight(const T2& _what,u32 _from=(u32)-1) const;
+    linline u32                     findFromRight(const T2& _what, u32 _from=(u32)-1) const;
 
     //! Get Size of List
     linline u32                     getSize()const;
 
     //! insert a new item at middle of list
-    linline void                    insert(const u32 _i,const T& _newitem);
-    linline void                    insert(const u32 _i,T&& _newitem);
+    linline void                    insert(const u32 _i, const T& _newitem);
+    linline void                    insert(const u32 _i, T&& _newitem);
 
     //! insert new items at middle of list
-    linline void                    insert(const u32 _i,const std::initializer_list<T> _items);
-    linline void                    insert(const u32 _i,const LList<T>& _other);
+    linline void                    insert(const u32 _i, const std::initializer_list<T> _items);
+    linline void                    insert(const u32 _i, const LList<T>& _other);
 
     //! Append a new Item at end of list
     linline void                    pushBack(const T& _newitem);
@@ -185,14 +185,14 @@ public:
     static const u32                nothing;
 protected:
     template<typename _T,typename _T2,const bool _have_operator>
-    struct _LList_Search{ linline static u32 __find(_T _data,u32 _size,const _T2& _what,u32 _from); linline static u32 __rfind(_T _data,u32 _size,const _T2& _what,u32 _from); };
+    struct _LList_Search{ linline static u32 __find(_T _data,u32 _size, const _T2& _what, u32 _from); linline static u32 __rfind(_T _data,u32 _size,const _T2& _what,u32 _from); };
     template<typename _T,typename _T2>
-    struct _LList_Search<_T,_T2,false>{ linline static u32 __find(_T _data,u32 _size,const _T2& _what,u32 _from); linline static u32 __rfind(_T _data,u32 _size,const _T2& _what,u32 _from); };
+    struct _LList_Search<_T,_T2,false>{ linline static u32 __find(_T _data, u32 _size, const _T2& _what, u32 _from); linline static u32 __rfind(_T _data,u32 _size,const _T2& _what,u32 _from); };
 
     template<typename _T,const bool _have_operator>
-    struct _LList_Sort{ linline static void _sort(_T _data,u32 _size,LSortType _type);};
+    struct _LList_Sort{ linline static void _sort(_T _data,u32 _size, LSortType _type);};
     template<typename _T>
-    struct _LList_Sort<_T,false>{ linline static void _sort(_T _data,u32 _size,LSortType _type);};
+    struct _LList_Sort<_T,false>{ linline static void _sort(_T _data, u32 _size, LSortType _type);};
 protected:
     ListNode* mFirst;
     ListNode* mLast;

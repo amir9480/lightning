@@ -91,8 +91,8 @@ class LMetaEnumElement:public LMetaAttributes
 {
 public:
     LMetaEnumElement();
-    LMetaEnumElement(const LString& _name,const i64& _value);
-    LMetaEnumElement(const LString& _name,const i64& _value, const LMap<LString,LVariant>& _attrs);
+    LMetaEnumElement(const LString& _name, const i64& _value);
+    LMetaEnumElement(const LString& _name, const i64& _value, const LMap<LString,LVariant>& _attrs);
     virtual ~LMetaEnumElement();
 
     //! get name of enum element
@@ -147,8 +147,8 @@ private:
 class LMetaProperty:public LMetaAttributes
 {
 public:
-    LMetaProperty(const LString& _name,const LString& _typename);
-    LMetaProperty(const LString& _name,const LString& _typename,const LMap<LString,LVariant>& _attrs);
+    LMetaProperty(const LString& _name, const LString& _typename);
+    LMetaProperty(const LString& _name, const LString& _typename, const LMap<LString,LVariant>& _attrs);
     virtual ~LMetaProperty();
 
     LString             getName() const;
@@ -189,8 +189,8 @@ template<typename ClassType,typename PropertyType>
 class LMetaPropertyRaw:public LMetaProperty
 {
 public:
-    LMetaPropertyRaw(const LString& _name,PropertyType ClassType::*_property);
-    LMetaPropertyRaw(const LString& _name,PropertyType ClassType::*_property,const LMap<LString,LVariant>& _attrs);
+    LMetaPropertyRaw(const LString& _name, PropertyType ClassType::*_property);
+    LMetaPropertyRaw(const LString& _name, PropertyType ClassType::*_property, const LMap<LString,LVariant>& _attrs);
     virtual ~LMetaPropertyRaw();
 
     virtual LVariant    get( LVariant _obj);

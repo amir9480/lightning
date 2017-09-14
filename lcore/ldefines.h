@@ -59,12 +59,13 @@
     //! Causes inline functions always be inline
     #define linline inline __attribute__((always_inline))
     #pragma GCC diagnostic ignored "-Wpmf-conversions"// prevent from this type warning
+    #pragma GCC diagnostic ignored "-Wempty-body"
 #else
     #define linline inline
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-#define LIGHTNING_IMAGE_PNG 1
+#define LIGHTNING_USING_LIB_PNG 1
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 typedef char                     i8  ;

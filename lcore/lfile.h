@@ -46,10 +46,10 @@ public:
     bool            isOpen()const;
 
     //! open a file. if some thing was wrong returns false
-    bool            open(LString _fname,int _opentype);
+    bool            open(LString _fname, int _opentype);
 
     //! write _size byte of _t on file
-    void            read(void* _t,u64 _size);
+    void            read(void* _t, u64 _size);
 
     //! read all content of one file encoded with utf8
     static LString  readAll(const LString& _filename);
@@ -64,7 +64,7 @@ public:
     i32             tellp()const;
 
     //! write _size byte of _t on file
-    void            write(const void* _t,u64 _size);
+    void            write(const void* _t, u64 _size);
 
     //! write some text
     void            write(const LString8& _in);

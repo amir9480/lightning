@@ -21,7 +21,6 @@ SOURCES +=\
     lcore/lmatrix.cpp \
     lcore/lmemory.cpp \
     lcore/lmemorylog.cpp \
-    lcore/lmemorymanager.cpp \
     lcore/lpair.cpp \
     lcore/lplane.cpp \
     lcore/lquaternion.cpp \
@@ -50,7 +49,8 @@ SOURCES +=\
     lgfx/D3D9/ld3d9vertexbuffer.cpp \
     lgfx/D3D9/ld3d9texture.cpp \
     lgfx/D3D9/ld3d9shader.cpp \
-    lcore/lmetaproperty.cpp
+    lcore/lmetaproperty.cpp \
+    lcore/lsmartpointers.cpp
 
 
 HEADERS +=\
@@ -69,7 +69,6 @@ HEADERS +=\
     lcore/lmatrix.h \
     lcore/lmemory.h \
     lcore/lmemorylog.h \
-    lcore/lmemorymanager.h \
     lcore/lpair.h \
     lcore/lplane.h \
     lcore/lquaternion.h \
@@ -101,7 +100,8 @@ HEADERS +=\
     lgfx/D3D9/ld3d9vertexbuffer.h \
     lgfx/D3D9/ld3d9texture.h \
     lgfx/D3D9/ld3d9shader.h \
-    lcore/lmetaproperty.h
+    lcore/lmetaproperty.h \
+    lcore/lsmartpointers.h
 
 DISTFILES += \
     .gitignore

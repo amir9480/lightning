@@ -5,7 +5,7 @@
 #include "../lcore/lstring.h"
 #include "../lcore/lmemorystream.h"
 
-#if LIGHTNING_IMAGE_PNG
+#if LIGHTNING_USING_LIB_PNG
 	#include <png.h>
 #endif
 
@@ -72,7 +72,7 @@ public:
     //! check this texture is nothing
     bool            isNull()const;
 
-#if LIGHTNING_IMAGE_PNG
+#if LIGHTNING_USING_LIB_PNG
     //! load from PNG format
     static LImage   loadFromPng(char* _data);
     static LImage   loadFromPngFile(const LString &_fileName);

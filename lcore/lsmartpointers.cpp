@@ -1,4 +1,4 @@
-#include "lmemorymanager.h"
+#include "lsmartpointers.h"
 
 LNAMESPACE_BEGIN
 
