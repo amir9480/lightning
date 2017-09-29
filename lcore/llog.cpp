@@ -2,7 +2,7 @@
 #include <stdio.h>
 LNAMESPACE_BEGIN
 
-#if LTARGET==LTARGET_DEBUG
+
 
 __Log_Manager __Log_Manager::get;
 
@@ -132,6 +132,6 @@ void __Log_Manager::addAssert(const LString &_message, const LString &_filename,
         throw 1;
 }
 
-#endif//LTARGET==LTARGET_DEBUG
+
 
 LNAMESPACE_END

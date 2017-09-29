@@ -48,10 +48,10 @@
  */
 struct _lptrobj
 {
-    void*        mAddress;//Address of memory
-    unsigned int mLine;// line of allocate
-    const char*  mFile;// file name of allocate point
-    unsigned int mSize;// size that allocated
+    void*                   mAddress;//Address of memory
+    unsigned int            mLine;// line of allocate
+    const char*             mFile;// file name of allocate point
+    unsigned long long int  mSize;// size that allocated
 };
 
 class _lptrlogmanager

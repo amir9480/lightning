@@ -325,6 +325,14 @@ struct TestStruct
     LString b;
 };
 
+
+LUniquePointer<TestStruct[]> testfoo()
+{
+    LUniquePointer<TestStruct[]> out = LUniquePointer<TestStruct[]>::create(10,44,"test foo");
+    return out;
+
+}
+
 int main()
 {
     lMemoryLogStart();
@@ -332,17 +340,10 @@ int main()
 
 
 
-    //int a;
-    //Test<int,false>::call(a);
+    auto test = testfoo();
+    for(int i=0;i<test.getSize();i++)
+        cout<<test[i].a<<" "<<test[i].b<<endl;
 
-    auto a = LUniquePointer<TestStruct[]>::create(10,44,"FOo");
-
-    for(int i=0;i<10;i++)
-    {
-        cout<<a[i].a<<" "<<a[i].b<<endl;
-        a[i].b="ttes";
-        cout<<a[i].a<<" "<<a[i].b<<endl;
-    }
 
 
 

@@ -8,7 +8,6 @@
 
 LNAMESPACE_BEGIN
 
-#if LTARGET==LTARGET_DEBUG
 
 // if you want to see where your log will save show LLOG_FILE
 //! Add a message to log . first parameter is CONDITION that if was true then message will be add.
@@ -62,14 +61,6 @@ private:
 };
 
 
-
-#else
-#define lLogMessage(...)
-#define lWarning(...)
-#define lError(...)
-#define lError2(...)
-#define lAssert(...)
-#endif// LTARGET==LTARGET_DEBUG
 LNAMESPACE_END
 
 #endif // LLOG_H

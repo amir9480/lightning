@@ -107,6 +107,11 @@ DISTFILES += \
     .gitignore
 
 
+RCC_DIR = compiled
+OBJECTS_DIR = compiled
+MOC_DIR = compiled
+UI_DIR = compiled
+
 # D3D9
 
 win32:CONFIG(release, debug|release): LIBS += -L$$PWD/dependencies/Directx9/Lib/x86/ -ld3d9 -ld3dx9
