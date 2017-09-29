@@ -11,6 +11,7 @@
 
 #include "lconfig.h"
 #include "lcore/lmath.h"
+#include "lcore/lobject.h"
 #include "lcore/lmemorylog.h"
 #include "lcore/ldefines.h"
 #include "lcore/lstring.h"

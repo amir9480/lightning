@@ -253,9 +253,9 @@ LMETAENUM_END_DEFINE(TypeA)
 
 
 
-struct StructA
+struct StructA:public LObject
 {
-    L_CLASS(StructA)
+    L_STRUCT(StructA)
 public:
     StructA(){}
     int     valA;
@@ -301,37 +301,7 @@ void lCallOnStart()
     LMetaObjectDefine<StructA>::get();
 }
 
-template<typename T,bool _val>
-struct Test
-{
-    static void call(T& ){  }
-};
-template<typename T>
-struct Test<T,true>
-{
-    static void call(T& _in){ hellotest(_in); }
-};
 
-
-struct TestStruct
-{
-    TestStruct(){}
-
-    TestStruct(int _a){a=_a;}
-
-    TestStruct(int _a,LString _b){a=_a;b=_b;}
-
-    int a;
-    LString b;
-};
-
-
-LUniquePointer<TestStruct[]> testfoo()
-{
-    LUniquePointer<TestStruct[]> out = LUniquePointer<TestStruct[]>::create(10,44,"test foo");
-    return out;
-
-}
 
 int main()
 {
@@ -340,9 +310,12 @@ int main()
 
 
 
-    auto test = testfoo();
-    for(int i=0;i<test.getSize();i++)
-        cout<<test[i].a<<" "<<test[i].b<<endl;
+    StructA a;
+    a.valA=55;
+    a.valB="Hello WOrld";
+
+    a.addProperty("ttt","Hello World");
+    cout<<a.getProperty("ttt").to<LString>()<<endl;
 
 
 

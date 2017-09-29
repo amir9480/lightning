@@ -8,11 +8,16 @@
 #include "lutility.h"
 
 
-#define L_CLASS( _NAME )\
+#define L_STRUCT( _NAME )\
     virtual Lightning::LString __lGetTypeName()const{return Lightning::lGetTypeName<decltype(*this)>();}\
     virtual Lightning::LString __lGetName()const{return Lightning::LString::fromUTF8( #_NAME );}\
     Lightning::LString __lGetActualTypeName()const{return Lightning::lGetTypeName<decltype(*this)>();}\
     Lightning::LString __lGetActualName()const{return Lightning::LString::fromUTF8( #_NAME );}
+
+#define L_CLASS( _NAME )\
+    public:\
+    L_STRUCT( _NAME )\
+    private:\
 
 #define LMETA_ATTR( _NAME , _VALUE ) { _NAME , Lightning::LVariant::create( _VALUE ) }
 

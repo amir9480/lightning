@@ -638,7 +638,7 @@ T& __LVariantTypeCastHelper<T&>::cast(const LVariant &_in)
     else if(_in.mType>=LVariant::Type::TIntR&&_in.mType<=LVariant::Type::TStringR)
         return *static_cast<T*>(_in.mCustom);
 
-    lError2(_in.mTypeName!=lGetTypeName<T>(),"LVariant Converting is not right");
+    //lError2(_in.mTypeName!=lGetTypeName<T>(),"LVariant Converting is not right");
 
 
     if(_in.mType==LVariant::Type::TEnum)
@@ -652,9 +652,9 @@ T& __LVariantTypeCastHelper<T&>::cast(const LVariant &_in)
         return *value;
     }
     if(_in.mType==LVariant::Type::TCustom)
-        return (dynamic_cast<LCLassVariant<T>*>(_in.mCustomClass)->mData);
+        return (reinterpret_cast<LCLassVariant<T>*>(_in.mCustomClass)->mData);
     if(_in.mType==LVariant::Type::TCustomR)
-        return *(dynamic_cast<LClassVariantReference<T>*>(_in.mCustomClass)->mData);
+        return *(reinterpret_cast<LClassVariantReference<T>*>(_in.mCustomClass)->mData);
     lMemoryLogStartIgnore();
     static T o = T();
     lMemoryLogEndIgnore();
@@ -703,7 +703,9 @@ T* __LVariantTypeCastHelper<T*>::cast(const LVariant &_in)
     else if(_in.mType>=LVariant::Type::TIntR&&_in.mType<=LVariant::Type::TStringR)
         return static_cast<T*>(_in.mCustom);
 
-    lError2(_in.mTypeName!=lGetTypeName<T>(),"LVariant Converting is not right");
+    lLogMessage(1,LString::fromInt((int)_in.mType));
+
+    //lError2(_in.mTypeName!=lGetTypeName<T>(),"LVariant Converting is not right");
 
     if(_in.mType==LVariant::Type::TEnumR)
         return ((T*)_in.mCustom);
@@ -712,7 +714,7 @@ T* __LVariantTypeCastHelper<T*>::cast(const LVariant &_in)
         return &(dynamic_cast<LCLassVariant<T>*>(_in.mCustomClass)->mData);
     if(_in.mType==LVariant::Type::TCustomR)
         return (dynamic_cast<LClassVariantReference<T>*>(_in.mCustomClass)->mData);
-
+    lError2(1,"You\'r type casting is not right");
     return nullptr;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
