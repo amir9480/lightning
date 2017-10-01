@@ -51,7 +51,8 @@ SOURCES +=\
     lgfx/D3D9/ld3d9shader.cpp \
     lcore/lmetaproperty.cpp \
     lcore/lsmartpointers.cpp \
-    lcore/lobject.cpp
+    lcore/lobject.cpp \
+    lcore/lserialization.cpp
 
 
 HEADERS +=\
@@ -103,7 +104,8 @@ HEADERS +=\
     lgfx/D3D9/ld3d9shader.h \
     lcore/lmetaproperty.h \
     lcore/lsmartpointers.h \
-    lcore/lobject.h
+    lcore/lobject.h \
+    lcore/lserialization.h
 
 DISTFILES += \
     .gitignore

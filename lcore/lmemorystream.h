@@ -23,7 +23,7 @@ public:
     char*       getData();
 
     //! get Data Size
-    u64 getSize() const;
+    u64         getSize() const;
 
     //! is write/read position on end of stream
     bool        isEndOfStream()const;

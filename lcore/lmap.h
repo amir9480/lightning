@@ -76,7 +76,7 @@ public:
     linline T1&                             keyAt(const u32 _i);
     linline const T1&                       keyAt(const u32 _i)const;
 
-    //! remove an element of map by key value
+    //! remove an element of map by key value. if key does not exists nothing will happened
     linline void                            remove(const T1& _key);
 
     //! reserve capacity for add new items for futur . every (16) insertion will make a new operate and

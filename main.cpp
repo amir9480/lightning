@@ -243,9 +243,7 @@ enum class TypeA
     ValC
 };
 
-
-
-LMETAENUM_BEGIN_DEFINE("TypeA",TypeA,LMETA_ATTR("ename" , "Enenmy Difficult"),LMETA_ATTR("edet" , "to set difficuly of Enemy AI"))
+LMETAENUM_BEGIN_DEFINE("TypeA",TypeA,LMETA_ATTR("ename" , "Enemy Difficult"),LMETA_ATTR("edet" , "to set difficuly of Enemy AI"))
     LMETAENUM_ELEMENT("ValA",ValA,LMETA_ATTR("ename" , "Easy"))
     LMETAENUM_ELEMENT("ValB",ValB,LMETA_ATTR("ename" , "Normal"))
     LMETAENUM_ELEMENT("ValC",ValC,LMETA_ATTR("ename" , "Hard"))
@@ -255,7 +253,7 @@ LMETAENUM_END_DEFINE(TypeA)
 
 struct StructA:public LObject
 {
-    L_STRUCT(StructA)
+    L_STRUCT(StructA,LObject)
 public:
     StructA(){}
     int     valA;
@@ -286,7 +284,7 @@ public:
         static Lightning::LMetaObject o("StructA",lGetTypeName<__The_Type>(),{{"ename",LVariant::create("Using to define enemy")}});
         if(!done)
         {
-            o.addPropertyWithGetterSetter("valA",&__The_Type::getValA,&__The_Type::setValA,{{"ename",LVariant::create("Enenmy Health")},{"edet",LVariant::create("Using to set enemy health")}});
+            o.addPropertyWithGetterSetter("valA",&__The_Type::getValA,&__The_Type::setValA,{{"ename",LVariant::create("Enemy Health")},{"edet",LVariant::create("Using to set enemy health")}});
             o.addPropertyRaw("valB",&__The_Type::valB);
 
             Lightning::LMetaObjectManager::mObjects.pushBack(&o);
@@ -309,14 +307,16 @@ int main()
 
 
 
-
     StructA a;
     a.valA=55;
     a.valB="Hello WOrld";
 
-    a.addProperty("ttt","Hello World");
+    a.setProperty("ttt","Hello World");
     cout<<a.getProperty("ttt").to<LString>()<<endl;
 
+    a.setPropertyAttribute("ttt","ename","Enemy Health");
+    cout<<a.getPropertyAttribute("ttt","ename").toString()<<endl;
+    cout<<a.getPropertyAttribute("valA","ename").toString()<<endl;
 
 
 

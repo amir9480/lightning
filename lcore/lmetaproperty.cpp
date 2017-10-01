@@ -22,17 +22,14 @@ LMetaAttributes::~LMetaAttributes()
 
 void LMetaAttributes::addAttribute(const LString &_name, const LString &_value)
 {
+    lMemoryLogStartIgnore();
     mAttributes[_name]=_value;
+    lMemoryLogEndIgnore();
 }
 
-bool LMetaAttributes::exists(const LString &_name) const
+LVariant LMetaAttributes::getAttribute(const LString &_name,const LVariant& _default) const
 {
-    return (mAttributes.findKey(_name)!=LMap<LString,LString>::nothing);
-}
-
-LVariant LMetaAttributes::getAttribute(const LString &_name,const LString& _default) const
-{
-    if(mAttributes.findKey(_name)!=LMap<LString,LString>::nothing)
+    if(mAttributes.findKey(_name)!=LMap<LString,LVariant>::nothing)
         return mAttributes[_name];
     return _default;
 }
@@ -44,29 +41,28 @@ const LMap<LString, LVariant> &LMetaAttributes::getAttributes() const
 
 bool LMetaAttributes::hasAttribute(const LString &_name) const
 {
-    if(mAttributes.findKey(_name)!=LMap<LString,LString>::nothing)
+    if(mAttributes.findKey(_name)!=LMap<LString,LVariant>::nothing)
         return true;
     return false;
 }
 
 bool LMetaAttributes::removeAttribute(const LString &_name)
 {
-    if(mAttributes.findKey(_name)!=LMap<LString,LString>::nothing)
+    lMemoryLogStartIgnore();
+    if(mAttributes.findKey(_name)!=LMap<LString,LVariant>::nothing)
     {
         mAttributes.remove(_name);
         return true;
     }
+    lMemoryLogEndIgnore();
     return false;
 }
 
-bool LMetaAttributes::setAttribute(const LString &_name, const LString &_value)
+void LMetaAttributes::setAttribute(const LString &_name, const LString &_value)
 {
-    if(mAttributes.findKey(_name)!=LMap<LString,LString>::nothing)
-    {
-        mAttributes[_name]=_value;
-        return true;
-    }
-    return false;
+    lMemoryLogStartIgnore();
+    mAttributes[_name]=_value;
+    lMemoryLogEndIgnore();
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -248,6 +248,9 @@ public:
     //! get typeid of variant
     LString                 getTypeName() const;
 
+    //! check Variant is null or not
+    bool                    isNull()const;
+
     //! is convertible by typename
     bool                    isConverible(const LString& _typename)const;
 

@@ -8,16 +8,31 @@
 #include "lutility.h"
 
 
-#define L_STRUCT( _NAME )\
+#define __L_CLASS_PARENT_CLASSES(...)  LOVERLOADED_MACRO( ___L_CLASS_PARENT_CLASSES , __VA_ARGS__ )
+#define ___L_CLASS_PARENT_CLASSES0()
+#define ___L_CLASS_PARENT_CLASSES1(A1)                              typedef A1 LParent1;
+#define ___L_CLASS_PARENT_CLASSES2(A1,A2)                           typedef A1 LParent1;typedef A2 LParent2;
+#define ___L_CLASS_PARENT_CLASSES3(A1,A2,A3)                        typedef A1 LParent1;typedef A2 LParent2;typedef A3 LParent3;
+#define ___L_CLASS_PARENT_CLASSES4(A1,A2,A3,A4)                     typedef A1 LParent1;typedef A2 LParent2;typedef A3 LParent3;typedef A4 LParent4;
+#define ___L_CLASS_PARENT_CLASSES5(A1,A2,A3,A4,A5)                  typedef A1 LParent1;typedef A2 LParent2;typedef A3 LParent3;typedef A4 LParent4 ;typedef A5 LParent5;
+#define ___L_CLASS_PARENT_CLASSES6(A1,A2,A3,A4,A5,A6)               typedef A1 LParent1;typedef A2 LParent2;typedef A3 LParent3;typedef A4 LParent4 ;typedef A5 LParent5;typedef A6 LParent6 ;
+#define ___L_CLASS_PARENT_CLASSES7(A1,A2,A3,A4,A5,A6,A7)            typedef A1 LParent1;typedef A2 LParent2;typedef A3 LParent3;typedef A4 LParent4 ;typedef A5 LParent5;typedef A6 LParent6 ;typedef A7 LParent7;
+#define ___L_CLASS_PARENT_CLASSES8(A1,A2,A3,A4,A5,A6,A7,A8)         typedef A1 LParent1;typedef A2 LParent2;typedef A3 LParent3;typedef A4 LParent4 ;typedef A5 LParent5;typedef A6 LParent6 ;typedef A7 LParent7;typedef A8 LParent8 ;
+#define ___L_CLASS_PARENT_CLASSES9(A1,A2,A3,A4,A5,A6,A7,A8,A9)      typedef A1 LParent1;typedef A2 LParent2;typedef A3 LParent3;typedef A4 LParent4 ;typedef A5 LParent5;typedef A6 LParent6 ;typedef A7 LParent7;typedef A8 LParent8 ;typedef A9 LParent9 ;
+#define ___L_CLASS_PARENT_CLASSES10(A1,A2,A3,A4,A5,A6,A7,A8,A9,A10) typedef A1 LParent1;typedef A2 LParent2;typedef A3 LParent3;typedef A4 LParent4 ;typedef A5 LParent5;typedef A6 LParent6 ;typedef A7 LParent7;typedef A8 LParent8 ;typedef A9 LParent9 ;typedef A10 LParent10 ;
+
+
+#define L_STRUCT( _NAME , ... )\
+    __L_CLASS_PARENT_CLASSES( __VA_ARGS__ )\
     virtual Lightning::LString __lGetTypeName()const{return Lightning::lGetTypeName<decltype(*this)>();}\
     virtual Lightning::LString __lGetName()const{return Lightning::LString::fromUTF8( #_NAME );}\
     Lightning::LString __lGetActualTypeName()const{return Lightning::lGetTypeName<decltype(*this)>();}\
     Lightning::LString __lGetActualName()const{return Lightning::LString::fromUTF8( #_NAME );}
 
-#define L_CLASS( _NAME )\
+#define L_CLASS( _NAME , ... )\
     public:\
-    L_STRUCT( _NAME )\
-    private:\
+    L_STRUCT( _NAME , __VA_ARGS__ )\
+    private:
 
 #define LMETA_ATTR( _NAME , _VALUE ) { _NAME , Lightning::LVariant::create( _VALUE ) }
 
@@ -70,11 +85,8 @@ public:
     //! set an attribute or if doesnt exist create new one
     void                            addAttribute(const LString& _name,const LString& _value);
 
-    //! check attribute exists or not
-    bool                            exists(const LString& _name)const;
-
     //! get an attribute by name if exists otherwise returns default
-    LVariant                        getAttribute(const LString& _name,const LString& _default=LString::empty)const;
+    LVariant                        getAttribute(const LString& _name, const LVariant &_default=LVariant())const;
 
     //! get all attributes
     const LMap<LString, LVariant>&  getAttributes() const;
@@ -85,8 +97,8 @@ public:
     //! removes an attribute if exists. if doesn't exists returns false
     bool                            removeAttribute(const LString& _name);
 
-    //! set an attribute if exist. if doesn't exists returns false
-    bool                            setAttribute(const LString& _name,const LString& _value);
+    //! set an attribute . if does not exists will create new one
+    void                            setAttribute(const LString& _name,const LString& _value);
 
 protected:
     LMap<LString,LVariant>   mAttributes;

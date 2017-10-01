@@ -248,6 +248,11 @@ LString LVariant::getTypeName() const
     return mTypeName;
 }
 
+bool LVariant::isNull() const
+{
+    return (mType==Type::TNull);
+}
+
 bool LVariant::isConverible(const LString &_typename) const
 {
     if(mType==Type::TNull)
